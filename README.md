@@ -24,7 +24,6 @@ Sample Code is provided with a brief explanation of what each sample does:
 
 * JAVA
   * Basic : A basic java application demonstrating FIDO2 registration and authentication. Click [HERE](https://webauthndemo.strongkey.com) to try out the basic java application in action.
-    * [Client](https://github.com/StrongKey/fido2/sampleapps/java/basic/client) - JavaScript sample
     * [Server](https://github.com/StrongKey/fido2/sampleapps/java/basic/server) - Java sample
 
 ## Contributing
