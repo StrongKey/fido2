@@ -17,18 +17,17 @@ Follow [the installation instructions](docs/Installation_Guide_Linux.md) to down
 To see it in action, sample code is provided in the links below.
 
 ## API docs
-[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/FIDO-Server/)
+[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
 
 ## Sample APPS
 Sample Code is provided with a brief explanation of what each sample does:
 
 * JAVA
   * Basic : A basic java application demonstrating FIDO2 registration and authentication. Click [HERE](https://webauthndemo.strongkey.com) to try out the basic java application in action.
-    * [Client](https://github.com/StrongKey/fido2/sampleapps/java/basic/client) - JavaScript sample
     * [Server](https://github.com/StrongKey/fido2/sampleapps/java/basic/server) - Java sample
 
 ## Contributing
-If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
+If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
 
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](LICENSE).
