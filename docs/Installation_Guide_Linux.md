@@ -74,7 +74,7 @@
     curl -k https://localhost:8181/api/application.wadl
     ```
 
-8. To test this installation of the FIDO2 Server, check out the [sample Relying Party web application](https://github.com/StrongKey/relying-party-java) and [sample WebAuthn client](https://github.com/StrongKey/WebAuthn).
+8. To test this installation of the FIDO2 Server, check out the [sample Basic Java application](https://github.com/StrongKey/fido2/sampleapps/java/basic).
 
 ## Removal
 
