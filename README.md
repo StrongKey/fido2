@@ -27,7 +27,7 @@ Sample Code is provided with a brief explanation of what each sample does:
     * [Server](https://github.com/StrongKey/fido2/sampleapps/java/basic/server) - Java sample
 
 ## Contributing
-If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
+If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
 
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](LICENSE).
