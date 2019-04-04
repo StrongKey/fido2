@@ -17,7 +17,7 @@ Follow [the installation instructions](docs/Installation_Guide_Linux.md) to down
 To see it in action, sample code is provided in the links below.
 
 ## API docs
-[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/FIDO-Server/)
+[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
 
 ## Sample APPS
 Sample Code is provided with a brief explanation of what each sample does:
