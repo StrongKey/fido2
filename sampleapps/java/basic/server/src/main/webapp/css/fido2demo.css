@@ -1,0 +1,299 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 28px; 
+  font-weight: 300;
+  color: #888;
+  text-align: left;
+  margin: 0px;
+}
+
+h2 {
+  color: #003e54;
+  font-size: 22px;
+  padding-bottom: 20px;
+  font-weight: 300;
+}
+
+a {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #003e54;
+  text-decoration: none;
+  font-weight: 600;
+}
+  
+a:hover {
+  text-decoration: underline;
+}
+  
+#main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;  
+  padding: 5%;
+  background-image: url(../img/cyansmoke.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+  
+.login_logo {
+  float: right;
+  text-align: right;
+  height: 64px;
+  width: 90px;
+  padding-top: 3px;
+}
+
+.login_logo img {
+  transition-property: width;
+  transition-duration: 0.5s;
+}
+
+#loginUsername {
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dimmed {
+  opacity: 0.4;
+}
+ 
+h1.strongkey-heading {
+  font-weight: 800;
+}
+
+h1.fido2-heading {
+  font-weight: 500;
+}
+
+.login-container {
+  margin: 0 auto;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 280px; 
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.form-panel {
+  border: 1px solid #ccc;
+  padding-top: 15px;
+  padding-bottom: 30px;
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 1.0);
+}
+
+#registerPanel {
+  clear: both;
+}
+
+#authHeadingPanel {
+  padding-bottom: 20px;
+}
+
+#authHeadingPanel img {
+  display: inline-block; 
+  opacity: 0.8; 
+  vertical-align: middle;
+}
+
+#authHeadingPanel h2 {
+  display: inline-block; 
+  vertical-align: middle; 
+  margin-left: 5px; 
+  padding: 0;
+}
+
+.met {
+  margin-bottom: 10px;
+}
+
+button.met {
+  margin-top: 20px;
+  background-color: #003e54;
+  border-radius: 60px;
+  border-color: #00a6d9;
+  color: rgb(255, 255, 255);
+  padding-bottom: 10px;
+  padding-left: 36px;
+  padding-right: 36px;
+  padding-top: 10px;
+}
+
+input.met::placeholder { 
+  color: rgb(0, 64, 84);
+  opacity: 1; 
+}
+
+input.met::placeholder:disabled { 
+  color: #888;
+  opacity: 1; 
+}
+
+input.pad {
+  margin-right: 10px;
+}
+
+label {
+  padding-left: 3px;
+  text-indent: -3px;
+}
+
+input.met[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  margin: 0;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+input.met[type="text"]:disabled {
+  color: #888;
+  background-color: #eee;
+}
+
+input.met:-moz-placeholder,
+input.met:focus {
+  box-shadow: none !important;
+}
+
+input.met[type="text"] {
+  background-color: #e9faff; 
+  border-bottom-color: rgb(0, 196, 217);
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #ccc;
+  box-shadow: none;
+  color: rgb(0, 64, 84);
+  padding-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 10px;
+  outline: none;
+}
+
+#logoutPanel {
+  margin-top: 30px;
+}
+
+footer {
+  text-align: center;
+}
+
+#metadataPanel {
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  text-align: left;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 330px;
+}
+
+#fidoLabel {
+  margin-bottom: 2px;
+}
+
+#metadataContent {
+  background-color: rgba(255, 255, 255, 1.0);
+  height: 100px;
+  overflow: auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  white-space: nowrap;
+  text-align: left;
+  padding: 5px;
+  margin-top: 5px;
+  border-width: 1px;
+  border-color: #888;
+  border-style: solid;
+}
+
+#metadataContent p {
+  color: #003e54;
+  margin-top: 8px;
+  margin-bottom: 3px;
+}
+
+#metadataContent ul {
+  margin-bottom: 3px;
+  margin-top: 3px;
+  list-style-type: none;
+  padding-inline-start: 15px;
+}
+
+#metadataContent li {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+span.fido-data-header {
+  color: #003e54;
+  font-weight: 600;
+}
+
+span.fido-data-key {
+  color: #444;
+  font-weight: 600;
+}
+
+span.fido-data-value {
+  color: #000;
+  font-weight: 400;
+}
+
+.loading-spinner {
+  position: absolute;
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  margin-left: -23px;
+  top: 40%;
+  left: 50%;
+}
+
+.loading-spinner:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #888;
+  border-color: #888 transparent #888 transparent;
+  animation: loading-spinner 1.2s linear infinite;
+}
+
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#noscript {
+  padding: 20px;
+}
+
+#unsupportedBrowser {
+	padding: 20px;
+}
+
+#cssMsg {
+  display: none;
+}

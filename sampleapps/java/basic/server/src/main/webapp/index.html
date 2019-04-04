@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STRONGKEY FIDO2 Demo App</title>
+  <link href="css/fonts.css" rel="stylesheet">
+  <link href="css/fido2demo.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="main" style="display: none">
+    <header>
+      <p id="cssMsg">(CSS has not been loaded; formatting is incorrect.)
+    </header>
+
+    <div class="login-container">
+      <div>
+        <div class="login_logo">
+          <a id="logo"><img width="58" src="img/logo-lg.png"></a>
+          <div id="loginUsername">...</div>
+        </div>
+        <h1 class="strongkey-heading">STRONGKEY</h1>
+        <h1 class="fido2-heading">FIDO2 Demo</h1>
+      </div>
+
+      <div id="regPanel" class="form-panel">
+        <h2>Register</h2>
+        <div id="regUsernamePanel">
+          <input autocomplete="off" class="met" id="regUsername" placeholder="Username" required="" type="text">
+        </div>
+        <div>
+          <input autocomplete="off" class="met" id="regDisplayName" placeholder="Key Display Name" required=""
+            type="text">
+        </div>
+        <div>
+          <button class="met" id="regSubmit">Register New Key</button>
+        </div>
+      </div>
+
+      <div id="authPanel" class="form-panel" style="display: none;">
+        <div id="authHeadingPanel">
+          <img width="24" src="img/login256.png">
+          <h2>Sign In</h2>
+        </div>
+        <div>
+          <input class="met" id="authUsername" placeholder="Username" required="" type="text">
+        </div>
+        <div>
+          <button class="met" id="authSubmit">Sign In</button>
+        </div>
+      </div>
+
+      <div id="logoutLinkPanel" style="display: none">
+        <p>&nbsp;<a id="logout" href="javascript:">Log Out</a>&nbsp;</p>
+      </div>
+      <div id="registerLinkPanel" style="display: none">
+        <p>Don't have an account? <a id="showRegPanel" href="javascript:">Register</a></p>
+      </div>
+      <div id="authLinkPanel">
+        <p><a id="showAuthPanel" href="javascript:">Sign in</a> with existing account</p>
+      </div>
+    </div>
+    <footer>
+      <div id="metadataPanel">
+        <div>
+          <input id="fidoCheckbox" class="met" type="checkbox">
+          <label id="fidoLabel" for="fidoCheckbox">FIDO2 Data</label>
+        </div>
+        <div id="metadataContent" style="visibility: hidden;">
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <noscript>
+    <p id="noscript">(Enable JavaScript in your browser.)</p>
+  </noscript>
+  <div id="unsupportedBrowser" style="display: none">WebAuthn is not supported by this browser.</div>
+  <div class="loading-spinner"></div>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/browserCheck.js"></script>
+  <script src="js/base64js.min.js"></script>
+  <script src="js/buffer-5.2.1.js"></script>
+  <script src="js/base64url.js"></script>
+  <script src="js/cbor.js"></script>
+  <script src="js/fido2demo.js"></script>
+</body>
+
+</html>

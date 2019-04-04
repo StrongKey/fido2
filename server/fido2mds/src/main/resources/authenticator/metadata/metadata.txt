@@ -1,0 +1,19 @@
+Virtual FIDO2 EdDSA25519 SHA512 Conformance Testing CTAP2 Authenticator.json
+Virtual RSA PCKS1.5 SHA1 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSA PCKS1.5 SHA256 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSA PCKS1.5 SHA384 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSA PCKS1.5 SHA512 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSA PKCS 1.5 SHA1 FIDO2 Conformance Testing CTAP2 Authenticator with TPM Attestation.json
+Virtual RSA PKCS 1.5 SHA256 FIDO2 Conformance Testing CTAP2 Authenticator with SafetyNet attestation.json
+Virtual RSA PKCS 1.5 SHA256 FIDO2 Conformance Testing CTAP2 Authenticator with TPM Attestation.json
+Virtual RSAPSS SHA256 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSAPSS SHA384 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual RSAPSS SHA512 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual Secp256K1 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual Secp256R1 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual Secp256R1 FIDO2 Conformance Testing CTAP2 Authenticator with Android Key Attestation.json
+Virtual Secp256R1 FIDO2 Conformance Testing CTAP2 Authenticator with Self(surrogate) attestation.json
+Virtual Secp256R1 FIDO2 Conformance Testing CTAP2 Authenticator with supported extensions.json
+Virtual Secp256R1 Multiple Root Certificates FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual Secp384r1 SHA384 FIDO2 Conformance Testing CTAP2 Authenticator.json
+Virtual Secp521r1 SHA512 FIDO2 Conformance Testing CTAP2 Authenticator.json

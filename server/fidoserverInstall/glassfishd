@@ -1,0 +1,62 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          glassfishd
+# Required-Start:    $syslog $time $remote_fs
+# Required-Stop:     $syslog $time $remote_fs
+# Default-Start:     3 4 5
+# Default-Stop:      0 2 1 6
+# Description:       Debian init script for payara webserver
+### END INIT INFO
+
+# Source function library.
+. /etc/skfsrc
+if [ -f /etc/init.d/functions ]; then
+        . /etc/init.d/functions
+fi
+
+PROGRAM="--user strongkey /usr/local/strongkey/payara41/glassfish/bin/asadmin"
+
+prog="Glassfish 4 Application Server"
+
+start () {
+	echo -n $"Starting $prog: "
+
+	# start daemon
+	daemon $PROGRAM start-domain
+        RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && touch /var/lock/subsys/glassfishd
+	return $RETVAL
+}
+
+stop () {
+	# stop daemon
+	echo -n $"Stopping $prog: "
+	daemon $PROGRAM stop-domain
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/glassfishd
+}
+
+restart() {
+	stop
+	start
+}
+
+case $1 in
+	start)
+		start
+	;;
+	stop)
+		stop
+	;;
+	restart)
+		restart
+	;;
+	*)
+
+	echo $"Usage: $prog {start|stop|restart}"
+	exit 3
+esac
+
+exit $RETVAL

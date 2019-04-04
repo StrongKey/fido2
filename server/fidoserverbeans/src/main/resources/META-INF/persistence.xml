@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="FIDOPU" transaction-type="JTA">
+    <jta-data-source>jdbc/skfs</jta-data-source>
+    <class>com.strongkey.appliance.entitybeans.Domains</class>
+    <class>com.strongkey.appliance.entitybeans.Servers</class>
+    <class>com.strongkey.skfe.entitybeans.FidoKeys</class>
+    <class>com.strongkey.replication.entitybeans.Replication</class>
+    <class>com.strongkey.skfs.entitybeans.FidoUsers</class>
+    <class>com.strongkey.skfs.entitybeans.AttestationCertificates</class>
+    <class>com.strongkey.skfs.entitybeans.FidoPolicies</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties/>
+  </persistence-unit>
+</persistence>

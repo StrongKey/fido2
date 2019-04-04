@@ -1,0 +1,589 @@
+openapi: 3.0.0
+info:
+  title: FIDO Server API
+  version: "2.0"
+  description: |
+    The FIDO Server API provides the registration and authentication web services required to manage users' FIDO keys.
+
+    All API calls require a cryptographic _domain ID (did)_. Cryptographic domains provide a method of cryptographically
+    separating encrypted data. Each domain uses a different set of encryption keys, uses a different set of credentials,
+    and can be configured separately to have different behaviors.
+
+    All web services require a set access and secret key. The secret key is used to authenticate the user to the server 
+    and protect the integrity of the request through the use of an HMAC-SHA-256 digest over the request. The access key
+    is used to identify which secret was used so the server can regenerate the equivalent digest and verify the request
+    was made by the owner of the secret key.
+  termsOfService: 'https://www.strongkey.com/privacy-policy-terms-of-use/#terms-of-use'
+  contact:
+    name: StrongKey
+    url: 'https://www.strongkey.com'
+    email: support@strongkey.com
+  license:
+    name: GNU LGPL 2.1+
+    url: 'http://www.fsf.org/licensing/licenses/lgpl.html'
+servers:
+  - url: '/api/domains/{did}'
+tags:
+  - name: Registration
+    description: Register a user and their FIDO key using FIDO2 protocols.
+  - name: Authentication
+    description: Authenticate a user using FIDO2 protocols.
+  - name: Administration
+    description: Management API for registered FIDO keys.
+paths:
+  /fidokeys/registration/challenge:
+    post:
+      summary: Request a challenge (nonce) for registration.
+      description: |
+        Step 1 for FIDO authenticator registration. This method generates and returns a challenge to the caller.
+      tags:
+        - Registration
+      operationId: preregister
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: header
+          name: strongkey-content-sha256
+          schema:
+            type: string
+          required: true
+          description: The base64 encoded SHA-256 sum of the POST body.
+          example: RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=
+        - in: header
+          name: Content-Type
+          schema:
+            type: string
+            example: application/json
+          required: true
+          description: The Content Type of the POST body.
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - protocol
+                - username
+              properties:
+                protocol:
+                  $ref: '#/components/schemas/protocol'
+                username:
+                  $ref: '#/components/schemas/username'
+                displayname:
+                  $ref: '#/components/schemas/displayname'
+                options:
+                  $ref: '#/components/schemas/options'
+                extensions:
+                  $ref: '#/components/schemas/extensions'
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /fidokeys/registration:
+    post:
+      summary: Submit a signed challenge (nonce) for registration.
+      description: |
+        Step 2 for FIDO authenticator registration. This method allows the caller to return the signed challenge to the server to be verified.
+      tags:
+        - Registration
+      operationId: register
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: header
+          name: strongkey-content-sha256
+          schema:
+            type: string
+          required: true
+          description: The base64 encoded SHA-256 sum of the POST body.
+          example: RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=
+        - in: header
+          name: Content-Type
+          schema:
+            type: string
+            example: application/json
+          required: true
+          description: The Content Type of the POST body.
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - protocol
+                - response
+                - metadata
+              properties:
+                protocol:
+                  $ref: '#/components/schemas/protocol'
+                response:
+                  $ref: '#/components/schemas/response'
+                metadata:
+                  $ref: '#/components/schemas/metadata'
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /fidokeys:
+    get:
+      summary: Get all keys associated with a registered user.
+      description: |
+        This method returns a list of user-registered FIDO authenticator metadata: the place and time from which it was registered and used (last modified).
+      tags:
+        - Administration
+      operationId: getkeysinfo
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: true
+          description: String username for which to retrieve keyinfo.
+          example: user.name@domain.com
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '404':
+          $ref: '#/components/responses/MissingResource'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /fidokeys/authentication/challenge:
+    post:
+      summary: Request a challenge (nonce) for authentication.
+      description: |
+        Step 1 for FIDO authenticator authentication. This method generates and returns a challenge to the caller.
+      tags:
+        - Authentication
+      operationId: preauthenticate
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: header
+          name: strongkey-content-sha256
+          schema:
+            type: string
+          required: true
+          description: The base64 encoded SHA-256 sum of the POST body.
+          example: RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=
+        - in: header
+          name: Content-Type
+          schema:
+            type: string
+            example: application/json
+          required: true
+          description: The Content Type of the POST body.
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - protocol
+                - username
+              properties:
+                protocol:
+                  $ref: '#/components/schemas/protocol'
+                username:
+                  $ref: '#/components/schemas/username'
+                options:
+                  $ref: '#/components/schemas/options'
+                extensions:
+                  $ref: '#/components/schemas/extensions'
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /fidokeys/authentication:
+    post:
+      summary: Submit a signed challenge (nonce) for authenication.
+      description: |
+        Step 2 for FIDO authenticator authentication. This method allows the caller to return the signed challenge to the server to be verified.
+      tags:
+        - Authentication
+      operationId: authenticate
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: header
+          name: strongkey-content-sha256
+          schema:
+            type: string
+          required: true
+          description: The base64 encoded SHA-256 sum of the POST body.
+          example: RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=
+        - in: header
+          name: Content-Type
+          schema:
+            type: string
+            example: application/json
+          required: true
+          description: The Content Type of the POST body.
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - protocol
+                - response
+                - metadata
+              properties:
+                protocol:
+                  $ref: '#/components/schemas/protocol'
+                response:
+                  $ref: '#/components/schemas/response'
+                metadata:
+                  $ref: '#/components/schemas/metadata'
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /fidokeys/{kid}:
+    patch:
+      summary: Updates a registered key's status.
+      description: |
+        This method changes the status of a specific user-registered key stored in persistent storage. The FIDO protocol as such does not specify any activation/deactivation process. This method just changes the user-registered FIDO authenticator information to bear a new status in the persistent storage so it can be used for FIDO authentication. To identify which key must be activated&mdash;since the user could have registered multiple FIDO authenticators&mdash;a key ID is passed. This key ID for every registered FIDO authenticator can be obtained by making the *getkeysinfo* call, which will return an array of registered key metadata with each entry mapped to a key ID. Client applications have to cache these key IDs if they wish to deactivate, activate, or deregister keys.
+      tags:
+        - Administration
+      operationId: patchkey
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: path
+          name: kid
+          schema:
+            type: string
+          required: true
+          description: String ID of the key to patch.
+          example: "1-1-username-1"
+        - in: header
+          name: strongkey-content-sha256
+          schema:
+            type: string
+          required: true
+          description: The base64 encoded SHA-256 sum of the POST body.
+          example: RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=
+        - in: header
+          name: Content-Type
+          schema:
+            type: string
+            example: application/json
+          required: true
+          description: The Content Type of the POST body.
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - modify_location
+              properties:
+                status:
+                  $ref: '#/components/schemas/status'
+                modify_location:
+                  $ref: '#/components/schemas/location'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '404':
+          $ref: '#/components/responses/MissingResource'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      summary: Delete a registered key.
+      description: |
+        The process of deleting or de-registering an already-registered FIDO authenticator. The inputs needed are the username and the random ID to point to a unique registered key for that user. This random ID can be obtained by calling the *getkeysinfo* method.
+      tags:
+        - Administration
+      operationId: deregister
+      parameters:
+        - in: path
+          name: did
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the domain from which to request services.
+          example: 1
+        - in: path
+          name: kid
+          schema:
+            type: string
+          required: true
+          description: String ID of the key to patch.
+          example: "1-1-username-1"
+        - in: header
+          name: Date
+          schema:
+            type: string
+            example: Mon, 25 Feb 2019 01:48:43 PST
+          required: true
+          description: The date that the request is being made in the format "EEE, d MMM yyyy HH:mm:ss z".
+        - in: header
+          name: strongkey-api-version
+          schema:
+            type: string
+            example: "2.0"
+          required: true
+          description: "2.0 is the only acceptable value."
+      responses:
+        '200':
+          $ref: '#/components/responses/GenericResponse'
+        '400':
+          $ref: '#/components/responses/BadInput'
+        '401':
+          $ref: '#/components/responses/BadAuth'
+        '404':
+          $ref: '#/components/responses/MissingResource'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    protocol:
+      description: The FIDO protocol for this request.
+      type: string
+      enum:
+        - 'FIDO2_0'
+        - 'U2F_V2'
+    metadata:
+      description: Additional information sent/stored. Particular to StrongKey's implementation of FIDO.
+      type: object
+    response:
+      description: The information returned after signing the challenge.
+      type: object
+    Response:
+      description: Response JSON object returned by web services.
+      required:
+        - Message
+      properties:
+        Response:
+          description: The result produced by the web service operation, typically an error message for non-200 status returns.
+          type: string
+    options:
+      description: The options that accompany this request.
+      type: object
+      example: {}
+    extensions:
+      description: The options that accompany this request.
+      type: object
+      example: {}
+    username:
+      description: The username associated with or to be associated with the FIDO key.
+      type: string
+      maxLength: 256
+      example: user.name@domain.com
+    displayname:
+      description: The display name associated with or to be associated with the FIDO key.
+      type: string
+      maxLength: 256
+      example: User Name
+    location:
+      description: Location metadata that can be stored during web service calls.
+      type: string
+    status:
+      description: The status of a registered FIDO key.
+      type: string
+      enum: 
+        - "Active"
+        - "Inactive"
+      
+  responses:
+    GenericResponse:
+      description: A request was successfully processed by the StrongKey FIDO server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'
+          example: |
+            {
+              "Response": "",
+            }
+    BadAuth:
+      description: The HMAC Authentication failed.
+    MissingResource:
+      description: The requested resource is unavailable.
+    BadInput:
+      description: There was an error in the submitted input.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'
+          example: |
+            {
+              "Response": "",
+            }
+    ServerError:
+      description: The server ran into an unexpected exception.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'
+          example: |
+            {
+              "Response": "",
+            }
+  securitySchemes:
+    HMAC:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: | 
+              The type and value of the authentication to present to the server. The currently supported mechanism is HMAC Auth which requires an access key and secret key. The secret key must be used to create an HMAC-SHA256 hash over the request in the form of\:
+                + http verb + "\n"             (ex POST)
+                + content SHA-256 + "\n"       (ex RDk2y8UcpVXsnFmyo6TzRpJxbszectFj8zR3bFdDjyY=)
+                + content type + "\n"          (ex application/json)
+                + current date + "\n"          (ex Mon, 25 Feb 2019 01:48:43 PST)
+                + strongkey api version + "\n" (ex 2.0)
+                + resource location            (ex /api/domains/1/fidokeys)
+                
+                The value of the header should be in the form "<type> <access key>:<hmac-sha256>" 
+                
+                ex: "HMAC 162a5684336fa6e7:iEN97fs4Sk7fMonM5BWiW4bNx5kUuNQ0lCzTB4qxKaY=" 
+security:
+  - HMAC: []

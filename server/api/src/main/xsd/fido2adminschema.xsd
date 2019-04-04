@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License, as published by the Free Software Foundation and
+ * available at http://www.fsf.org/licensing/licenses/lgpl.html,
+ * version 2.1 or above.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2001-2019 StrongAuth, Inc.
+ *
+ * $Date$
+ * $Revision$
+ * $Author$
+ * $URL$
+ *
+ * *********************************************
+ *                    888
+ *                    888
+ *                    888
+ *  88888b.   .d88b.  888888  .d88b.  .d8888b
+ *  888 "88b d88""88b 888    d8P  Y8b 88K
+ *  888  888 888  888 888    88888888 "Y8888b.
+ *  888  888 Y88..88P Y88b.  Y8b.          X88
+ *  888  888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * *********************************************
+ *
+ * The schema for sending XML messages to the KeyAppliance for card capture
+ * related service operations.
+ *
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://xml.strongauth.com/schema/CCXMLSchema201804"
+    xmlns:tns="http://xml.strongauth.com/schema/CCXMLSchema201804"
+    elementFormDefault="qualified">
+
+    <!--
+    =============================================
+    Did
+    =============================================
+    -->
+
+    <xsd:simpleType name="Did">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en-US">
+                The cryptographic domain id.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1"/>
+                    <xsd:maxExclusive value="65535"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!--
+    =============================================
+    Protocol
+    =============================================
+    -->
+
+    <xsd:simpleType name="Protocol">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en-US">
+                The FIDO protocol being used.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="FIDO2_0"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!--
+    =============================================
+    SvcUsername
+    =============================================
+    -->
+
+    <xsd:simpleType name="SvcUsername">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en-US">
+                The service credential username.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!--
+    =============================================
+    SvcPassword
+    =============================================
+    -->
+
+    <xsd:simpleType name="SvcPassword">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en-US">
+                The service credential password.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!--
+    ==========================================================================================
+                                         888                   88888888888
+                                         888                       888                                 
+                                         888                       888
+ .d8888b  .d88b.  88888b.d88b.  88888b.  888  .d88b.  888  888     888     888  888 88888b.   .d88b.  .d8888b
+d88P"    d88""88b 888 "888 "88b 888 "88b 888 d8P  Y8b `Y8bd8P'     888     888  888 888 "88b d8P  Y8b 88K
+888      888  888 888  888  888 888  888 888 88888888   X88K       888     888  888 888  888 88888888 "Y8888b.
+Y88b.    Y88..88P 888  888  888 888 d88P 888 Y8b.     .d8""8b.     888     Y88b 888 888 d88P Y8b.          X88
+ "Y8888P  "Y88P"  888  888  888 88888P"  888  "Y8888  888  888     888      "Y88888 88888P"   "Y8888   88888P'
+                                888                                             888 888
+                                888                                        Y8b d88P 888
+                                888                                         "Y88P"  888
+    ==========================================================================================
+    -->
+    
+    <!--
+    =============================================
+    SvcInfoType
+    =============================================
+    -->
+    <xsd:complexType name="SvcInfoType">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en-US">
+                Verify input contains did, protocol, svcusername, and svcpassword.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Did" type="tns:Did"/>
+            <xsd:element name="Protocol" type="tns:Protocol"/>
+            <xsd:element name="SvcUsername" type="tns:SvcUsername"/>
+            <xsd:element name="SvcPassword" type="tns:SvcPassword"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <!--
+    ==========================================================================================
+             888                                          888
+             888                                          888
+             888                                          888
+     .d88b.  888  .d88b.  88888b.d88b.   .d88b.  88888b.  888888 .d8888b
+    d8P  Y8b 888 d8P  Y8b 888 "888 "88b d8P  Y8b 888 "88b 888    88K
+    88888888 888 88888888 888  888  888 88888888 888  888 888    "Y8888b.
+    Y8b.     888 Y8b.     888  888  888 Y8b.     888  888 Y88b.       X88
+     "Y8888  888  "Y8888  888  888  888  "Y8888  888  888  "Y888  88888P'
+    ==========================================================================================
+    -->
+
+    <!--
+    =============================================
+    SvcInfo
+    =============================================
+    -->
+    <xsd:element name="SvcInfo" type="tns:SvcInfoType"/>
+</xsd:schema>
