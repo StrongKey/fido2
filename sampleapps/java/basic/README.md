@@ -42,16 +42,16 @@ Follow the instructions below to install this sample.
     echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
 
-4. Download the Relying Party .war file [basicserver.war](https://gitlab.strongkey.com/dev/fido2/blob/master/sampleapps/java/basic/basicserver.war).
+4. Download the Relying Party .war file [basicserver.war](https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war).
 
     ```sh
-    wget https://gitlab.strongkey.com/dev/fido2/blob/master/sampleapps/java/basic/basicserver.war
+    wget https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war
     ```
 
 5. Add the .war file to Payara.
 
     ```sh
-    payara41/glassfish/bin/asadmin deploy webauthntutorial.war
+    payara41/glassfish/bin/asadmin deploy basicserver.war
     ```
 
 6. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
