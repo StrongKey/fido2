@@ -1,5 +1,5 @@
 # Basic Java Sample application
-This project is a basic Relying Party (RP) web application written in Java to work with StrongKey's [FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2/server). This project also includes sample javascript files providing a basic user interface to test FIDO2 registration and authentication.
+This project is a basic Relying Party (RP) web application written in Java to work with StrongKey's [FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2/server). This project also includes sample JavaScript files providing a basic user interface to test FIDO2 registration and authentication.
 
 The goals of this project are to demonstrate how to call StrongKey's FIDO2 Server APIs and how to properly manage users' FIDO2 keys. It is meant to serve as a reference implementation of a project that leverages StrongKey's FIDO2 Server to enable FIDO2 authentication. **If you are an application developer looking to FIDO2-enable an application, this code uses examples of the FIDO2 API calls.**
 
