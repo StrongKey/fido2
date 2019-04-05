@@ -17,8 +17,8 @@ Follow [the installation instructions](docs/Installation_Guide_Linux.md) to down
 Sample code is provided with a brief explanation of what each sample does:
 
 * Java Samples
-  * Basic : A basic Java application demonstrating FIDO2 registration and authentication. Click [HERE](https://webauthndemo.strongkey.com) to try out the basic Java application.
-  * [Server](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/server) - Java sample
+  * [Basic](https://webauthndemo.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication.
+  * [Server](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/server): Java sample code.
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
