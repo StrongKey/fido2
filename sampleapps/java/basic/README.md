@@ -42,7 +42,7 @@ Follow the instructions below to install this sample.
     echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
 
-4. Download the Relying Party .war file [basicserver.war](https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war).
+4. Download the Relying Party web application .war file [basicserver.war](https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war).
 
     ```sh
     wget https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war
