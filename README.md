@@ -21,7 +21,7 @@ Sample code is provided with a brief explanation of what each sample does:
   * [Server](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/server): Java sample code.
 
 ## API docs
-[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
+[Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido/)
 
 ## Contributing
 If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
