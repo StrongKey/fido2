@@ -74,7 +74,7 @@
     curl -k https://localhost:8181/api/application.wadl
     ```
 
-8. To test this installation of the FIDO2 Server, check out the [sample Basic Java application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
+8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
 
 ## Removal
 
