@@ -72,4 +72,4 @@ available here[https://www.contributor-covenant.org/version/1/4/code-of-conduct.
 
 [homepage]: https://www.contributor-covenant.org
 
-For answers to common questions about this code of conduct, see the contributor covenant (FAQ)[https://www.contributor-covenant.org/faq].
+For answers to common questions about this code of conduct, see the contributor covenant [FAQ](https://www.contributor-covenant.org/faq).
