@@ -13,17 +13,15 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 ## Installation
 Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download the FIDO2 Server and get it running.
 
-To see it in action, sample code is provided in the links below.
+## Sample Applications
+Sample code is provided with a brief explanation of what each sample does:
+
+* Java Samples
+  * Basic : A basic Java application demonstrating FIDO2 registration and authentication. Click [HERE](https://webauthndemo.strongkey.com) to try out the basic Java application.
+  * [Server](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/server) - Java sample
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
-
-## Sample APPS
-Sample code is provided with a brief explanation of what each sample does:
-
-* JAVA
-  * Basic : A basic Java application demonstrating FIDO2 registration and authentication. Click [HERE](https://webauthndemo.strongkey.com) to try out the basic Java application.
-  * [Server](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/server) - Java sample
 
 ## Contributing
 If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
