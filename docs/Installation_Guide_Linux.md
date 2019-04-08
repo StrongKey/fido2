@@ -76,6 +76,11 @@
 
 8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
 
+__NOTE__: Both the signing ans secret keys in the keystore use default values and should be changed after installation is completed. Run the following command from _usr/local/strongkey/skfs/keystores_ to see the usage and syntax for the keymanager tool:
+    
+    ```java -jar keymanager.jar```
+
+
 ## Removal
 
 To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
