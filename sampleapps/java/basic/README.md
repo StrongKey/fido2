@@ -42,10 +42,10 @@ Follow the instructions below to install this sample.
     echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
 
-4. Download the Relying Party web application .war file [basicserver.war](https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war).
+4. Download the Relying Party web application .war file [basicserver.war](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war).
 
     ```sh
-    wget https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war
+    wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war
     ```
 
 5. Add the .war file to Payara.
@@ -63,7 +63,7 @@ Follow the instructions below to install this sample.
 
 ## Removal
 
-To uninstall the RP sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://github.com/StrongKey/FIDO-Server/blob/master/docs/Installation_Guide_Linux.md#removal). Removing the StrongKey FIDO Server also removes the sample RP web application and sample WebAuthn client.
+To uninstall the RP sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://github.com/StrongKey/fido2/blob/master/docs/Installation_Guide_Linux.md#removal). Removing the StrongKey FIDO Server also removes the sample RP web application and sample WebAuthn client.
 
 ## Contributing to the Sample Relying Party Web Application 
 
