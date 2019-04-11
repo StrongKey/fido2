@@ -1,5 +1,5 @@
 # Basic Java Sample application
-This project is a basic Relying Party (RP) web application written in Java to work with StrongKey's [FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2/server). This project also includes sample javascript files prividing a basic user interface to test FIDO2 registration and authentication.
+This project is a basic Relying Party (RP) web application written in Java to work with StrongKey's [FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2). This project also includes sample JavaScript files providing a basic user interface to test FIDO2 registration and authentication.
 
 The goals of this project are to demonstrate how to call StrongKey's FIDO2 Server APIs and how to properly manage users' FIDO2 keys. It is meant to serve as a reference implementation of a project that leverages StrongKey's FIDO2 Server to enable FIDO2 authentication. **If you are an application developer looking to FIDO2-enable an application, this code uses examples of the FIDO2 API calls.**
 
@@ -42,16 +42,16 @@ Follow the instructions below to install this sample.
     echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
 
-4. Download the Relying Party .war file [basicserver.war](https://gitlab.strongkey.com/dev/fido2/blob/master/sampleapps/java/basic/basicserver.war).
+4. Download the Relying Party web application .war file [basicserver.war](https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war).
 
     ```sh
-    wget https://gitlab.strongkey.com/dev/fido2/blob/master/sampleapps/java/basic/basicserver.war
+    wget https://github.com/StrongKey/fido2/blob/master/sampleapps/java/basic/basicserver.war
     ```
 
 5. Add the .war file to Payara.
 
     ```sh
-    payara41/glassfish/bin/asadmin deploy webauthntutorial.war
+    payara41/glassfish/bin/asadmin deploy basicserver.war
     ```
 
 6. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
@@ -67,7 +67,7 @@ To uninstall the RP sample web application, follow the uninstall instructions in
 
 ## Contributing to the Sample Relying Party Web Application 
 
-If you would like to contribute to the sample Relying Party web application project, please read [CONTRIBUTING.md](https://github.com/StrongKey/relying-party-java/blob/master/CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
+If you would like to contribute to the sample Relying Party web application project, please read [CONTRIBUTING.md](https://github.com/StrongKey/fido2/blob/master/CONTRIBUTING.md), then sign and submit the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
 
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](https://github.com/StrongKey/relying-party-java/blob/master/LICENSE).

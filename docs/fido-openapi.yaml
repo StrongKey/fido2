@@ -1,9 +1,9 @@
 openapi: 3.0.0
 info:
-  title: FIDO Server API
+  title: FIDO2 Server API
   version: "2.0"
   description: |
-    The FIDO Server API provides the registration and authentication web services required to manage users' FIDO keys.
+    The FIDO2 Server API provides the registration and authentication web services required to manage users' FIDO keys.
 
     All API calls require a cryptographic _domain ID (did)_. Cryptographic domains provide a method of cryptographically
     separating encrypted data. Each domain uses a different set of encryption keys, uses a different set of credentials,

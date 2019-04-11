@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
--  **The scripted installation process has been tested on the following Linux distros only.** The installation script is untested on other flavors of Linux but may work with slight modifications.
+-  **The scripted installation process has been tested on the following Linux distributions only.** The installation script is untested on other flavors of Linux but may work with slight modifications.
     - RedHat/CentOS/Oracle 7
     - Ubuntu 18.04
     - Debian 9
@@ -12,7 +12,7 @@
 
 -  The installation script installs Payara running HTTPS on port 8181, so make sure all firewall rules allow that port to be accessed.
 
-- StrongKey's FIDO2 Server must be installed before the sample Relying Party and sample WebAuthn.
+- StrongKey's FIDO2 Server must be installed before the sample Relying Party web application and sample WebAuthn Java client.
 
 ----------------
 
@@ -23,7 +23,7 @@
 
 1.  Open a terminal and **change directory** to the target download folder.
 
-2. Install **wget** if it does not exist already.
+2. Install **wget** if it has not been already.
     ```sh
     sudo yum install wget 
     or
@@ -74,7 +74,12 @@
     curl -k https://localhost:8181/api/application.wadl
     ```
 
-8. To test this installation of the FIDO2 Server, check out the [sample Basic Java application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
+8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
+
+__NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. Run the following command from _usr/local/strongkey/skfs/keystores_ to see the usage and syntax for the keymanager tool, then change them both:
+    
+    ```java -jar keymanager.jar```
+
 
 ## Removal
 
