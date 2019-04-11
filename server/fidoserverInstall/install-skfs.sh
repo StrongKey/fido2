@@ -212,6 +212,7 @@ if [ $INSTALL_FIDO = 'Y' ]; then
         fi
 
         cp $SKFS_SOFTWARE/signingkeystore.bcfks $SKFS_SOFTWARE/signingtruststore.bcfks $SKFS_HOME/keystores
+        cp -R $SKFS_SOFTWARE/keymanager $SKFS_HOME
 
 fi
 

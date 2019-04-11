@@ -19,4 +19,5 @@ server/crypto/target/
 server/fido2mds/target/
 server/fidoserverEAR/target/
 server/fidoserverbeans/target/
+server/keymanager/target/
 /sampleapps/java/basic/server/target/

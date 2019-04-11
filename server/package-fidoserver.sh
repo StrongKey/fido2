@@ -43,6 +43,8 @@ mvn clean install -q
 # Copy the necessary jars, libs, wars, ears into dist
 echo "-Copying files..."
 cp $fidoserver/fidoserverEAR/target/fidoserver.ear $fidoserver/fidoserverInstall
+mkdir $fidoserver/fidoserverInstall/keymanager
+cp -R $fidoserver/keymanager/target/dist/* $fidoserver/fidoserverInstall/keymanager
 
 # Create archives
 echo "-Packaging fidoserver..."
@@ -53,4 +55,5 @@ trap : 0
 echo "Success!"
 
 rm -f $fidoserver/fidoserverInstall/fidoserver.ear 
+rm -rf $fidoserver/fidoserverInstall/keymanager
 exit 0

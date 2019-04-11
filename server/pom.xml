@@ -36,5 +36,6 @@
         <module>fido2mds</module>
         <module>fidoserverbeans</module>
         <module>common</module>
+        <module>keymanager</module>
     </modules>
 </project>
