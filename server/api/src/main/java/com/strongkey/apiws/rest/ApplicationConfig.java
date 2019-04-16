@@ -2,7 +2,7 @@
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
+ * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
  */
 
 package com.strongkey.apiws.rest;
@@ -19,7 +19,6 @@ public class ApplicationConfig extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(APIServlet.class, CrossOriginResourceSharingFilter.class));
-//        return new HashSet<>(Arrays.asList(APIServlet.class, FidoAdminServlet.class));
+        return new HashSet<>(Arrays.asList(APIServlet.class, CrossOriginResourceSharingFilter.class, FidoAdminServlet.class));
     }
 }

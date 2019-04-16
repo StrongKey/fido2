@@ -2,7 +2,7 @@
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
+ * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
  */
 
 package com.strongkey.skfs.policybeans;
@@ -20,8 +20,10 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.core.Response;
 
 @Stateless
 public class deleteFidoPolicy implements deleteFidoPolicyLocal {
@@ -43,11 +45,20 @@ public class deleteFidoPolicy implements deleteFidoPolicyLocal {
     private String classname = this.getClass().getName();
 
     @Override
-    public void execute(Long did, Long sid, Long pid) throws SKFEException {
-        FidoPolicies policy = getpolicybean.getbyPK(did, sid, pid);
+    public Response execute(Long did, String sidpid) {
 
+        Long sid;
+        Long pid;
+        try {
+            sid = Long.parseLong(sidpid.split("-")[0]);
+            pid = Long.parseLong(sidpid.split("-")[1]);
+        } catch (Exception ex) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        FidoPolicies policy = getpolicybean.getbyPK(did, sid, pid);
         if (policy == null) {
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDOJPA-ERR-2005"));
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         em.remove(policy);
@@ -55,23 +66,22 @@ public class deleteFidoPolicy implements deleteFidoPolicyLocal {
 
         //Replicate
         String primarykey = sid + "-" + did + "-" + pid;
-        try {
-            if (applianceCommon.replicate()) {
+        if (applianceCommon.replicate()) {
 
-                String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, applianceConstants.REPLICATION_OPERATION_DELETE, primarykey, policy);
-                if (response != null) {
-                    throw new SKFEException(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response);
-
-                }
+            String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, applianceConstants.REPLICATION_OPERATION_DELETE, primarykey, policy);
+            if (response != null) {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
             }
-        } catch (Exception e) {
-            sc.setRollbackOnly();
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
-            throw new RuntimeException(e.getLocalizedMessage());
         }
 
         //remove from local map
         String fpMapkey = sid + "-" + did + "-" + pid;
         skceMaps.getMapObj().remove(skfsConstants.MAP_FIDO_POLICIES, fpMapkey);
+        String response = Json.createObjectBuilder()
+                .add(skfsConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, "Successfully deleted policy " + sid + "-" + pid)
+                .build().toString();
+
+        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        return Response.ok().entity(response).build();
     }
 }
