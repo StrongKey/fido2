@@ -35,6 +35,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.ws.rs.core.Response;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 @Stateless
 public class addFidoPolicy implements addFidoPolicyLocal {
@@ -54,8 +56,18 @@ public class addFidoPolicy implements addFidoPolicyLocal {
     public Response execute(Long did, CreateFidoPolicyRequest request) {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
 
+        JSONObject json;
+        JSONObject policy;
+        try {
+            json = new JSONObject(request.getPolicy());
+            policy = json.getJSONObject("policy");
+        } catch (JSONException ex) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-1000", ex.getLocalizedMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-1000") + "Check server logs for details.").build();
+        }
+
         //Base64 Policy
-        String policyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(request.getPolicy().getBytes());
+        String policyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(policy.toString().getBytes());
 
         Long sid = applianceCommon.getServerId();
         Integer pid = seqgenejb.nextPolicyID();
@@ -65,8 +77,8 @@ public class addFidoPolicy implements addFidoPolicyLocal {
         fidopolicyPK.setPid(pid.shortValue());
         fidopolicyPK.setSid(sid.shortValue());
         fidopolicy.setFidoPoliciesPK(fidopolicyPK);
-        fidopolicy.setStartDate(request.getStartDate());
-        fidopolicy.setEndDate(request.getEndDate());
+        fidopolicy.setStartDate(new Date(request.getStartDate()));
+        fidopolicy.setEndDate(new Date(request.getEndDate()));
         fidopolicy.setCertificateProfileName(request.getCertificateProfileName());
         fidopolicy.setPolicy(policyBase64);
         fidopolicy.setVersion(request.getVersion());
@@ -77,6 +89,23 @@ public class addFidoPolicy implements addFidoPolicyLocal {
 
         //TODO add signing code(?)
         try {
+            //add to local map
+            String fpMapkey = sid + "-" + did + "-" + pid;
+            FidoPolicyObject fidoPolicyObject;
+                fidoPolicyObject = FidoPolicyObject.parse(
+                        policyBase64,
+                        request.getVersion(),
+                        did,
+                        sid,
+                        pid.longValue(),
+                        new Date(request.getStartDate()),
+                        new Date(request.getEndDate()));
+            MDSClient mds = null;
+            if (fidoPolicyObject.getMdsOptions() != null) {
+                mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
+            }
+            skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
+
             em.persist(fidopolicy);
             em.flush();
             em.clear();
@@ -90,23 +119,6 @@ public class addFidoPolicy implements addFidoPolicyLocal {
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
                 }
             }
-
-            //add to local map
-            String fpMapkey = sid + "-" + did + "-" + pid;
-            FidoPolicyObject fidoPolicyObject;
-                fidoPolicyObject = FidoPolicyObject.parse(
-                        policyBase64,
-                        request.getVersion(),
-                        did,
-                        sid,
-                        pid.longValue(),
-                        request.getStartDate(),
-                        request.getEndDate());
-            MDSClient mds = null;
-            if (fidoPolicyObject.getMdsOptions() != null) {
-                mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
-            }
-            skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
 
         } catch (SKFEException ex) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + ex.getLocalizedMessage()).build();

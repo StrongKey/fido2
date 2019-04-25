@@ -9,32 +9,31 @@ package com.strongkey.skfs.requests;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.util.Date;
 
 @JsonInclude(Include.NON_NULL)
 public class CreateFidoPolicyRequest {
 
-    private Date startDate;
-    private Date endDate;
+    private Long startDate;
+    private Long endDate;
     private String certificateProfileName;
     private String Policy;
     private Integer version;
     private String status;
     private String notes;
 
-    public Date getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

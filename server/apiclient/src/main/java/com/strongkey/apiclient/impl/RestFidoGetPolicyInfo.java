@@ -47,9 +47,9 @@ public class RestFidoGetPolicyInfo {
 
             String pid = "";
             if (!sidpid.equalsIgnoreCase("null")) {
-                pid = "?pid=" + sidpid;
+                pid = "&pid=" + sidpid;
             }
-            String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.GETKEYSINFO_ENDPOINT + "?metadataonly=" + metadataonly + pid;
+            String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.GET_POLICY_ENDPOINT + "?metadataonly=" + metadataonly + pid;
 
             System.out.println("\nCalling getpolicyinfo @ " + resourceLoc);
             
@@ -107,9 +107,8 @@ public class RestFidoGetPolicyInfo {
 
             //  Check to see if there is any
             try {
-                gkresponse = responseJSON.getJsonObject("Response").toString();
+                gkresponse = responseJSON.getJsonArray("Response").toString();
             } catch (Exception ex) {
-                //  continue since there is no error
             }
 
             System.out.println("\nGet policy information test complete.");

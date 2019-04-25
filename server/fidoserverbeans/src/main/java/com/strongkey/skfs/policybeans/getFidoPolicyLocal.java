@@ -18,11 +18,7 @@ public interface getFidoPolicyLocal {
 
     public FidoPolicies getbyPK(Long did, Long sid, Long pid);
 
-    public FidoPolicies getMetadataByPK(Long did, Long sid, Long pid);
-    
     public Collection<FidoPolicies> getAllActive();
 
     public Collection<FidoPolicies> getbyDid(Long did);
-
-    public Collection<FidoPolicies> getMetadataByDid(Long did);
 }

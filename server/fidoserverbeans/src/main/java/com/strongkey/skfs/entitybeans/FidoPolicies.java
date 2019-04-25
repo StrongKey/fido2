@@ -32,10 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FidoPolicies.findAll", query = "SELECT f FROM FidoPolicies f"),
     @NamedQuery(name = "FidoPolicies.findBySid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.sid = :sid"),
     @NamedQuery(name = "FidoPolicies.findByDid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.did = :did"),
-    @NamedQuery(name = "FidoPolicies.findMetadataByDid", query = "SELECT f.fidoPoliciesPK.sid, f.fidoPoliciesPK.did, f.fidoPoliciesPK.pid, f.certificateProfileName, f.version, f.status, f.endDate, f.createDate, f.modifyDate, f.notes FROM FidoPolicies f WHERE f.fidoPoliciesPK.did = :did"),
     @NamedQuery(name = "FidoPolicies.findByPid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.pid = :pid"),
     @NamedQuery(name = "FidoPolicies.findBySidDidPid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.sid = :sid and f.fidoPoliciesPK.did = :did and f.fidoPoliciesPK.pid = :pid"),
-    @NamedQuery(name = "FidoPolicies.findMetadataBySidDidPid", query = "SELECT f.fidoPoliciesPK.sid, f.fidoPoliciesPK.did, f.fidoPoliciesPK.pid, f.certificateProfileName, f.version, f.status, f.endDate, f.createDate, f.modifyDate, f.notes FROM FidoPolicies f WHERE f.fidoPoliciesPK.sid = :sid and f.fidoPoliciesPK.did = :did and f.fidoPoliciesPK.pid = :pid"),
     @NamedQuery(name = "FidoPolicies.findByStartDate", query = "SELECT f FROM FidoPolicies f WHERE f.startDate = :startDate"),
     @NamedQuery(name = "FidoPolicies.findByEndDate", query = "SELECT f FROM FidoPolicies f WHERE f.endDate = :endDate"),
     @NamedQuery(name = "FidoPolicies.findByCertificateProfileName", query = "SELECT f FROM FidoPolicies f WHERE f.certificateProfileName = :certificateProfileName"),
@@ -223,23 +221,43 @@ public class FidoPolicies implements Serializable {
         return true;
     }
 
+    public JsonObjectBuilder toMetaDataJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("did", getFidoPoliciesPK().getDid());
+        job.add("sid", getFidoPoliciesPK().getSid());
+        job.add("pid", getFidoPoliciesPK().getPid());
+        job.add("startdate", getStartDate().getTime());
+        if (getEndDate() != null)
+            job.add("enddate", getEndDate().getTime());
+        job.add("name", getCertificateProfileName());
+        job.add("version", getVersion());
+        job.add("status", getStatus());
+        if (getNotes() != null)
+            job.add("notes", getNotes());
+        job.add("createDate", getCreateDate().getTime());
+        if (getModifyDate() != null)
+            job.add("modifyDate", getModifyDate().getTime());
+        return job;
+    }
+
     public JsonObjectBuilder toJson() {
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("did", getFidoPoliciesPK().getDid());
         job.add("sid", getFidoPoliciesPK().getSid());
         job.add("pid", getFidoPoliciesPK().getPid());
         job.add("startdate", getStartDate().getTime());
-        job.add("enddate", getEndDate().getTime());
+        if (getEndDate() != null)
+            job.add("enddate", getEndDate().getTime());
         job.add("name", getCertificateProfileName());
-        if (getPolicy()!= null)
+        if (getPolicy() != null)
             job.add("policy", getPolicy());
         job.add("version", getVersion());
         job.add("status", getStatus());
-        job.add("notes", getNotes());
+        if (getNotes() != null)
+            job.add("notes", getNotes());
         job.add("createDate", getCreateDate().getTime());
-        job.add("modifyDate", getModifyDate().getTime());
-        if (getSignature() != null)
-            job.add("signature", getSignature());
+        if (getModifyDate() != null)
+            job.add("modifyDate", getModifyDate().getTime());
         return job;
     }
 

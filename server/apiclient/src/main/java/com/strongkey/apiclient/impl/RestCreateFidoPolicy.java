@@ -30,8 +30,8 @@ public class RestCreateFidoPolicy {
                             String did, 
                             String accesskey, 
                             String secretkey, 
-                            Date startdate, 
-                            Date enddate, 
+                            Long startdate, 
+                            Long enddate, 
                             String certificateProfileName,
                             Integer version,
                             String status,
@@ -51,6 +51,7 @@ public class RestCreateFidoPolicy {
         cfpr.setPolicy(policy);
         ObjectWriter ow = new ObjectMapper().writer();
         String json = ow.writeValueAsString(cfpr);
+        System.out.println(json);
 
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);

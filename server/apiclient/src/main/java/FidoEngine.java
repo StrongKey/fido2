@@ -14,7 +14,6 @@ import com.strongkey.apiclient.impl.RestFidoGetKeysInfo;
 import com.strongkey.apiclient.impl.RestFidoGetPolicyInfo;
 import com.strongkey.apiclient.impl.RestFidoRegister;
 import java.util.Calendar;
-import java.util.Date;
 
 public class FidoEngine {
 
@@ -32,7 +31,7 @@ public class FidoEngine {
                      + "       java -jar apiclient.jar CP <hostport> <did> <accesskey> <secretkey> <start-date> <end-date> <certificate-profile-name> <version> <status> <notes> <policy>\n"
                      + "       java -jar apiclient.jar PP <hostport> <did> <accesskey> <secretkey> <sid-pid> <start-date> <end-date> <version> <status> <notes> <policy>\n"
                      + "       java -jar apiclient.jar DP <hostport> <did> <accesskey> <secretkey> <sid-pid>\n"
-                     + "       java -jar apiclient.jar DP <hostport> <did> <accesskey> <secretkey> <metatdataonly> <sid-pid>\n\n"
+                     + "       java -jar apiclient.jar GP <hostport> <did> <accesskey> <secretkey> <metatdataonly> <sid-pid>\n\n"
                      + "Acceptable Values:\n"
                      + "         hostport            : host and port to access the fido \n"
                      + "                                 SOAP & REST format : http://<FQDN>:<non-ssl-portnumber> or \n"
@@ -60,72 +59,90 @@ public class FidoEngine {
             switch (args[0]) {
 
                 case Constants.COMMANDS_REG:
-                    if (args.length != 8)
+                    if (args.length != 8) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoRegister.register(args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
                     System.out.println("\nDone with Register!\n");
                     break;
 
                 case Constants.COMMANDS_AUTH:
-                    if (args.length != 9)
+                    if (args.length != 9) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoAuthenticate.authenticate(args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
                     System.out.println("\nDone with Authorize!\n");
                     break;
 
                 case Constants.COMMANDS_GETKEYS:
-                    if (args.length != 6)
+                    if (args.length != 6) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoGetKeysInfo.getKeysInfo(args[1], args[2], args[3], args[4], args[5]);
                     System.out.println("\nDone with GetKeysInfo!\n");
                     break;
 
                 case Constants.COMMANDS_DEACT:
-                    if (args.length != 6)
+                    if (args.length != 6) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoActionsOnKey.deregister(args[1], args[2], args[3], args[4], args[5]);
                     System.out.println("\nDone with Deactivate!\n");
                     break;
 
                 case Constants.COMMANDS_UP:
-                    if (args.length != 7) 
+                    if (args.length != 7) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoActionsOnKey.patch(args[1], args[2], args[3], args[4], args[5], args[6]);
                     System.out.println("\nDone with Update!\n");
                     break;
 
                 case Constants.COMMANDS_CREATE_POLICY:
-                    if (args.length != 12) 
+                    if (args.length != 12) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
-                    RestCreateFidoPolicy.create(args[1], args[2], args[3], args[4], new Date(Long.parseLong(args[5])), new Date(Long.parseLong(args[6])), args[7], Integer.parseInt(args[8]), args[9], args[10], args[11]);
+                    RestCreateFidoPolicy.create(args[1], args[2], args[3], args[4], Long.parseLong(args[5]), Long.parseLong(args[6]), args[7], Integer.parseInt(args[8]), args[9], args[10], args[11]);
                     System.out.println("\nDone with Create!\n");
                     break;
 
                 case Constants.COMMANDS_PATCH_POLICY:
-                    if (args.length != 11) 
+                    if (args.length != 12) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
-                    RestFidoActionsOnPolicy.patch(args[1], args[2], args[3], args[4], args[5], new Date(Long.parseLong(args[6])), new Date(Long.parseLong(args[7])), Integer.parseInt(args[8]), args[9], args[10], args[11]);
+                    RestFidoActionsOnPolicy.patch(args[1], args[2], args[3], args[4], args[5], Long.parseLong(args[6]), Long.parseLong(args[7]), Integer.parseInt(args[8]), args[9], args[10], args[11]);
                     System.out.println("\nDone with patch!\n");
                     break;
 
                 case Constants.COMMANDS_DELETE_POLICY:
-                    if (args.length != 6) 
+                    if (args.length != 6) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoActionsOnPolicy.delete(args[1], args[2], args[3], args[4], args[5]);
                     System.out.println("\nDone with delete!\n");
                     break;
 
                 case Constants.COMMANDS_GET_POLICY:
-                    if (args.length != 6) 
+                    if (args.length != 7) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
 
                     RestFidoGetPolicyInfo.getPolicyInfo(args[1], args[2], args[3], args[4], args[5], args[6]);
                     System.out.println("\nDone with get policy!\n");
