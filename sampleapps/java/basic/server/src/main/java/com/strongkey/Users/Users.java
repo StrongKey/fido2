@@ -54,7 +54,7 @@ public class Users implements Serializable {
     private String lastName;
     
     @Basic(optional = false)
-    @Column(name = "createDate", nullable = false)
+    @Column(name = "create_date", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createDate;
     
