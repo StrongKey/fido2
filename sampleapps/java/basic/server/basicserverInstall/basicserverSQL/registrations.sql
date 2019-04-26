@@ -5,7 +5,7 @@
  * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
 create table IF NOT EXISTS Registrations (
-        id                              bigint unsigned not null,
+        id                              bigint unsigned AUTO_INCREMENT not null,
         email                      	varchar(64) not null,
         nonce                        	varchar(64) not null,
                 primary key (id),
