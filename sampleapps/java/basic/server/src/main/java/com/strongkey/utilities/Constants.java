@@ -10,6 +10,7 @@ package com.strongkey.utilities;
 // Constants
 public class Constants {
     // Webauthn tutorial (Relying Party (RP)) Path names
+    public static final String RP_REGISTER_EMAIL_PATH = "registerEmail";
     public static final String RP_PREGISTER_PATH = "preregister";
     public static final String RP_PREGISTER_EXISTING_PATH = "preregisterExisting";
     public static final String RP_REGISTER_PATH = "register";
@@ -19,7 +20,7 @@ public class Constants {
     public static final String RP_ISLOGGEDIN_PATH = "isLoggedIn";
     public static final String RP_LOGOUT_PATH = "logout";
     public static final String RP_PATH_DELETEACCOUNT = "deleteAccount";
-    public static final String RP_PATH_GETKEYS = "getkeysinfo";
+    public static final String RP_PATH_GETUSERINFO = "getuserinfo";
     public static final String RP_PATH_REMOVEKEYS = "removeKeys";
     
     
@@ -32,11 +33,20 @@ public class Constants {
     
     // Session Information
     public static final String SESSION_USERNAME = "username";
+    public static final String SESSION_FIRSTNAME = "firstName";
+    public static final String SESSION_LASTNAME = "lastName";
+    public static final String SESSION_EMAIL = "email";
     public static final String SESSION_ISAUTHENTICATED = "isAuthenticated";
     
     // Frontend <-> Webauthn tutorial (Relaying Party (RP)) JSON mappings
+    public static final String RP_JSON_KEY_EMAIL = "email";
     public static final String RP_JSON_KEY_USERNAME = "username";
     public static final String RP_JSON_KEY_DISPLAYNAME = "displayName";
+    public static final String RP_JSON_KEY_NONCE = "nonce";
+    public static final String RP_JSON_KEY_FIRSTNAME = "firstName";
+    public static final String RP_JSON_KEY_LASTNAME = "lastName";
+    public static final String RP_JSON_KEY_KEYS = "keys";
+    public static final String RP_JSON_KEY_USERINFO = "userInfo";
     public static final String RP_JSON_KEY_KEYIDS = "keyIds";
     public static final String RP_JSON_KEY_RESPONSE = "Response";
     public static final String RP_JSON_KEY_MESSAGE = "Message";
@@ -76,6 +86,7 @@ public class Constants {
     public static final String SKFS_RESPONSE_JSON_KEY_MESSAGE = "Message";
     public static final String SKFS_RESPONSE_JSON_KEY_ERROR = "Error";
     public static final String SKFS_RESPONSE_JSON_KEY_KEYS = "keys";
+    public static final String SKFS_RESPONSE_JSON_KEY_RANDOMID = "randomid";
     
     //  Miscellaneous
     public static final String CREATE_LOCATION = "N/A";
