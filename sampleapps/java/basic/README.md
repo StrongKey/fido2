@@ -57,7 +57,7 @@ Follow the instructions below to install this sample.
 6. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
-    curl -k https://localhost:8181/basicserver/application.wadl
+    curl -k https://localhost:8181/basicserver/fido2/application.wadl
     ```
 
 
