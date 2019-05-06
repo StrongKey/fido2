@@ -328,6 +328,7 @@ $MARIA_HOME/bin/mysql -u root mysql -e "update user set password=password('$MARI
                                                     grant all on skfs.* to skfsdbuser@localhost identified by '$MARIA_SKFSDBUSER_PASSWORD';
                                                     flush privileges;"
 if [ $INSTALL_FIDO = 'Y' ]; then
+
 	cd $SKFS_SOFTWARE/fidoserverSQL
 	$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs --quick < create.txt
 
@@ -346,6 +347,7 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 	chown -R strongkey $STRONGKEY_HOME/appliance
 
 	chown strongkey:strongkey $STRONGKEY_HOME/crypto/etc/crypto-configuration.properties
+
 fi
 
 service glassfishd start
@@ -377,17 +379,18 @@ $GLASSFISH_HOME/bin/asadmin delete-jvm-options $($GLASSFISH_HOME/bin/asadmin lis
 $GLASSFISH_HOME/bin/asadmin create-jvm-options -Djtss.tcs.ini.file=$STRONGKEY_HOME/lib/jtss_tcs.ini:-Djtss.tsp.ini.file=$STRONGKEY_HOME/lib/jtss_tsp.ini:-Xmx${XMXSIZE}:-Xms${XMXSIZE}:-server:-Djdk.tls.ephemeralDHKeySize=2048:-Dproduct.name="":-XX\\:-DisableExplicitGC
 
 if [ $INSTALL_FIDO = 'Y' ]; then
-	cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json << EOFAPPJSON
-	{
-  	"trustedFacets" : [{
-    	"version": { "major": 1, "minor" : 0 },
-    	"ids": [
-           	"https://$(hostname)",
-           	"https://$(hostname):8181"
-    	]
-  	}]
-	}
-	EOFAPPJSON
+
+cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json <<- EOFAPPJSON
+{
+  "trustedFacets" : [{
+    "version": { "major": 1, "minor" : 0 },
+    "ids": [
+      "https://$(hostname)",
+      "https://$(hostname):8181"
+    ]
+  }]
+}
+EOFAPPJSON
 
 	# Add other servers to app.json
 	for fqdn in $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select fqdn from servers;"); do
@@ -404,6 +407,7 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 	cp $SKFS_SOFTWARE/fidoserver.ear /tmp
 	$GLASSFISH_HOME/bin/asadmin deploy /tmp/fidoserver.ear
 	rm /tmp/fidoserver.ear
+
 fi
 
 echo "Done!"
