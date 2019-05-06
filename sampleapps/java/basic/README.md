@@ -20,41 +20,57 @@ Follow the instructions below to install this sample.
 - This Relying Party web application example must have a means of connecting with a StrongKey FIDO2 Server. You can install a FIDO2 Server either on the same machine as your RP web application or a different one.
 - You must have a Java web application server. These instructions assume you are using Payara (GlassFish).
 - The instructions assume the default ports for all the applications installed; Payara runs HTTPS on port 8181 by default, so make sure all firewall rules allow that port to be accessible.
-- **The sample commands below assume you are installing this RP web application on the same machine where StrongKey FIDO2 Server has been installed.** If you are installing on a separate machine, you may have to adjust the commands accordingly.
 
 ## Installation Instructions
 
-1. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
+1. If installing the sample application **on the same server** as the StrongKey FIDO Server, skip to step 2. Otherwise, StrongKey's software stack must be installed. The easiest way to do this is to follow the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) steps 1-5. Next, edit the install-skfs.sh script in a text editor. On the line "INSTALL_FIDO=Y" change the value of "Y" to "N". Run the script install-skfs.sh.
+
+2. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
 
     ```sh
     su - strongkey
     ```
 
-2. Create the following directories to configure the WebAuthn servlet home folder.
+3. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
     mkdir -p /usr/local/strongkey/webauthntutorial/etc
     ```
 
-3. Create a configuration file for the Relying Party web application to configure a FIDO2 Server.
+4. Create a configuration file for the Relying Party web application.
 
     ```sh
-    echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
+    vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
+5. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
-4. Download the Relying Party web application .war file [basicserver.war](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war).
+   ```
+   webauthntutorial.cfg.property.apiuri=https://{hostname of FIDO Server}:8181/api
+   webauthntutorial.cfg.property.mailhost.type={SendMail or SSL or StartTLS}
+   webauthntutorial.cfg.property.mailhost={localhost or hostname of mailhost}
+   webauthntutorial.cfg.property.mail.smtp.port={25 (SendMail) or mail server's port}
+   webauthntutorial.cfg.property.smtp.from={local-part of email address}
+   webauthntutorial.cfg.property.smtp.fromName={Human readable name associated with email}
+   webauthntutorial.cfg.property.smtp.auth.user={Username used to login to mail server}
+   webauthntutorial.cfg.property.smtp.auth.password={Password used to login to mail server}
+   webauthntutorial.cfg.property.email.subject=Verify your email address
+   webauthntutorial.cfg.property.email.type=HTML
+   ```
+   Save and exit
+
+6. Download the Relying Party web application .war file [basicserver.war](./basicserver.war).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war
     ```
 
-5. Add the .war file to Payara.
+7. Add the .war file to Payara.
 
     ```sh
     payara41/glassfish/bin/asadmin deploy basicserver.war
     ```
 
-6. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
+8. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
     curl -k https://localhost:8181/basicserver/application.wadl
