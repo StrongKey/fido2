@@ -45,14 +45,14 @@ Follow the instructions below to install this sample.
 5. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
    ```
-   webauthntutorial.cfg.property.apiuri=https://{hostname of FIDO Server}:8181/api
-   webauthntutorial.cfg.property.mailhost.type={SendMail or SSL or StartTLS}
-   webauthntutorial.cfg.property.mailhost={localhost or hostname of mailhost}
-   webauthntutorial.cfg.property.mail.smtp.port={25 (SendMail) or mail server's port}
-   webauthntutorial.cfg.property.smtp.from={local-part of email address}
-   webauthntutorial.cfg.property.smtp.fromName={Human readable name associated with email}
-   webauthntutorial.cfg.property.smtp.auth.user={Username used to login to mail server}
-   webauthntutorial.cfg.property.smtp.auth.password={Password used to login to mail server}
+   webauthntutorial.cfg.property.apiuri=https://[hostname of FIDO Server]:8181/api
+   webauthntutorial.cfg.property.mailhost.type=[SendMail or SSL or StartTLS]
+   webauthntutorial.cfg.property.mailhost=[localhost or hostname of mailhost]
+   webauthntutorial.cfg.property.mail.smtp.port=[25 (SendMail) or mail server's port]
+   webauthntutorial.cfg.property.smtp.from=[local-part of email address]
+   webauthntutorial.cfg.property.smtp.fromName=[Human readable name associated with email]
+   webauthntutorial.cfg.property.smtp.auth.user=[Username used to login to mail server]
+   webauthntutorial.cfg.property.smtp.auth.password=[Password used to login to mail server]
    webauthntutorial.cfg.property.email.subject=Verify your email address
    webauthntutorial.cfg.property.email.type=HTML
    ```
