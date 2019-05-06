@@ -25,24 +25,18 @@ Follow the instructions below to install this sample.
 
 1. If installing the sample application **on the same server** as the StrongKey FIDO Server, skip to step 2. Otherwise, StrongKey's software stack must be installed. The easiest way to do this is to follow the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) steps 1-5. Next, edit the install-skfs.sh script in a text editor. On the line "INSTALL_FIDO=Y" change the value of "Y" to "N". Run the script install-skfs.sh.
 
-2. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
-
-    ```sh
-    su - strongkey
-    ```
-
-3. Create the following directories to configure the WebAuthn servlet home folder.
+2. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
     mkdir -p /usr/local/strongkey/webauthntutorial/etc
     ```
 
-4. Create a configuration file for the Relying Party web application.
+3. Create a configuration file for the Relying Party web application.
 
     ```sh
     vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
-5. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
+4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
    ```
    webauthntutorial.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
@@ -58,19 +52,19 @@ Follow the instructions below to install this sample.
    ```
    Save and exit
 
-6. Download the Relying Party web application distribution [basicserver.war](./server/basicserver-v0.9-dist.tgz).
+5. Download the Relying Party web application distribution [basicserver.war](./server/basicserver-v0.9-dist.tgz).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/user_management/sampleapps/java/basic/server/basicserver-v0.9-dist.tgz
     ```
 
-7. Extract the downloaded file to the current directory:
+6. Extract the downloaded file to the current directory:
 
     ```sh
     tar xvzf basicserver-v0.9-dist.tgz
     ```
 
-8. Execute the _install-basicserver.sh_ script as follows:
+7. Execute the _install-basicserver.sh_ script as follows:
 
     ```sh
     sudo ./install-basicserver.sh
