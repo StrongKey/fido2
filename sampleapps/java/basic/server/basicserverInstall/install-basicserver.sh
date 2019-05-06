@@ -19,10 +19,8 @@ MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
 cd $SKFS_SOFTWARE/basicserverSQL
 $STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs --quick < create.txt
 
-# Create basic configurations
-touch $STRONGKEY_HOME/webauthntutorial/etc/webauthntutorial.properties
-echo "webauthntutorial.cfg.property.apiuri=https://$(hostname):8181/api" > $STRONGKEY_HOME/webauthntutorial/etc/webauthntutorial.properties
-chown strongkey:strongkey $STRONGKEY_HOME/webauthntutorial/etc/webauthntutorial.properties
+# Give application server permission to read configuration file
+chown -R strongkey:strongkey $STRONGKEY_HOME/webauthntutorial
 
 # Deploy sample application
 echo "Deploying StrongKey FidoServer ..."

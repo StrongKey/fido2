@@ -45,29 +45,35 @@ Follow the instructions below to install this sample.
 5. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
    ```
-   webauthntutorial.cfg.property.apiuri=https://[hostname of FIDO Server]:8181/api
-   webauthntutorial.cfg.property.mailhost.type=[SendMail or SSL or StartTLS]
-   webauthntutorial.cfg.property.mailhost=[localhost or hostname of mailhost]
-   webauthntutorial.cfg.property.mail.smtp.port=[25 (SendMail) or mail server's port]
-   webauthntutorial.cfg.property.smtp.from=[local-part of email address]
-   webauthntutorial.cfg.property.smtp.fromName=[Human readable name associated with email]
-   webauthntutorial.cfg.property.smtp.auth.user=[Username used to login to mail server]
-   webauthntutorial.cfg.property.smtp.auth.password=[Password used to login to mail server]
+   webauthntutorial.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
+   webauthntutorial.cfg.property.mailhost.type=**[SendMail or SSL or StartTLS]**
+   webauthntutorial.cfg.property.mailhost=**[localhost or hostname of mailhost]**
+   webauthntutorial.cfg.property.mail.smtp.port=**[25 (SendMail) or mail server's port]**
+   webauthntutorial.cfg.property.smtp.from=**[local-part of email address]**
+   webauthntutorial.cfg.property.smtp.fromName=**[Human readable name associated with email]**
+   webauthntutorial.cfg.property.smtp.auth.user=**[Username used to login to mail server]**
+   webauthntutorial.cfg.property.smtp.auth.password=**[Password used to login to mail server]**
    webauthntutorial.cfg.property.email.subject=Verify your email address
    webauthntutorial.cfg.property.email.type=HTML
    ```
    Save and exit
 
-6. Download the Relying Party web application .war file [basicserver.war](./basicserver.war).
+6. Download the Relying Party web application distribution [basicserver.war](./server/basicserver-v0.9-dist.tgz).
 
     ```sh
-    wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war
+    wget https://github.com/StrongKey/fido2/raw/user_management/sampleapps/java/basic/server/basicserver-v0.9-dist.tgz
     ```
 
-7. Add the .war file to Payara.
+7. Extract the downloaded file to the current directory:
 
     ```sh
-    payara41/glassfish/bin/asadmin deploy basicserver.war
+    tar xvzf basicserver-v0.9-dist.tgz
+    ```
+
+8. Execute the _install-basicserver.sh_ script as follows:
+
+    ```sh
+    sudo ./install-basicserver.sh
     ```
 
 8. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
