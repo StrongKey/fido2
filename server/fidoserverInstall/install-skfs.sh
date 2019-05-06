@@ -376,36 +376,35 @@ $GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool
 $GLASSFISH_HOME/bin/asadmin delete-jvm-options $($GLASSFISH_HOME/bin/asadmin list-jvm-options | sed -n '/\(-XX:NewRatio\|-XX:MaxPermSize\|-XX:PermSize\|-client\|-Xmx\|-Xms\)/p' | sed 's|:|\\\\:|' | tr '\n' ':')
 $GLASSFISH_HOME/bin/asadmin create-jvm-options -Djtss.tcs.ini.file=$STRONGKEY_HOME/lib/jtss_tcs.ini:-Djtss.tsp.ini.file=$STRONGKEY_HOME/lib/jtss_tsp.ini:-Xmx${XMXSIZE}:-Xms${XMXSIZE}:-server:-Djdk.tls.ephemeralDHKeySize=2048:-Dproduct.name="":-XX\\:-DisableExplicitGC
 
-cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json << EOFAPPJSON
-{
-  "trustedFacets" : [{
-    "version": { "major": 1, "minor" : 0 },
-    "ids": [
-           "https://$(hostname)",
-           "https://$(hostname):8181"
-    ]
-  }]
-}
-EOFAPPJSON
-
-# Add other servers to app.json
-for fqdn in $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select fqdn from servers;"); do
-        # Skip doing ourself again
-        if [ "$fqdn" == "$(hostname)" ]; then
-                continue
-        fi
-        sed -i "/^\[/a \"           https://$fqdn:8181\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
-        sed -i "/^\[/a \"           https://$fqdn\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
-done
-
-chown strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
-
 if [ $INSTALL_FIDO = 'Y' ]; then
+	cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json << EOFAPPJSON
+	{
+  	"trustedFacets" : [{
+    	"version": { "major": 1, "minor" : 0 },
+    	"ids": [
+           	"https://$(hostname)",
+           	"https://$(hostname):8181"
+    	]
+  	}]
+	}
+	EOFAPPJSON
+
+	# Add other servers to app.json
+	for fqdn in $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select fqdn from servers;"); do
+        	# Skip doing ourself again
+        	if [ "$fqdn" == "$(hostname)" ]; then
+                	continue
+        	fi
+        	sed -i "/^\[/a \"           https://$fqdn:8181\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
+        	sed -i "/^\[/a \"           https://$fqdn\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
+	done
+
+	chown strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
 	echo "Deploying StrongKey FidoServer ..."
 	cp $SKFS_SOFTWARE/fidoserver.ear /tmp
 	$GLASSFISH_HOME/bin/asadmin deploy /tmp/fidoserver.ear
+	rm /tmp/fidoserver.ear
 fi
 
-rm /tmp/fidoserver.ear
 echo "Done!"
 
