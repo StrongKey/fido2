@@ -28,13 +28,13 @@ Follow the instructions below to install this sample.
 2. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
-    mkdir -p /usr/local/strongkey/webauthntutorial/etc
+    sudo mkdir -p /usr/local/strongkey/webauthntutorial/etc
     ```
 
 3. Create a configuration file for the Relying Party web application.
 
     ```sh
-    vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
+    sudo vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
     ```
 4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
@@ -73,7 +73,7 @@ Follow the instructions below to install this sample.
 8. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
-    curl -k https://localhost:8181/basicserver/application.wadl
+    curl -k https://localhost:8181/basicserver/fido2/application.wadl
     ```
 
 
