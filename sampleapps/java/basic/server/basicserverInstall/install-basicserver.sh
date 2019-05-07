@@ -18,13 +18,13 @@ MARIA_DEMODBUSER_PASSWORD=AbracaDabra
 MARIA_ROOT_PASSWORD=BigKahuna
 
 # Create DB
-$MARIA_HOME/bin/mysql -u root mysql -p$MARIA_ROOT_PASSWORD -e "create database demo;
+$MARIA_HOME/bin/mysql -u root mysql -p${MARIA_ROOT_PASSWORD} -e "create database demo;
                                             grant all on demo.* to demodbuser@localhost identified by '$MARIA_DEMODBUSER_PASSWORD';
                                             flush privileges;"
 
 # Create DB Tables
 cd $SKFS_SOFTWARE/basicserverSQL
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=demodbuser --password=$MARIA_DEMODBUSER_PASSWORD --database=demo --quick < create.txt
+$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=demodbuser --password=${MARIA_DEMODBUSER_PASSWORD} --database=demo --quick < create.txt
 
 # Create JDBC connection
 $GLASSFISH_HOME/bin/asadmin create-jdbc-connection-pool \

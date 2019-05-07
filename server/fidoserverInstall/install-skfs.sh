@@ -324,7 +324,8 @@ echo done
 
 $MARIA_HOME/bin/mysql -u root mysql -e "update user set password=password('$MARIA_ROOT_PASSWORD') where user = 'root';
                                                     delete from mysql.db where host = '%';
-                                                    delete from mysql.user where user = '';"
+                                                    delete from mysql.user where user = '';
+						    flush privileges;"
 
 if [ $INSTALL_FIDO = 'Y' ]; then
 	$MARIA_HOME/bin/mysql -u root mysql -p$MARIA_ROOT_PASSWORD -e "create database skfs;
