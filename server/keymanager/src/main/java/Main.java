@@ -148,7 +148,7 @@ public class Main {
         chain[0] = x509cert;
 
         keystore.deleteEntry("1-zenc-signing-key");
-        keystore.setKeyEntry("1-zenc-signing-key", keypair.getPrivate(), null, chain); 
+        keystore.setKeyEntry("1-zenc-signing-key", keypair.getPrivate(), password.toCharArray(), chain); 
 
         keystore.deleteEntry("1-zenc-signing-key.cert");
         keystore.setCertificateEntry("1-zenc-signing-key.cert", x509cert);
