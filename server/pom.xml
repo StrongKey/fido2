@@ -33,6 +33,7 @@
         <module>authenticationBeans</module>
         <module>fidoserverEAR</module>
         <module>api</module>
+        <module>skfe</module>
         <module>fido2mds</module>
         <module>fidoserverbeans</module>
         <module>common</module>
