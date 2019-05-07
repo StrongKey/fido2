@@ -19,7 +19,7 @@ MARIA_ROOT_PASSWORD=BigKahuna
 
 # Create DB
 $MARIA_HOME/bin/mysql -u root mysql -p$MARIA_ROOT_PASSWORD -e "create database demo;
-                                            grant all on basicserver.* to demodbuser@localhost identified by '$MARIA_DEMODBUSER_PASSWORD';
+                                            grant all on demo.* to demodbuser@localhost identified by '$MARIA_DEMODBUSER_PASSWORD';
                                             flush privileges;"
 
 # Create DB Tables
