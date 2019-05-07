@@ -1,0 +1,294 @@
+{
+  "fido2policy": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FIDO2 Policy",
+    "description": "Schema for a FIDO2 Policy version 1.0",
+    "type": "object",
+    "properties": {
+      "cryptography": {
+        "description": "Forms of cryptography allowed by this policy",
+        "type": "object",
+        "properties": {
+          "elliptic_curves": {
+            "description": "The types of Ellipic Curves allowed by this policy",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "secp256r1", "secp384r1", "secp521r1", "curve25519"
+              ]
+            }
+          },
+          "allowed_rsa_signatures": {
+            "description": "The RSA signature algorithms allowed by this policy",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "rsassa-pkcs1-v1_5-sha1", "rsassa-pkcs1-v1_5-sha256", "rsassa-pkcs1-v1_5-sha384", "rsassa-pkcs1-v1_5-sha512", "rsassa-pss-sha256", "rsassa-pss-sha384", "rsassa-pss-sha512"
+              ]
+            }
+          },
+          "allowed_ec_signatures": {
+            "description": "The EC signature algorithms allowed by this policy",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ecdsa-p256-sha256", "ecdsa-p384-sha384", "ecdsa-p521-sha512", "eddsa", "ecdsa-p256k-sha256"
+              ]
+            }
+          },
+          "attestation_formats": {
+            "description": "The attestation formats allowed by this policy",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fido-u2f", "packed", "tpm", "android-key", "android-safetynet", "none"
+              ]
+            }
+          },
+          "attestation_types": {
+            "description": "The attestation types allowed by this policy",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "basic", "self", "attca", "ecdaa", "none"
+              ]
+            }
+          },
+          "challenge_length": {
+            "description": "The length of the challenges to be sent in number of bytes (default 16).",
+            "type": "integer",
+            "minimum": 16,
+            "maximum": 64
+          }
+        },
+        "required": ["elliptic_curves", "allowed_ec_signatures", "allowed_rsa_signatures", "attestation_formats", "attestation_types"],
+        "additionalProperties": false
+      },
+      "rp": {
+        "description": "Settings specific for the Relaying Party",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "A human-palatable name for the Relaying Party.",
+            "type": "string"
+          },
+          "id": {
+            "description": "A unique identifier for the Relying Party entity, which sets the RP ID.",
+            "type": "string"
+          },
+          "icon": {
+            "description": "A serialized URL which resolves to an image associated with the entity. For example, this could be a ... Relying Party's logo.",
+            "type": "string",
+            "format": "uri",
+            "pattern": "^(http[s])://"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      },
+      "timeout": {
+        "description": "This OPTIONAL member specifies a time, in milliseconds, that the caller is willing to wait for the call to complete. The value is treated as a hint, and MAY be overridden by the client.",
+        "type": "integer"
+      },
+      "mds": {
+        "description": "The configurations of the FIDO Metadata Service (MDS). This configuration is REQUIRED to cryptographically verify the authenticity of authenticators that provided attestation besides the none and self types.",
+        "type": "object",
+        "properties": {
+          "endpoints": {
+            "description": "A list of URLs and tokens that the FIDO server should query for up to date information on FIDO certified authenticators",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "The URL that the FIDO server should query for FIDO certified authenticators",
+                  "type": "string"
+                },
+                "token": {
+                  "description": "The access token required by MDS",
+                  "type": "string"
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false
+            }
+          },
+          "certification": {
+            "description": "The list of FIDO cerification required of registering authenticators. Note that authenticators that provide self or none type attestation (if allowed by the policy) are not required to meet this requirement.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "FIDO_CERTIFIED", "NOT_FIDO_CERTIFIED", "USER_VERIFICATION_BYPASS", "ATTESTATION_KEY_COMPROMISE", "USER_KEY_REMOTE_COMPROMISE", "USER_KEY_PHYSICAL_COMPROMISE", "UPDATE_AVAILABLE", "REVOKED", "SELF_ASSERTION_SUBMITTED", "FIDO_CERTIFIED_L1", "FIDO_CERTIFIED_L1plus", "FIDO_CERTIFIED_L2", "FIDO_CERTIFIED_L2plus", "FIDO_CERTIFIED_L3", "FIDO_CERTIFIED_L3plus"
+              ]
+            }
+          }
+        },
+        "required": ["endpoints", "certification"],
+        "additionalProperties": false
+      },
+      "tokenbinding": {
+        "description": "An optional parameter that checks whether token binding occurred.",
+        "type": "string",
+        "enum": [
+          "present", "supported"
+        ]
+      },
+      "counter": {
+        "description": "Authenticators SHOULD implement a signature counter feature. The signature counter is incremented for each successful authenticatorGetAssertion operation by some positive value, and its value is returned to the WebAuthn Relying Party within the authenticator data. The signature counter's purpose is to aid Relying Parties in detecting cloned authenticators. Clone detection is more important for authenticators with limited protection measures.",
+        "type": "object",
+        "properties": {
+          "requireCounter": {
+            "description": "If set to true, requires that authenticators implement a counter. If set to false, an authenticator can choose to not implement a counter by always returning a counter value of zero. Note: The FIDO server is unable to detect if a authenticator implements a counter or not until the first AUTHENTICATION",
+            "type": "boolean"
+          },
+          "requireIncrease": {
+            "description": "If set to true, fails authentication requests that do not provide a counter value higher than the previous authentication. If set to false, authentication can provide a counter value identical to the last successful authentication. A warning will be returned that the authenticator might have been cloned.",
+            "type": "boolean"
+          }
+        },
+        "required": ["requireCounter", "requireIncrease"],
+        "additionalProperties": false
+      },
+      "userSettings": {
+        "description": "Requires users to provide the same local authentication information provided during registration for all authentication requests. The use case for this is for authenticators that are capable of providing a variable amount of information about the local authentication method used to authenticate to them. In the case the user provides user verification (via a fingerprint) during registration, they would not want authentication to merely require user presence (via tapping an 'ok' prompt).",
+        "type": "boolean"
+      },
+      "storeSignatures": {
+        "description": "Stores all challenges and their signatures.",
+        "type": "boolean"
+      },
+      "registration": {
+        "description": "Configurations for registration",
+        "type": "object",
+        "properties": {
+          "icon": {
+            "description": "Allow the user to provide an icon during registration that will be associated with their public key. This icon is '[a] serialized URL which resolves to an image associated with the entity. For example, this could be a user’s avatar.'",
+            "type": "string",
+            "enum": [
+              "disabled", "enabled"
+            ]
+          },
+          "displayName": {
+            "description": "Allows/Requires the user to provide '[a] human-palatable name for the user account, intended only for display' with a registered key. If this property is not set to required and no displayName is provided during registration, the username will be used as the displayName.",
+            "type": "string",
+            "enum": [
+              "none", "preferred", "required"
+            ]
+          },
+          "userid_length": {
+            "description": "The number of bytes to use for generating a user's id (default 32)",
+            "type": "integer",
+            "minimum": 32,
+            "maximum": 64
+          },
+          "excludeCredentials": {
+            "description": "This member is intended for use by Relying Parties that wish to limit the creation of multiple credentials for the same account on a single authenticator.",
+            "type": "string",
+            "enum": [
+              "disabled", "enabled"
+            ]
+          },
+          "authenticatorSelection": {
+            "description": "WebAuthn Relying Parties may use the AuthenticatorSelectionCriteria dictionary to specify their requirements regarding authenticator attributes.",
+            "type": "object",
+            "properties": {
+              "authenticatorAttachment": {
+                "description": "If this member is present, eligible authenticators are filtered to only authenticators attached with the specified §5.4.5 Authenticator Attachment enumeration (enum AuthenticatorAttachment).",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "platform",
+                    "cross-platform"
+                  ]
+                }
+              },
+              "requireResidentKey": {
+                "description": "This member describes the Relying Parties' requirements regarding resident credentials. If the parameter is set to true, the authenticator MUST create a client-side-resident public key credential source when creating a public key credential.",
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              "userVerification": {
+                "description": "This member describes the Relying Party's requirements regarding user verification for the create() operation. Eligible authenticators are filtered to only those capable of satisfying this requirement.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "required",
+                    "preferred",
+                    "discouraged"
+                  ]
+                }
+              }
+            },
+            "required": ["authenticatorAttachment", "requireResidentKey", "userVerification"],
+            "additionalProperties": false
+          },
+          "attestation": {
+            "description": "This member is intended for use by Relying Parties that wish to express their preference for attestation conveyance. The default is none.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "none",
+                "indirect",
+                "direct"
+              ]
+            }
+          }
+        },
+        "required": ["displayName", "excludeCredentials", "authenticatorSelection", "attestation"],
+        "additionalProperties": false
+      },
+      "authentication": {
+        "description": "Configurations for authentication",
+        "type": "object",
+        "properties": {
+          "allowCredentials": {
+            "description": "This OPTIONAL member determines if 'a list of PublicKeyCredentialDescriptor objects representing public key credentials acceptable to the caller, in descending order of the caller’s preference (the first item in the list is the most preferred credential, and so on down the list).'",
+            "type": "string",
+            "enum": ["disabled", "enabled"]
+          },
+          "userVerification": {
+            "description": "This member describes the Relying Party's requirements regarding user verification for the get() operation. Eligible authenticators are filtered to only those capable of satisfying this requirement.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "required",
+                "preferred",
+                "discouraged"
+              ]
+            }
+          }
+        },
+        "required": ["userVerification"],
+        "additionalProperties": false
+      },
+      "extensions": {
+        "description": "Extensions",
+        "type": "object",
+        "properties": {
+          "example.extension":{
+            "description": "This extension is an extension defined for certification. IT SHOULD NOT EXIST IN PRODUCTION POLICIES",
+            "type": "boolean"
+          },
+          "appid": {
+            "description": "This client extension allows Relying Parties that have previously registered a credential using the legacy FIDO JavaScript APIs to request an assertion.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "required": ["cryptography", "rp", "counter", "registration", "authentication"],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "svcinfo": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "svcinfo",
+    "description": "Verify input contains did, protocol, svcusername, and svcpassword",
+    "type": "object",
+    "properties": {
+      "did": {
+        "description": "The cryptographic domain id",
+        "type": "integer",
+        "mimimum": 1,
+        "maximum": 65535
+      },
+      "protocol": {
+        "description": "The FIDO protocol being used",
+        "type": "string",
+        "enum": [
+          "FIDO20"
+        ]
+      },
+      "svcusername": {
+        "description": "The service credential username",
+        "type": "string"
+      },
+      "svcpassword": {
+        "description": "The service credential password",
+        "type": "string"
+      }
+    },
+    "required": ["did", "protocol", "svcusername", "svcpassword"],
+    "additionalProperties": false
+  },
+  "createpayload": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "createpayload",
+    "description": "Verify input contains metadata and a policy.",
+    "type": "object",
+    "properties": {
+      "metadata": {
+        "description": "Additional information",
+        "type": "object",
+        "properties": {
+          "name": { "$ref": "resources/fido2commonschema.json#/definitions/name" },
+          "version": { "$ref": "resources/fido2commonschema.json#/definitions/version" },
+          "startdate": { "$ref": "resources/fido2commonschema.json#/definitions/startdate" },
+          "enddate": { "$ref": "resources/fido2commonschema.json#/definitions/enddate" },
+          "status": { "$ref": "resources/fido2commonschema.json#/definitions/status" },
+          "notes": { "$ref": "resources/fido2commonschema.json#/definitions/notes" }
+        },
+        "required": ["name", "version", "startdate", "status"],
+        "additionalProperties": false
+      },
+      "policy": { "$ref": "resources/fido2policyschema.json#/fido2policy" }
+    },
+    "required": ["metadata", "policy"],
+    "additionalProperties": false
+  },
+  "readpayload": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "readpayload",
+    "description": "Verify input contains metadata.",
+    "type": "object",
+    "properties": {
+      "metadata": {
+        "description": "Additional information",
+        "type": "object",
+        "properties": {
+          "pid": { "$ref": "resources/fido2commonschema.json#/definitions/pid" }
+        },
+        "required": ["pid"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["metadata"],
+    "additionalProperties": false
+  },
+  "updatepayload": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "readpayload",
+    "description": "Verify input contains metadata and a policy.",
+    "type": "object",
+    "properties": {
+      "metadata": {
+        "description": "Additional information",
+        "type": "object",
+        "properties": {
+          "pid": { "$ref": "resources/fido2commonschema.json#/definitions/pid" },
+          "version": { "$ref": "resources/fido2commonschema.json#/definitions/version" },
+          "startdate": { "$ref": "resources/fido2commonschema.json#/definitions/startdate" },
+          "enddate": { "$ref": "resources/fido2commonschema.json#/definitions/enddate" },
+          "status": { "$ref": "resources/fido2commonschema.json#/definitions/status" },
+          "notes": { "$ref": "resources/fido2commonschema.json#/definitions/notes" }
+        },
+        "required": ["pid"],
+        "additionalProperties": false
+      },
+      "policy": { "$ref": "resources/fido2policyschema.json#/fido2policy" }
+    },
+    "required": ["metadata", "policy"],
+    "additionalProperties": false
+  },
+  "deletepayload": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "deletepayload",
+    "description": "Verify input contains metadata.",
+    "type": "object",
+    "properties": {
+      "metadata": {
+        "description": "Additional information",
+        "type": "object",
+        "properties": {
+          "pid": { "$ref": "resources/fido2commonschema.json#/definitions/pid" }
+        },
+        "required": ["pid"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["metadata"],
+    "additionalProperties": false
+  }
+}
