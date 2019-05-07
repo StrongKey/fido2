@@ -13,11 +13,30 @@ MARIATGT=mariadb-10.2.13
 GLASSFISH_HOME=$STRONGKEY_HOME/payara41/glassfish
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
+MARIA_DEMODBUSER_PASSWORD=AbracaDabra
+MARIA_ROOT_PASSWORD=BigKahuna
+
+# Create DB
+$MARIA_HOME/bin/mysql -u root mysql -p$MARIA_ROOT_PASSWORD -e "create database demo;
+                                            grant all on basicserver.* to demodbuser@localhost identified by '$MARIA_DEMODBUSER_PASSWORD';
+                                            flush privileges;"
 
 # Create DB Tables
 cd $SKFS_SOFTWARE/basicserverSQL
-$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs --quick < create.txt
+$STRONGKEY_HOME/$MARIATGT/bin/mysql --user=demodbuser --password=$MARIA_DEMODBUSER_PASSWORD --database=demo --quick < create.txt
+
+# Create JDBC connection
+$GLASSFISH_HOME/bin/asadmin create-jdbc-connection-pool \
+	--datasourceclassname org.mariadb.jdbc.MySQLDataSource \
+	--restype javax.sql.ConnectionPoolDataSource \
+	--isconnectvalidatereq=true \
+	--validationmethod meta-data \
+	--property ServerName=localhost:DatabaseName=demo:port=3306:user=demodbuser:password=$MARIA_DEMODBUSER_PASSWORD:DontTrackOpenResources=true \
+	DemoPool
+$GLASSFISH_HOME/bin/asadmin create-jdbc-resource --connectionpoolid DemoPool jdbc/demo
+$GLASSFISH_HOME/bin/asadmin set server.resources.jdbc-connection-pool.DemoPool.max-pool-size=1000
+$GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.max-thread-pool-size=1000
+$GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.min-thread-pool-size=10
 
 # Give application server permission to read configuration file
 chown -R strongkey:strongkey $STRONGKEY_HOME/webauthntutorial
