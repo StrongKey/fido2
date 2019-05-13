@@ -21,3 +21,5 @@ server/fidoserverEAR/target/
 server/fidoserverbeans/target/
 server/keymanager/target/
 /sampleapps/java/basic/server/target/
+/server/skfe/nbproject/
+/server/skfe/target/
