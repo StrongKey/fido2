@@ -87,7 +87,7 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 echo "Installing required linux packages ..."
 if [[ ! -z $YUM_CMD ]]; then
     yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
-    systemctl restart rng-tools
+    systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
     apt install unzip libaio1 openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
@@ -124,7 +124,7 @@ if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
 fi
 
 
-if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
+if [ ! -f $SKFS_SOFTWARE/$OPENDJ ]; then
         echo "Downloading OpenDJ ..."
         wget https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/OpenDJ-3.0.0.zip -q
 fi
