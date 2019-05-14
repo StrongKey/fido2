@@ -831,7 +831,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         " key handles count = " + keyhandles.length);
 
                 if (authresponses != null) {
-                    String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfe.cfg.property.entropylength")));
+                    String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
 
                     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                     JsonArrayBuilder allowedCredBuilder = Json.createArrayBuilder();
@@ -1911,9 +1911,9 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
     private String decryptKH(String token) {
         String retvalue = token;
-        if (skfsCommon.getConfigurationProperty("skfe.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
+        if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
             String clusterid = "1";
-            String domainid = skceCommon.getConfigurationProperty("skfe.cfg.property.db.keyhandle.encrypt.saka.domainid");
+            String domainid = skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
             String sakausername = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "username");
             String sakapassword = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "password");
             String hosturl = skceCommon.getWorkingHostURLInCluster(Long.parseLong(clusterid), Long.parseLong(domainid));
@@ -1921,7 +1921,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             if (port == null) {
                 // Create URL for calling web-service
                 URL baseUrl = com.strongkey.saka.web.EncryptionService.class.getResource(".");
-                String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfe.cfg.property.saka.encryption.wsdlsuffix");
+                String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
                 URL url = null;
                 try {
                     url = new URL(baseUrl, hosturl + ENCRYPTION_SERVICE_WSDL_SUFFIX);
