@@ -34,7 +34,6 @@
  */
 package com.strongauth.skfews.u2f.rest;
 
-import com.strongauth.skfews.fido2.rest.FidoAdminServlet;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +45,6 @@ public class ApplicationConfig extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(SKFEServlet.class, FidoAdminServlet.class));
+        return new HashSet<>(Arrays.asList(SKFEServlet.class));
     }
 }
