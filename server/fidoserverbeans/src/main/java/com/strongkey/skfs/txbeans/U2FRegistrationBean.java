@@ -44,8 +44,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
     @EJB
     updateFidoUserBeanLocal updateldapbean;
 
-    
-    @Override
+   @Override
     public String execute(Long did, String registrationresponse, String registrationmetadata, String protocol) {
         String wsresponse="";
         //  check for needed fields in registrationresponse and metadata
