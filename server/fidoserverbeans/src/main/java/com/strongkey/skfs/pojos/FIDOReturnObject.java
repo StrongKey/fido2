@@ -64,7 +64,7 @@ public class FIDOReturnObject {
         }
         
         // Build the output json object
-        JsonObject responseJSON = null;
+        JsonObject responseJSON ;
         
         responseJSON = Json.createObjectBuilder()
         .add(skfsConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, response)
