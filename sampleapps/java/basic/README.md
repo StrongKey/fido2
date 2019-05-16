@@ -24,10 +24,10 @@ Follow the instructions below to install this sample.
 ## Installation Instructions
 
 1. If installing the sample application **on the same server** as the StrongKey FIDO Server, skip to Step 2. Otherwise, StrongKey's software stack must be installed. Follow these steps for a seperate server install:
-    * follow the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) Steps 1-5. 
-    * Edit the *install-skfs.sh* script in a text editor. On the line "INSTALL_FIDO=Y" change the value of "Y" to "N".
-    * Run the script *install-skfs.sh*.
-    * Continue with Step 2.
+    * Follow the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) Steps 1-5
+    * Edit the *install-skfs.sh* script in a text editor. On the line "INSTALL_FIDO=Y" change the value of "Y" to "N"
+    * Run the script *install-skfs.sh*
+    * Continue with Step 2
 
 2. Create the following directories to configure the WebAuthn servlet home folder.
 
