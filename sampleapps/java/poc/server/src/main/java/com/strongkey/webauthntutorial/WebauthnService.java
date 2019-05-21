@@ -7,15 +7,27 @@
 
 package com.strongkey.webauthntutorial;
 
-import com.strongkey.database.UserDatabase;
+import com.strongkey.Registrations.RegistrationDBLocal;
+import com.strongkey.Users.UserDBLocal;
+import com.strongkey.utilities.Common;
+import com.strongkey.utilities.Configurations;
 import com.strongkey.utilities.Constants;
+import com.strongkey.utilities.EmailService;
 import com.strongkey.utilities.WebauthnTutorialLogger;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.Json;
@@ -41,7 +53,63 @@ public class WebauthnService {
     private HttpServletRequest request;
     
     @EJB
-    private UserDatabase userdatabase;
+    private UserDBLocal userdatabase;
+    
+    @EJB
+    private EmailService emailService;
+    
+    @EJB
+    private RegistrationDBLocal registrationDB;
+    
+    private SecureRandom nonceGen;
+    
+    @PostConstruct
+    private void init(){
+        nonceGen = new SecureRandom();
+    }
+    
+    // Send an email to a specified email address with a registration link
+    @POST
+    @Path("/" + Constants.RP_REGISTER_EMAIL_PATH)
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response registerEmail(JsonObject input){
+        try{
+            String email = getValueFromInput(Constants.RP_JSON_KEY_EMAIL, input);
+            
+            //Verify valid email (by checking that an account with this email DNE)
+            if (doesEmailExist(email)) {
+                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "registerEmail", "WEBAUTHN-WS-ERR-1005", email);
+                return generateResponse(Response.Status.CONFLICT,
+                        WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1005"));
+            }
+            
+            //If a registration link exists already for this account, delete it
+            if(registrationDB.doesRegistrationForEmailExist(email)){
+                registrationDB.deleteRegistration(email);
+            }
+            
+            //Store pending registration in DB
+            String nonce = generateNonce();
+            
+            //Send out registration email
+            registrationDB.addRegistration(email, nonce);
+            String reglink = getOrigin() 
+                    + Configurations.getConfigurationProperty("webauthntutorial.cfg.property.registration.path")
+                    + nonce;
+            emailService.sendEmail(
+                    email,
+                    Configurations.getConfigurationProperty("webauthntutorial.cfg.property.email.subject"),
+                    getRegistrationTemplate().replace("$URLLine$", reglink));
+            return generateResponse(Response.Status.OK, "");
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "registerEmail", "WEBAUTHN-WS-ERR-1000", ex.getLocalizedMessage());
+            return generateResponse(Response.Status.INTERNAL_SERVER_ERROR,
+                    WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
+        }
+    }
     
     // Endpoint to request a registration challenge (for a new account).
     @POST
@@ -53,13 +121,26 @@ public class WebauthnService {
             //Get user input + basic input checking
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String displayName = getValueFromInput(Constants.RP_JSON_KEY_DISPLAYNAME, input);
+            String firstName = getValueFromInput(Constants.RP_JSON_KEY_FIRSTNAME, input);
+            String lastName = getValueFromInput(Constants.RP_JSON_KEY_LASTNAME, input);
+            String nonce = getValueFromInput(Constants.RP_JSON_KEY_NONCE, input);
+            
+            //Verify valid registration link (by checking that the registration OTP (nonce) is valid)
+            if(!isValidNonce(nonce)){
+                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "preregister", "WEBAUTHN-WS-ERR-1006", nonce);
+                return generateResponse(Response.Status.CONFLICT,
+                        WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1006"));
+            }
 
             //Verify User does not already exist
-            if (!doesAccountExists(username)){
+            if (!doesAccountExist(username)){
                 String prereg = SKFSClient.preregister(username, displayName);
                 HttpSession session = request.getSession(true);
                 session.setAttribute(Constants.SESSION_USERNAME, username);
                 session.setAttribute(Constants.SESSION_ISAUTHENTICATED, false);
+                session.setAttribute(Constants.SESSION_FIRSTNAME, firstName);
+                session.setAttribute(Constants.SESSION_LASTNAME, lastName);
+                session.setAttribute(Constants.SESSION_EMAIL, registrationDB.getEmailFromNonce(nonce));
                 session.setMaxInactiveInterval(Constants.SESSION_TIMEOUT_VALUE);
                 return generateResponse(Response.Status.OK, prereg);
             }
@@ -92,15 +173,34 @@ public class WebauthnService {
                 return generateResponse(Response.Status.FORBIDDEN, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1003"));
             }
             
+            //Get information stored in session
+            String email = (String) session.getAttribute(Constants.SESSION_EMAIL);
             String username = (String) session.getAttribute(Constants.SESSION_USERNAME);
-            if (!doesAccountExists(username)) {
+            String firstName = (String) session.getAttribute(Constants.SESSION_FIRSTNAME);
+            String lastName = (String) session.getAttribute(Constants.SESSION_LASTNAME);
+            
+            //Verify email was not used to generate another account
+            if (doesEmailExist(email)) {
+                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "register", "WEBAUTHN-WS-ERR-1005", email);
+                return generateResponse(Response.Status.CONFLICT,
+                        WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1005"));
+            }
+            
+            if (!doesAccountExist(username)) {
                 String regresponse = SKFSClient.register(username, getOrigin(), input);
                 //On success, add user to database
-                userdatabase.addUser(username);
+                userdatabase.addUser(email, username, firstName, lastName);
+                
+                //Remove registration request from DB
+                registrationDB.deleteRegistration(email);
+                session.removeAttribute(Constants.SESSION_FIRSTNAME);
+                session.removeAttribute(Constants.SESSION_LASTNAME);
+                session.removeAttribute(Constants.SESSION_EMAIL);
                 
                 session.setAttribute(Constants.SESSION_USERNAME, username);
                 session.setAttribute(Constants.SESSION_ISAUTHENTICATED, true);
                 session.setMaxInactiveInterval(Constants.SESSION_TIMEOUT_VALUE);
+                System.out.println("Received from FIDO Server: " + regresponse);
                 return generateResponse(Response.Status.OK, getResponseFromSKFSResponse(regresponse));
             } else {
                 //If the user already exists, throw an error
@@ -168,7 +268,7 @@ public class WebauthnService {
             }
 
             String username = (String) session.getAttribute(Constants.SESSION_USERNAME);
-            if (doesAccountExists(username)) {
+            if (doesAccountExist(username)) {
                 String regresponse = SKFSClient.register(username, getOrigin(), input);
                 return generateResponse(Response.Status.OK, getResponseFromSKFSResponse(regresponse));
             } else {
@@ -229,7 +329,7 @@ public class WebauthnService {
             }
 
             String username = (String) session.getAttribute(Constants.SESSION_USERNAME);
-            if (doesAccountExists(username)) {
+            if (doesAccountExist(username)) {
                 String authresponse = SKFSClient.authenticate(username, getOrigin(), input);
                 session.setAttribute("username", username);
                 session.setAttribute("isAuthenticated", true);
@@ -310,7 +410,11 @@ public class WebauthnService {
                 userdatabase.deleteUser(username);
                 String SKFSResponse = SKFSClient.getKeys(username);
                 JsonArray keyIds = getKeyIdsFromSKFSResponse(SKFSResponse);
-                removeKeys(keyIds);
+                System.out.println(keyIds);
+                for (int keyIndex = 0; keyIndex < keyIds.size(); keyIndex++) {
+                    SKFSClient.deregisterKey(keyIds.getJsonObject(keyIndex)
+                            .getString(Constants.SKFS_RESPONSE_JSON_KEY_RANDOMID));
+                }
                 session.invalidate();
                 return generateResponse(Response.Status.OK, "Success");
             } else {
@@ -328,13 +432,13 @@ public class WebauthnService {
     // Endpoint that allows a logged in user to request all keys that they  
     // registered on their account
     @POST
-    @Path("/" + Constants.RP_PATH_GETKEYS)
+    @Path("/" + Constants.RP_PATH_GETUSERINFO)
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getKeys() {
+    public Response getUserInfo() {
         try {
             HttpSession session = request.getSession(false);
             if (session == null) {
-                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getKeys", "WEBAUTHN-WS-ERR-1003", "");
+                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getUserInfo", "WEBAUTHN-WS-ERR-1003", "");
                 return generateResponse(Response.Status.FORBIDDEN, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1003"));
             }
 
@@ -342,14 +446,21 @@ public class WebauthnService {
             Boolean isAuthenticated = (Boolean) session.getAttribute(Constants.SESSION_ISAUTHENTICATED);
             if (isAuthenticated) {
                 String keys = SKFSClient.getKeys(username);
-                return generateResponse(Response.Status.OK, keys);
+                JsonObject keysJson = Common.parseJsonFromString(keys);
+                JsonObject userJson = userdatabase.getUserInfoFromUsername(username);
+                
+                return generateResponse(Response.Status.OK, 
+                        Json.createObjectBuilder()
+                            .add(Constants.RP_JSON_KEY_KEYS, keysJson)
+                            .add(Constants.RP_JSON_KEY_USERINFO, userJson)
+                            .build().toString());
             } else {
-                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getKeys", "WEBAUTHN-WS-ERR-1002", username);
+                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getUserInfo", "WEBAUTHN-WS-ERR-1002", username);
                 return generateResponse(Response.Status.CONFLICT, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1002"));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getKeys", "WEBAUTHN-WS-ERR-1000", ex.getLocalizedMessage());
+            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getUserInfo", "WEBAUTHN-WS-ERR-1000", ex.getLocalizedMessage());
             return generateResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
@@ -379,7 +490,8 @@ public class WebauthnService {
                 JsonArray userKeyIds = getKeyIdsFromSKFSResponse(keys);
                 Set<String> userKeyIdSet = new HashSet<>();
                 for(int keyIndex = 0; keyIndex < userKeyIds.size(); keyIndex++){
-                    userKeyIdSet.add(userKeyIds.getString(keyIndex));
+                    userKeyIdSet.add(userKeyIds.getJsonObject(keyIndex)
+                            .getString(Constants.SKFS_RESPONSE_JSON_KEY_RANDOMID));
                 }
                 
                 for(int keyIndex = 0; keyIndex < keyIds.size(); keyIndex++){
@@ -410,9 +522,30 @@ public class WebauthnService {
         return requestURL.getScheme() + "://" + requestURL.getAuthority();
     }
     
+    private String getRegistrationTemplate() throws FileNotFoundException, IOException{
+        StringBuilder sb = new StringBuilder();
+        File file = new File(getClass().getClassLoader().getResource("resources/email_register.html").getFile());
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+        while((line = br.readLine()) != null){
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+    
     // Return whether an account with this username already exists
-    private boolean doesAccountExists(String username){
+    private boolean doesAccountExist(String username){
         return userdatabase.doesUserExist(username);
+    }
+    
+    // Return whether request comes from a valid registration link
+    private boolean isValidNonce(String nonce){
+        return registrationDB.doesRegistrationForNonceExist(nonce);
+    }
+    
+    // Return whether an account with this email already exists
+    private boolean doesEmailExist(String email) {
+        return userdatabase.doesEmailExist(email);
     }
     
     // Parse user input
@@ -453,13 +586,14 @@ public class WebauthnService {
     // Remove all keys
     private void removeKeys(JsonArray keyIds){
         for(int keyIndex = 0; keyIndex < keyIds.size(); keyIndex++){
-            try{
-                SKFSClient.deregisterKey(keyIds.getString(keyIndex));
-            }
-            catch(Exception ex){    // TODO handle case in which a deregister fails
-                WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "removeKeys", "WEBAUTHN-WS-ERR-1000", ex.getLocalizedMessage());
-            }
+            SKFSClient.deregisterKey(keyIds.getString(keyIndex));
         }
+    }
+    
+    private String generateNonce(){
+        byte[] result = new byte[32];
+        nonceGen.nextBytes(result);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(result);
     }
     
     

@@ -7,6 +7,7 @@
 
 package com.strongkey.webauthntutorial;
 
+import com.strongkey.utilities.Common;
 import com.strongkey.utilities.Configurations;
 import com.strongkey.utilities.Constants;
 import com.strongkey.utilities.WebauthnTutorialLogger;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.ejb.Singleton;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -44,6 +46,7 @@ import org.apache.http.util.EntityUtils;
 
 //  Call the StrongKey Fido Engine (SKFS) via REST API to handle Webauthn/FIDO2
 //  key management.
+@Singleton
 public class SKFSClient {
     private static final String CLASSNAME = SKFSClient.class.getName();
 
@@ -186,12 +189,12 @@ public class SKFSClient {
     // Request for all keys associated with a user
     public static String getKeys(String username) {
         return callSKFSRestApi(
-                SKFSFIDOKEYURI + "?" + Constants.SKFS_QUERY_KEY_USERNAME + username, 
+                SKFSFIDOKEYURI + "?" + Constants.SKFS_QUERY_KEY_USERNAME + "=" + username, 
                 null, 
                 HttpMethod.GET);
     }
     
-    // Delete a user's key
+    // Delete a user's keyWEBAUTHN-WS-ERR-1003
     public static String deregisterKey(String keyid) {
         return callSKFSRestApi(
                 SKFSFIDOKEYURI + "/" + keyid,
@@ -202,9 +205,11 @@ public class SKFSClient {
     // Format HTTP request for resource
     private static String callSKFSRestApi(String requestURI, String body, String method){
         HttpRequestBase request;
+        String contentType = MediaType.APPLICATION_JSON;
         switch(method){
             case HttpMethod.GET:
                 request = new HttpGet(requestURI);
+                contentType = "";
                 break;
             case HttpMethod.POST:
                 request = new HttpPost(requestURI);
@@ -212,22 +217,30 @@ public class SKFSClient {
                 break;
             case HttpMethod.DELETE:
                 request = new HttpDelete(requestURI);
+                contentType = "";
+                break;
             default:
                 WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "callSKFSRestApi",
                         "WEBAUTHN-ERR-5001", "Invalid HTTP Method");
                 throw new WebServiceException(WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-ERR-5001"));
         }
-        String contentType = MediaType.APPLICATION_JSON;
         String apiVersion = "2.0";
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
         String bodyHash = (body == null)? "" : calculateHash(body);
+        
+        String queryParams = request.getURI().getQuery();
+        if (queryParams != null) {
+            queryParams = "?" + queryParams;
+        } else {
+            queryParams = "";
+        }
         
         String requestToHmac = request.getMethod() + "\n"
                 + bodyHash + "\n"
                 + contentType + "\n"
                 + currentDate + "\n"
                 + apiVersion + "\n"
-                + request.getURI().getPath();
+                + request.getURI().getPath()+queryParams;
         String hmac = calculateHMAC(SECRETKEY, requestToHmac);
         
         request.addHeader("Date", currentDate);
@@ -258,7 +271,7 @@ public class SKFSClient {
     private static String getAndVerifySuccessfulResponse(HttpResponse skfsResponse){
         try {
             String responseJsonString = EntityUtils.toString(skfsResponse.getEntity());
-            verifyJson(responseJsonString);
+            Common.parseJsonFromString(responseJsonString);     //Response is valid JSON by parsing it
             
             if (skfsResponse.getStatusLine().getStatusCode() != 200 
                     || responseJsonString == null) {
@@ -270,19 +283,6 @@ public class SKFSClient {
             return responseJsonString;
         } catch (IOException | ParseException ex) {
             WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "verifySuccessfulCall",
-                    "WEBAUTHN-ERR-5001", ex.getLocalizedMessage());
-            throw new WebServiceException(WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-ERR-5001"));
-        }
-    }
-    
-    // Verify that SKFE response is the proper format
-    private static void verifyJson(String responseJsonString){
-        System.out.println(responseJsonString);
-        try (JsonReader jsonReader = Json.createReader(new StringReader(responseJsonString))) {
-            jsonReader.readObject();
-        }
-        catch(JsonParsingException ex){
-            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "getResponseFromString",
                     "WEBAUTHN-ERR-5001", ex.getLocalizedMessage());
             throw new WebServiceException(WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-ERR-5001"));
         }

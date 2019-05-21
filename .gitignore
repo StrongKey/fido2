@@ -21,3 +21,4 @@ server/fidoserverEAR/target/
 server/fidoserverbeans/target/
 server/keymanager/target/
 /sampleapps/java/basic/server/target/
+/sampleapps/java/poc/server/target/

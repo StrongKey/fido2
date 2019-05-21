@@ -7,7 +7,7 @@
     <version>4.0</version>
     <packaging>war</packaging>
 
-    <name>basicserver</name>
+    <name>pocserver</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -31,6 +31,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.6</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.1</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -89,7 +95,7 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>basicserver</finalName>
+        <finalName>pocserver</finalName>
     </build>
 
 </project>

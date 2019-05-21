@@ -7,10 +7,10 @@
 # The license can be found at https://github.com/StrongKey/fido2/LICENSE
 ###################################################################################
 
-basicserver=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+pocserver=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 failure() {
-        rm -f $basicserver/basicserverInstall/basicserver.war 
+        rm -f $pocserver/pocserverInstall/pocserver.war 
         echo "There was a problem creating the SAMPLEAPPLICATION distribution. Aborting." >&2
         exit 1
 }
@@ -26,15 +26,15 @@ mvn clean install -q
 
 # Copy the necessary jars, libs, wars, ears into dist
 echo "-Copying files..."
-cp $basicserver/target/basicserver.war $basicserver/basicserverInstall
+cp $pocserver/target/pocserver.war $pocserver/pocserverInstall
 
 # Create archives
 echo "-Packaging fidoserver..."
-tar zcf basicserver-v0.9-dist.tgz -C $basicserver/basicserverInstall .
+tar zcf pocserver-v0.9-dist.tgz -C $pocserver/pocserverInstall .
 
 # Do not go to the failure function
 trap : 0
 echo "Success!"
 
-rm -f $basicserver/basicserverInstall/basicserver.war
+rm -f $pocserver/pocserverInstall/pocserver.war
 exit 0

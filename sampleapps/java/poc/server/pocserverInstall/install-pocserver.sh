@@ -23,7 +23,7 @@ $MARIA_HOME/bin/mysql -u root mysql -p${MARIA_ROOT_PASSWORD} -e "create database
                                             flush privileges;"
 
 # Create DB Tables
-cd $SKFS_SOFTWARE/basicserverSQL
+cd $SKFS_SOFTWARE/pocserverSQL
 $STRONGKEY_HOME/$MARIATGT/bin/mysql --user=demodbuser --password=${MARIA_DEMODBUSER_PASSWORD} --database=demo --quick < create.txt
 
 # Create JDBC connection
@@ -44,5 +44,5 @@ chown -R strongkey:strongkey $STRONGKEY_HOME/webauthntutorial
 
 # Deploy sample application
 echo "Deploying StrongKey FidoServer ..."
-cp $SKFS_SOFTWARE/basicserver.war /tmp
-$GLASSFISH_HOME/bin/asadmin deploy /tmp/basicserver.war
+cp $SKFS_SOFTWARE/pocserver.war /tmp
+$GLASSFISH_HOME/bin/asadmin deploy /tmp/pocserver.war
