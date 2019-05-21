@@ -10,25 +10,26 @@ package com.strongkey.skfs.policybeans;
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceMaps;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skce.pojos.UserSessionInfo;
+import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
+import com.strongkey.skfs.core.U2FUtility;
 import com.strongkey.skfs.fido.policyobjects.AuthenticatorSelection;
 import com.strongkey.skfs.fido.policyobjects.CryptographyPolicyOptions;
+import com.strongkey.skfs.fido.policyobjects.ExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RegistrationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
-import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skce.utilities.skceMaps;
-import com.strongkey.skfs.core.U2FUtility;
-import com.strongkey.skfs.fido.policyobjects.ExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
 import com.strongkey.skfs.fido.policyobjects.extensions.Fido2RegistrationExtension;
+import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
-import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
+import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -62,18 +63,18 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         //  fetch the username
         if (username == null || username.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username"));
         }
         if (displayName == null || displayName.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username"));
         }
         
         //Gather useful information
         FidoPolicyObject fidoPolicy = getpolicybean.getPolicyByDidUsername(did, username);
         if(fidoPolicy == null){
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", "No policy found");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + "No policy found"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0002") + "No policy found"));
         }
         RegistrationPolicyOptions regOp = fidoPolicy.getRegistrationOptions();
         String userId = getUserId(did, username, regOp.getUseridLength());
@@ -100,7 +101,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         }
         catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException | SKFEException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0003", ex.getLocalizedMessage());
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getLocalizedMessage()));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getLocalizedMessage()));
         }
         
         if(fidoPolicy.getTimeout() != null){
@@ -280,21 +281,21 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_ATTACHMENT, rpRequestedAttachment);
             }
             else if(rpRequestedAttachment != null){
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_ATTACHMENT);
+                throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_ATTACHMENT);
             }
             
             if(authselect.getRequireResidentKey().contains(rpRequestedRequireResidentKey)){
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_RESIDENTKEY, rpRequestedRequireResidentKey);
             }
             else if (rpRequestedRequireResidentKey != null) {
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY);
+                throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY);
             }
 
             if(authselect.getUserVerification().contains(rpRequestedUserVerification)){
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, rpRequestedUserVerification);
             }
             else if (rpRequestedUserVerification != null) {
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
+                throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
             }
         }
         authselectResponse = authselectBuilder.build();
@@ -302,11 +303,11 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         if(!authselectResponse.isEmpty()){
             if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_RESIDENTKEY, null) == null 
                     && !authselect.getRequireResidentKey().contains(false)){
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
+                throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
             }
             if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
                     && !authselect.getUserVerification().contains(skfsConstants.POLICY_CONST_PREFERRED)){
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
+                throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
             }
             return authselectResponse;
         }
@@ -322,12 +323,12 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
             attestionResponse = rpRequestedAttestation;
         }
         else if(rpRequestedAttestation != null){
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION);
+            throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION);
         }
         
         // If an option is unset, verify the policy allows for the default behavior.
         if(attestionResponse == null && !regOp.getAttestation().contains(skfsConstants.FIDO2_CONST_ATTESTATION_NONE)){
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION + "Missing");
+            throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION + "Missing");
         }
         return attestionResponse;
     }
