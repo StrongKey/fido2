@@ -33,7 +33,7 @@
 3.  **Download** the binary distribution file [fido2server-v0.9-dist.tgz](../fido2server-v0.9-dist.tgz).
 
     ```sh
-    wget https://github.com/StrongKey/fido2/raw/user_management/fido2server-v0.9-dist.tgz
+    wget https://github.com/StrongKey/fido2/raw/master/fido2server-v0.9-dist.tgz
     ```
 
 4.  **Extract the downloaded file to the current directory**:
