@@ -1,32 +1,37 @@
-# Project Title
-
-POC web application
+# POC web application
 
 
 ### Installing
 
 A step by step instructions on how to get a development env running
+1. Switch to (or login as) the strongkey user. The default password for the strongkey user is ShaZam123.
+```
+su - strongkey
+```
 
-1.Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./dist/demo6/poc-git.tar.gz).
+2. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./dist/demo6/poc-git.tar.gz).
+```
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/dist/demo6/poc-git.tar.gz
+```
 
 
-2.Extract the downloaded file
+3. Extract the downloaded file
 
 ```
 tar xvzf poc-ui-dist.tar.gz
 ```
-3.Copy all the files to the payara docroot.
+4. Copy all the files to the payara docroot.
 
 ```
 cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
 ```
-4.Optional: You can modify the background image and the logo image.
+5. Optional: You can modify the background image and the logo image.
 
 ```
 cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/bg/background.jpg
 cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/logo/logo.png
 ```
-5.The application is deployed in the docroot and can be accessed.
+6. The application is deployed in the docroot and can be accessed.
 
 ```
 https://localhost:8443/
