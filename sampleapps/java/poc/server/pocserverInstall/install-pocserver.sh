@@ -45,4 +45,4 @@ chown -R strongkey:strongkey $STRONGKEY_HOME/webauthntutorial
 # Deploy sample application
 echo "Deploying StrongKey FidoServer ..."
 cp $SKFS_SOFTWARE/pocserver.war /tmp
-$GLASSFISH_HOME/bin/asadmin deploy /tmp/pocserver.war
+$GLASSFISH_HOME/bin/asadmin deploy --contextroot poc --name poc /tmp/pocserver.war
