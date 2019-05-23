@@ -7,7 +7,7 @@ POC web application
 
 A step by step instructions on how to get a development env running
 
-1.Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./dist/demo6/poc-ui.tar.gz).
+1.Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./dist/demo6/poc-git.tar.gz).
 
 
 2.Extract the downloaded file
