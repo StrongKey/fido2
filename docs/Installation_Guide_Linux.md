@@ -2,11 +2,18 @@
 
 ## Prerequisites
 
--  **The scripted installation process has been tested on the following Linux distributions only.** The installation script is untested on other flavors of Linux but may work with slight modifications.
+-  **To install on one of the following Linux distributions.** The installation script is untested on other flavors of Linux but may work with slight modifications.
     - RedHat/CentOS/Oracle 7
     - Ubuntu 18.04
     - Debian 9
     - Amazon Linux 2
+    
+-  **To install on Windows Server 2016 or Windows Server 2019**, install and configure OpenJDK with the steps below:
+    - Download AdoptOpenJDK from https://adoptopenjdk.net.
+    - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options, then download the latest release.
+    - Run the installer and ensure the following options are installed:
+        - *Set JAVA_HOME variable*
+        - *JavaSoft (Oracle) registry keys*
 
 -  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
 
