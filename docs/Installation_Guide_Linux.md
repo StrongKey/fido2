@@ -16,6 +16,8 @@
     - Run the installer and ensure the following options are installed:
         - *Set JAVA_HOME variable*
         - *JavaSoft (Oracle) registry keys*
+        
+----------------
 
 -  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
 
