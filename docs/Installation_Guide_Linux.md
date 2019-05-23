@@ -1,4 +1,4 @@
-#### StrongKey FIDO2 Server, Community Edition
+#### StrongKey FIDO2 Server, Community Edition for Linux
 
 ## Prerequisites
 
