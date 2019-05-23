@@ -11,9 +11,9 @@ A step by step instructions on how to get a development env running
 su - strongkey
 ```
 
-2. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./poc-git.tar.gz).
+2. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./poc-ui-dist.tar.gz).
 ```
-wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-git.tar.gz
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
 ```
 
 
