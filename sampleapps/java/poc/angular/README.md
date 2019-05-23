@@ -1,7 +1,9 @@
 # POC web application
 
+## Prerequisites
+- **The sample commands below assume you are installing this RP web application on the same machine where StrongKey FIDO2 Server has been installed.** If you are installing on a separate machine, you may have to adjust the commands accordingly.
 
-### Installing
+## Installation Instructions
 
 A step by step instructions on how to get a development env running
 1. Switch to (or login as) the strongkey user. The default password for the strongkey user is ShaZam123.
@@ -9,9 +11,9 @@ A step by step instructions on how to get a development env running
 su - strongkey
 ```
 
-2. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./dist/demo6/poc-git.tar.gz).
+2. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](./poc-git.tar.gz).
 ```
-wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/dist/demo6/poc-git.tar.gz
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-git.tar.gz
 ```
 
 
