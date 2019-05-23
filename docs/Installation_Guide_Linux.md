@@ -10,7 +10,7 @@
     
  **OR**
  
--  **Windows Server 2016 or Windows Server 2019**, install and configure OpenJDK with the steps below:
+-  **Windows Server 2016 or Windows Server 2019** Install and configure OpenJDK with the steps below:
     - Download AdoptOpenJDK from https://adoptopenjdk.net.
     - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options, then download the latest release.
     - Run the installer and ensure the following options are installed:
