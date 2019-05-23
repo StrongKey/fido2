@@ -2,13 +2,15 @@
 
 ## Prerequisites
 
--  **To install on one of the following Linux distributions.** The installation script is untested on other flavors of Linux but may work with slight modifications.
+-  **One of the following Linux distributions.** The installation script is untested on other flavors of Linux but may work with slight modifications.
     - RedHat/CentOS/Oracle 7
     - Ubuntu 18.04
     - Debian 9
     - Amazon Linux 2
     
--  **To install on Windows Server 2016 or Windows Server 2019**, install and configure OpenJDK with the steps below:
+ **OR**
+ 
+-  **Windows Server 2016 or Windows Server 2019**, install and configure OpenJDK with the steps below:
     - Download AdoptOpenJDK from https://adoptopenjdk.net.
     - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options, then download the latest release.
     - Run the installer and ensure the following options are installed:
