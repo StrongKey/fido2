@@ -13,7 +13,7 @@ A step by step instructions on how to get a development env running
 2.Extract the downloaded file
 
 ```
-tar xvzf pocserver-v0.9-dist.tgz
+tar xvzf poc-ui-dist.tar.gz
 ```
 3.Copy all the files to the payara docroot.
 
