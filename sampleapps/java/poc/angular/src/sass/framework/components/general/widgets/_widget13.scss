@@ -1,0 +1,82 @@
+//
+//** Widget 13 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget13-base() {
+    .m-widget13 {  	
+    	.m-widget13__item {
+            display: table;
+            width: 100%;
+
+            .m-widget13__desc {
+                display: table-cell;
+                padding-right: 30px;                
+                width: 50%;
+                vertical-align: top; 
+                padding-top: 10px;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+            }
+
+            .m-widget13__text {
+                display: table-cell;               
+                width: 50%;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                vertical-align: top;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+
+                &.m-widget13__text-bolder {
+                    font-size: get-font-size(regular, '++');
+                    font-weight: get-font-weight(bolder);
+                }
+
+                &.m-widget13__number-bolder {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bolder); 
+                }
+            }
+        }
+
+        .m-widget13__action {
+            margin-top: 30px;
+            padding-top: 30px;
+            .m-widget__detalis {                
+                margin-right: 10px;
+            }
+        }
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget13-skin() {
+    $skin: get-default-skin(); 
+       
+    .m-widget13 {
+    	.m-widget13__item {
+
+            .m-widget13__desc {
+                color: get-color($skin, regular, '----');             
+            }
+            .m-widget13__text {
+                color: get-color($skin, regular, '----'); 
+
+                &.m-widget13__text-bolder {
+                    color: get-color($skin, regular, '-');
+                }
+            }               
+        }
+
+        .m-widget13__action {
+            border-top: 0.07rem dashed get-color($skin, panel);     
+        }
+    }     
+}
+
+//== Build Component Base
+@include m-build-component--widget13-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget13-skin();

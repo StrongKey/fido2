@@ -1,0 +1,11 @@
+//
+//** Global Include
+// Include all dependency partials
+
+//== Base Mixins and SASS Functions
+@import "base/include";
+
+//== Components
+@import "components/base/include";
+@import "components/general/include";
+@import "components/plugins/include";

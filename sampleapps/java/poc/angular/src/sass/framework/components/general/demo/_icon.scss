@@ -1,0 +1,72 @@
+//
+//** Demo Icon Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--demo-icon-base() {
+    // icon demo
+    .m-demo-icon  {
+        margin-bottom: 20px; 
+        display: table;
+        padding: 10px;
+
+        .m-demo-icon__preview {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 0;
+            text-align: left;
+            padding-right: 10px;
+            width: 50px;  
+
+            i {
+                line-height: 0;
+                vertical-align: middle;
+                font-size: 2rem !important; 
+            }
+        }
+
+        .m-demo-icon__class {
+            width: 100%;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: left; 
+            padding: 0;
+            font-size: get-font-size(regular, '-');
+            font-weight: get-font-weight('bold');
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--demo-icon-skin($skin) {
+    // icon demo
+    @include component-skin(m-demo-icon, $skin) {
+
+        .m-demo-icon__preview {
+            i {
+                color: get-color($skin, regular, '++');
+            }
+        }
+
+        .m-demo-icon__class {
+            color: get-color($skin, regular, '--');
+        }
+
+        &:hover {
+            background-color: get-color($skin, panel, '-');
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--demo-icon-base();
+
+//== Component Skin - Light
+@include m-build-component--demo-icon-skin(light);
+
+//== Component Skin - Dark
+@include m-build-component--demo-icon-skin(dark);

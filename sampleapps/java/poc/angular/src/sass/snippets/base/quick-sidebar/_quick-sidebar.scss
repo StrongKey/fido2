@@ -1,0 +1,72 @@
+//
+//** Aside Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--quick-sidebar-base($layout) {
+    .m-quick-sidebar {
+        padding: array-get($layout, self, padding);
+
+        // close icon
+        .m-quick-sidebar__close {
+            position: absolute;
+            font-size: array-get($layout, close, font-size);
+            cursor: pointer;   
+        }
+
+        // scrollbar
+        .mCSB_scrollTools {
+            right: array-get($layout, scrollbar, right) !important;
+        }
+
+        // tabbed mode
+        &.m-quick-sidebar--tabbed {
+            .m-quick-sidebar__close {
+                top: array-get($layout, tabbed, close, top);
+                right: array-get($layout, tabbed, close, right);
+            }
+
+            .m-tabs.m-tabs-line {
+                margin: array-get($layout, tabbed, tabs, self, margin);
+
+                > .m-tabs__item {
+                    > .m-tabs__link {
+                        padding: array-get($layout, tabbed, tabs, item, link, padding);
+                    }
+                }       
+            }
+        }
+    }    
+}
+
+//== Component Skin
+@mixin m-build-component--quick-sidebar-skin($layout, $skin) {    
+    @include component-skin(m-quick-sidebar, $skin) {
+        background-color: array-get($layout, self, bg-color);
+        @include shadow( get-shadow($skin) );
+
+        .m-quick-sidebar__close {
+            color: get-color($skin, icon);
+
+            &:hover {
+                color: get-brand-color();
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--quick-sidebar-base( array-get($m--quick-sidebar, layout) );
+
+//== Component Skin - Light
+@include m-build-component--quick-sidebar-skin( array-get($m--quick-sidebar, skins, light), light );
+
+//== Component Skin - Dark
+@include m-build-component--quick-sidebar-skin( array-get($m--quick-sidebar, skins, dark), dark );
+
+//== Component Offcanvas Mode
+@include m-generate-component--offcanvas(m-quick-sidebar, default, array-get($m--quick-sidebar, layout, self, offcanvas) );

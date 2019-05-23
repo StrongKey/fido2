@@ -1,0 +1,216 @@
+//
+//** Alert Customization
+// 
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--alert-base() {
+    //== Base
+    .alert {	
+        padding: 0.85rem 1.5rem;
+        @include border-radius(0);
+
+        @include rounded {
+            @include border-radius(array-get($m--border-radius, general));
+        }
+
+        .close  {
+            @include m-generate-close-icon();
+            font-size: get-font-size(icon, '-');
+            outline:none !important;
+            text-shadow: none;
+            padding-top: 0.95rem;
+            padding-bottom: 0;
+            cursor: pointer;
+
+            span {
+                display: none;    
+            }
+        }   
+
+        &.m-alert--square {
+            @include border-radius(0);
+        }
+
+        &.m-alert--icon {
+            $m-alert-icon-padding-y: 1.45rem;
+            $m-alert-icon-padding-x: 1.75rem;
+
+            display: table;
+            padding: 0;
+
+            .m-alert__icon {
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;
+                padding: $m-alert-icon-padding-y 0.5rem $m-alert-icon-padding-y $m-alert-icon-padding-x;
+                line-height: 0;
+                width: 1%;
+
+                &.m-alert__icon--top {
+                    vertical-align: top;
+                    padding-top: 1.85rem;
+                }
+
+                @include icons-size( array-get($m--bootstrap-extend-config, alert, icon, sizes) );
+
+                i {
+                    display: inline;
+                }
+            }
+
+            .m-alert__text {
+                display: table-cell;
+                vertical-align: middle;
+                width: auto;
+                padding: $m-alert-icon-padding-y 1.25rem;
+            }
+
+            .m-alert__actions {
+                width: auto;
+                display: table-cell;
+                vertical-align: middle;
+                text-align: right;
+                padding: $m-alert-icon-padding-y $m-alert-icon-padding-x $m-alert-icon-padding-y 1.25rem;
+            }
+
+            .m-alert__close {
+                display: table-cell;
+                vertical-align: top;
+                width: auto;
+                padding: $m-alert-icon-padding-y $m-alert-icon-padding-x $m-alert-icon-padding-y 1.25rem;
+
+                .close {
+                    padding-top: 0;
+                    top: 0.65rem;
+                }
+            }
+
+
+            &.m-alert--outline.m-alert--icon-solid {
+                .m-alert__icon {
+                    position: relative;
+                    padding: $m-alert-icon-padding-y $m-alert-icon-padding-x;
+
+                    span {
+                        top: 50%;
+                        margin-top: -6px;  
+                        right: -6px;
+                        @include m--build-classic-arrow(left, 6px); 
+                    }       
+                }
+
+                .m-alert__close {
+                    padding-top: 0;
+
+                    .close {
+                        padding-top: 0;
+                        top: 0.75rem;
+                    }
+                }
+
+                .m-alert__text {
+                    padding-left: 1.75rem;
+                }
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--alert-skin($skin) {
+    @include component-skin(alert, $skin) { 
+        background: get-color($skin, box);
+                
+        .close  {
+            color: get-color($skin, icon);
+        }
+
+        &.m-alert--default {
+            background: get-color($skin, panel, '--');
+            color: get-color($skin, regular);
+
+            .m-alert__icon {
+                i {
+                    color: get-color($skin, regular, '-');
+                }
+            }
+                
+            .close  {
+                color: get-color($skin, regular, '-');
+            }
+        }
+
+        &.m-alert--air {
+            @include shadow(get-shadow($skin, '--')); 
+
+            &:not(.m-alert--outline) {
+                border: 0;
+            }
+        }
+
+        @each $name, $color in $m--state-colors {
+            &.m-alert--outline.alert-#{$name} {
+                @include alert-variant( get-color($skin, box), array-get($color, base), get-color($skin, regular) );
+
+                .close {
+                    color: array-get($color, base);
+                }
+
+                color: array-get($color, base);
+                font-weight: get-font-weight(bold);
+
+                .m-alert__icon {
+                    i {
+                        color: array-get($color, base);
+                    }
+                }
+
+                &.m-alert--icon-solid {
+                    .m-alert__icon {
+                        position: relative;
+                        background: array-get($color, base);
+
+                        i {
+                            color: array-get($color, inverse);
+                        }
+
+                        span {
+                            @include m--set-classic-arrow-bg( left, array-get($color, base));  
+                        }
+                    }
+                }
+            }
+        }
+
+        &.m-alert--outline-2x {
+            border-width: 2px;
+        }
+    }
+}
+
+//== Component States
+@mixin m-build-component--alert-states() {
+    @each $name, $color in $m--state-colors {
+        // alert-variant($background, $border, $body-color)
+        .alert-#{$name}:not(.m-alert--outline) {
+            @include alert-variant( lighten(array-get($color, base), 6%), lighten(array-get($color, base), 3%), lighten(array-get($color, base), 50%) );
+
+            .close {
+                color: lighten(array-get($color, base), 50%);
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--alert-base();
+
+//== Component Skin - Light
+@include m-build-component--alert-skin(light);
+
+//== Component State
+@include m-build-component--alert-states();

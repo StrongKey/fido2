@@ -1,0 +1,173 @@
+//
+//** Default Search
+//
+
+//== Search Base 
+@mixin m-build-header-search-base($layout) {
+	.m-header-search {		
+		.m-header-search__form {
+			display: inline-block;
+			float: right;
+
+			// spinner
+			&.m-loader:before {
+				right: array-get($layout, spinner, right, desktop);	
+			}
+		}
+
+		.m-header-search__wrapper {
+			display: table;
+			table-layout: fixed;	
+			text-align: right;	
+			background-color: array-get($layout, input, bg-color, desktop, default);
+			@include border-radius(array-get($layout, self, border-radius));
+		}
+
+		.m-header-search__input-wrapper {
+			display: table-cell;
+			vertical-align: middle;
+		}
+
+		.m-header-search__input {
+			@include reset-input();
+			width: 100%;
+			font-size: array-get($layout, input, font-size);
+			padding: array-get($layout, input, padding, desktop);
+			display: block;
+			color: array-get($layout, input, font-color, desktop);			
+			@include input-placeholder(array-get($layout, input, placeholder-color, desktop));
+		}
+
+		.m-header-search__icon-search,
+		.m-header-search__icon-close, 
+		.m-header-search__icon-cancel {	
+			text-align: center;
+			display: table-cell;
+			vertical-align: middle;
+			line-height: 0 !important;
+			cursor: pointer;
+		}
+
+		.m-header-search__icon-search {			
+			width: array-get($layout, icon, search, width, desktop);
+			padding: array-get($layout, icon, search, padding, desktop);
+			font-size: array-get($layout, icon, search, font-size, desktop);
+			color: array-get($layout, icon, search, font-color, desktop);
+		}
+
+		.m-header-search__icon-close {		
+			display: none;	
+			font-size: array-get($layout, icon, close, font-size, desktop);
+			width: array-get($layout, icon, close, width, desktop);
+			padding: array-get($layout, icon, cancel, padding, desktop);
+		}
+
+		// cancel icon
+		.m-header-search__icon-cancel {
+			visibility: hidden;
+			font-size: array-get($layout, icon, cancel, font-size, desktop);
+			width: array-get($layout, icon, cancel, width, desktop);		
+			padding: array-get($layout, icon, cancel, padding, desktop);	 
+			color: array-get($layout, icon, cancel, font-color, desktop);
+		}
+	}
+
+	@include desktop {
+		.m-header-search {
+			width: array-get($layout, self, width, desktop, default);
+
+			// expandable input
+			&.m-header-search--expandable {
+				width: array-get($layout, self, width, desktop, expandable, expanded);
+
+				$icons-width: array-get($layout, icon, search, width, desktop) + array-get($layout, icon, cancel, width, desktop);
+
+				.m-header-search__input {					
+					@include transition(width array-get($layout, self, transition-time)  ease-out);	
+					width: array-get($layout, self, width, desktop, expandable, initial) - $icons-width;
+					
+					&:focus {
+						@include transition(width array-get($layout, self, transition-time)  ease-out);	
+						width: array-get($layout, self, width, desktop, expandable, expanded) - $icons-width;
+					}
+				}
+			}
+		}
+	}  
+
+	@include tablet-and-mobile {
+		.m-header-search {			
+			.m-header-search__form {
+				padding: array-get($layout, self, padding, mobile);
+				float: none;
+				
+				// form input spinner
+				&.m-loader:before {
+					//right: array-get($layout, spinner, right, mobile);	
+				}
+			}
+
+			.m-header-search__wrapper {
+				background-color: transparent;
+				float: none;
+			}
+
+			.m-header-search__input-wrapper {
+				display: none;
+			}
+
+			.m-header-search__input {	
+				background-color: transparent;
+				color: array-get($layout, input, font-color, mobile);
+				@include input-placeholder(array-get($layout, input, placeholder-color, mobile));
+			}
+
+			.m-header-search__icon-search {
+				width: array-get($layout, icon, search, width, mobile);
+				padding: array-get($layout, icon, search, padding, mobile);
+				font-size: array-get($layout, icon, search, font-size, mobile);
+				text-align: left;
+				color: array-get($layout, icon, search, font-color, mobile);
+			}
+
+			.m-header-search__icon-close {
+				display: none;
+				width: array-get($layout, icon, close, width, mobile);
+				padding: array-get($layout, icon, close, padding, mobile);
+				font-size: array-get($layout, icon, close, font-size, mobile);
+				color: array-get($layout, icon, close, font-color, mobile);
+			}
+
+			.m-header-search__icon-cancel {
+				display: none !important;					
+			}
+
+			// search expanded mode
+			.m-header-search--mobile-expanded & {
+				width: 100%;
+				position: static;
+
+				.m-header-search__wrapper {
+					width: 100%;
+				}
+
+				.m-header-search__input-wrapper,
+				.m-header-search__icon-search,
+				.m-header-search__icon-close {
+					display: table-cell;
+				}
+			}				
+		}
+
+		// search form expanded
+		.m-header-search--mobile-expanded {
+			// topbar nav
+			.m-topbar__nav-wrapper {
+				display: none !important; 
+			}
+		}
+	}	
+}
+
+//== Build Search Base
+@include m-build-header-search-base( array-get($m-config-header, search ) );

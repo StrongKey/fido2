@@ -1,0 +1,29 @@
+//
+//** Aside for Horizontal Menu Mobile Mode
+//
+
+@mixin m-build-aside-header-menu-mobile-base($layout) {
+	
+	//== Base Markup
+	@include tablet-and-mobile {
+		.m-aside-header-menu-mobile {
+			width: array-get($layout, self, default, width);
+			z-index: array-get($layout, self, fixed, zindex) + 3;	
+
+			&.m-aside-header-menu-mobile--skin-dark {
+				background-color: array-get($layout, self, default, bg-color, dark); 		
+			}
+			
+			&.m-aside-header-menu-mobile--skin-light {
+				background-color: array-get($layout, self, default, bg-color, light); 		
+			}
+		}
+	}
+}
+
+
+//== Build Aside Mobile Base
+@include m-build-aside-header-menu-mobile-base( array-get($m-config-aside, aside-header-menu-mobile ) );
+
+//== Build Header Mobile Menu Offcanvas
+@include m-generate-component--offcanvas(m-aside-header-menu-mobile, tablet-and-mobile, array-get($m-config-aside, aside-header-menu-mobile, self, offcanvas) );

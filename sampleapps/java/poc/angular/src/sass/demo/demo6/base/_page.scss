@@ -1,0 +1,30 @@
+body {
+	&.m-page--boxed {
+		background-attachment: fixed;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}	
+}
+
+//== General Mode
+.m-page {		
+	//== Page loading
+	.m-page--loading-enabled & {
+		@include animation(m-animate-fade-in .5s);
+	}	
+
+	.m-page--loading & {
+		@include opacity(0);		
+		@include animation(m-animate-fade-out .5s both);
+	}
+}	
+
+@media (min-width: array-get($m--layout-breakpoints, xxl)) {
+	.m-page--boxed {
+		.m-page {
+			width: array-get($m--container-widths, xxl);
+			margin-left: auto;
+			margin-right: auto;
+		}	
+	}
+}

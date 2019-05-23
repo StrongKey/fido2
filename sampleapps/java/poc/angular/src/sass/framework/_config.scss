@@ -1,0 +1,424 @@
+//
+//** Global Config
+//
+
+//== Framework SASS Functions
+@import "base/functions";
+
+//== Layout Breakpoints
+// Define the minimum and maximum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+$m--layout-breakpoints: (
+  	// Small screen / phone
+    sm: 576px,
+  	
+  	// Medium screen / tablet
+  	md: 768px,
+  	
+  	// Large screen / desktop
+  	lg: 1024px,
+  	
+  	// Extra large screen / wide desktop
+  	xl: 1200px,
+
+    // Extra large screen / wide desktop
+    xxl: 1400px,
+
+    // Super Extra large screen / wide desktop
+    xxxl: 1600px
+)!default;
+
+//== Global arrow style
+$m--arrow-style: 'smooth' !default; // supported options: smooth, classic
+
+//== Default skin
+$m--default-skin: 'light' !default; // supported option: light. the dark option will be added in the future when a new demo with dark skin is released.
+
+//== Global rounded border mode
+$m--rounded: true !default;   // access to this value calling rounded() in SASS code
+
+//== Force cursor with pointer for button tags globally
+$m--btn-force-hover-pointer: true !default;
+
+//== Border Radius
+$m--border-radius: (
+    general: 4px,
+    dropdown: 4px,
+    scrollbar: 2px
+) !default;
+
+//== Core icon codes(lineawesome icons: https://icons8.com/line-awesome)
+$m--icon-codes: (
+    close: '\f191',
+    down: '\f110',
+    up: '\f113',
+    left: '\f111',  
+    right: '\f112',
+    plus: '\f2c2',
+    minus: '\f28e'
+) !default;
+
+//== Modal Z-index
+$m--modal-zindex: 1050 !default;
+
+//== General dropdown Z-index
+$m--dropdown-zindex: 101 !default;
+
+//== Transition
+$m--transition: (
+    general: all 0.3s,
+    link: (
+        hover: color .4s ease
+    )
+)!default;
+
+//== UI State Colors
+$m--brand-color: #004054 !default;
+$m--brand-inverse-color: #ffffff !default; 
+
+$m--state-colors: (
+    // metronic states
+    brand: (
+        base: $m--brand-color,
+        inverse: $m--brand-inverse-color
+    ),
+    metal: (
+        base: #c4c5d6,
+        inverse: #ffffff
+    ),  
+    light: (
+        base: #ffffff,
+        inverse: #282a3c 
+    ),
+    accent: (
+        base: #00c4d9,
+        inverse: #ffffff 
+    ),
+    focus: (
+        base: #00c4d9,
+        inverse: #ffffff 
+    ),
+
+    // bootstrap states
+    primary: (
+        base: #004054,
+        inverse: #ffffff
+    ),
+    success: (
+        base: #34bfa3,
+        inverse: #ffffff
+    ),
+    info: (
+        base: #00c4d9,
+        inverse: #ffffff
+    ),
+    warning: (
+        base: #ffb822,
+        inverse: #111111
+    ),
+    danger: (
+        base: #f4516c,
+        inverse: #ffffff
+    )    
+)!default;
+
+//== The body element font settings
+$m--root-font: (
+    size: (
+        desktop: 13px,
+        tablet: 12px,
+        mobile: 12px
+    ), 
+    weight: 300, 
+    color: (
+        light: #333333, 
+        dark: #efefef
+    )
+)!default;
+
+//== Font families
+$m--font-families: (
+    regular: 'Montserrat',  
+    heading: 'Montserrat'
+)!default;
+
+//== General link font settings
+$m--link-font: (
+    default: (
+        color: (
+            light: get-brand-color(), 
+            dark: get-brand-color()
+        )
+    ),
+
+    hover: (
+        color: (
+            light: get-brand-color('+'), 
+            dark: get-brand-color('+')
+        )
+    )    
+)!default;
+
+//== General Font sizes
+$m--font-sizes: (
+    // text font sizes
+    regular: (
+        down5: 0.7rem,  // access to this font size value calling get-font-size function as get-font-size(regular, -----) in SASS code
+        down4: 0.75rem, // access to this font size value calling get-font-size function as get-font-size(regular, ----) in SASS code
+        down3: 0.78rem, // access to this font size value calling get-font-size function as get-font-size(regular, ---) in SASS code
+        down2: 0.8rem,  // access to this font size value calling get-font-size function as get-font-size(regular, --) in SASS code
+        down1: 0.85rem, // access to this font size value calling get-font-size function as get-font-size(regular, -) in SASS code
+        base: 1rem,     // access to this font size value calling get-font-size function as get-font-size(regular) in SASS code
+        up1:  1.1rem,   // access to this font size value calling get-font-size function as get-font-size(regular, +) in SASS code
+        up2: 1.2rem,    // access to this font size value calling get-font-size function as get-font-size(regular, ++) in SASS code
+        up3: 1.3rem,    // access to this font size value calling get-font-size function as get-font-size(regular, +++) in SASS code
+        up4: 1.5rem,    // access to this font size value calling get-font-size function as get-font-size(regular, ++++) in SASS code
+        up5: 1.6rem     // access to this font size value calling get-font-size function as get-font-size(regular, +++++) in SASS code
+    ),
+
+    // icon font sizes
+    icon: (
+        down5: 0.8rem,  // access to this shadow value calling get-font-size function as get-font-size(icon, -----) in SASS code
+        down4: 0.9rem,  // access to this shadow value calling get-font-size function as get-font-size(icon, ----) in SASS code
+        down3: 1rem,    // access to this shadow value calling get-font-size function as get-font-size(icon, ---) in SASS code
+        down2: 1.1rem,  // access to this shadow value calling get-font-size function as get-font-size(icon, --) in SASS code
+        down1: 1.2rem,  // access to this shadow value calling get-font-size function as get-font-size(icon, -) in SASS code
+        base: 1.3rem,   // access to this shadow value calling get-font-size function as get-font-size(icon) in SASS code
+        up1:  1.4rem,   // access to this shadow value calling get-font-size function as get-font-size(icon, +++++) in SASS code
+        up2: 1.6rem,    // access to this shadow value calling get-font-size function as get-font-size(icon, ++++) in SASS code
+        up3: 1.8rem,    // access to this shadow value calling get-font-size function as get-font-size(icon, +++) in SASS code
+        up4: 2.0rem,    // access to this shadow value calling get-font-size function as get-font-size(icon, ++) in SASS code
+        up5: 2.1rem     // access to this shadow value calling get-font-size function as get-font-size(icon, +) in SASS code
+    ) 
+)!default;
+
+//== General Font Weights
+$m--font-weights: (
+    thin:  200,     // access to this font weight value calling get-font-weight function as get-font-weight(this) in SASS code
+    normal: 300,    // access to this font weight value calling get-font-weight function as get-font-weight(normal) in SASS code
+    bold: 400,      // access to this font weight value calling get-font-weight function as get-font-weight(bold) in SASS code
+    bolder: 500,    // access to this font weight value calling get-font-weight function as get-font-weight(bolder) in SASS code
+    boldest: 600,   // access to this font weight value calling get-font-weight function as get-font-weight(boldest) in SASS code
+    boldest2: 700   // access to this font weight value calling get-font-weight function as get-font-weight(boldest2) in SASS code
+)!default;
+
+//== General typography font colors
+$m--typography-colors: (
+    // light skin
+    light: (
+        // regular text color
+        regular: (
+            lighten5: lighten(#575962, 30%), // access to this color value calling get-color function as get-color(light, regular, -----) in SASS code
+            lighten4: lighten(#575962, 25%), // access to this color value calling get-color function as get-color(light, regular, ----) in SASS code
+            lighten3: lighten(#575962, 20%), // access to this color value calling get-color function as get-color(light, regular, ---) in SASS code
+            lighten2: lighten(#575962, 15%), // access to this color value calling get-color function as get-color(light, regular, --) in SASS code
+            lighten1: lighten(#575962, 10%), // access to this color value calling get-color function as get-color(light, regular, -) in SASS code
+            base:     #575962,               // access to this color value calling get-color function as get-color(light, regular) in SASS code
+            darken1:  darken(#575962, 10%),  // access to this color value calling get-color function as get-color(light, regular, +) in SASS code
+            darken2:  darken(#575962, 15%),  // access to this color value calling get-color function as get-color(light, regular, ++) in SASS code
+            darken3:  darken(#575962, 20%),  // access to this color value calling get-color function as get-color(light, regular, +++) in SASS code
+            darken4:  darken(#575962, 25%),  // access to this color value calling get-color function as get-color(light, regular, ++++) in SASS code
+            darken5:  darken(#575962, 30%)   // access to this color value calling get-color function as get-color(light, regular, +++++) in SASS code 
+        ),
+
+        // link color
+        link: (
+            lighten5: lighten(#5b52ce, 30%), // access to this color value calling get-color function as get-color(light, link, -----) in SASS code
+            lighten4: lighten(#5b52ce, 25%), // access to this color value calling get-color function as get-color(light, link, ----) in SASS code
+            lighten3: lighten(#5b52ce, 20%), // access to this color value calling get-color function as get-color(light, link, ---) in SASS code
+            lighten2: lighten(#5b52ce, 15%), // access to this color value calling get-color function as get-color(light, link, --) in SASS code
+            lighten1: lighten(#5b52ce, 10%), // access to this color value calling get-color function as get-color(light, link, -) in SASS code
+            base:     #5b52ce, 
+            darken1:  darken(#5b52ce, 10%),  // access to this color value calling get-color function as get-color(light, link, +++++) in SASS code
+            darken2:  darken(#5b52ce, 15%),  // access to this color value calling get-color function as get-color(light, link, ++++) in SASS code
+            darken3:  darken(#5b52ce, 20%),  // access to this color value calling get-color function as get-color(light, link, +++) in SASS code
+            darken4:  darken(#5b52ce, 25%),  // access to this color value calling get-color function as get-color(light, link, ++) in SASS code
+            darken5:  darken(#5b52ce, 30%)   // access to this color value calling get-color function as get-color(light, link, +) in SASS code
+        ),
+
+        // icon color
+        icon: (
+            lighten5: lighten(#cfcedb, 25%),
+            lighten4: lighten(#cfcedb, 20%),
+            lighten3: lighten(#cfcedb, 15%),
+            lighten2: lighten(#cfcedb, 10%),
+            lighten1: lighten(#cfcedb, 5%),
+            base:     #cfcedb, 
+            darken1:  darken(#cfcedb, 5%),
+            darken2:  darken(#cfcedb, 10%),
+            darken3:  darken(#cfcedb, 15%),
+            darken4:  darken(#cfcedb, 20%),
+            darken5:  darken(#cfcedb, 25%)
+        ),
+
+        // muted text color
+        muted: (
+            lighten5: lighten(#afb2c1, 30%),
+            lighten4: lighten(#afb2c1, 25%),
+            lighten3: lighten(#afb2c1, 20%),
+            lighten2: lighten(#afb2c1, 15%),
+            lighten1: lighten(#afb2c1, 10%),
+            base:     #afb2c1, 
+            darken1:  darken(#afb2c1, 10%),
+            darken2:  darken(#afb2c1, 15%),
+            darken3:  darken(#afb2c1, 20%),
+            darken4:  darken(#afb2c1, 25%),
+            darken5:  darken(#afb2c1, 30%)
+        ), 
+
+        // panel(border colors)
+        panel: (
+            lighten5: lighten(#fdfdff, 2%),
+            lighten4: #fdfdff,
+            lighten3: lighten(#ebedf2, 5%),
+            lighten2: lighten(#ebedf2, 4%),
+            lighten1: lighten(#ebedf2, 3%),
+            base:     #ebedf2, 
+            darken1:  darken(#ebedf2, 3%),
+            darken2:  darken(#ebedf2, 4%),
+            darken3:  darken(#ebedf2, 15%),
+            darken4:  darken(#ebedf2, 20%),
+            darken5:  darken(#ebedf2, 25%),
+        ),
+
+        // box(background colors)
+        box: (
+            lighten5: lighten(#ffffff, 6%),
+            lighten4: lighten(#ffffff, 5%),
+            lighten3: lighten(#ffffff, 4%),
+            lighten2: lighten(#ffffff, 3%),
+            lighten1: lighten(#ffffff, 2%),
+            base:     #ffffff, 
+            darken1:  darken(#ffffff, 2%),
+            darken2:  darken(#ffffff, 3%),
+            darken3:  darken(#ffffff, 4%),
+            darken4:  darken(#ffffff, 5%),
+            darken5:  darken(#ffffff, 6%),
+        )
+    ),
+
+    // dark skin
+    dark: (
+        // regular text color
+        regular: (
+            lighten5: lighten(#9fa1b7, 25%), // access to this color value calling get-color function as get-color(dark, regular, +++++) in SASS code
+            lighten4: lighten(#9fa1b7, 20%), // access to this color value calling get-color function as get-color(dark, regular, ++++) in SASS code
+            lighten3: lighten(#9fa1b7, 15%), // access to this color value calling get-color function as get-color(dark, regular, +++) in SASS code
+            lighten2: lighten(#9fa1b7, 10%), // access to this color value calling get-color function as get-color(dark, regular, ++) in SASS code
+            lighten1: lighten(#9fa1b7, 5%), // access to this color value calling get-color function as get-color(dark, regular, +) in SASS code
+            base:     #ffffff,               // access to this color value calling get-color function as get-color(dark, regular) in SASS code
+            darken1:  darken(#9fa1b7, 5%),  // access to this color value calling get-color function as get-color(dark, regular, -) in SASS code
+            darken2:  darken(#9fa1b7, 10%),  // access to this color value calling get-color function as get-color(dark, regular, --) in SASS code
+            darken3:  darken(#9fa1b7, 15%),  // access to this color value calling get-color function as get-color(dark, regular, ---) in SASS code
+            darken4:  darken(#9fa1b7, 20%),  // access to this color value calling get-color function as get-color(dark, regular, ----) in SASS code
+            darken5:  darken(#9fa1b7, 25%)   // access to this color value calling get-color function as get-color(dark, regular, -----) in SASS code 
+        ),
+
+        // link color
+        link: (
+            lighten5: lighten(#5b52ce, 30%), // access to this color value calling get-color function as get-color(dark, link, +++++) in SASS code
+            lighten4: lighten(#5b52ce, 25%), // access to this color value calling get-color function as get-color(dark, link, ++++) in SASS code
+            lighten3: lighten(#5b52ce, 20%), // access to this color value calling get-color function as get-color(dark, link, +++) in SASS code
+            lighten2: lighten(#5b52ce, 15%), // access to this color value calling get-color function as get-color(dark, link, ++) in SASS code
+            lighten1: lighten(#5b52ce, 10%), // access to this color value calling get-color function as get-color(dark, link, +) in SASS code
+            base:     #d3d4ea,               // access to this color value calling get-color function as get-color(dark, link) in SASS code
+            darken1:  darken(#5b52ce, 10%),  // access to this color value calling get-color function as get-color(dark, link, -) in SASS code
+            darken2:  darken(#5b52ce, 15%),  // access to this color value calling get-color function as get-color(dark, link, --) in SASS code
+            darken3:  darken(#5b52ce, 20%),  // access to this color value calling get-color function as get-color(dark, link, ---) in SASS code
+            darken4:  darken(#5b52ce, 25%),  // access to this color value calling get-color function as get-color(dark, link, ----) in SASS code
+            darken5:  darken(#5b52ce, 30%)   // access to this color value calling get-color function as get-color(dark, link, -----) in SASS code 
+        ),
+
+        // icon color
+        icon: (
+            lighten5: lighten(#dfdff1, 25%),
+            lighten4: lighten(#dfdff1, 20%),
+            lighten3: lighten(#dfdff1, 15%),
+            lighten2: lighten(#dfdff1, 10%),
+            lighten1: lighten(#dfdff1, 5%),
+            base:     #dfdff1, 
+            darken1:  darken(#dfdff1, 5%),
+            darken2:  darken(#dfdff1, 10%),
+            darken3:  darken(#dfdff1, 15%),
+            darken4:  darken(#dfdff1, 20%),
+            darken5:  darken(#dfdff1, 25%)
+        ),
+
+        // muted text color
+        muted: (
+            lighten5: lighten(#c9c9e0, 30%),
+            lighten4: lighten(#c9c9e0, 25%),
+            lighten3: lighten(#c9c9e0, 20%),
+            lighten2: lighten(#c9c9e0, 15%),
+            lighten1: lighten(#c9c9e0, 10%),
+            base:     #c9c9e0, 
+            darken1:  darken(#c9c9e0, 10%),
+            darken2:  darken(#c9c9e0, 15%),
+            darken3:  darken(#c9c9e0, 20%),
+            darken4:  darken(#c9c9e0, 25%),
+            darken5:  darken(#c9c9e0, 30%)
+        ), 
+
+        // panel(border colors)
+        panel: (
+            lighten5: lighten(#a1a4b1, 7%),
+            lighten4: lighten(#a1a4b1, 6%),
+            lighten3: lighten(#a1a4b1, 5%),
+            lighten2: lighten(#a1a4b1, 4%),
+            lighten1: lighten(#a1a4b1, 3%),
+            base:     #a1a4b1, 
+            darken1:  darken(#a1a4b1, 3%),
+            darken2:  darken(#a1a4b1, 4%),
+            darken3:  darken(#a1a4b1, 15%),
+            darken4:  darken(#a1a4b1, 20%),
+            darken5:  darken(#a1a4b1, 25%),
+        ),
+
+        // box(background colors)
+        box: (
+            lighten5: lighten(#2c2e3e, 6%),
+            lighten4: lighten(#2c2e3e, 5%),
+            lighten3: lighten(#2c2e3e, 4%),
+            lighten2: lighten(#2c2e3e, 3%),
+            lighten1: lighten(#2c2e3e, 2%),
+            base:     #2c2e3e, 
+            darken1:  darken(#2c2e3e, 2%),
+            darken2:  darken(#2c2e3e, 3%),
+            darken3:  darken(#2c2e3e, 4%),
+            darken4:  darken(#2c2e3e, 5%),
+            darken5:  darken(#2c2e3e, 6%),
+        )
+    )
+)!default;  
+ 
+//== General box shadows
+$m--box-shadow-base-color: darken(#c5c2cc, 50%) !default; // purple shadow: #716ac  grey shadow: #c5c2cc
+
+$m--box-shadows: (
+    light: (
+        lighten5: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.02), // access to this shadow value calling get-shadow function as get-shadow(light, regular, -----) in SASS code
+        lighten4: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.04), // access to this shadow value calling get-shadow function as get-shadow(light, regular, ----) in SASS code
+        lighten3: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.06), // access to this shadow value calling get-shadow function as get-shadow(light, regular, ---) in SASS code
+        lighten2: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.08), // access to this shadow value calling get-shadow function as get-shadow(light, regular, --) in SASS code
+        lighten1: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.1),  // access to this shadow value calling get-shadow function as get-shadow(light, regular, -) in SASS code
+        base: 0px 0px 15px 1px rgba($m--box-shadow-base-color, 0.2),      // access to this shadow value calling get-shadow function as get-shadow(light, regular) in SASS code
+        darken1:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.25), // access to this shadow value calling get-shadow function as get-shadow(light, regular, +++++) in SASS code
+        darken2:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.3),  // access to this shadow value calling get-shadow function as get-shadow(light, regular, ++++) in SASS code
+        darken3:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.35), // access to this shadow value calling get-shadow function as get-shadow(light, regular, +++) in SASS code
+        darken4:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.4),  // access to this shadow value calling get-shadow function as get-shadow(light, regular, ++) in SASS code
+        darken5:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.7),  // access to this shadow value calling get-shadow function as get-shadow(light, regular, +) in SASS code
+    ),
+    dark: (
+        lighten5: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.1),  // access to this shadow value calling get-shadow function as get-shadow(dark, regular, +++++) in SASS code
+        lighten4: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.15), // access to this shadow value calling get-shadow function as get-shadow(dark, regular, ++++) in SASS code
+        lighten3: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.2),  // access to this shadow value calling get-shadow function as get-shadow(dark, regular, +++) in SASS code
+        lighten2: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.25), // access to this shadow value calling get-shadow function as get-shadow(dark, regular, ++) in SASS code
+        lighten1: 0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.3),  // access to this shadow value calling get-shadow function as get-shadow(dark, regular, +) in SASS code
+        base: 0px 0px 15px 1px rgba($m--box-shadow-base-color, 0.4),      // access to this shadow value calling get-shadow function as get-shadow(dark, regular) in SASS code
+        darken1:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.5),  // access to this shadow value calling get-shadow function as get-shadow(dark, regular, -----) in SASS code
+        darken2:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.55), // access to this shadow value calling get-shadow function as get-shadow(dark, regular, ----) in SASS code
+        darken3:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.6),  // access to this shadow value calling get-shadow function as get-shadow(dark, regular, ---) in SASS code
+        darken4:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.65), // access to this shadow value calling get-shadow function as get-shadow(dark, regular, --) in SASS code
+        darken5:  0px 1px 15px 1px rgba($m--box-shadow-base-color, 0.85), // access to this shadow value calling get-shadow function as get-shadow(dark, regular, -) in SASS code
+    )
+)!default;  

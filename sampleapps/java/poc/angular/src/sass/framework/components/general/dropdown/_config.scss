@@ -1,0 +1,154 @@
+//
+//** Dropdown Component
+//
+
+$m--dropdown: (
+	// layout
+	layout: (
+		// base
+		base: (
+			// self
+			self: (
+				zindex: 101,
+				border-radius: array-get($m--border-radius, dropdown),
+				width: (
+					default: 245px,
+					small: 225px,
+					medium: 325px,  
+					large: 380px,
+					huge: 455px
+				),
+				space: 0,  // space between toggler and dropdown itself
+				mobile-indent: 30px, //indent for mobile full width mode
+				align-push-offset: 20px, // offset for left and right aligment push
+				animation: (
+					offset: 10px
+				)
+			),
+
+			// arrow
+			arrow: (
+				classic: (
+					size: 10px, 
+					offset: 15px
+				),
+				// smooth arrow left and right spacings
+				smooth: (
+					offset: 15px
+				)
+			),
+
+			// header
+			header: (
+				// self
+				self: (
+					padding: 20px 20px
+				),
+
+				// title
+				title: (
+					padding: 0 0 5px 0
+				),
+
+				// subtitle
+				subtitle: (
+					padding: 0px
+				)
+			),
+
+			// body
+			body: (
+				padding: 20px,
+				scrollbar: (
+					right: -10px
+				)
+			),
+
+			// footer
+			footer: (
+				padding: 20px 
+			)
+		)
+	),
+
+	// skins 
+	skins: (
+		// light skin
+		light: (
+			// self
+			self: (
+				bg-color: #ffffff,
+				box-shadow: get-shadow(light)
+			),
+
+			// header
+			header: (
+				// self
+				self: (
+					bg-color: transparent,
+					box-shadow: 1px 34px 52px -19px rgba(68,62,84,0.03)
+				),
+
+				// title
+				title: (
+					color: #fff
+				),
+
+				// subtitle
+				subtitle: (
+					color: #fff
+				)
+			),
+
+			// body
+			body: (
+				// scrollbar
+				scrollbar: (
+					dragger: (
+						default: rgba(0, 0, 0, 0.1),
+						drag: rgba(0, 0, 0, 0.4)
+					)
+				)
+			)
+		),
+
+		// default skin
+		dark: (
+			// self
+			self: (
+				bg-color: #282a3c,
+				box-shadow: get-shadow(dark)
+			),
+
+			// header
+			header: (
+				// self
+				self: (
+					bg-color: array-get($m--state-colors, brand, base),
+					box-shadow: none
+				),
+
+				// title
+				title: (
+					color: #fff
+				),
+
+				// subtitle
+				subtitle: (
+					color: #fff
+				)
+			),
+
+			// body
+			body: (
+				// scrollbar
+				scrollbar: (
+					dragger: (
+						default: rgba(0, 0, 0, 0.1),
+						drag: rgba(0, 0, 0, 0.4)
+					)
+				)
+			)			
+		)		
+	)
+);

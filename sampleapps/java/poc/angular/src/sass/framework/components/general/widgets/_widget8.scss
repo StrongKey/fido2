@@ -1,0 +1,99 @@
+//
+//** List Widget 8 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget8-base() {
+    // Widget
+    .m-widget8 {      
+        
+        &:last-child {
+            margin-bottom: -0.71rem;
+        } 
+        // Item
+        .m-widget8__item {
+            display: table;             
+            margin-bottom: 0.4rem;
+            padding-bottom: 1.1rem;
+            margin-top: 1.21rem;
+
+            .m-widget8__pic {                       
+                vertical-align: top;                                 
+
+                > img {
+                    width: 3rem;                    
+                    border-radius: 50%;
+                }
+            }
+            // Info
+            .m-widget8__info {
+                display: table-cell;
+                width: 100%;
+                padding-left: 1rem;                
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+                vertical-align: top;
+                line-height: 1.3;                 
+                padding-top: 0.21rem;
+                // Username
+                .m-widget8__username {
+                    font-size: get-font-size(regular, '++');
+                    font-weight: get-font-weight(bolder);                      
+                }
+
+                // Description
+                .m-widget8__desc {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(regular);                                        
+                }                 
+            }
+
+            // Action
+            .m-widget8__action {
+                display: table-cell;  
+                vertical-align: top;                 
+
+                // Button
+                > button {
+                    //margin-top: 0.21rem;
+                }                   
+            }    
+        }              
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget8-skin() {
+    $skin: get-default-skin();    
+    // Widget
+    .m-widget8 { 
+
+        // Item
+        .m-widget8__item {
+            
+            // Username
+            .m-widget8__username {
+                color: get-color($skin, regular);       
+            } 
+            
+            // Description
+            .m-widget8__desc {
+                color: get-color($skin, regular, '---');                                           
+            }  
+
+            // Item border bottom
+            border-bottom: 0.07rem dashed get-color($skin, panel);
+            
+            // Item last border: 0 
+            &:last-child {
+                border-bottom: 0;
+            } 
+        }        
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget8-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget8-skin();

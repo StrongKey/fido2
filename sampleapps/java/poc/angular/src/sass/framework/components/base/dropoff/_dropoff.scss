@@ -1,0 +1,27 @@
+//
+//** Dropoff
+// Used by offcanvas aside mode and other components that requires page level dropoff overlay
+
+.m-dropoff {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	overflow: hidden;
+	display: none;
+	@include opacity(0);
+	z-index: array-get($m--dropoff, zindex);
+	background-color: array-get($m--dropoff, bg-color);
+
+	.m-dropoff--on & {
+		display: block;
+		@include opacity(1);
+		animation: m-dropoff-fade-in .3s linear 1;
+	}
+}
+
+@include keyframes(m-dropoff-fade-in) {
+    from   { opacity: 0; }
+    to { opacity: 1; }
+}

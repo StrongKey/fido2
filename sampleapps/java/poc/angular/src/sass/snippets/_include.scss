@@ -1,0 +1,36 @@
+//
+//** Snippets Include
+//
+
+//== Base Snippets
+@import "base/layout-builder/base";
+
+@import "base/quick-sidebar/config";
+@import "base/quick-sidebar/quick-sidebar";
+
+//== Custom Snippets
+@import "custom/general/pricing-tables/pricing-table-1";
+@import "custom/general/pricing-tables/pricing-table-2";
+@import "custom/general/pricing-tables/pricing-table-3";
+@import "custom/general/pricing-tables/pricing-table-4";
+
+@import "custom/invoices/invoice-1";
+@import "custom/invoices/invoice-2";
+
+
+@import "custom/pages/user/login-1";
+@import "custom/pages/user/login-2";
+@import "custom/pages/user/login-5";
+@import "custom/pages/user/login-6";
+
+
+@import "custom/pages/error/error-1";
+@import "custom/pages/error/error-2";
+@import "custom/pages/error/error-3";
+@import "custom/pages/error/error-4";
+@import "custom/pages/error/error-5";
+@import "custom/pages/error/error-6";
+
+//== Apps Snippets
+@import "apps/mail/config";
+@import "apps/mail/mail";

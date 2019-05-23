@@ -1,0 +1,96 @@
+//
+//** Badge List Component
+//
+
+//== Component Base
+@mixin m-build-component--list-badge-base() {	     
+ 
+	.m-list-badge {
+		display: table; 
+			
+		.m-list-badge__label {
+			display: table-cell;			
+			padding-right: 1.43rem;
+			font-size: 1.3rem;
+			vertical-align: middle;
+			font-weight: get-font-weight(boldest);
+		}
+
+		.m-list-badge__items {
+			display: table-cell;				 
+			vertical-align: middle; 
+			
+			.m-list-badge__item {
+				@include border-radius(1.43rem);				 					 
+				padding: 0.33rem 1.14rem 0.33rem 1.14rem;
+				font-size: get-font-size(regular, '-');   
+				font-weight: get-font-weight(bolder); 
+				margin-right: 0.4rem;
+				text-decoration: none;	
+			} 							 
+		}
+	}		
+}
+
+//== Component Skin
+@mixin m-build-component--list-badge-skin() {
+    $skin: get-default-skin();
+
+    .m-list-badge {		 		 
+		//== Item state colors
+		.m-list-badge__items {
+			//== Link and non-link items
+			.m-list-badge__item {              
+			   	color: get-brand-color(); 		
+			   	background-color: get-brand-inverse-color();		
+			}
+
+			a.m-list-badge__item:hover {
+				color: get-brand-inverse-color();	
+			   	background-color: get-brand-color();
+			}
+		}
+
+		//== White background
+		&.m-list-badge--light-bg {
+			.m-list-badge__items {
+				//== Link and non-link items
+				.m-list-badge__item {              
+				   	border: 1px solid get-brand-color();
+				}
+			}
+		}
+	}	
+}
+
+//== Component States
+@mixin m-build-component--list-badge-states() {
+    .m-list-badge {		 		
+
+		//== Item state colors
+		.m-list-badge__items {
+			@each $name, $color in $m--state-colors {
+				//== Link and non-link items
+				.m-list-badge__item.m-list-badge__item--#{$name} {              
+			        color: array-get($color, inverse); 		
+			        background-color: array-get($color, base);		
+			    }
+
+			    //== If link item then apply hover bg color
+			    a.m-list-badge__item.m-list-badge__item--#{$name}:hover {
+			    	background: darken(array-get($color, base), 10%);
+			    	color: array-get($color, inverse); 		
+				}    
+			}			 
+		}
+	}		 	
+}
+
+//== Build Component Base
+@include m-build-component--list-badge-base();
+
+//== Build Component Skin
+@include m-build-component--list-badge-skin();
+
+//== Build Component States
+@include m-build-component--list-badge-states();

@@ -1,0 +1,94 @@
+//
+//** Widget 14 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget14-base() {
+    .m-widget14 {        
+        padding: 2.2rem;
+
+        &.m-widget14--no-padding {
+            padding: 0;
+        }
+
+        // widget header
+        .m-widget14__header {
+            padding: 1.1rem 0;
+            margin-bottom: 0.5rem;
+
+            .m-widget14__title {
+                font-size: get-font-size(regular, '+++');
+                font-weight: get-font-weight(bolder);
+                margin-bottom: 0;
+            }
+            .m-widget14__desc {
+                display: inline-block;
+                margin-top: 0.2rem;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+            }             
+        }
+
+        // widget legend
+        .m-widget14__legend {
+            margin-bottom: 0.9rem;
+
+            &:last-child {
+                 margin-bottom: 0;
+            }
+            
+            .m-widget14__legend-bullet {
+                width: 2rem;
+                height: 0.45rem;
+                display: inline-block;
+                border-radius: 1.1rem;
+                margin-bottom: 0.12rem;
+                margin-right: 0.8rem;
+            }
+            
+            .m-widget14__legend-text {                
+                display: inline-block;
+            }
+        }
+
+        .m-widget14__chart {
+            position: relative;
+            margin-top: 0.5rem;
+
+            .m-widget14__stat {
+                font-size: 2.4rem;
+                font-weight: get-font-weight(boldest);
+                @include vertical-horizontal-center();
+            }           
+        }     
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget14-skin() {
+    $skin: get-default-skin();  
+     
+    .m-widget14__title {
+        color: get-color($skin, regular);
+    }
+
+    .m-widget14__desc {
+        color: get-color($skin, regular, '----');            
+    }
+
+    .m-widget14__legend-text {                
+        color: get-color($skin, regular, '----');      
+    }          
+
+    .m-widget14__chart {
+        .m-widget14__stat {
+            color: get-color($skin, muted, '--');  
+        } 
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget14-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget14-skin();

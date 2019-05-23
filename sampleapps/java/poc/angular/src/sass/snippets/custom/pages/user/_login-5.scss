@@ -1,0 +1,492 @@
+//
+//** "User Login - 5" Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--login-5-base() {
+
+    //== Login Base
+    .m-login.m-login--5 { 
+        height: 100%;
+        display: table;
+        width: 100%;
+        background: white;
+        overflow:hidden;
+
+        .m-login__wrapper-1 { 
+            display: table-cell; 
+            width: 50%;
+             
+            .m-login__wrapper-1-1 {
+                display: table;
+                margin: 0 auto;
+                width: 100%;                        
+            
+                .m-login__contanier {                 
+                    margin: 0 auto;
+                    display: table-cell;                     
+                    padding-top: 50px; 
+                    text-align: center;
+
+                    .m-login__content {                                             
+                        width: 500px;
+                        margin: 0 auto;                 
+                        padding: 1rem 1.5rem;
+
+                        .m-login__logo {                             
+                        }
+
+                        .m-login__title {
+                            padding-top: 6rem;
+
+                            > h3 {
+                            }
+                        }
+
+                        .m-login__desc {
+                            padding-top: 2.2rem;
+                        }
+
+                        .m-login__form-action {
+                            margin: 3.4rem 0 3rem 0;
+                            text-align: center;
+
+                            .btn {
+                                display: inline-block;
+                                text-align: center;
+                                padding: 1.2rem 3rem;
+                                margin-right: 2rem;
+
+                                &:last-child {
+                                    margin-right: 0;
+                                }
+                            }
+                        }                     
+                    }                 
+                } 
+
+                .m-login__border { 
+                    display: table-cell;                     
+                    padding-top: 7rem; 
+                      
+
+                    > div {
+                        height: 500px;
+                        background: #ffffff;
+                        width: 30px;             
+                        box-shadow: -19px 0 35px -7px #F5F5F5;                        
+                        margin-top: -100px;
+                        position: absolute;
+                    }                                                                                  
+                }                  
+            } 
+        }    
+
+         
+         
+
+        //== Login Area
+        .m-login__wrapper-2 {
+            padding-top: 13%;
+            display: table-cell; 
+            width: 50%; 
+             
+            .m-login__contanier {
+                width: 430px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+
+                .m-login__logo {
+                    text-align: center;
+                    margin: 0 auto 4rem auto;
+                }
+
+                .m-login__head {
+                    margin-top: 1rem;
+
+                    .m-login__title {
+                        text-align: center;
+                        font-size: 1.5rem;
+                    }
+
+                    .m-login__desc {
+                        margin-top: 1.5rem;
+                        text-align: center;
+                        font-size: font-get-size(regular);
+                    }
+                }
+
+                .m-login__form {
+                    margin-top: 4rem;
+
+                    .m-form__group {
+                        margin: 0;
+                        padding: 0;
+                        position: relative;
+
+                        .form-control {                        
+                            @include border-radius(0);
+                            border: 0;
+                            border-bottom: 1px solid get-color(light, panel); 
+                            padding: 1rem 0;
+                            margin-top: 0.1rem;
+
+                            @include input-placeholder(#9496a0);
+                                    
+                            &.m-login__form-input--last {
+                                border: 0;
+                            }
+
+                            &:focus {
+                                @include input-placeholder(get-state-color(brand));
+                            }
+                        }
+
+                        &.has-danger {
+                            .form-control {      
+                                //color: get-state-color(danger);
+                                //@include input-placeholder(lighten(get-state-color(danger), 3%));
+                            }
+
+                            .form-control-feedback {
+                                font-weight: get-font-weight(bold);
+                                font-size: get-font-size(regular, '-');
+                            }
+                        }
+                    }
+
+                    .m-login__form-sub {
+                        margin-top: 2rem;
+
+                        .m-checkbox {
+                            font-size: get-font-size(regular);
+                        }
+
+                        .m-link {
+                            font-size: get-font-size(regular);
+                        }
+                    }
+
+                    .m-login__form-action {
+                        margin: 3rem 0 3rem 0;
+                        text-align: center;
+
+                        .btn {
+                            display: inline-block;
+                            text-align: center;
+                            padding: 1.2rem 3rem; 
+                            margin-right: 2rem;
+
+                            &:last-child {
+                                margin-right: 0;
+                            }                          
+                        }                       
+                    }
+                }
+                .m-login__account {
+                    text-align: center;
+
+                    .m-login__account-msg {
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(bold);                         
+                    }
+
+                    .m-login__account-link {
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(bold);
+                    }
+                }       
+            }    
+        }       
+    }
+
+    //== Login Modes        
+    .m-login.m-login--5 {
+        &.m-login--signin {
+            .m-login__signup {
+                display: none;
+            }
+
+            .m-login__signin {
+                display: block;
+            }
+
+            .m-login__forget-password {
+                display: none;
+            }
+        }
+
+        &.m-login--signup {
+            .m-login__signup {
+                display: block;
+            }
+
+            .m-login__signin {
+                display: none;
+            }
+
+            .m-login__forget-password {
+                display: none;
+            }
+
+            .m-login__account {
+                display: none;
+            }
+        }
+
+        &.m-login--forget-password {
+            .m-login__signup {
+                display: none;
+            }
+
+            .m-login__signin {
+                display: none;
+            }
+
+            .m-login__forget-password {
+                display: block;
+            }
+        }
+    } 
+
+    @include minimal-desktop() {
+        .m-login.m-login--5 {
+            padding: 2rem 1rem;   
+            .m-login__wrapper-1 {
+                .m-login__wrapper-1-1 {
+                    .m-login__contanier {
+                        .m-login__content {
+                            width: 100%;
+                             
+                        } 
+                    }
+                }
+                     
+            }    
+
+            .m-login__wrapper-2{
+                .m-login__contanier {
+                    width: 100%;
+
+                    .m-login__signup {
+                        .m-login__form {
+                            .m-login__form-action {                                
+                                .btn {                                    
+                                    padding: 1.2rem 3rem;
+                                    margin-right: 2rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    } 
+                                }
+                            }
+                        }
+                    }
+
+                    .m-login__forget-password {
+                        .m-login__form {
+                            .m-login__form-action {
+                                .btn {                                     
+                                    text-align: center;
+                                    padding: 1.2rem 3rem;
+                                    margin-right: 2rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }                                     
+                }
+            }                 
+        }    
+    }
+
+    @include  tablet {             
+        .m-login.m-login--5 {
+               
+            .m-login__wrapper-1 {
+                .m-login__wrapper-1-1 {
+                    .m-login__contanier {
+                        .m-login__content {
+                            width: 100%;
+                            padding: 2rem 3rem; 
+                        } 
+                    }
+                }
+                     
+            }    
+
+            .m-login__wrapper-2{
+                .m-login__contanier {
+                    width: 100%;
+                    padding: 0 3rem; 
+
+                    .m-login__signup {
+                        .m-login__form {
+                            .m-login__form-action {                                
+                                .btn {                                    
+                                    padding: 1.2rem 3rem;
+                                    margin-right: 2rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    } 
+                                }
+                            }
+                        }
+                    }
+
+                    .m-login__forget-password {
+                        .m-login__form {
+                            .m-login__form-action {
+                                .btn {                                     
+                                    text-align: center;
+                                    padding: 1.2rem 3rem;
+                                    margin-right: 2rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }                      
+                }
+            }                 
+        }    
+    }      
+
+    @include mobile() {
+        .m-login.m-login--5 {
+            .m-login__wrapper-1 {                 
+                width: 100%;
+                display: block;
+                margin: 0 auto;                 
+
+                .m-login__wrapper-1-1 {                                
+                    padding-bottom: 0;                    
+                    margin: 0 auto;
+
+                    .m-login__contanier {
+                        display: block;
+                        width: 100%;
+
+                        .m-login__content {                              
+                            width: 100%;                                                          
+                        } 
+                    } 
+
+                    .m-login__border {                  
+                        display: block;
+                        margin-top: 150px;
+                        padding-top: 0;  
+
+                        > div {
+                            height: 30px;
+                            background: #ffffff;
+                            width: 100%;                                      
+                            box-shadow: 0 -15px 30px -7px #F5F5F5;                        
+                            position: relative;
+                                
+                        }                                                                                  
+                    }                                      
+                } 
+            }        
+                
+
+            .m-login__wrapper-2 {                                          
+                width: 100%;
+                display: block; 
+
+                .m-login__contanier {
+                    width: 100%;
+                    margin: 0 auto;
+                    
+                    .m-login__signup {
+                        .m-login__form {
+                            .m-login__form-action {                                
+                                .btn {                                    
+                                    padding: 1rem 1.95rem;
+                                    margin-right: 0.5rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    } 
+                                }
+                            }
+                        }
+                    }
+
+                    .m-login__forget-password {
+                        .m-login__form {
+                            .m-login__form-action {
+                                .btn {                                     
+                                    text-align: center;
+                                    padding: 1rem 2rem;
+                                    margin-right: 0.5rem;
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }                        
+        }
+    }   
+}
+
+@mixin m-build-snippet--login-5-skin() {
+    .m-login.m-login--5 {
+        .m-login__wrapper-1 {
+            .m-login__contanier {
+                .m-login__title {
+
+                }
+                .m-login__desc {
+
+                }
+                .m-login__form-action {
+                    .btn {
+
+                    }
+                }
+            }
+        }
+
+        .m-login__wrapper-2 {
+            .m-login__contanier {
+                .m-login__head {
+                    .m-login__title {
+
+                    }
+                    .m-login__desc {
+
+                    }
+                }
+                .m-login__account {
+                    .m-login__account-msg {
+
+                    }
+                    .m-login__account-link {
+
+                    }
+                } 
+            }
+        }        
+    }
+}
+
+//== Build Component - Light Skin
+@include m-build-snippet--login-5-skin();
+
+//== Build Component Base
+@include m-build-snippet--login-5-base();
+             
+                
+
+         

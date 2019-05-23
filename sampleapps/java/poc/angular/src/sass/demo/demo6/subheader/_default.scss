@@ -1,0 +1,141 @@
+//
+//** Subheader
+//
+
+//== Mixin
+@mixin m-build-subheader-base() {
+	$skin: get-default-skin();
+
+	//== General Mode
+	.m-subheader {
+		padding: 30px 30px 0 30px;
+
+		//== Page Title
+		.m-subheader__title {
+			display: inline-block;
+			padding: 7px 25px 7px 0;
+			font-family: #{get-heading-font-family()};
+			font-weight: 300;			
+			font-size: 1.55rem;
+			font-weight: get-font-weight(bolder);
+			vertical-align: middle;
+			margin: 0 15px 0 0;
+			color: get-color($skin, regular, '+');
+
+			&.m-subheader__title--separator {
+				border-right: 1px solid get-color($skin, panel, '+');
+			}
+		}
+
+		//== Page Breadcrumbs
+		.m-subheader__breadcrumbs.m-nav {
+			> .m-nav__item {
+				padding: 0;
+
+				> .m-nav__link {
+					> .m-nav__link-text {
+						color: get-color($skin, regular, '---');
+					}
+
+					> .m-nav__link-icon {
+						font-size: get-font-size(icon);
+						color: get-color($skin, regular, '---');
+					}
+
+					&:hover {
+						> .m-nav__link-text {
+							color: get-brand-color();
+						}
+
+						> .m-nav__link-icon {
+							color:get-brand-color();
+						}
+					}
+				}
+
+				&.m-nav__item--home {
+					> .m-nav__link {
+						> .m-nav__link-icon {
+							padding-right: 0;
+						}
+					}
+				}
+			}
+
+			> .m-nav__separator {
+				padding: 0 3px;
+				color: get-color($skin, regular, '---');
+			}
+		}
+
+		//== Page Date Range Picker
+		.m-subheader__daterange {
+			display: inline-block;
+			@include border-radius(2rem);
+			padding: 5px;
+			cursor: pointer;
+			background: #fff;
+
+			.m-subheader__daterange-label {
+				padding: 0.7rem 0.75rem 0.7rem 1.5rem;
+				
+				.m-subheader__daterange-title {
+					display: inline-block;
+					font-weight: get-font-weight(bold);
+					color: #aaaeb8;	
+				}
+
+				.m-subheader__daterange-date {
+					display: inline-block;
+					font-weight: get-font-weight(bolder);
+				}
+			}
+
+			> .btn {
+				width: 32px !important;
+    			height: 32px !important;
+
+				> i {
+					font-size: 0.8rem !important;
+				}
+			}
+		}
+	}
+
+	//== Mobile Mode
+	@include tablet-and-mobile {
+		.m-subheader {
+			padding: 30px 20px 0 20px;
+		}
+	}
+
+	//== Mobile Mode
+	@include mobile {
+		.m-subheader {
+			padding: 20px 20px 0 20px;
+	
+			//== Page Title
+			.m-subheader__title {
+				display: block;
+				margin: 0 0 0 0;
+				padding: 0;
+
+				&.m-subheader__title--separator {
+					border-right: 0; 
+				}
+			}
+
+			//== Page Breadcrumbs
+			.m-subheader__breadcrumbs.m-nav {
+				margin-top: 0.75rem;
+
+				> .m-nav__separator {
+					padding: 0 3px;
+				}
+			}
+		}
+	}
+}
+
+//== Build
+@include m-build-subheader-base();

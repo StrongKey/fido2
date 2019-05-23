@@ -1,0 +1,63 @@
+//
+//** Wizard Base Component
+//
+
+//== Component Base
+@mixin m-build-component--wizard-base-base() {
+	.m-wizard {
+		//== Wizard form
+		.m-wizard__form {
+			//== Form step content
+			.m-wizard__form-step {
+				display: none;
+
+				&.m-wizard__form-step--current {
+					display: block;
+				}
+			}
+		}
+
+		
+		//== Initial state
+		[data-wizard-action="submit"] {
+			display: none;
+		}
+
+		//== First step state
+		&,
+		&.m-wizard--step-first {
+			[data-wizard-action="prev"] {
+				display: none;
+			}
+		}
+
+		//== Last step state
+		&.m-wizard--step-last {
+			[data-wizard-action="submit"] {
+				display: inline-block !important;
+			}
+
+			[data-wizard-action="next"] {
+				display: none !important;
+			}
+
+			[data-wizard-action="prev"] {
+				display: inline-block !important;
+			}
+		}
+
+		//== Between step
+		&.m-wizard--step-between {
+			[data-wizard-action="next"] {
+				display: inline-block !important;
+			}
+
+			[data-wizard-action="prev"] {
+				display: inline-block !important;
+			}
+		}		
+	}	
+}
+
+//== Build Component Base
+@include m-build-component--wizard-base-base();

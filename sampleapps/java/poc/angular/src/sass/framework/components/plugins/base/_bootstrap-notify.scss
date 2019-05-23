@@ -1,0 +1,73 @@
+//
+//** Bootstrap Notify Component
+//
+
+//== Mixins
+@mixin m-build-component--bootstrap-notify-base() {
+    .alert[data-notify] {
+        min-width: 300px;
+
+        @include tablet {
+            max-width: 70%;
+        }
+
+        @include mobile {
+            max-width: 90%;
+        }
+
+        &[data-notify-position=top-center],
+        &[data-notify-position=bottom-center] {
+            width: 30%;
+
+            @include tablet {
+                width: 70%;
+            }
+
+            @include mobile {
+                width: 90%;
+            }
+        }
+
+        .close {
+            padding: 0.25rem 0 0 2rem;
+            font-size: 1rem;
+        }
+
+        .icon {
+            position: absolute;
+        }
+
+        @include icons-attr( font-size, (lineawesome: 1.8rem, fontawesome: 1.6rem, metronic: 1.8rem) );
+        @include icons-attr( margin-top, (lineawesome: -0.1rem, fontawesome: -0.1rem, metronic: -0.4rem) );
+
+        [data-notify=title] {
+            display: block;
+            font-weight: get-font-weight(bolder);
+        }
+
+        .icon ~ [data-notify=title] {
+            padding-left: 2.85rem;
+        }
+
+        .icon ~ [data-notify=message] {
+            display: inline-block;
+            padding-left: 2.85rem;
+        }
+
+        [data-notify=title]:not(:empty) ~ [data-notify=message] {
+            margin-top: 0.2rem;
+        }
+
+        .progress {
+            margin-top: 0.5rem;
+            line-height: 0.5rem;
+
+            .progress-bar {
+                height: 0.5rem;
+            }
+        }
+    }
+}
+
+//== Build
+@include m-build-component--bootstrap-notify-base(); 

@@ -1,0 +1,181 @@
+//
+//** Lists Config
+//
+
+$m--lists: (
+	// search result
+	search: (
+		form: (
+			self: (
+				padding: 3px 0 0 0,
+				transition-time: 0.4s
+			),
+
+			input: (
+				padding: 0px,
+				offset-bottom: 10px
+			),
+
+			separator: (
+				offset: 20px
+			),
+
+			icon: (
+				close: (
+					width: 30px,
+					padding: 0 0 0 0
+				)
+			),
+
+			spinner: (
+				top: 12px,
+				right: 0
+			)
+		),
+
+		results: (
+			category: (
+				self: (
+					padding: 0,
+					margin: 30px 0 10px 0
+				)
+			),
+
+			separator: (
+				margin: (
+					default: 10px 0,
+					fit: 10px -20px
+				)
+			),
+
+			message: (
+				self: (
+					padding: 10px 0,
+				)
+			),
+
+			item: (
+				self: (
+					padding: 5px 0
+				),					
+				icon: (
+					width: 32px,
+				),	
+				pic: (
+					self: (
+						width: 45px
+					),
+
+					img: (
+						max-width: 35px
+					)
+				)
+			)
+		)		
+	),
+
+	// timelime
+	timeline: (
+		layout: (
+			// group
+			group: (
+				// self
+				self: (
+					margin: 0 0 30px 0,
+					line-offset: 3px
+				),
+
+				// heading
+				heading: (
+					margin: 0 0 18px 0
+				),
+
+				// items
+				items: (
+					// self
+					self: (				
+						margin: 0,
+						padding: 0,
+						line: (
+							hide-bg-color: (
+								light: #fff,
+								dark: #ddd
+							)
+						)
+					),
+
+					// item
+					item: (
+						self: (
+							padding: 6px 0,
+							margin: 5px 0
+						),
+
+						badge: (
+							width: 20px,
+							size: 7px
+						),
+
+						icon: (
+							padding: 0 5px 0 0,
+							width: 30px
+						),
+
+						text: (
+							padding: 0 5px 0 0
+						),
+
+						time: (
+							width: 80px,
+							padding: 0 0 0 5px
+						)
+					)
+				)
+			)
+		),
+		skins: (
+			light: (
+				self: (
+					bg-color: #fff
+				)
+			),
+
+			dark: (
+				self: (
+					bg-color: #333
+				)
+			)
+		)		
+	),
+
+	// settings
+	settings: (
+		// group
+		group: (
+			// self
+			self: (
+				margin: 0 0 30px 0
+			),
+
+			// heading
+			heading: (
+				margin: 0 0 13px 0
+			),
+
+			// item
+			item: (
+				self: (
+					padding: 9px 0
+				),
+
+				caption: (
+					padding: 0 5px 0 0
+				),
+
+				control: (
+					padding: 0 0 0 0
+				)
+			)
+		)
+	)
+)

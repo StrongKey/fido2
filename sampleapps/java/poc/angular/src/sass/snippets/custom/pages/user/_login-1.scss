@@ -1,0 +1,256 @@
+//
+//** "User Login - 1" Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--login-1-base() {
+    //== Login Base
+    .m-login.m-login--1 {  
+        background: white;
+        
+        //== Page Aside
+    	.m-login__aside {
+    		width: 700px;
+            padding: 2rem 11rem;  
+        }
+
+        //== Page Content
+        .m-login__content {
+            padding: 5rem 10rem 10rem 10rem;
+            background-attachment: fixed;
+            background-size: cover;
+
+            .m-login__welcome {
+                color: #ffffff;
+                font-size: 3.5rem;
+                font-weight: get-font-weight(bolder);
+                margin-bottom: 2rem;
+            }
+
+            .m-login__msg {
+                color: #ffffff;
+                font-size: get-font-size(regular, '+');
+                font-weight: get-font-weight(thin);
+            }                    
+        }
+
+        //== Login Area
+    	.m-login__wrapper {
+            overflow: hidden;
+            padding: 35% 2rem 2rem 2rem;
+
+    		.m-login__logo {
+                text-align: center;
+                margin: 0 auto 4rem auto;
+    		}
+
+    		.m-login__head {
+                margin-top: 1rem;
+
+                .m-login__title {
+                    text-align: center;
+                    font-size: 1.5rem;
+    			}
+
+                .m-login__desc {
+                    margin-top: 1.5rem;
+                    text-align: center;
+                    font-size: font-get-size(regular);
+                }
+            }
+
+    		.m-login__form {
+    			margin-top: 4rem;
+
+                .m-form__group {
+                    margin: 0;
+                    padding: 0;
+                    position: relative;
+
+                    .form-control {                        
+                        @include border-radius(0);
+                        border: 0;
+                        border-bottom: 1px solid get-color(light, panel); 
+                        padding: 1rem 0;
+                        margin-top: 0.1rem;
+
+                        @include input-placeholder(#9496a0);
+                            
+                        &.m-login__form-input--last {
+                            border: 0;
+                        }
+
+                        &:focus {
+                            @include input-placeholder(get-state-color(brand));
+                        }
+                    }
+
+                    &.has-danger {
+                        .form-control {      
+                            //color: get-state-color(danger);
+                            //@include input-placeholder(lighten(get-state-color(danger), 3%));
+                        }
+
+                        .form-control-feedback {
+                            font-weight: get-font-weight(bold);
+                            font-size: get-font-size(regular, '-');
+                        }
+                    }
+                }
+
+                .m-login__form-sub {
+                    margin-top: 2rem;
+
+                    .m-checkbox {
+                        font-size: get-font-size(regular);
+                    }
+
+                    .m-link {
+                        font-size: get-font-size(regular);
+                    }
+                }
+
+                .m-login__form-action {
+                    margin: 3rem 0 3rem 0;
+                    text-align: center;
+
+                    .btn {
+                        display: inline-block;
+                        text-align: center;
+                        padding: 1.2rem 3rem;
+                    }
+                }
+    		}
+    	}
+
+    	.m-login__account {
+            text-align: center;
+
+    		.m-login__account-msg {
+                font-size: get-font-size(regular, '+');
+                font-weight: get-font-weight(bold);
+                color: get-color(light, regular, '---');
+    		}
+
+    		.m-login__account-link {
+                font-size: get-font-size(regular, '+');
+                font-weight: get-font-weight(bold);
+    		}
+    	}
+    }
+
+    //== Login Modes        
+    .m-login.m-login--1 {
+        &.m-login--signin {
+            .m-login__signup {
+                display: none;
+            }
+
+            .m-login__signin {
+                display: block;
+            }
+
+            .m-login__forget-password {
+                display: none;
+            }
+        }
+
+        &.m-login--signup {
+            .m-login__signup {
+                display: block;
+            }
+
+            .m-login__signin {
+                display: none;
+            }
+
+            .m-login__forget-password {
+                display: none;
+            }
+
+            .m-login__account {
+                display: none;
+            }
+        }
+
+        &.m-login--forget-password {
+            .m-login__signup {
+                display: none;
+            }
+
+            .m-login__signin {
+                display: none;
+            }
+
+            .m-login__forget-password {
+                display: block;
+            }
+        }
+    } 
+
+    @include minimal-desktop() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 400px;
+                margin: 0 auto;
+                padding: 3rem 3rem;
+            }
+
+            .m-login__content {
+                padding: 2rem;
+
+                .m-login__welcome {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+
+    @include tablet-and-mobile() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 500px;
+                margin: 0 auto;
+                padding: 2rem 3rem;
+
+                .m-login__wrapper {
+                    padding-top: 3rem;
+
+                    .m-login__logo {
+                        margin: 2rem auto 3.5rem auto;
+                    }
+                }
+            }
+
+            .m-login__content {
+                padding: 2rem;
+
+                .m-login__welcome {
+                    font-size: 1.5rem;
+                    margin-bottom: 1rem;
+                }
+
+                .m-login__msg {
+                    font-size: get-font-size(regular);
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    @include mobile() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 100%;
+                padding: 2rem 3rem;
+
+                .m-login__wrapper {
+                    padding-top: 2rem;
+                }
+            }
+        }
+    }
+}
+
+//== Build Component Base
+@include m-build-snippet--login-1-base();

@@ -1,0 +1,82 @@
+//
+//** Table Component
+//
+
+//== Component Base
+@mixin m-build-component--table-base() {
+    .table {
+        th {
+            font-weight: get-font-weight(bolder);
+        }
+
+        td {
+            font-weight: get-font-weight(regular);
+        }
+
+        &.table-striped {
+            thead th {
+                border: 0;
+            }
+
+            tbody {
+                th, td {
+                    border1: 0;
+                }
+            }
+        }
+    }
+
+    .m-table {
+        &.m-table--head-no-border {
+            thead th {
+                border-top: 0;
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--table-skin($skin) {
+    .m-table {
+        // state colors
+        @each $name, $color in $m--state-colors {
+            &.m-table--head-bg-#{$name} {
+                thead th {
+                    background: array-get($color, base);
+                    color: array-get($color, inverse);
+                    border-bottom: 0;
+                    border-top: 0;
+                }
+            } 
+
+            &.m-table--head-separator-#{$name} {
+                thead th {
+                    border-top: 0;
+                    border-bottom: 1px solid array-get($color, base);
+                }
+            }            
+
+            tr.m-table__row--#{$name} {
+                th,td {
+                    background: array-get($color, base);
+                    color: array-get($color, inverse);
+                    border-bottom: 0;
+                    border-top: 0;
+                }
+            } 
+
+            &.m-table--border-#{$name} {
+                &,
+                th, td {
+                    border-color: array-get($color, base);
+                }
+            } 
+        }
+    }
+}
+
+//== Build Component Base
+@include m-build-component--table-base();
+
+//== Build Component - Light Skin
+@include m-build-component--table-skin(light);

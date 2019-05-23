@@ -1,0 +1,1024 @@
+//
+//** Horizontal Menu Generator Helpers
+// 
+
+@mixin m-populate--menu-hor-item-base($item) {
+	// item
+	padding: array-get($item, self, padding);
+
+	// link
+	> .m-menu__link {
+		cursor: pointer;
+		padding: array-get($item, link, self, padding);
+
+		// link icon
+		.m-menu__link-icon {	
+			font-size: array-get($item, link, icon, font-size);
+			width: array-get($item, link, icon, width);
+			text-align: array-get($item, link, icon, align);
+			padding: array-get($item, link, icon, padding);
+			line-height: 0;
+		}	
+
+		// link bullet
+		.m-menu__link-bullet {
+			vertical-align: middle;
+			text-align: array-get($item, link, bullet, self, align);
+			width: array-get($item, link, bullet, self, width);
+			@if array-has($item, link, bullet, padding) {
+				padding: array-get($item, link, bullet, padding);
+			}
+
+			> span {
+				vertical-align: middle;
+				display: inline-block;
+			}
+
+			&.m-menu__link-bullet--dot {
+				> span {
+					width: array-get($item, link, bullet, dot, size);
+					height: array-get($item, link, bullet, dot, size);
+					@include border-radius(100%);
+				}
+			}
+
+			&.m-menu__link-bullet--line {				
+				> span {
+					width: array-get($item, link, bullet, line, width);
+					height: array-get($item, link, bullet, line, height);
+				}
+			}
+		}
+
+		// link text
+		.m-menu__link-text {
+			font-weight: array-get($item, link, text, font-weight);	
+			font-size: array-get($item, link, text, font-size);
+			text-transform: array-get($item, link, text, font-transform);
+
+			@if array-has($item, link, text, padding) {
+				padding: array-get($item, link, text, padding);
+			}
+		}
+
+		// link badge
+		.m-menu__link-badge {
+			padding: array-get($item, link, badge, padding);
+			text-align: array-get($item, link, badge, align);
+		}
+
+		// link arrow icon
+		.m-menu__hor-arrow {						
+			font-size: array-get($item, link, arrow, font-size);
+			width: array-get($item, link, arrow, width);
+			text-align: array-get($item, link, arrow, align);
+
+			@if array-has($item, link, arrow, padding) {
+				padding: array-get($item, link, arrow, padding);
+			}
+		}
+
+		// menu root level "here" arrow
+		.m-menu__item-here {
+			display: none;
+		}
+	}	
+}
+
+@mixin m-populate--menu-hor-item-skin($item) {
+	// item bg color
+	@if array-get($item, self) {
+		&.m-menu__item--hover,
+		&:hover {
+			background-color: array-get($item, self, bg-color, hover);
+		}
+
+		&.m-menu__item--open,
+		&.m-menu__item--active {
+			background-color: array-get($item, self, bg-color, active);
+		}
+	}
+	
+	// link
+	> .m-menu__link {
+		background-color: array-get($item, link, self, bg-color, default);
+
+		// link icon
+		.m-menu__link-icon {	
+			color: array-get($item, link, icon, font-color, default);
+		}	
+
+		// link bullet
+		.m-menu__link-bullet {
+			&.m-menu__link-bullet--dot {
+				> span {
+					background-color: array-get($item, link, bullet, dot, bg-color, default);
+				}
+			}
+
+			&.m-menu__link-bullet--line {				
+				> span {
+					background-color: array-get($item, link, bullet, line, bg-color, default);
+				}
+			}
+		}
+
+		// link text
+		.m-menu__link-text {
+			color: array-get($item, link, text, font-color, default);
+		}
+
+		// link arrow icon
+		.m-menu__hor-arrow {						
+			color: array-get($item, link, arrow, font-color, default);
+		}
+	}
+
+	// active state
+	&.m-menu__item--active {					
+		> .m-menu__link {
+			// link bg color
+			background-color: array-get($item, link, self, bg-color, active);
+
+			// link icon
+			.m-menu__link-icon {
+				color: array-get($item, link, icon, font-color, active);
+			}	
+
+			// link bullet
+			.m-menu__link-bullet {
+				&.m-menu__link-bullet--dot {
+					> span {
+						background-color: array-get($item, link, bullet, dot, bg-color, active);
+					}
+				}
+
+				&.m-menu__link-bullet--line {				
+					> span {
+						background-color: array-get($item, link, bullet, line, bg-color, active);
+					}
+				}
+			}
+
+			.m-menu__link-text {
+				color: array-get($item, link, text, font-color, active);
+			}
+
+			// link arrow icon
+			> .m-menu__hor-arrow {						
+				color: array-get($item, link, arrow, font-color, active);
+			}
+		}
+	}
+
+	// hover state
+	&:hover,
+	&.m-menu__item--hover {
+		> .m-menu__link {
+			// link bg color
+			background-color: array-get($item, link, self, bg-color, hover);
+			
+			// link icon
+			.m-menu__link-icon {
+				color: array-get($item, link, icon, font-color, hover);
+			}	
+
+			// link bullet
+			.m-menu__link-bullet {
+				&.m-menu__link-bullet--dot {
+					> span {
+						background-color: array-get($item, link, bullet, dot, bg-color, hover);
+					}
+				}
+
+				&.m-menu__link-bullet--line {				
+					> span {
+						background-color: array-get($item, link, bullet, line, bg-color, hover);
+					}
+				}
+			}
+
+			// link text
+			.m-menu__link-text {
+				color: array-get($item, link, text, font-color, hover);
+			}
+
+			// link arrow icon
+			> .m-menu__hor-arrow {						
+				color: array-get($item, link, arrow, font-color, hover);
+			}
+		}
+	}	
+}
+
+@mixin m-populate--menu-hor-heading-base($item) {
+	// heading
+	padding: array-get($item, self, padding);
+
+	// text
+	> .m-menu__link-text {
+		font-weight: array-get($item, caption, text, font-weight);	
+		font-size: array-get($item, caption, text, font-size);
+		text-transform: array-get($item, caption, text, font-transform);
+	}
+
+	// icon
+	> .m-menu__link-icon {	
+		font-size: array-get($item, caption, icon, font-size);
+		width: array-get($item, caption, icon, width);
+		text-align: array-get($item, caption, icon, align);
+		padding: array-get($item, caption, icon, padding);
+	}	
+
+	// badge
+	.m-menu__link-badge {
+		padding: array-get($item, caption, badge, padding);
+		text-align: array-get($item, caption, badge, align);
+	}
+}
+
+@mixin m-populate--menu-hor-heading-skin($item) {
+	// text
+	> .m-menu__link-text {
+		color: array-get($item, caption, text, font-color);
+	}
+
+	// icon
+	> .m-menu__link-icon {	
+		color: array-get($item, caption, icon, font-color);
+	}
+}
+
+@mixin m-populate--menu-hor-dropdown-arrow-base($layout) {
+	@if smooth-arrow() {
+		.m-menu__nav.m-menu__nav--submenu-arrow {
+			// root submenu arrow
+			
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--tabs > .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--submenu.m-menu__item--hover,
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--hover {
+				> .m-menu__submenu {
+					padding-top: array-get($layout, smooth, offset, dropdown-root);   
+
+					> .m-menu__arrow {
+						@include m--build-smooth-arrow-vertical(bottom, default);
+						position: absolute;
+						margin-top: -(array-get($layout, smooth, offset, dropdown-root));
+					}
+				}
+			}
+
+			> .m-menu__item.m-menu__item--submenu {
+				> .m-menu__submenu {
+					.m-menu__submenu.m-menu__submenu--right {
+						top: array-get($layout, smooth, offset, dropdown);
+
+						> .m-menu__subnav {
+							margin-left: array-get($m-smooth-arrows, size, default, right, offset);
+						}
+
+						> .m-menu__arrow {
+							@include m--build-smooth-arrow-horizontal(right, default);
+							left: 1px;
+							position: absolute;
+							margin-left: 0;
+							margin-top: array-get($layout, smooth, offset, arrow);
+						}
+					}
+
+					.m-menu__submenu.m-menu__submenu--left {
+						top: array-get($layout, smooth, offset, dropdown);
+
+						> .m-menu__subnav {
+							margin-right: array-get($m-smooth-arrows, size, default, right, offset);
+						}
+
+						> .m-menu__arrow {
+							@include m--build-smooth-arrow-horizontal(left, default);
+							right: 0;
+							left: auto;
+							position: absolute;
+							margin-left: 0;
+							margin-right: 0;
+							margin-top: array-get($layout, smooth, offset, arrow);
+						}
+					}
+				}
+			}		
+		}
+	} @else {
+		.m-menu__nav.m-menu__nav--submenu-arrow {
+			// mega submenu arrow
+			> .m-menu__item {
+				&.m-menu__item--submenu > .m-menu__submenu.m-menu__item--tabs > .m-menu__subnav > .m-menu__item.m-menu__item--submenu.m-menu__item--hover,
+				&.m-menu__item--submenu.m-menu__item--hover {
+					> .m-menu__submenu {
+						padding-top: array-get($layout, classic, size);   
+
+						> .m-menu__arrow {
+							@include m--build-classic-arrow(top, array-get($layout, size));
+							position: absolute;
+							margin-top: -(array-get($layout, classic, size) - 1px);
+						}
+					}
+				}
+			}
+
+			// mega menu submenu arrows
+			> .m-menu__item {
+				> .m-menu__submenu {
+					.m-menu__submenu.m-menu__submenu--right {
+						top: array-get($layout, classic, offset, dropdown);
+
+						> .m-menu__subnav {
+							margin-left: array-get($layout, classic, size) - 1px;
+						}
+
+						> .m-menu__arrow {
+							@include m--build-classic-arrow(right, array-get($layout, size));
+							left: 0;
+							position: absolute;
+							margin-top: array-get($layout, classic, offset, arrow) ;
+							margin-left: 0;
+						}
+					}
+
+					.m-menu__submenu.m-menu__submenu--left {
+						top: array-get($layout, classic, offset, dropdown);
+
+						> .m-menu__subnav {
+							margin-right: array-get($layout, classic, size) - 1px;
+						}
+
+						> .m-menu__arrow {
+							@include m--build-classic-arrow(left, array-get($layout, size));
+							right: 0;
+							left: auto;
+							position: absolute;
+							margin-top: array-get($layout, classic, offset, arrow);
+							margin-left: 0;
+							margin-right: 0;
+						}
+					}
+				}
+			}
+		}
+	}	
+}
+
+@mixin m-populate--menu-hor-submenu-width($config) {
+
+	// minimal desktop mode(992px < width < 1200px)
+	@include minimal-desktop() {
+		.#{array-get($config, base, class)} {
+			.m-menu__nav {
+				// menu root item
+				> .m-menu__item {
+					// general submenu
+					.m-menu__submenu {
+						&.m-menu__submenu--full,
+						&.m-menu__submenu--fixed,
+						&.m-menu__submenu--auto,
+						&.m-menu__submenu--auto.m-menu__submenu--mimimal-desktop-wide,
+						&.m-menu__submenu--fixed-xl,
+						&.m-menu__submenu--fixed-xxl {
+							margin: 0 auto;
+							width: auto;
+							left: 20px;
+							right: 20px;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//== Responsive container widths
+	@each $breakpoint, $breakpoint-width in $m--layout-breakpoints {
+	    @media (min-width: $breakpoint-width) {
+	    	.#{array-get($config, base, class)} {
+				.m-menu__nav {
+					// menu root item
+					> .m-menu__item {
+						// general submenu
+						.m-menu__submenu.m-menu__submenu--fixed-#{$breakpoint} {
+					        width: map-get($m--container-widths, $breakpoint);
+					    }
+					}
+				}
+			}
+	    }
+	}
+}
+
+@mixin m-populate--menu-hor-base($config) {
+	.#{array-get($config, base, class)} {
+		display: table;
+	    width: 100%;
+	    height: 100%;
+	    margin: array-get($config, build, layout, self, margin);
+    
+    	// general menu
+		.m-menu__nav {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: table-row;
+			height: 100%; 
+
+			// menu root item
+			> .m-menu__item {
+				// general link
+				.m-menu__link {
+					display: table;
+					table-layout: fixed;
+					text-decoration: none;
+					position: relative;
+					vertical-align: middle;
+					height: 100%;
+					outline: none !important;
+					text-decoration: none;
+					cursor: pointer;  				
+					
+					.m-menu__link-text {								
+						display: table-cell;
+						height: 100%;
+						width: 100%;
+						padding: 0;
+						vertical-align: middle;
+					}
+
+					.m-menu__link-title {								
+						display: table-cell;
+						height: 100%;
+						padding: 0;
+						vertical-align: middle;
+
+						> .m-menu__link-wrap {								
+							display: table;
+							height: 100%;
+							width: 100%;
+							padding: 0;	
+							vertical-align: middle;	
+
+							// menu item link's icon part
+							> .m-menu__link-badge {
+								line-height: 0;
+								display: table-cell;
+								height: 100%;
+								vertical-align: middle;		
+								white-space: nowrap;				
+							}
+						}						
+					}
+
+					// link icon
+					.m-menu__link-icon {
+						display: table-cell;
+						vertical-align: middle;
+						font-size: 18px;
+					}	
+
+					// sub menu link arrow icon
+					.m-menu__hor-arrow {						
+						vertical-align: middle;
+						display: table-cell;
+					}
+
+					// hide sidebar sub menu link arrow icon
+					.m-menu__ver-arrow {
+						display: none;
+					}
+
+					&:hover,
+					&:active,
+					&:focus {
+						text-decoration: none;
+					}
+				}
+
+				// primary link
+				> .m-menu__link {
+					> .m-menu__link-text {	
+						width: auto;
+					}
+				}
+
+				// icon only menu item
+				&.m-menu__item--icon-only {
+					> .m-menu__link {
+						text-align: center;
+
+						> .m-menu__link-icon {
+							text-align: center;
+						}
+					}
+				}
+
+				// general submenu
+				.m-menu__submenu {
+					@include fix-animation-lags();
+					display: none;
+					z-index: array-get($config, build, layout, item, submenu, self, zindex);		
+					position: absolute;
+					top: 100%;
+
+					.m-menu__subnav {
+						background-color: #eee;		
+						list-style: none !important;
+						padding: 0;
+						margin: 0;
+
+						@include rounded {
+							border-radius: array-get($config, build, layout, item, submenu, self, border-radius);
+						}
+					}
+
+					// classic submenu
+					& {
+						width: array-get($config, build, layout, item, submenu, self, width, classic);
+						margin: 0 auto;
+						left: auto;
+		    			right: auto;
+					}
+
+					// full width
+					&.m-menu__submenu--full {
+						margin: 0 auto;
+						width: auto;
+						left: array-get($config, build, layout, item, submenu, self, width, full, offset);
+						right: array-get($config, build, layout, item, submenu, self, width, full, offset);
+					}
+
+					// fixed width options
+					&.m-menu__submenu--fixed {
+						left: auto;
+						right: auto;
+						width: auto;
+					}		
+
+					// alignment right
+					&.m-menu__submenu--right {						
+						right: 0;
+						left: auto;
+
+						&.m-menu__submenu--pull {
+							margin-right: -40px;
+						}
+					}
+
+					// alignment left
+					&.m-menu__submenu--left {
+						right: auto;
+						left: 0;
+
+						&.m-menu__submenu--pull {
+							margin-left: -40px;
+						}
+					}
+
+					// alignment center
+					&.m-menu__submenu--center {
+						margin: 0 auto;
+						left: 0;
+		    			right: 0;
+
+		    			&.m-menu__submenu--classic {
+		    				//left: - (array-get($config, build, layout, item, submenu, self, width, classic) / 2);
+		    			}
+					}
+
+					// sub menu dropdown
+					> .m-menu__subnav {
+						> .m-menu__item.m-menu__item--submenu {
+							position: relative;
+							padding: 0;
+							margin: 0;
+
+							> .m-menu__submenu {
+								top:0;
+								display: none;
+								margin-top: 0;
+
+								&.m-menu__submenu--left {
+									right: 100%;
+									left: auto;
+								}
+
+								&.m-menu__submenu--right {								
+									left: 100%;		
+									right: auto;			
+								}
+							}
+						}
+					}
+
+					// mega menu content
+					.m-menu__content {
+						display: table-row;
+						list-style: none;
+						padding: 0;
+						margin: 0;
+
+						> .m-menu__item {
+							padding: 0;
+							margin: 0;
+							display: table-cell;
+					    	width: 1%;
+
+					    	&:last-child {
+					    		border-right: 0;
+					    	}
+						}
+					}			
+
+					// mega heading
+					.m-menu__heading {
+						padding: 0;
+						margin: 0;
+						display: table;
+						table-layout: fixed;
+						text-decoration: none;
+						position: relative;
+						vertical-align: middle;
+								
+						.m-menu__link-text {
+							display: table-cell;
+							vertical-align: middle;
+							font-size: 14px;
+						}
+
+						.m-menu__link-title {		
+							width: 100%;						
+							display: table-cell;
+							height: 100%;
+							padding: 0;
+							vertical-align: middle;
+
+							> .m-menu__link-wrap {								
+								display: table;
+								height: 100%;
+								width: 100%;
+								padding: 0;	
+								vertical-align: middle;	
+
+								// menu item link's icon part
+								> .m-menu__link-badge {
+									display: table-cell;
+									height: 100%;
+									vertical-align: middle;		
+									white-space: nowrap;				
+								}
+							}						
+						}
+
+						// link icon
+						.m-menu__link-icon {
+							display: table-cell;
+							vertical-align: middle;
+							font-size: 18px;
+							padding: 0 10px 0 0;
+						}	
+
+						// sub menu link arrow icon
+						.m-menu__hor-arrow {						
+							vertical-align: middle;
+							display: table-cell;
+							padding: 0 0 0 10px;
+						}
+
+						// hide sidebar sub menu link arrow icon
+						.m-menu__ver-arrow {
+							display: none;
+						}
+					}
+				}
+				
+				.m-menu__inner,
+				.m-menu__subnav {
+					list-style: none;
+					margin: 0;
+					padding: 0;
+			 
+					> .m-menu__item {
+						display: block;
+						margin: 0; 
+						padding: 10px 20px;
+
+						.m-menu__link {
+							display: table;
+							table-layout: fixed;
+							text-decoration: none;
+							position: relative;
+							vertical-align: middle;
+							width: 100%;
+
+							&:hover,
+							&:active,
+							&:focus {
+								outline: none;
+								text-decoration: none;
+							}							
+								
+							.m-menu__link-text {
+								display: table-cell;
+								vertical-align: middle;
+								font-weight: array-get($config, build, layout, item, submenu, item, link, text, font-weight);	
+								color: array-get($config, build, layout, item, submenu, item, link, text, font-color, default);
+								font-size: array-get($config, build, layout, item, submenu, item, link, text, font-size);
+								text-transform: array-get($config, build, layout, item, submenu, item, link, text, font-transform);
+							}
+
+							.m-menu__link-title {		
+								width: 100%;						
+								display: table-cell;
+								height: 100%;
+								padding: 0;
+								vertical-align: middle;
+
+								> .m-menu__link-wrap {								
+									display: table;
+									height: 100%;
+									width: 100%;
+									padding: 0;	
+									vertical-align: middle;	
+
+									// menu item link's icon part
+									> .m-menu__link-badge {
+										display: table-cell;
+										height: 100%;
+										vertical-align: middle;		
+										white-space: nowrap;				
+
+										padding: array-get($config, build, layout, item, submenu, item, link, badge, padding);
+										text-align: array-get($config, build, layout, item, submenu, item, link, badge, align);
+									}
+								}						
+							}
+
+							// link icon
+							.m-menu__link-icon {
+								display: table-cell;
+								vertical-align: middle;
+								padding: array-get($config, build, layout, item, submenu, item, link, icon, padding);
+								color: array-get($config, build, layout, item, submenu, item, link, icon, font-color, default);
+								font-size: array-get($config, build, layout, item, submenu, item, link, icon, font-size);
+								width: array-get($config, build, layout, item, submenu, item, link, icon, width);
+								text-align: array-get($config, build, layout, item, submenu, item, link, icon, align);
+							}	
+
+							// menu item link's icon part
+							.m-menu__link-bullet {
+								display: table-cell;
+								height: 100%;
+								vertical-align: middle;
+								line-height: 0;
+							}
+
+							// sub menu link arrow icon
+							.m-menu__hor-arrow {						
+								vertical-align: middle;
+								display: table-cell;
+								padding: array-get($config, build, layout, item, submenu, item, link, arrow, padding);
+							}
+
+							// hide sidebar sub menu link arrow icon
+							.m-menu__ver-arrow {
+								display: none;
+							}
+						}
+					}
+				}
+
+				.m-menu__inner {
+					padding: 0;
+				}					
+
+				// tabs integration
+				&.m-menu__item--submenu.m-menu__item--tabs > .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--submenu {
+					> .m-menu__submenu {
+						top:100%;
+
+						&.m-menu__submenu--left {
+							right: 100%;
+							left: 0;
+						}
+
+						&.m-menu__submenu--right {								
+							left: 100%;		
+							right: 0;			
+						}
+					}
+				}
+			}	
+		}
+
+		// root menu
+		.m-menu__nav {
+			> .m-menu__item {				
+				// item itself				
+				padding: array-get($config, build, layout, item, self, padding);
+				height: 100%;
+				display: table-cell;
+				vertical-align: middle;
+
+				// used for classic submenus
+				&.m-menu__item--rel {
+					position: relative;			
+				}
+
+				@include m-populate--menu-hor-item-base( array-get($config, build, layout, item) );
+
+				// submenu
+				.m-menu__submenu {
+					> .m-menu__subnav {
+						padding: array-get($config, build, layout, item, submenu, self, padding, megamenu);	
+
+						@at-root.m--style-rounded  & {
+							border-radius: array-get($config, build, layout, item, submenu, self, border-radius);
+						}
+
+						> .m-menu__item {
+							@include m-populate--menu-hor-item-base(array-get($config, build, layout, item, submenu, item));
+						}
+
+						// mega submenu
+						.m-menu__content {
+							// separator
+							> .m-menu__item {
+								&:last-child {
+									border-right:0 !important;  
+								}
+							}	
+
+							// heading
+							.m-menu__heading {
+								@include m-populate--menu-hor-heading-base(array-get($config, build, layout, item, submenu, item, column, heading));
+							}
+
+							// mega menu 
+							.m-menu__inner {
+								padding: array-get($config, build, layout, item, submenu, item, column, self, padding);	
+
+								> .m-menu__item {
+									@include m-populate--menu-hor-item-base(array-get($config, build, layout, item, submenu, item));
+								}
+							}
+						}
+					}
+					
+					&.m-menu__submenu--classic {
+						> .m-menu__subnav {
+							padding: array-get($config, build, layout, item, submenu, self, padding, classic);	
+						}
+					}
+
+					// inline submenu
+					&.m-menu__submenu--inline {
+						display: table;
+						width: auto;
+
+						> .m-menu__subnav {
+							> .m-menu__item {
+								display: table-cell;
+								padding: 5px 0;
+							}
+						}						
+					}					
+				}		
+			}
+
+			// general submenu hover effect
+			.m-menu__item {
+				// menu resize item
+				&.m-menu__item--resize {
+					display: none;
+				}
+
+				// menu item hover
+				&.m-menu__item--active-tab,
+				&.m-menu__item--hover {
+					.m-menu__submenu {
+						display: block;
+						animation: #{array-get($config, base, class)}-submenu-fade-in .3s ease 1, #{array-get($config, base, class)}-submenu-move-up .3s ease-out 1;
+						
+						// ie8-11 versions hack
+                    	@include hack-ie8-11 {
+                        	animation: none;
+                    	}
+
+						> .m-menu__subnav > .m-menu__item.m-menu__item--hover {
+							> .m-menu__submenu {
+								display: block;
+								animation: #{array-get($config, base, class)}-submenu-fade-in .3s ease 1, #{array-get($config, base, class)}-submenu-move-up .3s ease-out 1;
+							
+								// ie8-11 versions hack
+                    			@include hack-ie8-11 {
+                        			animation: none;
+                    			}
+							}
+						}
+					}
+				}			
+			}
+		}
+
+		// dropdown arrow
+		@include m-populate--menu-hor-dropdown-arrow-base( array-get($config, build, layout, item, submenu, arrow) );
+	}
+}
+
+@mixin m-populate--menu-hor-skin($base, $config, $skin) {
+	.#{array-get($base, class)}.#{array-get($base, class)}--skin-#{$skin} {
+		// root level items
+		.m-menu__nav {
+			> .m-menu__item {	
+
+				@if array-get($config, item, self) {
+					&.m-menu__item--hover,
+					&:hover {
+						background-color: array-get($config, item, self, bg-color, hover);
+					}
+
+					&.m-menu__item--open,
+					&.m-menu__item--active {
+						background-color: array-get($config, item, self, bg-color, active);
+					}
+				}
+
+				@include m-populate--menu-hor-item-skin(array-get($config, item));
+			}
+		}
+	}
+
+	.#{array-get($base, class)}.#{array-get($base, class)}--submenu-skin-#{$skin} {
+		// submenu level items
+		.m-menu__nav {
+			> .m-menu__item {			
+				// classic submenu
+				.m-menu__submenu {
+					> .m-menu__subnav {
+						background-color: array-get($config, item, submenu, self, bg-color);
+						box-shadow: array-get($config, item, submenu, self, box-shadow);
+
+						// submenu item
+						> .m-menu__item {
+							@include m-populate--menu-hor-item-skin(array-get($config, item, submenu, item));
+						}
+
+						// mega submenu
+						.m-menu__content {
+							// separator
+							> .m-menu__item {
+								border-right: array-get($config, item, submenu, item, column, separator, border);
+							}		
+
+							// heading
+							.m-menu__heading {
+								@include m-populate--menu-hor-heading-skin(array-get($config, item, submenu, item, column, heading));
+							}
+
+							// mega menu 
+							.m-menu__inner {
+								> .m-menu__item {
+									@include m-populate--menu-hor-item-skin(array-get($config, item, submenu, item));
+								}
+							}
+						}
+					}
+				}				
+			}
+		}
+
+		// submenu arrow
+		.m-menu__nav.m-menu__nav--submenu-arrow {
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--active-tab,
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--hover {
+				@if smooth-arrow() {
+					> .m-menu__submenu .m-menu__arrow {
+						color: array-get($config, item, submenu, self, bg-color);	
+					}
+				} @else {
+					> .m-menu__submenu {
+						> .m-menu__arrow {
+							@include m--set-classic-arrow-bg(top, array-get($config, item, submenu, self, bg-color));
+						}
+
+						.m-menu__submenu {
+							&.m-menu__submenu--left {
+								> .m-menu__arrow {
+									@include m--set-classic-arrow-bg(left, array-get($config, item, submenu, self, bg-color));
+								}
+							}
+
+							&.m-menu__submenu--right {
+								> .m-menu__arrow {
+									@include m--set-classic-arrow-bg(right, array-get($config, item, submenu, self, bg-color));
+								}
+							}
+						}							
+					}
+				}
+			}
+		}
+	}
+}

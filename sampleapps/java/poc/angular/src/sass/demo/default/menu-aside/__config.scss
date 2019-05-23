@@ -1,0 +1,1230 @@
+//
+//** Menus Settings
+//
+
+$m-header-fixed-zindex: array-get($m-config-header, header, fixed, zindex);
+
+$m-aside-menu-dropdown-submenu-width: 245px;
+
+$m-config-menu-aside: (
+	// base parameters required to build the base menu
+	base:	(
+		class: m-aside-menu, // menu element class name
+		parent-class: m-aside-left, // manu parent aside element class name
+		mode: general, // menu mode: general or tablet-and-mobile
+	),
+
+	// customize the menu
+	build: (
+		// layout
+		layout: (
+			// default mode
+			default: (
+				// menu panel itself
+				self: (
+					padding: 30px 0 30px 0
+				),
+
+				// root item
+				item: (
+					// item itself
+					self: (
+						margin:	0
+					),
+
+					// item link
+					link: (
+						// link itself
+						self: (
+							height: 44px,				
+							padding: 9px 30px
+						),					
+
+						// link icon
+						icon:	(
+							width: 35px,
+							align: left,
+							font-size: 1.4rem
+						),		
+
+						// link bullet
+						bullet:	(
+							self: (
+								width: 15px,
+							),
+
+							dot: (
+								size: 4px
+							),
+
+							line: (
+								width: 5px,
+								height: 1px
+							)							
+						),					
+
+						// link text
+						text:	(
+							font-size: 1.02rem,
+							font-weight: 400,
+							font-transform:	initial
+						),
+
+						// link arrow
+						arrow:	(
+							width: 20px,
+							align: right,
+							transition: all 0.3s ease,
+							font-size: 0.7rem
+						),
+
+						// link badge
+						badge:	(
+							padding: 0px 0px 0px 5px,
+							align: right
+						)
+					),
+
+					// item submenu
+					submenu: (
+						// submenu self
+						self: (
+							indent: 15px,
+							margin:	0
+						),
+
+						// submenu item
+						item: (
+							// item itself
+							self: (
+								margin:	0
+							),
+
+							// item link
+							link: (
+								// link itself
+								self: (
+									height: 40px,		
+									padding: 0 30px,
+									padding-x: 30px
+								),					
+
+								// link icon
+								icon:	(
+									width: 35px,
+									align: left,
+									font-size: 1.35rem
+								),		
+
+								// link bullet
+								bullet:	(
+									self: (
+										width: 20px,
+									),
+									dot: (
+										size: 4px
+									),
+									line: (
+										width: 5px,
+										height: 1px
+									)							
+								),						
+
+								// link text
+								text:	(
+									font-size: 1rem,
+									font-weight: 400,
+									font-transform:	initial
+								),
+
+								// link arrow
+								arrow:	(
+									width: 20px,
+									align: right,
+									transition: all 0.3s ease,
+									font-size: 0.7rem
+								),
+
+								// link badge
+								badge:	(
+									padding: 0px 0px 0px 5px,
+									align: right,	
+								)
+							)
+						),
+
+						// submenu section
+						section: (
+							self: (
+								indent: 15px,
+								padding: 0 25px,
+								margin: 20px 0 0 0,
+								height: 40px
+							),
+
+							text: (
+								font-size: 0.8rem,
+								font-weight: 300,
+								font-transform: uppercase,
+								letter-spacing: 0.3px
+							),
+
+							icon: (
+								font-size: 1.1rem
+							)
+						),
+
+						// submenu separator
+						separator: (
+							margin: 15px 0
+						)
+					),
+
+					// arrow
+					arrow: (
+						// classic triangle arrow
+						classic: (
+							size: 10px, // arrow size
+							offset: (  
+								arrow: 10px,  // arrow offset
+								dropdown: -5px // dropdown offset
+							)
+						),
+
+						// smooth triangle arrow
+						smooth: (
+							top: 2px,
+							right: -2px,
+							margin: 0px -7px 0 0
+						) 
+					)
+				),
+
+				// root section
+				section: (
+					self: (
+						padding: 0 27px,
+						margin: 20px 0 0 0,
+						height: 40px
+					),
+
+					text: (
+						font-size: 0.83rem,
+						font-weight: 500,
+						font-transform: uppercase,
+						letter-spacing: 0.3px
+					),
+
+					icon: (					
+						font-size: 1.1rem
+					)
+				),
+
+				// root separator
+				separator: (
+					margin: 15px 0,
+				)
+			),
+
+			// minimize mode
+			minimize: (
+				// menu panel itself
+				self: (
+					padding: 30px 0 30px 0,
+					width: $m-aside-left-width-minimize,
+				),
+
+				// root item
+				item: (
+					// self
+					self: (
+						zindex:	$m-header-fixed-zindex - 1, 
+						width: $m-aside-menu-dropdown-submenu-width + $m-aside-left-width-minimize + 1,
+					),
+
+					// item link
+					link: (
+						badge: (
+							right: -15px,  
+							size: 6px
+						)
+					),
+
+					// item submenu
+					submenu: (
+						// self
+						self: (
+							width: $m-aside-menu-dropdown-submenu-width,
+							margin-left: $m-aside-left-width-minimize + 1
+						),
+
+						// parent item
+						parent-item: (
+							// item itself
+							self: (
+								margin:	0
+							),
+
+							// item link
+							link: (
+								// link itself
+								self: (
+									height: 40px,			
+									margin-bottom: 0px,	
+									padding: 0 30px 10px 30px
+								),					
+								// link text
+								text:	(
+									font-size: 1.05rem,
+									font-weight: 400,
+									font-transform:	initial
+								),
+								// link badge
+								badge:	(
+									padding: 0px 0px 0px 5px,
+									align: right
+								)
+							)
+						)
+					)
+				)
+			),
+
+			// dropdown mode
+			dropdown: (
+				// dropdown menu item
+				item: (
+					// item itself
+					self: (
+						margin: 0, 
+						zindex:	$m-header-fixed-zindex - 1,
+					),
+
+					// submenu
+					submenu: (
+						// submenu itself
+						self: (
+							// submenu base styles
+							padding: 20px 0,
+							width: $m-aside-menu-dropdown-submenu-width,
+							parent-width: $m-aside-left-width,
+							border-radius: 4px,
+
+							// submenu animation
+							animation: (
+								offset: 10px
+							),
+
+							// vertical offset
+							offset: (
+								root: (
+									default: -5px,
+									up: -10px
+								),
+								inner: (
+									default: -10px,
+									up: -10px
+								)								
+							)
+						),
+
+						// submenu item
+						item: (
+							// item itself
+							self: (
+								margin:	0
+							),
+
+							// item link
+							link: (
+								// link itself
+								self: (
+									height: 40px,				
+									padding: 7px 30px
+								),					
+								// link icon
+								icon:	(
+									width: 35px,
+									align: left,
+									font-size: 1.35rem
+								),		
+								// link bullet
+								bullet:	(
+									self: (
+										width: 20px,
+									),
+									dot: (
+										size: 4px
+									),
+									line: (
+										width: 5px,
+										height: 1px
+									)							
+								),						
+								// link text
+								text:	(
+									font-size: 1rem,
+									font-weight: 400,
+									font-transform:	initial
+								),
+
+								// link arrow
+								arrow:	(
+									width: 20px,
+									align: right,
+									transition: all 0.3s ease,
+									font-size: 0.7rem
+								),
+
+								// link badge
+								badge:	(
+									padding: 0px 0px 0px 5px,
+									align: right,	
+								)
+							)
+						),
+
+						// submenu section
+						section: (
+							self: (
+								margin: 20px 0 0 0,
+								padding: 0 25px,
+								height: 40px
+							),
+								
+							text: (
+								font-size: 0.8rem,
+								font-weight: 300,
+								font-transform: uppercase,
+							),
+
+							icon: (
+								font-size: 1.1rem,
+							)
+						),
+
+						// submenu separator
+						separator: (
+							margin: 15px 0,
+						),
+
+						// submenu arrow
+						arrow: (
+							// classic triangle arrow
+							classic: (
+								offset: (
+									default: 12px,
+									up: 20px
+								),
+								size: 10px,
+								left: 0,
+								margin: 0
+							),
+
+							// smooth triangle arrow
+							smooth: (
+								offset: (
+									default: 10px,
+									up: 20px
+								),
+								left: 1px,
+								margin: 0
+							) 
+						)
+					)
+				)
+			)		
+		),
+
+		// skins
+		skins: (
+			// dark skin
+			dark: (
+				// default mode
+				default: (
+					// menu panel itself
+					self: (
+						bg-color: array-get($m-config-aside, aside-left, skins, dark, self, bg-color)
+					),
+
+					// root item
+					item: (
+						// item itself
+						self: (
+							bg-color: (
+								default: null,
+								open: #292b3a,
+								expanded: #292b3a,
+								active: null,
+								hover: #292b3a
+							)
+						),
+
+						// item link
+						link: (
+							// link itself
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									expanded: null,
+									active: null,
+									hover: null
+								)
+							),					
+
+							// link icon
+							icon: (
+								font-color:	(
+									default: #525672,
+									open: #8c8ea4,
+									expanded: #8c8ea4,
+									active: get-brand-color(), 
+									hover: #8c8ea4
+								),
+							),		
+
+							// link bullet
+							bullet:	(
+								dot: (
+									bg-color: (
+										default: #525672,
+										open: #8c8ea4,
+										expanded: #8c8ea4,
+										active: get-brand-color(),
+										hover: #8c8ea4
+									)
+								),
+								line: (
+									bg-color: (
+										default: #525672,
+										open: #8c8ea4,
+										expanded: #8c8ea4,
+										active: get-brand-color(),
+										hover: #8c8ea4					
+									)
+								)							
+							),					
+
+							// link text
+							text:	(
+								font-color:	(
+									default: #868aa8,
+									open: #868aa8,
+									expanded: #868aa8,
+									active: get-brand-color(),
+									hover: #868aa8		
+								)	
+							),
+
+							// link arrow
+							arrow:	(
+								font-color:	(
+									default: #525672,
+									open: #8c8ea4,
+									expanded: #8c8ea4,
+									active: get-brand-color(),
+									hover: #8c8ea4,
+								)
+							)
+						),
+
+						// item submenu
+						submenu: (
+							// submenu self
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									active: null,
+									hover: null
+								)
+							),
+
+							// submenu item
+							item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										active: null,
+										hover: null
+									)
+								),
+
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											open: null,
+											active: null,
+											hover: null
+										)
+									),					
+
+									// link icon
+									icon:	(
+										font-color:	(
+											default: #525672,
+											open: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)
+									),		
+
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: #525672,
+												open: #8c8ea4,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										),
+
+										line: (
+											bg-color: (
+												default: #525672,
+												open: #8c8ea4,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										)							
+									),						
+
+									// link text
+									text: (
+										font-color:	(
+											default: #686c89,
+											open: #868aa8,
+											active: get-brand-color(),
+											hover: #868aa8
+										)	
+									),
+
+									// link arrow
+									arrow:	(
+										font-color:	(
+											default: #525672,
+											open: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)
+									)
+								)
+							),
+
+							// submenu section
+							section: (
+								text: (
+									font-color: #464b66
+								),
+								icon: (
+									font-color: #424554
+								)
+							),
+
+							// submenu separator
+							separator: (
+								border: 1px solid rgba(#ffffff, 0.07)
+							)
+						)
+					),
+
+					// root section
+					section: (
+						text: (
+							font-color: #464b66
+						),
+						icon: (
+							font-color: #424554
+						)
+					),
+
+					// root separator
+					separator: (
+						border: 1px solid rgba(#ffffff, 0.07)
+					)
+				),
+
+				// minimize mode
+				minimize: (
+					// root item
+					item: (
+						// item link
+						link: (
+							// self
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									active: null,
+									hover: null
+								)
+							),		
+							// link icon
+							icon:	(
+								font-color:	(
+									default: #646885,
+									open: get-brand-color(),
+									active: get-brand-color(),
+									hover: #8c8ea4
+								)
+							),
+
+							arrow: (
+							)
+						),
+
+						// item submenu
+						submenu: (
+							// self
+							self: (
+								bg-color: red
+							),
+
+							// parent item
+							parent-item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										active: null,
+										hover: null
+									)
+								),
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											active: null,
+											hover: null
+										)
+									),					
+
+									// link text
+									text:	(
+										font-color:	(
+											default: #7b7f9e,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)	
+									)
+								)
+							)
+						)
+					)
+				),
+
+				// dropdown mode
+				dropdown: (
+					// dropdown menu item
+					item: (
+						// submenu
+						submenu: (
+							// submenu itself
+							self: (
+								// submenu base styles
+								bg-color: #2c2e3e,
+								box-shadow: get-shadow(dark),
+							),
+							// submenu item
+							item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										active: null,
+										hover: null
+									)
+								),
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											open: null,
+											active: null,
+											hover: null
+										)
+									),					
+
+									// link icon
+									icon:	(
+										font-color:	(
+											default: #5f627e,
+											open: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)
+									),		
+
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: #525672,
+												open: #525672,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										),
+
+										line: (
+											bg-color:	(
+												default: #525672,
+												open: #8c8ea4,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										)							
+									),						
+
+									// link text
+									text:	(
+										font-color:	(
+											default: #717594,
+											open: #868aa8,
+											active: get-brand-color(),
+											hover: #868aa8
+										)	
+									),
+									// link arrow
+									arrow:	(
+										font-color:	(
+											default: #525672,
+											open: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)
+									)
+								)
+							),
+
+							// submenu section
+							section: (									
+								text: (
+									font-color:#3F4052
+								),
+								icon: (
+									font-color: #424554
+								)
+							),
+
+							// submenu separator
+							separator: (
+								border: 1px solid rgba(#ffffff, 0.07)
+							)
+						)
+					)		
+				)	
+			),
+				
+			// light skin
+			light: (
+				// default mode
+				default: (
+					// menu panel itself
+					self: (
+						bg-color: #ffffff
+					),
+
+					// root item
+					item: (
+						// item itself
+						self: (
+							bg-color: (
+								default: null,
+								open: null,
+								expanded: null,
+								active: null,
+								hover: null
+							)
+						),
+
+						// item link
+						link: (
+							// link itself
+							self: (
+								bg-color: (
+									default: null,
+									open: #f8f8fb,
+									expanded: #f8f8fb,
+									active: #f8f8fb,
+									hover: #f8f8fb
+								)
+							),					
+
+							// link icon
+							icon: (
+								font-color:	(
+									default: lighten(#8c8ea4, 10%),
+									open: lighten(#8c8ea4, 5%),
+									expanded: lighten(#8c8ea4, 5%),
+									active: get-brand-color(), 
+									hover: lighten(#8c8ea4, 5%)
+								),
+							),		
+
+							// link bullet
+							bullet:	(
+								dot: (
+									bg-color: (
+										default: lighten(#8c8ea4, 10%),
+										open: lighten(#8c8ea4, 5%),
+										expanded: lighten(#8c8ea4, 5%),
+										active: get-brand-color(),
+										hover: lighten(#8c8ea4, 5%)
+									)
+								),
+								line: (
+									bg-color: (
+										default: lighten(#8c8ea4, 10%),
+										open: lighten(#8c8ea4, 5%),
+										expanded: lighten(#8c8ea4, 5%),
+										active: get-brand-color(),
+										hover: lighten(#8c8ea4, 5%)					
+									)
+								)							
+							),					
+
+							// link text
+							text:	(
+								font-color:	(
+									default: darken(#868aa8, 15%),
+									open: darken(#868aa8, 20%),
+									expanded: darken(#868aa8, 20%),
+									active: get-brand-color(),
+									hover: darken(#868aa8, 20%)	
+								)	
+							),
+
+							// link arrow
+							arrow:	(
+								font-color:	(
+									default: lighten(#8c8ea4, 10%),
+									open: lighten(#8c8ea4, 5%),
+									expanded: lighten(#8c8ea4, 5%),
+									active: get-brand-color(),
+									hover: lighten(#8c8ea4, 5%)
+								)
+							)
+						),
+
+						// item submenu
+						submenu: (
+							// submenu self
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									active: null,
+									hover: null
+								)
+							),
+
+							// submenu item
+							item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										expanded: null,
+										active: null,
+										hover: null
+									)
+								),
+
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											open: #f8f8fb,
+											expanded: #f8f8fb,
+											active: #f8f8fb,
+											hover: #f8f8fb
+										)
+									),					
+
+									// link icon
+									icon:	(
+										font-color:	(
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											active: get-brand-color(), 
+											hover: lighten(#8c8ea4, 5%)
+										)
+									),		
+
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												expanded: lighten(#8c8ea4, 5%),
+												active: get-brand-color(),
+												hover: lighten(#8c8ea4, 5%)
+											)
+										),
+
+										line: (
+											bg-color: (
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												expanded: lighten(#8c8ea4, 5%),
+												active: get-brand-color(),
+												hover: lighten(#8c8ea4, 5%)
+											)
+										)							
+									),						
+
+									// link text
+									text: (
+										font-color:	(
+											default: darken(#868aa8, 5%),
+											open: darken(#868aa8, 10%),
+											active: get-brand-color(),
+											hover: darken(#868aa8, 10%)
+										)	
+									),
+
+									// link arrow
+									arrow:	(
+										font-color:	(
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											active: get-brand-color(),
+											hover: lighten(#8c8ea4, 5%)
+										)
+									)
+								)
+							),
+
+							// submenu section
+							section: (
+								text: (
+									font-color: lighten(#868aa8, 10%)
+								),
+								icon: (
+									font-color: lighten(#868aa8, 12%)
+								)
+							),
+
+							// submenu separator
+							separator: (
+								border: 1px solid rgba(#000000, 0.07)
+							)
+						)
+					),
+
+					// root section
+					section: (
+						text: (
+							font-color: lighten(#868aa8, 10%)
+						),
+						icon: (
+							font-color: lighten(#868aa8, 12%)
+						)
+					),
+
+					// root separator
+					separator: (
+						border: 1px solid rgba(#000000, 0.07)
+					)
+				),
+
+				// minimize mode
+				minimize: (
+					// root item
+					item: (
+						// item link
+						link: (
+							// self
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									active: null,
+									hover: null
+								)
+							),		
+							// link icon
+							icon:	(
+								font-color:	(
+									default: lighten(#8c8ea4, 10%),
+									open: lighten(#8c8ea4, 5%),
+									active: get-brand-color(), 
+									hover: lighten(#8c8ea4, 5%)
+								)
+							)
+						),
+
+						// item submenu
+						submenu: (
+							// self
+							self: (
+								bg-color: red
+							),
+
+							// parent item
+							parent-item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										active: null,
+										hover: null
+									)
+								),
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											active: null,
+											hover: null
+										)
+									),					
+
+									// link text
+									text:	(
+										font-color:	(
+											default: darken(#868aa8, 5%),
+											active: get-brand-color(),
+											hover: darken(#868aa8, 10%)	
+										)	
+									)
+								)
+							)
+						)
+					)
+				),
+
+				// dropdown mode
+				dropdown: (
+					// dropdown menu item
+					item: (
+						// submenu
+						submenu: (
+							// submenu itself
+							self: (
+								// submenu base styles
+								bg-color: #fff,
+								box-shadow: get-shadow(dark),
+							),
+							
+							// submenu item
+							item: (
+								// item itself
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										expanded: null,
+										active: null,
+										hover: null
+									)
+								),
+
+								// item link
+								link: (
+									// link itself
+									self: (
+										bg-color: (
+											default: null,
+											open: #f8f8fb,
+											expanded: #f8f8fb,
+											active: #f8f8fb,
+											hover: #f8f8fb
+										)
+									),					
+
+									// link icon
+									icon:	(
+										font-color:	(
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											active: get-brand-color(), 
+											hover: lighten(#8c8ea4, 5%)
+										)
+									),		
+
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												expanded: lighten(#8c8ea4, 5%),
+												active: get-brand-color(),
+												hover: lighten(#8c8ea4, 5%)
+											)
+										),
+
+										line: (
+											bg-color: (
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												expanded: lighten(#8c8ea4, 5%),
+												active: get-brand-color(),
+												hover: lighten(#8c8ea4, 5%)
+											)
+										)							
+									),						
+
+									// link text
+									text: (
+										font-color:	(
+											default: darken(#868aa8, 10%),
+											open: darken(#868aa8, 15%),
+											active: get-brand-color(),
+											hover: darken(#868aa8, 15%)
+										)	
+									),
+
+									// link arrow
+									arrow:	(
+										font-color:	(
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											active: get-brand-color(),
+											hover: lighten(#8c8ea4, 5%)
+										)
+									)
+								)
+							),
+
+							// submenu section
+							section: (
+								text: (
+									font-color: lighten(#868aa8, 10%)
+								),
+								icon: (
+									font-color: lighten(#868aa8, 12%)
+								)
+							),
+
+							// submenu separator
+							separator: (
+								border: 1px solid rgba(#000000, 0.07)
+							)
+						)
+					)		
+				)	
+			)
+		)			
+	)
+);

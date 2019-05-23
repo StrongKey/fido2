@@ -1,0 +1,211 @@
+//
+//** List Widget 4 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget4-base() {
+    .m-widget4 {    
+        .m-widget4__item {
+            display: table;             
+            padding-top: 1.15rem; 
+            padding-bottom: 1.25rem; 
+            
+            .m-widget4__img {   
+                display: table-cell;    
+                vertical-align: middle;      
+
+                &.m-widget4__img--logo {
+                    img {
+                        width: 3.5rem;                    
+                        border-radius: 50%;
+                    }
+                } 
+
+                &.m-widget4__img--pic {
+                    img {
+                        width: 4rem;                    
+                        border-radius: 50%;
+                    }
+                } 
+
+                &.m-widget4__img--icon {
+                    img {
+                        width: 2.1rem;
+                    }
+                } 
+            }
+
+            .m-widget4__info {
+                display: table-cell;
+                width: 100%;
+                padding-left: 1.2rem;                    
+                padding-right: 1.2rem;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+                vertical-align: middle;
+
+                .m-widget4__text {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bolder);                    
+                }
+
+                .m-widget4__title {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(boldest);                    
+                } 
+
+                .m-widget4__sub {
+                    font-size: get-font-size(regular, '-');
+                    font-weight: get-font-weight(regular);
+                } 
+            }
+
+            .m-widget4__ext {
+                display: table-cell; 
+                vertical-align: middle;  
+
+                .m-widget4__number {
+                    font-size: get-font-size(regular, '++');
+                    font-weight: get-font-weight(boldest); 
+                }
+
+                .m-widget4__icon {
+                    > i {
+                        font-size: get-font-size(icon, '++');
+                    }
+
+                    &.m-widget4__icon--2x {
+                        > i {
+                            font-size: 2.2rem;
+                        }
+                    }
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }                        
+            }
+        }    
+
+        &.m-widget4--progress {
+            .m-widget4__info {
+                width: 50%;
+            }
+
+            // Progress
+            .m-widget4__progress {     
+                display: table-cell; 
+                vertical-align: middle;     
+                padding-left: 2rem;
+                padding-right: 2rem;
+                width: 50%;
+
+                .m-widget4__progress-wrapper {
+                    // Stats
+                    .m-widget17__progress-number {
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(boldest);                      
+                    }
+                    
+                    // Text
+                    .m-widget17__progress-label {
+                        font-size: get-font-size(regular, '-');
+                        font-weight: get-font-weight(regular);
+                        float: right;
+                        margin-top: 0.3rem;
+                    }
+
+                    // Progress
+                    .progress {
+                        display: block;
+                        margin-top: 0.8rem;
+                        height: 0.5rem;
+                    }    
+                }                
+            }       
+
+        }  
+
+        .m-widget4__chart {
+            position: relative;
+        }
+
+        &.m-widget4--chart-bottom {
+            .m-widget4__chart {
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+
+                .m-portlet--rounded & {
+                    canvas {
+                        @include border-bottom-left-radius(array-get($m--border-radius, general));
+                        @include border-bottom-right-radius(array-get($m--border-radius, general));
+                    }                
+                }
+            }
+        }
+    } 
+
+    @include tablet-and-mobile {
+        .m-widget4 {
+            &.m-widget4--chart-bottom {
+                .m-widget4__chart {
+
+                }
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--widget4-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget4__item { 
+
+        .m-widget4__number {
+            color: get-color($skin, regular);
+        }
+
+        .m-widget4__title {
+            color: get-color($skin, regular);       
+        } 
+
+        .m-widget4__sub {
+            color: get-color($skin, regular, '--');       
+        } 
+
+        .m-widget4__text {
+            color: get-color($skin, regular, '---');
+        }
+
+        .m-widget4__icon {
+            > i {
+                color: get-color($skin, icon, '+');
+            }
+
+            &:hover {
+                > i {
+                    color: get-brand-color();
+                }
+            }
+        }
+
+        border-bottom: 0.07rem dashed get-color($skin, panel);
+         
+        &.m-widget4__item--last,
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        .m-widget4__chart {
+            
+        }     
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget4-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget4-skin();

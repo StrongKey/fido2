@@ -1,0 +1,59 @@
+/*
+ * Icon Font Metronic
+ * Made with love by Icons8 [ https://icons8.com/ ] using FontCustom [ https://github.com/FontCustom/fontcustom ]
+ *
+ * Contacts:
+ *    [ https://icons8.com/contact ]
+ *
+ * Follow Icon8 on
+ *    Twitter [ https://twitter.com/icons_8 ]
+ *    Facebook [ https://www.facebook.com/Icons8 ]
+ *    Google+ [ https://plus.google.com/+Icons8 ]
+ *    GitHub [ https://github.com/icons8 ]
+ */
+
+
+@font-face {
+  font-family: "Metronic";
+  src: url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.eot");
+  src: url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.woff2") format("woff2"),
+       url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.woff") format("woff"),
+       url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.ttf") format("truetype"),
+       url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.svg#Metronic") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Metronic";
+    src: url("../fonts/Metronic_fda1334c35d0f5fe2afb3afebbb6774a.svg#Metronic") format("svg");
+  }
+}
+
+[data-icons8]:before { content: attr(data-icons8); }
+
+.icons8, [data-icons8]:before,
+.icons8-arrows-01:before,
+.icons8-arrows-02:before,
+.icons8-arrows-03:before,
+.icons8-arrows-04:before {
+  display: inline-block;
+  font-family: "Metronic";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+.icons8-arrows-01:before { content: "\f1b1"; }
+.icons8-arrows-02:before { content: "\f1b2"; }
+.icons8-arrows-03:before { content: "\f1b3"; }
+.icons8-arrows-04:before { content: "\f1b4"; }

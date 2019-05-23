@@ -1,0 +1,105 @@
+//
+//** Vertical Menu Mixins
+// Mixins to generate base markup for general vertical menu
+
+//== Vertical Menu
+@mixin m-build--menu-ver( $config ) {
+	// base menu
+	@include m-populate--menu-ver-base( array-get($config, base), array-get($config, build, layout) );
+	
+	// dark skin
+	@if array-has($config, build, skins, dark) {	
+		@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}	
+	
+	// light skin
+	@if array-has($config, build, skins, light) {	
+		@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	}
+}
+
+//== Base mixin generate dropdown vertical menu markup
+@mixin m-build--menu-ver-dropdown( $config ) {  
+	// base dropdown submenu
+	@include m-populate--menu-ver-dropdown-base( array-get($config, base), array-get($config, build, layout) );
+	
+	// base dropdown submenu's dark skin
+	@if array-has($config, build, skins, dark) {
+		@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}
+
+	// base dropdown submenu's light skin
+	@if array-has($config, build, skins, light) {
+		@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	}
+}
+
+//== Builds vertical menu markup for minimized sidebar mode
+@mixin m-build--menu-ver-minimize( $config ) {
+	// base minimize menu
+	@include m-populate--menu-ver-minimize-base( array-get($config, base), array-get($config, build, layout) );
+
+	// base minimiz menu's dark skin
+	@if array-has($config, build, skins, dark) {
+		@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}
+
+	// base minimiz menu's light skin
+	@if array-has($config, build, skins, light) {
+		@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, light), light );	
+	}
+}
+
+//== Generates Base Vetical Menu
+@mixin m-generate--menu-ver( $config ) {
+	// Base menu
+	@if (array-get($config, base, mode) == general) {
+		@include m-build--menu-ver( $config ); 
+	} @else if (array-get($config, base, mode) == tablet-and-mobile) {
+		@include tablet-and-mobile {
+			@include m-build--menu-ver( $config ); 
+		}
+	} @else if (array-get($config, base, mode) == mobile) {
+		@include mobile {
+			@include m-build--menu-ver( $config ); 
+		}
+	}
+
+	// Base dropdown menu submenu mode
+	@if (array-has($config, build, layout, dropdown)) {
+		// Desktop only dropdown vertical menu
+		@include desktop {
+			@include  m-build--menu-ver-dropdown( $config );
+		}
+
+		// Dropdown Submenu Animations	
+		@include keyframes(#{array-get($config, base, class)}-submenu-fade-out) {
+		    from   { opacity: 1; }
+		    to { opacity: 0; }
+		}
+
+		@include keyframes(#{array-get($config, base, class)}-submenu-fade-in) {
+		    from   { opacity: 0; }
+		    to { opacity: 1; }
+		}
+
+		@include keyframes(#{array-get($config, base, class)}-submenu-move-up) {
+		    from   { margin-top: array-get($config, build, layout, dropdown, item, submenu, self, animation, offset); }
+		    to { margin-top: 0; }
+		}
+
+		@include keyframes(#{array-get($config, base, class)}-submenu-move-down) {
+		    from   { margin-bottom: array-get($config, build, layout, dropdown, item, submenu, self, animation, offset); }
+		    to { margin-bottom: 0; }
+		}
+	}
+
+	// Base minimize menu mode
+	@if (array-has($config, build, layout, minimize)) {
+		@include desktop {
+			.#{array-get($config, base, parent-class)}--minimize {
+				@include m-build--menu-ver-minimize( $config );
+			}
+		}
+	}	
+}

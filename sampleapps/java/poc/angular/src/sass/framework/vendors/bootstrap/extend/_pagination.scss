@@ -1,0 +1,29 @@
+//
+//** Pagination Customization
+// 
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--pagination-base() {
+    .pagination {
+         .page-item {
+            .page-link:focus {
+                @include shadow(none);
+            }
+        }
+    }   
+}
+
+//== Component Skin
+@mixin m-build-component--pagination-skin($skin) {
+    
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--pagination-base();
+
+//== Component Skin
+@include m-build-component--pagination-skin(light);

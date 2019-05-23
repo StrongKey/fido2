@@ -1,0 +1,73 @@
+//
+//** Error 1 Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--error-1-base() {
+    .m-error-1 {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover; 
+
+        .m-error_container {
+            .m-error_number {
+
+                > h1 {                              
+                    font-size: 150px;
+                    margin-left: 80px;
+                    margin-top: 9rem;
+                    font-weight: get-font-weight(boldest);
+                }
+            }
+
+            .m-error_desc {
+                font-size: get-font-size(regular, '++++');
+                margin-left: 80px;            
+            }
+        } 
+    }
+
+    @include mobile() {
+        .m-error-1 {
+            .m-error_container {
+                .m-error_number {
+                    > h1 {
+                        margin: 120px 0 0 3rem;
+                        font-size: 8rem;                      
+                    }
+                }                
+
+                .m-error_desc {
+                    margin-left: 3rem;
+                    padding-right: 0.5rem;
+                }                 
+            }
+        }    
+    }     
+}
+
+//== Snippet Skin
+@mixin m-build-snippet--error-1() {     
+    $skin: get-default-skin();    
+
+    .m-error_container {
+
+        .m-error_number {
+
+            > h1 {
+                color: #6587C6;                 
+            }
+        }
+
+        .m-error_desc {
+            color: get-color($skin, regular, '---');
+        }
+    }     
+}
+
+
+//== Build Snippet Base
+@include m-build-snippet--error-1-base();
+//== Build Snippet Base
+@include m-build-snippet--error-1();

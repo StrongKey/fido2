@@ -1,0 +1,53 @@
+//
+//** Error 6 Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--error-6-base() {
+    .m-error-6 {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover; 
+        
+        .m-error_container {
+             text-align: center;
+            .m-error_subtitle {
+
+                > h1 { 
+                    font-size: 10rem;                    
+                    margin-top: 12rem;               
+                    font-weight: get-font-weight(boldest);                                   
+                }
+            }
+
+            .m-error_description {                
+                margin-top: 3rem;
+                font-size: 2.3rem;
+                font-weight: get-font-weight(bolder);
+                line-height: 3rem;
+            }             
+        }
+    }
+     
+    @include mobile() {
+        .m-error-6 {              
+            .m-error_container {
+                .m-error_subtitle {
+
+                    > h1 {
+                        font-size: 5rem;                       
+                    }
+                }
+                .m-error_description {
+                    font-size: 1.7rem;
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;                    
+                }
+            } 
+        }  
+    }              
+}
+
+//== Build Snippet Base
+@include m-build-snippet--error-6-base();

@@ -1,0 +1,125 @@
+//
+//** Bootstrap Switch Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--switch-base() {
+    [data-switch=true] {
+        @include opacity(0);
+    }
+    
+    .bootstrap-switch {
+        //== Label
+        .bootstrap-switch-label {
+            background: #fff;
+        }
+
+        .bootstrap-switch-handle-on, 
+        .bootstrap-switch-handle-off, 
+        .bootstrap-switch-label {
+            padding-top: array-get($m--forms, input, layout, self, size, default, padding, y);
+            padding-bottom: array-get($m--forms, input, layout, self, size, default, padding, y);
+            padding-left:  array-get($m--forms, input, layout, self, size, default, padding, x);
+            padding-right:  array-get($m--forms, input, layout, self, size, default, padding, x);
+            letter-spacing: 0.1rem;
+            line-height: array-get($m--forms, input, layout, self, size, default, line-height);
+            font-size: get-font-size(regular, '-');
+            font-weight: get-font-weight(bold);
+        }
+
+        &.bootstrap-switch-mini .bootstrap-switch-handle-on,
+        &.bootstrap-switch-mini .bootstrap-switch-handle-off,
+        &.bootstrap-switch-mini .bootstrap-switch-label {
+            font-size: get-font-size(regular, '--');
+            line-height: array-get($m--forms, input, layout, self, size, default, line-height);
+        }
+
+        &.bootstrap-switch-small .bootstrap-switch-handle-on,  
+        &.bootstrap-switch-small .bootstrap-switch-handle-off,
+        &.bootstrap-switch-small .bootstrap-switch-label {
+            padding-top: array-get($m--forms, input, layout, self, size, sm, padding, y);
+            padding-bottom: array-get($m--forms, input, layout, self, size, sm, padding, y);
+            padding-left:  array-get($m--forms, input, layout, self, size, sm, padding, x);
+            padding-right:  array-get($m--forms, input, layout, self, size, sm, padding, x);
+            font-size: get-font-size(regular, '-');
+            line-height: array-get($m--forms, input, layout, self, size, sm, line-height);
+        }
+
+        &.bootstrap-switch-large .bootstrap-switch-handle-on,
+        &.bootstrap-switch-large .bootstrap-switch-handle-off,
+        &.bootstrap-switch-large .bootstrap-switch-label {
+            padding: array-get($m--forms, input, layout, self, size, lg, padding, y) array-get($m--forms, input, layout, self, size, lg, padding, x);
+            font-size: get-font-size(regular, '+');
+            line-height: array-get($m--forms, input, layout, self, size, lg, line-height);
+        }
+    }
+
+    .m-bootstrap-switch {
+        display: inline-block;
+
+        &.m-bootstrap-switch--pill {
+            .bootstrap-switch {
+                @include border-radius(array-get($m--forms, input, layout, self, size, default, pill-radius));
+            }
+        }
+
+        &.m-bootstrap-switch--square {
+            .bootstrap-switch {
+                @include border-radius(0, '!important');
+                
+                .bootstrap-switch-handle-off,
+                .bootstrap-switch-handle-on {
+                    @include border-radius(0, '!important');
+                }
+            }
+        }
+    }
+}
+
+@mixin m-build-component--switch-skin($skin) {
+    .bootstrap-switch {
+        border-color: array-get($m--forms, input, skins, $skin, default, border, default);
+
+        //== Label
+        .bootstrap-switch-label {
+            color: get-color($skin, regular);
+            background: #fff;
+        }
+
+        //== State colors
+        @each $name, $color in $m--state-colors {
+            .bootstrap-switch-handle-on.bootstrap-switch-#{$name},
+            .bootstrap-switch-handle-off.bootstrap-switch-#{$name} {
+                background-color: array-get($color, base);
+                border-color: array-get($color, base);
+                color: array-get($color, inverse);
+            } 
+        }
+
+        //== Default state
+        .bootstrap-switch-handle-on.bootstrap-switch-default,
+        .bootstrap-switch-handle-off.bootstrap-switch-default {
+            background-color: array-get($m--forms, input, skins, $skin, default, border, default);
+            border-color: array-get($m--forms, input, skins, $skin, default, border, default);
+            color: get-color(light, regular);
+        }
+    }
+
+    .m-bootstrap-switch {
+        &.m-bootstrap-switch--air {
+            .bootstrap-switch {
+                @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default) );
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--switch-base();
+
+//== Component Skin - Light
+@include m-build-component--switch-skin(light);

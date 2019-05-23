@@ -1,0 +1,63 @@
+//== Extend Horizontal Menu
+@mixin m-extend--menu-hor($config) {
+	// Base vertical menu
+	@if (array-get($config, base, mode) == general) {
+		.#{array-get($config, base, class)} {
+			@content; 
+		}
+	} @else if (array-get($config, base, mode) == desktop) {
+		@include desktop {
+			.#{array-get($config, base, class)} {
+				@content; 
+			}
+		}
+	} @else if (array-get($config, base, mode) == desktop-and-tablet) {
+		@include desktop-and-tablet {
+			.#{array-get($config, base, class)} {
+				@content; 
+			}
+		}
+	}
+}
+
+@mixin m-extend--menu-hor-primary-skin($config, $skin) {
+	// Base vertical menu
+	@if (array-get($config, base, mode) == general) {
+		.#{array-get($base, class)}.#{array-get($base, class)}--skin-#{$skin} {
+			@content; 
+		}
+	} @else if (array-get($config, base, mode) == desktop) {
+		@include desktop {
+			.#{array-get($base, class)}.#{array-get($base, class)}--skin-#{$skin} {
+				@content; 
+			}
+		}
+	} @else if (array-get($config, base, mode) == desktop-and-tablet) {
+		@include desktop-and-tablet {
+			.#{array-get($base, class)}.#{array-get($base, class)}--skin-#{$skin} {
+				@content; 
+			}
+		}
+	}
+}
+
+@mixin m-extend--menu-hor-submenu-skin($config, $skin) {
+	// Base vertical menu
+	@if (array-get($config, base, mode) == general) {
+		.#{array-get($base, class)}.#{array-get($base, class)}--submenu-skin-#{$skin} {
+			@content; 
+		}
+	} @else if (array-get($config, base, mode) == desktop) {
+		@include desktop {
+			.#{array-get($base, class)}.#{array-get($base, class)}--submenu-skin-#{$skin} {
+				@content; 
+			}
+		}
+	} @else if (array-get($config, base, mode) == desktop-and-tablet) {
+		@include desktop-and-tablet {
+			.#{array-get($base, class)}.#{array-get($base, class)}--submenu-skin-#{$skin} {
+				@content; 
+			}
+		}
+	}
+}

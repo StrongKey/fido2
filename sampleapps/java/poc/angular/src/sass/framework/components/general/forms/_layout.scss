@@ -1,0 +1,395 @@
+//
+//** Form Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--form-base() {
+    $space: 30px;
+
+    .m-form  {
+        //== Form group
+        .form-control-label,
+        label {
+            font-weight: get-font-weight(bold);
+            font-size: get-font-size(regular);
+
+            &.col-form-label {
+                padding-top: array-get($m--forms, input, layout, self, size, default, padding, y); 
+                //padding-bottom: array-get($m--forms, input, layout, self, size, default, padding, y); 
+            }
+        }
+
+    	.m-form__group {
+            margin-bottom: 0;    		
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            &.m-form__group--md {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            &.m-form__group--sm {
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+
+            .m-form__control-static {
+                display: inline-block;
+                font-weight: get-font-weight(normal);
+                font-size: get-font-size(regular);
+                padding-top: array-get($m--forms, input, layout, self, size, default, padding, y); 
+            }
+
+            &.m-form__group--first {
+                padding-top: 0;
+            }
+            
+
+            &.m-form__group--last {
+                padding-bottom: 0;
+            }
+            
+            @include desktop() {
+                &:first-child {
+                    padding-top: 0;
+                }
+
+                &:last-child {
+                    padding-bottom: 0;
+                }
+            }
+
+            &.m-form__group--inline {
+                display: table;
+                padding: 0;
+
+                > .m-form__label {
+                    display: table-cell;
+                    vertical-align: middle;
+                    margin: 0;
+                    padding-right: 0.5rem;
+
+                    &.m-form__label-no-wrap {
+                        white-space:nowrap;
+                    }
+
+                    > label {
+                        margin: 0;
+                    }
+                }
+
+                > .m-form__control {
+                    display: table-cell;
+                    vertical-align: middle;
+                    margin: 0;
+                    width: 100%;
+                }
+            }
+    	}        
+
+        //== Form control help
+    	.m-form__help {
+    		font-weight: get-font-weight(normal);
+    		font-size: get-font-size(regular, '-');
+    		padding-top: 7px;
+    	}
+
+        span.m-form__help {
+            display: inline-block;
+        }
+
+        //== Form section
+        .m-form__section {
+            margin: 40px 0 40px 0;
+
+            &:first-child,
+            &.m-form__section--first {
+                margin-top: 0;
+            }
+
+            &:last-child,
+            &.m-form__section--last {
+                margin-bottom: 0;
+            }       
+        }
+
+        //== Form separator
+        .m-form__seperator {
+            display: block;
+            height: 0;
+
+            &.m-form__seperator--space {
+                margin: 20px 0;
+            }
+
+            &.m-form__seperator--space-2x {
+                margin: 30px 0;
+            }           
+
+            &.m-form__seperator--space-3x {
+                margin: 40px 0;
+            }
+        }
+
+        //== Form heading
+        .m-form__heading {
+            padding: 0;
+            margin: 0 0 15px 0;
+            
+            .m-form__heading-title {
+                font-weight: get-font-weight(bolder);
+                font-size: get-font-size(regular, '+++');
+
+                .m-form__heading-help-icon {
+                    line-height: 0;
+                    vertical-align: middle;
+                    padding-left: 5px;
+                }
+            }
+
+            .m-form__heading-sub {
+                margin: 5px 0 0 0;
+                padding: 0;
+                font-size: get-font-size(regular);
+            }
+
+            &.m-form__heading--bordered,
+            &.m-form__heading--dashed {
+                padding: 0 0 15px 0;
+                margin: 0 0 15px 0;
+            }
+        }
+
+        //== Form actions
+        .m-form__actions {
+            @include clearfix();
+        	padding: $space;
+
+            &.m-form__actions--right {
+                text-align: right;
+            }
+
+            &.m-form__actions--paddingless-sides {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+
+        &.m-form--custom {
+            .m-form__actions {
+                padding: $space 0;
+                margin-top: $space;
+
+                &.m-form__actions--top {
+                    margin-top: 0; 
+                    margin-bottom: $space;
+                }
+            }
+        }
+
+        //== form layout options
+        
+        // fit form option
+        &.m-form--fit {
+            .m-form__content,
+            .m-form__heading, 
+            .m-form__group {
+                padding-left: $space;
+                padding-right: $space;
+            }             
+        }
+
+        // form labels right aligned option
+        @include desktop {
+            .m-form__section.m-form__section--label-align-right,
+            &.m-form--label-align-right {
+                .m-form__group {
+                    > label {
+                        text-align: right;
+                    }
+                }
+            }
+        }      
+
+        // form labels right aligned option
+        @include tablet {
+            &.m-form--label-align-right-tablet {
+                .m-form__group {
+                    label {
+                        text-align: right;
+                    }
+                }
+            }
+        }        
+
+        &.m-form--group-seperator-dashed,
+        &.m-form--group-seperator {
+            .m-portlet__body {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .m-form__group {
+                padding-top: 25px;
+                padding-bottom: 25px;
+            }
+        }
+
+        // Validation state
+        .form-control-feedback {
+            margin-top: 0.2rem;
+            font-size: get-font-size(regular, '-');
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--form-skin() {
+    $skin: get-default-skin();
+
+    .m-form {
+        .form-control-label,
+        .col-form-label,
+    	.m-form__group > label {
+    		color: get-color($skin, regular, '+');
+    	}
+
+        .m-form__control-static {
+            color: get-color($skin, regular, '-');
+        }
+
+        &.m-form--group-seperator {
+            .m-form__group {
+                border-bottom: 1px solid get-color($skin, panel, '-'); 
+
+                &.m-form__group--last,
+                &:last-child {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+        &.m-form--group-seperator-dashed {
+            .m-form__group {
+                border-bottom: 1px dashed get-color($skin, panel); 
+
+                &.m-form__group--last,
+                &:last-child {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+    	.m-form__help {
+    		color: get-color($skin, regular, '--');
+    	}
+
+        .m-form__seperator {
+            border-top: 1px solid get-color($skin, panel); 
+
+            &.m-form__seperator--dashed {
+                border-top: 1px dashed get-color($skin, panel); 
+            }
+        }
+
+        .m-form__heading {
+            .m-form__heading-title {
+                color: get-color($skin, regular);
+            }
+
+            .m-form__heading-sub {
+                color: get-color($skin, regular, '-');
+            }
+
+            &.m-form__heading--bordered {
+                border-bottom: 1px solid get-color($skin, panel);
+            }
+
+            &.m-form__heading--dashed {
+                border-bottom: 1px dashed get-color($skin, panel);
+            }
+        }
+
+        .m-form__section {
+            color: get-color($skin, regular, '--');
+        }
+
+        .m-form__actions {
+            &.m-form__actions--line {
+        	   border-top: 1px solid get-color($skin, panel); 
+            }
+
+            &.m-form__actions--top {
+                &.m-form__actions--line {
+                    border-top: 0;
+                    border-bottom: 1px solid get-color($skin, panel);
+                }                
+            }
+
+            &.m-form__actions--solid {
+                background-color: get-color($skin, panel, '--');
+                border-color: get-color($skin, panel, '--');
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--form-validation-state($state, $color) {
+    .has-#{$state} {
+        label:not([class]),
+        label.col-form-label,
+        label.form-control-label {
+            color: $color;
+        }
+
+        .form-control-feedback {
+            color: $color;
+        }
+
+        .input-group-text,
+        .form-control {
+            border-color: array-get($m--forms, input, skins, light, default, border, default);
+        }
+
+        .form-control:focus {
+            border-color: array-get($m--forms, input, skins, light, default, border, focus);
+        }
+    }
+
+    .m-form.m-form--state {
+        .has-#{$state} { 
+            .input-group .input-group-text,
+            .input-group .btn.btn-secondary,
+            .form-control:focus,
+            .form-control {
+                border-color: $color;
+            }
+
+            .bootstrap-select.btn-group.btn.btn-secondary,
+            .input-group-btn > .btn.btn-secondary {
+                border-color: $color;
+
+                &:hover {
+                    border-color: $color;
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--form-base();
+
+//== Component Skin
+@include m-build-component--form-skin();
+
+//== Component States
+@include m-build-component--form-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--form-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--form-validation-state(danger, array-get($m--state-colors, danger, base));  

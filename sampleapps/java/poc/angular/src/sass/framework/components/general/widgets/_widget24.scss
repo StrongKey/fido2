@@ -1,0 +1,93 @@
+ //
+//** Total Profit Component
+//
+
+//== Component Base
+@mixin m-build-component--widget24-base() {
+    .m-widget24 {         
+          
+        // widjet item
+        .m-widget24__item {                  
+
+            .m-widget24__title {                
+                margin-left: 1.8rem;
+                margin-top: 3.21rem;
+                display: inline-block;
+                font-size: get-font-size(regular, '+');
+                font-weight: get-font-weight(boldest);
+            } 
+
+            .m-widget24__desc {                 
+                margin-left: 1.8rem; 
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(normal);           
+            }
+
+            .m-widget24__stats {                
+                float: right;
+                margin-right: 1.8rem;
+                margin-top: -1.43rem;
+                font-size: 1.75rem;
+                font-weight: get-font-weight(boldest);
+            }
+
+            .progress {
+                margin-top: 2.14rem;
+                margin-left: 1.8rem;
+                margin-right: 1.8rem;
+                margin-bottom: 0.5rem;
+                height: 0.5rem;                
+            }
+
+            .m-widget24__change {               
+                margin-left: 1.8rem;
+                display: inline-block;
+                margin-bottom: 2.86rem; 
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(normal); 
+            }
+
+            .m-widget24__number {                
+                float: right;
+                margin-right: 1.8rem;
+                display: inline-block;
+                margin-bottom: 2.86rem; 
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(normal);
+            }
+        }
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget24-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget24 {   
+
+        .m-widget24__item {
+
+            .m-widget24__title {
+                color: get-color($skin, regular);
+            }
+
+            .m-widget24__desc {
+                color: get-color($skin, regular, '----');
+            }
+
+            .m-widget24__change {
+                color: get-color($skin, regular, '----');
+            }
+
+            .m-widget24__number {
+                color: get-color($skin, regular, '----');
+            }
+        }        
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget24-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget24-skin();

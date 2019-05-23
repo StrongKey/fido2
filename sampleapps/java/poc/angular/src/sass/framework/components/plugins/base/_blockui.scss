@@ -1,0 +1,52 @@
+//
+//** Spinner Message Component
+//
+//
+
+//== Mixins
+@mixin m-build-component--blockui-base() {
+    // Spinner markup
+    .m-blockui {
+        @include rounded {
+            @include border-radius(array-get($m--border-radius, general));
+        }
+        display: table;
+        table-layout: fixed;
+
+        > span {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 8px 15px;                  
+            font-size: get-font-size(regular);
+            font-weight: get-font-weight(bold);
+
+            > .m-loader,
+            > .m-spinner {
+                margin-right: 10px;
+            }
+        }       
+    }
+}
+
+@mixin m-build-component--blockui-skin($skin) {
+    @include component-skin(m-blockui, $skin) {
+        background: get-color($skin, box);
+        @include shadow(get-shadow($skin, '-'));
+
+        &.m-blockui-no-shadow {
+            @include shadow(none);
+        }
+
+        > span {
+            color: get-color($skin, regular, '-');
+        }
+    }
+}
+
+//== Build
+
+@include m-build-component--blockui-base();
+
+@include m-build-component--blockui-skin(light);
+
+@include m-build-component--blockui-skin(dark);

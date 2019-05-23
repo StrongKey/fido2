@@ -1,0 +1,38 @@
+//
+//** Code Component
+//
+
+//== Component Base
+@mixin m-build-component--typography-type-base() {
+    .m-type {
+    	@include flexbox-inline();
+    	@include flexbox-align-items(center);
+    	@include flexbox-justify-content(center);
+        @inclide flexbox-grow(0);
+
+    	height: 40px;
+        width: 40px;
+        line-height: 0;
+
+        @include border-radius(100%);
+
+        > span {
+			line-height: 0;
+            font-weight: get-font-weight(boldest); 
+            font-size: 1.6rem;
+            text-transform: uppercase;
+        }
+
+        &.m-type--lg {
+        	height: 80px;
+        	width: 80px;
+
+        	> span {
+        		font-size: 3rem;
+        	}
+        }
+    }
+}
+
+//== Build Component Base
+@include m-build-component--typography-type-base();

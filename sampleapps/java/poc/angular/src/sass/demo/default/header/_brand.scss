@@ -1,0 +1,180 @@
+//
+//** Brand
+//
+
+@mixin m-build-brand-base($layout) {	
+	//== General Mode
+	.m-brand {
+		@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+		height: array-get($m-config-header, header, default, height, desktop);		
+		width: array-get($layout, self, width, default);	
+		padding: array-get($layout, self, padding, desktop); 
+		
+		//== Brand hidden mode
+		.m-brand--hidden & {
+			display: none;
+		}
+		
+		//== Brand logo
+		.m-brand__logo {
+			vertical-align: middle;
+			line-height: 0;
+
+			.m-brand__logo-wrapper {
+				display: inline-block;
+			}
+		}
+
+		//== Brand tool
+		.m-brand__tools {
+			line-height: 0;
+			vertical-align: middle;
+			text-align: right;
+
+			//== Toggler
+			@include  m-build--toggler(m-brand__toggler, array-get($layout, tools, toggler));  
+
+			.m-brand__toggler {
+				@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color));
+			}
+
+			//== Icon
+			.m-brand__icon {
+				display: inline-block;
+				line-height: 0;
+				vertical-align: middle;
+				cursor: pointer;
+
+				> i {
+					font-size: array-get($layout, tools, icon, font-size);
+					color: array-get($layout, tools, icon, color, default);
+				}
+
+				&:hover {
+					text-decoration: none;
+
+					> i {
+						color: array-get($layout, tools, icon, color, hover);
+					}
+				}
+			}
+		}	
+
+		//== Dark skin
+		&.m-brand--skin-dark {
+			background: array-get($layout, self, bg-color, dark);
+
+			//== Brand tool
+			.m-brand__tools {
+				.m-brand__toggler {
+					@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, dark));
+				}
+
+				.m-brand__icon {
+					> i {
+						color: array-get($layout, tools, icon, color, dark, default);
+					}
+
+					&:hover {
+						text-decoration: none;
+
+						> i {
+							color: array-get($layout, tools, icon, color, dark, hover);
+						}
+					}
+				}
+			}
+		}
+
+		//== Light skin
+		&.m-brand--skin-light {
+			background: array-get($layout, self, bg-color, light);
+
+			//== Brand tool
+			.m-brand__tools {
+				.m-brand__toggler {
+					@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, light));
+				}
+
+				.m-brand__icon {
+					> i {
+						color: array-get($layout, tools, icon, color, light, default);
+					}
+
+					&:hover {
+						text-decoration: none;
+
+						> i {
+							color: array-get($layout, tools, icon, color, light, hover);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//== Desktop Mode
+	@include desktop {
+		.m-brand {
+			.m-brand__logo,
+			.m-brand__tools {
+				@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				height: array-get($m-config-header, header, default, height, desktop) !important;			
+			}
+
+			//== Brand minimize mode
+			.m-brand--minimize & {
+				@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				width: array-get($layout, self, width, minimize); 
+				padding-left: 0;
+				padding-right: 0;
+
+				.m-brand__logo {
+					display: none !important;
+				}
+
+				.m-brand__tools {
+					text-align: center;
+				}
+			}	
+
+			.m-header--static.m-aside-left--fixed & {
+				position: fixed;
+				height: array-get($m-config-header, header, default, height, desktop) !important;
+				top: 0;
+				bottom: auto;			
+
+				.m-brand__tools,
+				.m-brand__logo {
+					height: array-get($m-config-header, header, default, height, desktop) !important;
+					@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				}
+			} 
+		}	
+	}
+
+	//== Table & Mobile Mode
+	@include tablet-and-mobile {
+		.m-brand {
+			width: 100%;
+			position: relative;
+			height: array-get($m-config-header, header, default, height, mobile) !important;
+			padding: array-get($layout, self, padding, mobile);
+			z-index: 2; 
+
+			.m-brand__tools {				
+				.m-brand__icon {
+					margin-left: array-get($layout, tools, self, space, mobile);
+
+					.flaticon-more {
+						position: relative;
+						top: 1px;
+					}
+				}
+			}
+		}
+	}
+}
+
+//== Build Brand Base
+@include m-build-brand-base( array-get($m-config-header, brand ) );

@@ -1,0 +1,1039 @@
+/*
+ * Mapplic - Custom Interactive Map Plugin by @sekler
+ * Version 4.0
+ * http://www.mapplic.com/
+ */
+
+.mapplic-element {
+	font-size: 0;
+	height: 420px;
+}
+
+.mapplic-element input,
+.mapplic-element button,
+.mapplic-element a:hover,
+.mapplic-element a:active,
+.mapplic-element a:focus {
+	outline: none;
+}
+
+/* Preloader & Error */
+.mapplic-element.mapplic-loading { background: url(images/loader.gif) no-repeat center; }
+.mapplic-element.mapplic-error { background: url(images/error-icon.png) no-repeat center; }
+
+.mapplic-element > * {
+	opacity: 1;
+	transition: opacity 0.6s;
+}
+
+.mapplic-element.mapplic-loading > * {
+	opacity: 0;
+}
+
+/* Map container */
+.mapplic-container {
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	width: 70%;
+	height: 100%;
+}
+
+.mapplic-map {
+	position: absolute;
+	left: 0;
+	top: 0;
+	overflow: visible !important;
+}
+
+/* Map layer */
+.mapplic-layer img {
+	width: 100%;
+}
+
+/* IE Fix */
+.mapplic-layer {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.mapplic-map .mapplic-map-image {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+/* IE Fix END */
+
+.mapplic-map.mapplic-zoomable .mapplic-map-image {
+	cursor: url(images/openhand.cur), default;
+}
+
+.mapplic-map.mapplic-zoomable.mapplic-dragging .mapplic-map-image {
+	cursor: url(images/closedhand.cur), move;
+}
+
+/* Pin types */
+.mapplic-pin {
+	background-image: url(images/pin.png);
+	background-size: 18px 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+	font-size: 0;
+	width: 18px;
+	height: 24px;
+	margin-top: -23px;
+	margin-left: -9px;
+	position: absolute;
+	-webkit-transition: background-color 0.2s, border-color 0.2s;
+	-moz-transition: background-color 0.2s, border-color 0.2s;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* New pin types */
+.mapplic-pin.pin-classic {
+	background-color: #f23543;
+	background-image: none;
+	border-color: #f23543;
+	border-radius: 10px;
+	line-height: 22px !important;
+	width: 20px;
+	height: 20px;
+	margin-top: -25px;
+	margin-left: -10px;
+}
+
+.mapplic-pin.pin-classic:before {
+	border-style: solid;
+	border-width: 9px 8px 0 8px;
+	border-color: inherit;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+	content: '';
+	display: block;
+	position: absolute;
+	top: 16px;
+	left: 2px;
+}
+
+.mapplic-pin.pin-marker {
+	background-color: #fdca2a;
+	background-image: none;
+	border-color: #fdca2a;
+	border-radius: 8px;
+	width: 16px;
+	height: 16px;
+	margin-top: -8px;
+	margin-left: -8px;
+}
+
+.mapplic-pin.pin-marker:before {
+	border-color: inherit;
+	border-style: solid;
+	border-width: 6px;
+	border-radius: 16px;
+	content: '';
+	display: block;
+	opacity: 0.4;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: -6px;
+	top: -6px;
+}
+
+.mapplic-pin.pin-disk {
+	background-color: white !important;
+	background-image: none;
+	border-color: #f19819;
+	border-radius: 8px;
+	color: #333 !important;
+	width: 16px;
+	height: 16px;
+	margin-top: -8px;
+	margin-left: -8px;
+}
+
+.mapplic-pin.pin-disk:before {
+	border-color: inherit;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 16px;
+	content: '';
+	display: block;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: -3px;
+	top: -3px;
+}
+
+.mapplic-pin.pin-ribbon {
+	background-color: #46b450;
+	background-image: none;
+	border-color: #46b450;
+	border-radius: 2px 2px 2px 0;
+	height: 16px;
+	min-width: 10px;
+	width: auto;
+	padding: 0 3px;
+	margin-top: -20px;
+	margin-left: -8px;
+}
+
+.mapplic-pin.pin-ribbon:after {
+	border-style: solid;
+	border-width: 0 8px 4px 0;
+	border-color: transparent rgba(0, 0, 0, 0.5) transparent transparent;
+	content: '';
+	display: block;
+	position: absolute;
+	top: 16px;
+	left: 0px;
+}
+
+.mapplic-pin.pin-ribbon:before {
+	border-style: solid;
+	border-width: 0 8px 4px 0;
+	border-color: inherit;
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+	content: '';
+	display: block;
+	position: absolute;
+	top: 16px;
+	left: 0px;
+}
+
+.mapplic-pin.pin-dot {
+	background-color: transparent !important;
+	background-image: none;
+	border-color: #29afa1;
+	color: #333 !important;
+	height: 16px;
+	min-width: 10px;
+	width: auto;
+	padding: 0 3px;
+	margin-left: 4px;
+	margin-top: -8px;
+}
+
+.mapplic-pin.pin-dot:before {
+	border-color: inherit;
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 12px;
+	content: '';
+	display: block;
+	width: 0px;
+	height: 0px;
+	position: absolute;
+	top: 5px;
+	left: -7px;
+}
+
+.mapplic-pin.orange { background-image: url(images/pin-orange.png); }
+.mapplic-pin.yellow { background-image: url(images/pin-yellow.png); }
+.mapplic-pin.green { background-image: url(images/pin-green.png); }
+.mapplic-pin.blue { background-image: url(images/pin-blue.png); }
+.mapplic-pin.purple { background-image: url(images/pin-purple.png); }
+
+.mapplic-pin.circular {
+	background-image: none;
+	background-color: #fb7575;
+	border-radius: 6px;
+	box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.1) inset;
+	width: 12px;
+	height: 12px;
+	margin-left: -6px;
+	margin-top: -6px;
+}
+
+.mapplic-pin.circle {
+	background: none !important;
+	border: 2px solid #fb7575;
+	width: 8px;
+	height: 8px;
+	margin-left: -6px;
+	margin-top: -6px;
+}
+
+.mapplic-pin.transparent {
+	background-image: none;
+	background-color: #795ecd;
+	border-radius: 10px;
+	width: 20px;
+	height: 20px;
+	margin-left: -10px;
+	margin-top: -10px;
+	opacity: 0.5 !important;
+}
+
+.mapplic-pin.pin-label {
+	color: #fff;
+	font-size: 9px;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	line-height: 16px;
+}
+
+.mapplic-pin.pin-label:visited {
+	color: #fff;
+}
+
+.mapplic-pin.pin-md {
+	border-radius: 50%;
+	margin-left: -10px;
+	margin-top: -10px;
+	line-height: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.mapplic-pin.pin-lg {
+	border-radius: 50%;
+	margin-left: -15px;
+	margin-top: -15px;
+	line-height: 30px;
+	width: 30px;
+	height: 30px;
+}
+
+.mapplic-pin.pin-xl {
+	border-radius: 50%;
+	margin-left: -20px;
+	margin-top: -20px;
+	line-height: 40px;
+	width: 40px;
+	height: 40px;
+}
+
+.mapplic-pin.pin-pulse:before {
+	content: '';
+	border: 2px solid #888;
+	border-radius: 30px;
+	height: inherit;
+	width: inherit;
+	top: -2px;
+	left: -2px;
+	position: absolute;
+	animation: pulsate 1.8s ease-out;
+	animation-iteration-count: infinite;
+	animation-delay: 1s;
+	opacity: 0;
+	box-sizing: content-box;
+}
+
+@-webkit-keyframes pulsate {
+	0% {-webkit-transform: scale(1, 1); opacity: 0.0;}
+	25% {opacity: 0.5; }
+	50% {-webkit-transform: scale(1.6, 1.6); opacity: 0.0;}
+}
+
+/* Minimap */
+.mapplic-minimap {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	position: absolute;
+	margin: 10px;
+	bottom: 0;
+	right: 0;
+	opacity: 0.5;
+	overflow: hidden;
+	-webkit-transition: opacity 0.6s;
+	-moz-transition: opacity 0.6s;
+	transition: opacity 0.6s;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.mapplic-minimap img {
+	width: 100%;
+}
+
+.mapplic-minimap-overlay {
+	background-color: rgba(0, 0, 0, 0.4);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.mapplic-minimap .mapplic-minimap-active {
+	position: absolute;
+	opacity: 1;
+	top: 0;
+	left: 0;
+}
+
+.mapplic-clip-transition {
+	-webkit-transition: clip 0.1s;
+	-moz-transition: clip 0.1s;
+	transition: clip 0.1s;
+}
+
+.mapplic-minimap-background {
+	width: 140px !important;
+	-webkit-filter: blur(2px);
+}
+
+/* Clear Button */
+.mapplic-clear-button {
+	background-color: #fff;
+	background-image: url(images/reset.png);
+	background-size: 16px 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid #eee;
+	border-bottom: 1px solid #ddd;
+	border-radius: 2px;
+	margin: 10px;
+	width: 28px;
+	height: 28px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.mapplic-clear-button:active {
+	background-color: #eee;
+}
+
+/* Zoom Buttons */
+.mapplic-zoom-buttons {
+	margin: 10px;
+	position: absolute;
+	left: 0;
+	bottom: 40px;
+}
+
+.mapplic-zoom-buttons a {
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid #eee;
+	border-bottom: 1px solid #ddd;
+	color: #fff !important;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+	line-height: 24px;
+	width: 28px;
+	height: 28px;
+}
+
+.mapplic-zoom-buttons a:active {
+	background-color: #f4f4f4;
+}
+
+.mapplic-zoom-buttons a.mapplic-disabled {
+	background-color: #eee;
+	cursor: default;
+}
+
+a.mapplic-zoomin-button {
+	background-image: url(images/plus.png);
+	background-size: 10px 10px;
+	border-radius: 2px 2px 0 0;
+}
+
+a.mapplic-zoomout-button {
+	background-image: url(images/minus.png);
+	background-size: 10px 10px;
+	border-radius: 0 0 2px 2px;
+	border-top: none;
+}
+
+/* Fullscreen */
+.mapplic-fullscreen {
+	background-color: rgba(255, 255, 255, 0.8);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100% !important;
+	z-index: 1000;
+}
+
+.mapplic-fullscreen-button {
+	background-color: #fff;
+	background-image: url(images/fullscreen.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid #eee;
+	border-bottom: 1px solid #ddd;
+	border-radius: 2px;
+	margin: 10px;
+	width: 28px;
+	height: 28px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.mapplic-fullscreen .mapplic-fullscreen-button {
+	background-image: url(images/fullscreen-exit.png);
+}
+
+.mapplic-fullscreen .mapplic-container {
+	width: 80%;
+}
+
+.mapplic-fullscreen .mapplic-sidebar {
+	width: 20%;
+}
+
+/* Levels */
+.mapplic-levels {
+	border-bottom: 1px solid #eee;
+	border-radius: 2px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 10px;
+	overflow: hidden;
+}
+
+.mapplic-levels > * {
+	display: block;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.mapplic-levels-select {
+	background-color: #fff;
+	border: none;
+	border-radius: 0;
+	color: #666;
+	margin: 0;
+	padding: 10px 6px;
+	margin-left: 20px;
+	font-size: 13px;
+	font-weight: 400;
+	outline: none;
+	-webkit-appearance: none;
+}
+
+.mapplic-levels a {
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 8px 4px;
+	cursor: pointer;
+	height: 50%;
+	width: 20px;
+	position: absolute;
+}
+
+.mapplic-levels a:active {
+	background-color: #f8f8f8;
+}
+
+.mapplic-levels .mapplic-levels-up {
+	background-image: url(images/arrow-up.png);
+}
+
+.mapplic-levels .mapplic-levels-down {
+	background-image: url(images/arrow-down.png);
+	bottom: 0;
+}
+
+.mapplic-levels a.mapplic-disabled {
+	background-color: #eee;
+	cursor: default;
+}
+
+/* Sidebar */
+.mapplic-sidebar {
+	width: 30%;
+	height: 100%;
+	float: left;
+	position: relative;
+}
+
+/* Search */
+.mapplic-search-form {
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #eee;
+	border-right: 1px solid #f4f4f4;
+	padding: 14px 12px;
+	margin: 0;
+	width: 100%;
+	position: absolute;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.mapplic-search-input {
+	background-image: url(images/viewer.png);
+	background-size: 17px 16px;
+	background-repeat: no-repeat;
+	background-position: 8px;
+	border: 2px solid #eee;
+	border-radius: 0;
+	font-size: 14px !important;
+	font-family: inherit;
+	line-height: 20px;
+	height: 38px;
+	margin: 0;
+	padding: 8px 32px;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	-webkit-transition: border-color 0.1s;
+	-moz-transition: border-color 0.1s;
+	transition: border-color 0.1s;
+}
+
+.mapplic-search-input::-ms-clear {display: none; width:0; height:0;}
+
+.mapplic-search-input:focus {
+	border-color: #6ed8dd;
+}
+
+.mapplic-search-clear {
+	background-image: url(images/cross.png);
+	background-size: 8px 8px;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-position: center;
+	border: none;
+	cursor: pointer;
+	display: none;
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	margin: 2px 0;
+	width: 34px;
+	height: 34px;
+}
+
+.mapplic-not-found {
+	color: #bbb;
+	display: none;
+	font-size: 13px;
+	padding: 0 30px;
+	position: absolute;
+	text-align: center;
+	top: 100px;
+}
+
+/* Sidebar list */
+.mapplic-list-container {
+	padding-top: 67px;
+	height: 100%;
+	overflow-y: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.mapplic-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	overflow-y: auto;
+	height: 100%;
+}
+
+.mapplic-list-container ol {
+	border-color: #eee;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.mapplic-list-container li {
+	border-color: inherit;
+	margin: 0 !important;
+}
+
+.mapplic-list-category > a {
+	background-color: #888;
+	box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.05) inset;
+	color: #fff !important;
+	display: block;
+	font-size: 14px;
+	line-height: 26px;
+	padding: 10px 12px;
+	text-decoration: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+}
+
+.mapplic-list-category ol {
+	border-bottom: 2px solid #eee !important;
+}
+
+.mapplic-list-thumbnail {
+	border-radius: 0px !important;
+	box-shadow: none !important;
+	float: left;
+	margin-right: 10px;
+	width: 50px;
+	max-height: 50px;
+}
+
+.mapplic-list-category > a .mapplic-list-count {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 2px;
+	float: right;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 20px;
+	margin-left: 10px;
+	margin-top: 4px;
+	padding: 0 6px;
+	text-align: center;
+	-webkit-transition: border-radius 0.2s;
+	-moz-transition: border-radius 0.2s;
+	transition: border-radius 0.2s;
+
+}
+
+.mapplic-list-location {
+	border-bottom: 1px solid #eee;
+	margin: 0 !important;
+}
+
+.mapplic-list-location > a {
+	background-color: #fff;
+	border-left: 1px solid transparent;
+	display: block;
+	font-size: 14px;
+	padding: 10px;
+	text-decoration: none;
+	-webkit-transition: border 0.1s;
+	-moz-transition: border 0.1s;
+	transition: border 0.1s;
+}
+
+.mapplic-list-location > a:after {
+	content: '';
+	display:block;
+	clear:both;
+}
+
+.mapplic-list-location > a:hover {
+	background-color: #f4fcfc;
+	border-left: 2px solid;
+	border-color: inherit;
+}
+
+.mapplic-list-location h4 {
+	color: #242424;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 18px;
+	margin: 4px 0;
+	clear: none;
+}
+
+.mapplic-list-location span {
+	color: #bbb;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+/* Tooltip */
+.mapplic-tooltip {
+	background-color: #fff;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+	display: none;
+	max-width: 300px;
+	min-width: 120px;
+	margin-top: -76px;
+	padding: 16px;
+	position: absolute;
+	-webkit-transition: margin 0.1s;
+	-moz-transition: margin 0.1s;
+	transition: margin 0.1s;
+}
+
+.mapplic-tooltip-title {
+	color: #333;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 18px;
+	margin: 0 12px 0 0 !important;
+}
+
+.mapplic-hovertip {
+	min-width: 30px;
+	padding: 6px 14px;
+	pointer-events: none;
+}
+
+.mapplic-hovertip .mapplic-tooltip-title {
+	margin: 0 !important;
+	font-size: 16px;
+	line-height: 24px;
+	text-align: center;
+}
+
+.mapplic-tooltip-content {
+	max-height: 160px;
+	margin-right: 10px;
+	overflow-y: auto;
+}
+
+.mapplic-tooltip p {
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.mapplic-tooltip-thumbnail {
+	border-radius: 50% !important;
+	float: left;
+	width: 48px;
+	height: 48px;
+	margin-right: 12px;
+}
+
+.mapplic-tooltip-description,
+.mapplic-tooltip p {
+	color: #aaa;
+	font-size: 13px;
+	line-height: 20px;
+}
+
+.mapplic-popup-link {
+	background-color: #6CB5F4;
+	border-radius: 0;
+	color: #fff !important;
+	float: right;
+	font-size: 14px;
+	line-height: 28px;
+	padding: 0 10px;
+	margin-top: 12px;
+	text-decoration: none;
+	-webkit-transition: background-color 0.2s;
+	-moz-transition: background-color 0.2s;
+	transition: background-color 0.2s;
+}
+
+.mapplic-popup-link:hover {
+	background-color: #888;
+}
+
+.mapplic-tooltip img {
+	max-width: 100%;
+}
+
+.mapplic-tooltip-close {
+	background-image: url(images/cross.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 8px 8px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	position: absolute;
+	right: 6px;
+	top: 6px;
+	padding: 8px;
+	width: 8px;
+	height: 8px;
+	opacity: 0.5;
+	-webkit-transition: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+}
+
+.mapplic-tooltip-close:hover {
+	opacity: 1.0;
+}
+
+.mapplic-tooltip-triangle {
+	border-color: #fff transparent transparent transparent;
+	border-style: solid;
+	border-width: 8px 7px 0 7px;
+	width: 0;
+	height: 0;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	margin-bottom: -8px;
+	margin-left: -7px;
+	-webkit-transition: left 0.1s;
+	-moz-transition: left 0.1s;
+	transition: left 0.1s;
+}
+
+.mapplic-bottom .mapplic-tooltip-triangle {
+	border-color: transparent transparent #fff transparent;
+	border-width: 0 7px 8px 7px;
+	top: 0;
+	margin-top: -8px;
+}
+
+/* Lightbox */
+.mapplic-lightbox-title {
+	color: #333;
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.mapplic-lightbox {
+	background-color: #fff;
+	position: relative;
+	padding: 20px;
+	width: auto;
+	max-width: 500px;
+	margin: 20px auto;
+}
+
+.mapplic-lightbox:after {
+	content: '';
+	display:block;
+	clear:both;
+}
+
+.mapplic-popup-image {
+	outline: none;
+}
+
+/* Lightbox animation */
+.mfp-fade.mfp-bg {
+	opacity: 0;
+	-webkit-transition: all 0.15s ease-out;
+	-moz-transition: all 0.15s ease-out;
+	transition: all 0.15s ease-out;
+}
+
+.mfp-fade.mfp-bg.mfp-ready { opacity: 0.8; }
+.mfp-fade.mfp-bg.mfp-removing { opacity: 0; }
+
+.mfp-fade.mfp-wrap .mfp-content {
+	opacity: 0;
+	-webkit-transition: all 0.15s ease-out;
+	-moz-transition: all 0.15s ease-out;
+	transition: all 0.15s ease-out;
+}
+
+.mfp-fade.mfp-wrap.mfp-ready .mfp-content { opacity: 1; }
+.mfp-fade.mfp-wrap.mfp-removing .mfp-content { opacity: 0; }
+
+/* Developer tools */
+.mapplic-coordinates {
+	background-color: rgba(255, 255, 255, 0.9);
+	color: #333;
+	position: absolute;
+	margin: 10px;
+	margin-left: -80px;
+	padding: 4px 6px;
+	font-size: 14px;
+	top: 0;
+	left: 50%;
+	pointer-events: none;
+}
+
+/* Responsive layout */
+@media all and (max-width: 667px) {
+	.mapplic-container,
+	.mapplic-sidebar {
+		width: 100% !important;
+	}
+
+	.mapplic-tooltip {
+		max-width: 240px;
+	}
+
+	.mapplic-minimap-background {
+		width: 100px !important;
+	}
+
+	.mapplic-element {
+		height: auto !important;
+	}
+
+	.mapplic-search-form {
+		border-right: none;
+	}
+}
+
+/* Retina */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+	.mapplic-search-clear,
+	.mapplic-tooltip-close {
+		background-image: url(images/cross@2x.png);
+	}
+
+	.mapplic-levels .mapplic-levels-up {
+		background-image: url(images/arrow-up@2x.png);
+	}
+
+	.mapplic-levels .mapplic-levels-down {
+		background-image: url(images/arrow-down@2x.png);
+	}
+
+	a.mapplic-zoomin-button {
+		background-image: url(images/plus@2x.png);
+	}
+
+	a.mapplic-zoomout-button {
+		background-image: url(images/minus@2x.png);
+	}
+
+	.mapplic-search-input {
+		background-image: url(images/viewer@2x.png);
+	}
+
+	.mapplic-pin { background-image: url(images/pin@2x.png); }
+	.mapplic-pin.orange { background-image: url(images/pin-orange@2x.png); }
+	.mapplic-pin.yellow { background-image: url(images/pin-yellow@2x.png); }
+	.mapplic-pin.green { background-image: url(images/pin-green@2x.png); }
+	.mapplic-pin.blue { background-image: url(images/pin-blue@2x.png); }
+	.mapplic-pin.purple { background-image: url(images/pin-purple@2x.png); }
+
+	.mapplic-clear-button {
+		background-image: url(images/reset@2x.png);
+	}
+}
+
+/* Map */
+.mapplic-element svg {
+	width: 100%;
+	height: 100%;
+}
+
+.mapplic-element svg a {
+	cursor: pointer;
+}
+
+.mapplic-clickable:not(g),
+g.mapplic-clickable > * {
+	cursor: pointer;
+	-webkit-transition: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+}
+
+.mapplic-map-image *[id^=nopointer] {
+	pointer-events: none;
+}
+
+[id^=landmarks] .mapplic-clickable {
+	cursor: pointer;
+}

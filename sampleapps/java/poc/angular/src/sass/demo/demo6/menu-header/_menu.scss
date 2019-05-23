@@ -1,0 +1,84 @@
+//
+//** Horizontal Menu
+// Build horizontal menu for desktop mode and aside/vertical menu for mobile mode
+
+//== Horizontal menu for desktop mode
+@include m-generate--menu-hor(array-get($m-config-menu-header, desktop));
+
+//== Vertical menu for mobile mode
+@include m-generate--menu-ver(array-get($m-config-menu-header, tablet-and-mobile));
+
+@include desktop {
+	.m-header-menu {
+		width: auto;
+		float:left;
+		margin: 0;
+
+		.m-menu__nav {
+			> .m-menu__item {
+				> .m-menu__link {
+					height: 38px;
+					padding: 8px 14px; 
+					border-radius: 40px;
+				}
+
+				&:first-child {
+					padding-left: 0;
+				}
+
+				&.m-menu__item--more {
+					> .m-menu__link {
+						text-align: center;
+						
+						> .m-menu__link-icon {
+							line-height: 0; 	 
+						}
+					}
+				}
+
+				&.m-menu__item--expanded,
+				&.m-menu__item--active {
+					> .m-menu__link {
+						> .m-menu__item-here {
+							@include m--build-smooth-arrow-vertical(top, large);
+							position: absolute;
+							top: 100%;
+							z-index: 1;
+							margin-top: (array-get($m-config-header, header, default, height, desktop)) / 2 - 19px;  
+							color: array-get($m-config-header, header, default, bg-color);
+							display: inline-block !important;
+						}
+					}
+				}	
+
+				&:hover,
+				&.m-menu__item--expanded,
+				&.m-menu__item--active {
+					> .m-menu__link {
+						background: $m-secondary-brand-hover-color; 
+					}
+				}
+			}
+		}
+	}
+}
+
+@include minimal-desktop {
+	.m-menu__nav {
+		> .m-menu__item {
+			> .m-menu__link {
+				padding-left: 4px 8px; 
+			}
+		}
+	}
+}
+
+@include tablet-and-mobile {
+	.m-header-menu {
+		display: none;
+
+		.m-aside-header-menu-mobile--offcanvas-on & {
+			display: block;
+		}
+	} 
+}

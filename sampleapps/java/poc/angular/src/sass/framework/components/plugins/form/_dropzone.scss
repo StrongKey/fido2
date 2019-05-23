@@ -1,0 +1,66 @@
+//
+//** Dropzone Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--dropzone-base() {
+    .m-dropzone {
+        @include rounded {
+            @include border-radius(array-get($m--border-radius, general));
+        }
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+
+        .m-dropzone__msg-title {
+        	margin: 0 0 5px 0;
+        	padding: 0;
+        	font-weight: get-font-weight(bold);
+        	font-size: get-font-size(regular, '+');
+        }
+
+        .m-dropzone__msg-desc {
+        	font-size: get-font-size(regular, '-');
+        }
+
+        .dz-preview {
+        	.dz-image {
+                @include rounded {
+        		  @include border-radius(6px);
+        	    }
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--dropzone-skin($skin) {
+    .m-dropzone {
+        border: 2px dashed get-color($skin, panel);
+
+        .m-dropzone__msg-title {
+        	color: get-color($skin, regular);
+        }
+
+        .m-dropzone__msg-desc {
+        	color: get-color($skin, regular, '-');
+        }
+    
+        //== State colors
+        @each $name, $color in $m--state-colors {
+            &.m-dropzone--#{$name} {
+                border-color: array-get($color, base);
+            } 
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--dropzone-base();
+
+//== Component Skin - Light
+@include m-build-component--dropzone-skin(light);

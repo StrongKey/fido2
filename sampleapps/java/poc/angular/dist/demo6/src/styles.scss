@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+$font-family-primary:     "Montserrat", sans-serif !default;
+
+$font-family-default:     "Montserrat", Arial, sans-serif !default;
+$m--font-families: (
+    regular: 'Montserrat',
+    heading: 'Montserrat'
+)!default;
+
+@import '~swagger-ui/dist/swagger-ui.css';
