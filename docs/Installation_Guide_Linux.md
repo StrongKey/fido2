@@ -8,16 +8,6 @@
     - Debian 9
     - Amazon Linux 2
     
- **OR**
- 
--  **Windows Server 2016 or Windows Server 2019**
-   Prior to running the installation script, install and configure OpenJDK with the steps below:
-    - Download AdoptOpenJDK from https://adoptopenjdk.net.
-    - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options, then download the latest release.
-    - Run the installer and ensure the following options are installed:
-        - *Set JAVA_HOME variable*
-        - *JavaSoft (Oracle) registry keys*
-        
 ----------------
 
 -  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
