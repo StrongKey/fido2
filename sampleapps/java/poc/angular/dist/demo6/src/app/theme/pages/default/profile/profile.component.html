@@ -42,13 +42,8 @@
 													REGISTER NEW KEY
 												</button> &nbsp;&nbsp;
 											</li>
-											<li class="nav-item m-tabs__item">
-												<button *ngIf="!isAllSelected" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="toggleKeySelect('select')">
-													SELECT ALL
-												</button> &nbsp;&nbsp;
-											</li>
 											<li>
-												<button *ngIf="isAllSelected" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="toggleKeySelect('deselect')">
+												<button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="deSelectAll()">
 													DESELECT ALL
 												</button> &nbsp;&nbsp;
 											</li>
