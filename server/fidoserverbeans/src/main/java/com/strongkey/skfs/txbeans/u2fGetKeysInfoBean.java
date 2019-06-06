@@ -50,8 +50,8 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
      * 888 888 888 .d88b. 888 888 .d88b. .d8888b 888 888 888888 .d88b. d8P Y8b
      * `Y8bd8P' d8P Y8b d88P" 888 888 888 d8P Y8b 88888888 X88K 88888888 888 888
      * 888 888 88888888 Y8b. .d8""8b. Y8b. Y88b. Y88b 888 Y88b. Y8b. "Y8888 888
-     * 888 "Y8888 "Y8888P "Y88888 "Y888 "Y8888      *
-     ************************************************************************
+     * 888 "Y8888 "Y8888P "Y88888 "Y888 "Y8888 *
+     * ***********************************************************************
      */
     /**
      * This method is responsible for fetching the user registered key from the
@@ -159,8 +159,10 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                         if (regSettings != null) {
                             byte[] regSettingsBytes = Base64.getUrlDecoder().decode(regSettings);
                             String regSettingsString = new String(regSettingsBytes, "UTF-8");
-                            String displayName = skfsCommon.getJsonObjectFromString(regSettingsString).getString("displayName");
-                            keyJsonBuilder.add("displayName", displayName);
+                            String displayName = skfsCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
+                            if (displayName != null) {
+                                keyJsonBuilder.add("displayName", displayName);
+                            }
                         }
                         keysArrayBuilder.add(keyJsonBuilder.build());
                     }
