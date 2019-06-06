@@ -98,10 +98,10 @@ export class ProfileComponent implements OnInit {
             }
             else {
               if(randomIDs.length === this.fidoKeys.length && this.fidoKeys.length > 1){
-                this._sharedService.setError("Cannot delete all keys. To delete all keys, you need to delete this account(use the Advanced Tab).");
+                this._sharedService.setError("Cannot delete all keys. To delete all keys, you need to delete this account(use the Advanced tab).");
               }
               else{
-                this._sharedService.setError("Please register a second key before deleting the last key. To delete this account, use the Advanced Tab.");
+                this._sharedService.setError("Please register a second key before deleting the last key. To delete this account, use the Advanced tab.");
               }
                 this.deSelectKeys();
             }
