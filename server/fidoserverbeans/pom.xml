@@ -69,6 +69,11 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.jvnet.staxex</groupId>
             <artifactId>stax-ex</artifactId>
             <version>1.7.7</version>
@@ -109,11 +114,27 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.strongauth</groupId>
+            <artifactId>replicationWAR</artifactId>
+            <version>4.0</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.strongauth</groupId>
+            <artifactId>replicationEJB</artifactId>
+            <version>4.0</version>
+            <type>ejb</type>
+            <scope>provided</scope>
+        </dependency>
+        
+<!--        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+            <version>2.9.9</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>fido2mds</artifactId>

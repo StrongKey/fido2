@@ -7,8 +7,8 @@
 
 package com.strongkey.appliance.utilities;
 
-import com.strongkey.appliance.entitybeans.Domains;
 import com.strongkey.appliance.entitybeans.Servers;
+import com.strongkey.appliance.entitybeans.Domains;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Set;
@@ -47,7 +47,7 @@ public class applianceMaps {
         while (st.hasMoreTokens()) {
             disabledDomains.add(Long.parseLong(st.nextToken()));
         }
-        strongkeyLogger.logp(applianceConstants.KA_LOGGER, Level.WARNING, "common", "init", "SKL-MSG-1053", "Following encryption domains are disabled for network webservices: " + disabledDomains.toString());
+        strongkeyLogger.logp(applianceConstants.KA_LOGGER, Level.WARNING, "common", "init", "APPL-MSG-1000", "Following encryption domains are disabled for network webservices: " + disabledDomains.toString());
         
         SECRANDOM_ALG = applianceCommon.getApplianceConfigurationProperty("appliance.cfg.property.prngalgorithm");
     }
