@@ -9,7 +9,7 @@ import { DefaultUrlHandlingStrategy } from "@angular/router/src/url_handling_str
 
 @Injectable()
 export class RestService {
-    private pocURL = ConstantsService.baseURL + ":8443/poc/fido2";
+    private pocURL = ConstantsService.baseURL + ":8181/poc/fido2";
     private fidoHeaders = new Headers({ 'Content-Type': 'application/json' });
     constructor(private http: Http, private _router: Router, private sharedService: SharedService) {
         this.fidoHeaders.append('Cache-Control', 'no-cache, no-store, must-revalidate');

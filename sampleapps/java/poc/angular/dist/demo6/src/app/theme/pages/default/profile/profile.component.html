@@ -38,13 +38,8 @@
 									<div class="m-portlet__head-title">
 										<ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
 											<li class="nav-item m-tabs__item">
-												<button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="addKey()">
+												<button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" data-toggle="modal" data-target="#newKeyModal" >
 													REGISTER NEW KEY
-												</button> &nbsp;&nbsp;
-											</li>
-											<li>
-												<button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="deSelectAll()">
-													DESELECT ALL
 												</button> &nbsp;&nbsp;
 											</li>
 											<li class="nav-item m-tabs__item">
@@ -64,6 +59,9 @@
 												SELECT
 											</th>
 											<th>
+												DISPLAY NAME
+											</th>
+											<th>
 												DATE REGISTERED
 											</th>
 											<th>
@@ -81,6 +79,7 @@
 													</label>
 												</div>
 											</td>
+											<td>{{ key.displayName }}</td>
 											<td>{{ key.createDate | date:'medium' }}</td>
 											<td *ngIf="key.modifyDate != 0">{{ key.modifyDate | date:'medium'}}</td>
 											<td *ngIf="key.modifyDate == 0">{{ 'never' }}</td>
@@ -126,6 +125,36 @@
 										</div>
 									</div>
 								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="newKeyModal" tabindex="-1" role="dialog" aria-labelledby="newKeyModalLabel" aria-hidden="true" data-backdrop="false">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h2 class="modal-title" style="font-weight: bold;">Register New Key</h2>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeNewKeyModal>
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								You are trying to add additional keys to the existing keys.
+								<br>
+								<br>
+								<div class="form-group m-form__group row">
+									<label class="col-sm-4 col-form-label" style="font-weight: bold;">
+										Display Name
+									</label>
+									<div class="col-sm-8">
+										<input class="form-control m-input" type="text" name="displayname" [(ngModel)]="newDisplayName" required>
+									</div>
+								</div>
+								<br>
+								<div class="form-group m-form__group row">
+									<div class="col-sm-8"></div>
+									<button class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="addKey()">Add Key</button>
+								</div>
 							</div>
 						</div>
 					</div>
