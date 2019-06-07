@@ -32,7 +32,7 @@
     sudo apt install wget
      ```
 
-3.  **Download** the binary distribution file [fido2server-v0.9-dist.tgz](../fido2server-v0.9-dist.tgz).
+3.  **Download** the binary distribution file [fido2server-v0.9-dist.tgz](https://github.com/StrongKey/fido2/raw/master/fido2server-v0.9-dist.tgz).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/master/fido2server-v0.9-dist.tgz
