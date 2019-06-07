@@ -40,7 +40,7 @@ $GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool
 $GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.min-thread-pool-size=10
 
 # Give application server permission to read configuration file
-chown -R strongkey:strongkey $STRONGKEY_HOME/webauthntutorial
+chown -R strongkey:strongkey $STRONGKEY_HOME/poc
 
 # Deploy sample application
 echo "Deploying StrongKey FidoServer ..."

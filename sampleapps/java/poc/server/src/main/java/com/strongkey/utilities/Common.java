@@ -23,9 +23,9 @@ public class Common {
             return jsonReader.readObject();
         }
         catch(JsonParsingException ex){
-            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "verifyJson",
-                    "WEBAUTHN-ERR-5001", ex.getLocalizedMessage());
-            throw new WebServiceException(WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-ERR-5001"));
+            POCLogger.logp(Level.SEVERE, CLASSNAME, "verifyJson",
+                    "POC-ERR-5001", ex.getLocalizedMessage());
+            throw new WebServiceException(POCLogger.getMessageProperty("POC-ERR-5001"));
         }
     }
 }

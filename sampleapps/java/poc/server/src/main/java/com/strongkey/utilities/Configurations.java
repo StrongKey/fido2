@@ -18,7 +18,7 @@ import java.util.logging.Level;
 // Load configurations from property files
 public class Configurations {
     
-    private static final ResourceBundle DEFAULTCONFIGS = ResourceBundle.getBundle("resources.webauthntutorial-configuration");
+    private static final ResourceBundle DEFAULTCONFIGS = ResourceBundle.getBundle("resources.poc-configuration");
     private static ResourceBundle customConfigs = null;
     private static final String CLASSNAME = Configurations.class.getName();
     
@@ -26,7 +26,7 @@ public class Configurations {
     static{
         try {
             logConfigurations(DEFAULTCONFIGS);
-            File customConfigFile = new File(DEFAULTCONFIGS.getString("webauthntutorial.cfg.property.configlocation"));
+            File customConfigFile = new File(DEFAULTCONFIGS.getString("poc.cfg.property.configlocation"));
             if(customConfigFile.exists() && customConfigFile.isFile()){
                 customConfigs = new PropertyResourceBundle(new FileInputStream(customConfigFile));
                 logConfigurations(customConfigs);
@@ -64,6 +64,6 @@ public class Configurations {
             }
         }
         
-        WebauthnTutorialLogger.logp(Level.FINE, CLASSNAME, "logConfigurations", "WEBAUTHN-MSG-1000", configString.toString());
+        POCLogger.logp(Level.FINE, CLASSNAME, "logConfigurations", "POC-MSG-1000", configString.toString());
     }
 }

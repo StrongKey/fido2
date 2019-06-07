@@ -30,21 +30,21 @@ public class EmailService {
     
     @PostConstruct
     private void init(){
-        String mailhostType = Configurations.getConfigurationProperty("webauthntutorial.cfg.property.mailhost.type");
+        String mailhostType = Configurations.getConfigurationProperty("poc.cfg.property.mailhost.type");
         
         //Set mail configurations
         Properties properties = System.getProperties();
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.host", 
-                Configurations.getConfigurationProperty("webauthntutorial.cfg.property.mailhost"));
+                Configurations.getConfigurationProperty("poc.cfg.property.mailhost"));
         properties.setProperty("mail.smtp.port", 
-                Configurations.getConfigurationProperty("webauthntutorial.cfg.property.mail.smtp.port"));
+                Configurations.getConfigurationProperty("poc.cfg.property.mail.smtp.port"));
         properties.setProperty("mail.smtp.from", 
-                Configurations.getConfigurationProperty("webauthntutorial.cfg.property.smtp.from"));
+                Configurations.getConfigurationProperty("poc.cfg.property.smtp.from"));
         properties.setProperty("mail.smtp.auth",  String.valueOf(!mailhostType.equalsIgnoreCase("SendMail")));
         Authenticator auth = new PasswordAuthenticator(
-                Configurations.getConfigurationProperty("webauthntutorial.cfg.property.smtp.auth.user"),
-                Configurations.getConfigurationProperty("webauthntutorial.cfg.property.smtp.auth.password"));
+                Configurations.getConfigurationProperty("poc.cfg.property.smtp.auth.user"),
+                Configurations.getConfigurationProperty("poc.cfg.property.smtp.auth.password"));
         
         //TLS
         if(mailhostType.equalsIgnoreCase("StartTLS")){
@@ -65,12 +65,12 @@ public class EmailService {
         try{
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(
-                    Configurations.getConfigurationProperty("webauthntutorial.cfg.property.smtp.from"),
-                    Configurations.getConfigurationProperty("webauthntutorial.cfg.property.smtp.fromName")));
+                    Configurations.getConfigurationProperty("poc.cfg.property.smtp.from"),
+                    Configurations.getConfigurationProperty("poc.cfg.property.smtp.fromName")));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(subjectline);
             
-            if(Configurations.getConfigurationProperty("webauthntutorial.cfg.property.email.type").equalsIgnoreCase("HTML")){
+            if(Configurations.getConfigurationProperty("poc.cfg.property.email.type").equalsIgnoreCase("HTML")){
                 message.setContent(content, "text/html; charset=utf-8");
             }
             else{
@@ -80,7 +80,7 @@ public class EmailService {
             Transport.send(message);
         } catch (MessagingException ex) {
             ex.printStackTrace();
-            WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "callSKFSRestApi", "WEBAUTHN-ERR-5001", ex.getLocalizedMessage());
+            POCLogger.logp(Level.SEVERE, CLASSNAME, "callSKFSRestApi", "POC-ERR-5001", ex.getLocalizedMessage());
         }
     }
     
