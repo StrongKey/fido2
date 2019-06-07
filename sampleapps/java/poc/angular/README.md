@@ -30,8 +30,8 @@ cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
 5. Optional: You can modify the background image and the logo image.
 
 ```
-cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/bg/background.jpg
-cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/logo/logo.png
+cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
+cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
 ```
 6. The application is deployed in the docroot and can be accessed.
 
