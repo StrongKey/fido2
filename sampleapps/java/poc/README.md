@@ -24,6 +24,10 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
     * Complete Steps 1-5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) 
     * Edit the *install-skfs.sh* script in a text editor; on the line "INSTALL_FIDO=Y" change the value of "Y" to "N"
     * Run the script *install-skfs.sh*
+    ```sh
+     sudo ./install-skfs.sh
+    ```
+   
 
 2. Create the following directories to configure the WebAuthn servlet home folder.
 
