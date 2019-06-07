@@ -1,4 +1,4 @@
-# POC Java Sample application
+# Proof Of Concept (POC) Java application
 This project is a Relying Party (RP) web application written in JavaScript and Java to work with StrongKey's [FIDO Certified FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2).
 
 Web-application developers, worldwide, are going to face multiple challenges in the near future: having to learn about FIDO2, trying to program in FIDO2, demonstrate to management what FIDO2 can do for their company and acquire budgets and resources to transition to FIDO2 strong-authentication.  Unless you've spent many weeks to many months understanding how FIDO2 works, addressing all these challenges remains daunting.
@@ -28,31 +28,31 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
 2. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
-    sudo mkdir -p /usr/local/strongkey/webauthntutorial/etc
+    sudo mkdir -p /usr/local/strongkey/poc/etc
     ```
 
 3. Create a configuration file for the Relying Party web application.
 
     ```sh
-    sudo vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
+    sudo vi /usr/local/strongkey/poc/etc/poc.properties
     ```
 4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
    ```
-   webauthntutorial.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
-   webauthntutorial.cfg.property.mailhost.type=**[SendMail or SSL or StartTLS]**
-   webauthntutorial.cfg.property.mailhost=**[localhost or hostname of mailhost]**
-   webauthntutorial.cfg.property.mail.smtp.port=**[25 (SendMail) or mail server's port]**
-   webauthntutorial.cfg.property.smtp.from=**[local-part of email address]**
-   webauthntutorial.cfg.property.smtp.fromName=**[Human readable name associated with email]**
-   webauthntutorial.cfg.property.smtp.auth.user=**[Username used to login to mail server]**
-   webauthntutorial.cfg.property.smtp.auth.password=**[Password used to login to mail server]**
-   webauthntutorial.cfg.property.email.subject=Verify your email address
-   webauthntutorial.cfg.property.email.type=HTML
+   poc.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
+   poc.cfg.property.mailhost.type=**[SendMail or SSL or StartTLS]**
+   poc.cfg.property.mailhost=**[localhost or hostname of mailhost]**
+   poc.cfg.property.mail.smtp.port=**[25 (SendMail) or mail server's port]**
+   poc.cfg.property.smtp.from=**[local-part of email address]**
+   poc.cfg.property.smtp.fromName=**[Human readable name associated with email]**
+   poc.cfg.property.smtp.auth.user=**[Username used to login to mail server]**
+   poc.cfg.property.smtp.auth.password=**[Password used to login to mail server]**
+   poc.cfg.property.email.subject=Verify your email address
+   poc.cfg.property.email.type=HTML
    ```
    Save and exit
 
-5. Download the Relying Party web application distribution [pocserver-v0.9-dist.tgz](./server/pocserver-v0.9-dist.tgz).
+5. Download the Relying Party web application distribution [pocserver-v0.9-dist.tgz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz
@@ -73,13 +73,46 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
 8. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
-    curl -k https://localhost:8181/pocserver/fido2/application.wadl
+    curl -k https://localhost:8181/poc/fido2/application.wadl
     ```
+At this point, we have the POC server installed and will continue to install the frontend angular application.
 
+9. Switch to (or login as) the strongkey user. The default password for the strongkey user is ShaZam123.
+```
+su - strongkey
+```
+
+10. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz).
+```
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
+```
+
+11. Extract the downloaded file
+
+```
+tar xvzf poc-ui-dist.tar.gz
+```
+12. Copy all the files to the payara docroot.
+
+```
+cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
+```
+13. Optional: You can modify the background image and the logo image.
+
+```
+cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/bg/background.jpg
+cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/logo/logo.png
+```
+14. The application is deployed in the docroot and can be accessed.
+
+```
+https://<FQDN>:8181/
+```
 
 ## Removal
 
 To uninstall the RP sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://github.com/StrongKey/fido2/blob/master/docs/Installation_Guide_Linux.md#removal). Removing the StrongKey FIDO Server also removes the sample RP web application and sample WebAuthn client.
+If this POC was installed on top of the FIDO server, the clean up script will erase the FIDO server as well. If this was a standalone install, the cleanup script will only remove the POC application.
 
 ## Contributing to the Sample Relying Party Web Application 
 
