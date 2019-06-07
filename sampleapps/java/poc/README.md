@@ -1,19 +1,16 @@
 # POC Java Sample application
-This project is a Relying Party (RP) web application written in Java to work with StrongKey's [FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2).
+This project is a Relying Party (RP) web application written in JavaScript and Java to work with StrongKey's [FIDO Certified FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2).
 
-The goals of this project are to demonstrate what a production level FIDO2 authentication deployment might looks like and to demonstrate StrongKey's APIs for managing FIDO2 keys. It is meant to serve as a reference implementation of a project that leverages StrongKey's FIDO2 Server to enable FIDO2 authentication. **If you are an application developer looking to FIDO2-enable an application, this code uses examples of the FIDO2 API calls.**
+Web-application developers, worldwide, are going to face multiple challenges in the near future: having to learn about FIDO2, trying to program in FIDO2, demonstrate to management what FIDO2 can do for their company and acquire budgets and resources to transition to FIDO2 strong-authentication.  Unless you've spent many weeks to many months understanding how FIDO2 works, addressing all these challenges remains daunting.
 
-The cybersecurity term, "Relying Party," originating from the jurisprudential term, was intended to represent legal entities that have a standing within a court of law where disputes related to digital signatures and non-repudiation could be argued; *a web application has no legal standing in court, but its owner does*. For additional information on WebAuthn Relying Parties, visit the technical specification:
+StrongKey has released this project to the open-source community to address all these challenges.
 
-- [Definition of WebAuthn Relying Party](https://www.w3.org/TR/webauthn/#webauthn-relying-party)
-- [Complete WebAuthn specification](https://www.w3.org/TR/webauthn)
-- [A useful diagram of WebAuthn functional flow](https://www.w3.org/TR/webauthn/#api)
+- First, it allows you to setup a FIDO2-enabled single-page web-application that can run unmodified and demonstrate FIDO2 registration, authentication and some simple FIDO2 key-management on the client side.
+- Second, it allows you to substitute the stock graphics and logo in this web-applications with your own company's graphics and logo without having to do any programming - you just have to replace the graphic image files and reload the application.  This allows you to demonstrate to your peers and management what FIDO2 can do for the company, and how the user-experience (UX) might look in its most basic form.  
+- Third, it allows you to learn how FIDO2 works because you have all the code available to you here in a modern web-application framework.
+- Fourth, it allows you to use the FIDO Certified, open-source FIDO2 server with your web-application without having to figure out what the deployment issues are going to look like - you will have already deployed this FIDO2 server in your environment to get this proof-of-concept web-application working.
 
-For more information on the originating jargon and related terms, visit the Internet Engineering Task Force (IETF) Request for Comments (RFC):
-
-- The definition of Relying Party is in the [second paragraph of 1.1. Background](https://tools.ietf.org/html/rfc3647#section-1.1)
-
-Follow the instructions below to install this sample.
+While this web-application can show you how to use W3C's WebAuthn (a subset of the FIDO2 specification) JavaScript, it is also intended to demonstrate how to use FIDO2 protocols with StrongKey's FIDO2 Server to enable strong-authentication.  Follow the instructions below to install this sample.
 
 ## Prerequisites
 
@@ -87,6 +84,18 @@ To uninstall the RP sample web application, follow the uninstall instructions in
 ## Contributing to the Sample Relying Party Web Application 
 
 If you would like to contribute to the sample Relying Party web application project, please read [CONTRIBUTING.md](https://github.com/StrongKey/fido2/blob/master/CONTRIBUTING.md), then sign and submit the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
+
+## A note on "Relying Party"
+
+The cybersecurity term, "Relying Party," originating from the jurisprudential term, was intended to represent legal entities that have a standing within a court of law where disputes related to digital signatures and non-repudiation could be argued; *a web application has no legal standing in court, but its owner does*. For additional information on WebAuthn Relying Parties, visit the technical specification:
+
+- [Definition of WebAuthn Relying Party](https://www.w3.org/TR/webauthn/#webauthn-relying-party)
+- [Complete WebAuthn specification](https://www.w3.org/TR/webauthn)
+- [A useful diagram of WebAuthn functional flow](https://www.w3.org/TR/webauthn/#api)
+
+For more information on the originating jargon and related terms, visit the Internet Engineering Task Force (IETF) Request for Comments (RFC):
+
+- The definition of Relying Party is in the [second paragraph of 1.1. Background](https://tools.ietf.org/html/rfc3647#section-1.1)
 
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](../../../LICENSE).

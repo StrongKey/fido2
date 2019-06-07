@@ -10,7 +10,8 @@
 			<div class="m-login__signin">
 				<div class="m-login__head">
 					<h3 class="m-login__title" style="color: #004054">
-						<b>Authentication</b>
+						<b *ngIf="!isRegister">Authentication</b>
+						<b *ngIf="!!isRegister">Registration</b>
             <p>Please choose one of the following approved authentication keys.</p>
 						<div class = "auth_icons_grid">
     					<img  style="height: 15%; width: 15%; padding:5px;" src="./assets/app/media/img//icons/wifi_key.png">

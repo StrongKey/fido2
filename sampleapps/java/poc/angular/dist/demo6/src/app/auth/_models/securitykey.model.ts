@@ -4,6 +4,7 @@ export class SecurityKey {
         public createLocation?: string,
         public fidoProtocol?: string,
         public fidoVersion?: string,
+        public displayName?: string,
         public lastusedLocation?: string,
         public modifyDate?: number,
         public randomid?: string,
