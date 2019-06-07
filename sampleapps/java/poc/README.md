@@ -1,4 +1,4 @@
-# POC Java Sample application
+# Proof Of Concept (POC) Java application
 This project is a Relying Party (RP) web application written in JavaScript and Java to work with StrongKey's [FIDO Certified FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2).
 
 Web-application developers, worldwide, are going to face multiple challenges in the near future: having to learn about FIDO2, trying to program in FIDO2, demonstrate to management what FIDO2 can do for their company and acquire budgets and resources to transition to FIDO2 strong-authentication.  Unless you've spent many weeks to many months understanding how FIDO2 works, addressing all these challenges remains daunting.
