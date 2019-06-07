@@ -76,7 +76,7 @@
     curl -k https://localhost:8181/api/application.wadl
     ```
 
-8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic) or a [JAVA Proof Of Concept (POC) application] (https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc) which also involves user registration using emails. 
+8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic) or a [JAVA Proof Of Concept (POC) application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc) which also involves user registration using emails. 
 
 __NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the trustore are located under "/usr/local/strongkey/skfs/keystores" directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
     
