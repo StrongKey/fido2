@@ -1,0 +1,177 @@
+//
+//** Aside Left
+//
+
+@mixin m-build-aside-left-base($layout) {
+	//== Base markup
+	.m-aside-left {
+		@include transition(array-get($layout, self, minimize, transition));
+		width: array-get($layout, self, default, width);	
+
+		&.m-aside-left--skin-dark {
+			background-color: array-get($layout, self, default, bg-color, dark); 		
+		}
+		
+		&.m-aside-left--skin-light {
+			background-color: array-get($layout, self, default, bg-color, light); 		
+		}
+	}
+
+	//== Default Offcanvas Mode
+	.m-aside-left.m-aside-left-offcanvas-default {
+		.m-aside-left {
+			top: array-get($m-config-header, header, layout, self, default, height, desktop) !important;		
+		}
+
+		.m-body {
+			padding-left: 0 !important;
+		}
+	}
+
+	//== Hide Mode
+	.m-aside-left--hide {
+		.m-aside-left {
+			width: 0;
+			overflow: hidden; 
+		}
+
+		.m-body {
+			padding-left: 0 !important;
+		}
+	}
+
+	@include desktop {		
+		//== Minimize
+		.m-aside-left--minimize {
+			.m-aside-left {
+				width: array-get($layout, self, minimize, width);
+				transition: array-get($layout, self, minimize, transition);
+			}
+		}
+		
+		//== Fixed
+		.m-aside-left--fixed {
+			// aside left
+			.m-aside-left {
+				top: 0;
+				bottom:0;
+				position:fixed;
+				height: auto !important;
+				left: 0;
+				z-index: array-get($layout, self, fixed, zindex);
+				@include fix-fixed-position-lags();		
+
+				//== Fixed aside custom scroller
+				&.m-aside-left--skin-dark {
+					.ps {
+						@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, dark) );
+					}
+				}
+
+				&.m-aside-left--skin-light {
+					.ps {
+						@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, light) );
+					}
+				}								
+			}
+
+			&.m-page--wide {
+				.m-aside-left {
+					left: auto;
+				}
+			}
+
+			// fixed header
+			&.m-header--static,
+			&.m-header--fixed {
+				.m-aside-left {
+					top: array-get($m-config-header, header, default, height, desktop); 
+				}
+			}
+
+			// fixed and hidable header's hidden mode
+			&.m-header--fixed.m-header--fixed-hidable.m-header--hide {
+				.m-aside-left {
+					@include transition(array-get($m-config-header, header, fixed, hidable, transition-hide));
+					top: array-get($m-config-header, header, fixed, minimize, height, desktop);
+				}
+			}
+
+			// fixed and hidable header's shown mode
+			&.m-header--fixed.m-header--fixed-hidable.m-header--show {
+				.m-aside-left {
+					@include transition(array-get($m-config-header, header, fixed, hidable, transition-show));
+					top: array-get($m-config-header, header, fixed, minimize, height, desktop);
+				}
+			}
+
+			// body on fixed aside mode
+			.m-body {
+				@include transition(array-get($layout, self, minimize, transition));
+				padding-left: array-get($layout, self, default, width);
+			}
+
+			// wide layout mode
+			&.m-page--wide.m-aside-left--fixed {
+				.m-body {
+					padding-left: 0;
+				}
+			}
+
+			&.m-aside-left--minimize {
+				.m-body {
+					@include transition(array-get($layout, self, minimize, transition));
+					padding-left: array-get($layout, self, minimize, width);
+				} 
+			}
+
+			// boxed layout
+			&.m-page--boxed {
+				.m-aside-left {
+					left: auto;
+					margin-left: -(array-get($layout, self, default, width));
+				}
+
+				&.m-aside-left--minimize {
+					.m-aside-left {
+						margin-left: -($m-aside-left-width-minimize);
+					}
+				}
+			}
+		}	
+
+		//== Fixed and minimized aside hover
+		.m-aside-left--fixed.m-aside-left--minimize-hover {
+			transition: array-get($layout, self, minimize, transition);
+
+			.m-aside-left {
+				width: array-get($layout, self, default, width);
+				transition: array-get($layout, self, minimize, transition);
+			}
+
+			.m-body {
+				transition: array-get($layout, self, minimize, transition);
+				padding-left: array-get($layout, self, minimize, width);
+			}
+		}	
+	}
+
+	@include tablet-and-mobile {
+		.m-aside-left.m-aside-left-offcanvas-default {
+			.m-aside-left {
+				top: 0 !important;
+			}		
+		}
+
+		.m-aside-left {
+			padding-top: 10px;
+		}
+	}
+}
+
+//== Build Aside Left Base
+@include m-build-aside-left-base( array-get($m-config-aside, aside-left) );
+
+//== Build Aside Left Offcanvas
+@include m-generate-component--offcanvas(m-aside-left, tablet-and-mobile, array-get($m-config-aside, aside-left, self, offcanvas, tablet-and-mobile) ); 
+//@include m-generate-component--offcanvas(m-aside-left--offcanvas-default, default, array-get($m-config-aside, aside-left, self, offcanvas, default) );

@@ -1,0 +1,144 @@
+//
+//** Widget 28 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget28-base() {
+    .m-widget28 {       
+        .m-widget28__pic {
+            position: relative; 
+            min-height: 286px;        
+        }
+        .m-widget28__container {                
+            width: 100%;                         
+
+            .m-widget28__nav-items {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                border-spacing: 1.2rem;
+                margin-top: -8rem;
+                position: absolute;
+                left: 50%;                     
+                transform: translate(-50%, -50%);
+                padding: 0 1rem;
+
+
+                .m-widget28__nav-item {
+                    display: table-cell;                       
+
+                    > a {
+                        text-align: center;                            
+                        padding: 1rem 0 1rem 0;
+
+                        > span {
+                            display: block;                                
+
+                            > i {
+                                font-size: 2.2rem; 
+                                margin-right: 0; 
+                                padding-bottom: 1rem;
+                                padding-top: 0.4rem;                                      
+                            }
+
+                            &:last-child {
+                                font-size: get-font-size(regular,  '--'); 
+                            }  
+                        }                            
+                    }
+                }
+            }
+
+            .m-widget28__tab {
+                margin-top: 2rem;
+
+                .m-widget28__tab-container {                    
+                    .m-widget28__tab-items {                    
+                        .m-widget28__tab-item {
+                            margin-top: 1.2rem;                            
+
+                            > span {
+                                display: block;
+
+                                &:first-child {
+                                    font-size: get-font-size(regular,  '-');  
+                                    font-weight: get-font-weight(bolder);                                     
+                                }
+                                
+                                &:last-child {
+                                    font-size: get-font-size(regular, '+');
+                                    font-weight: get-font-weight(boldest);
+                                    margin-bottom: 1rem;    
+                                }
+                            }
+
+                            &:first-child {
+                                margin-top: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }                
+    }      
+}
+
+//== Component Skin
+@mixin m-build-component--widget28-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget28 {                  
+        .m-widget28__container {
+            .m-widget28__nav-items {
+                .m-widget28__nav-item {
+                    > a {
+                        color: get-color($skin, regular, '-----');
+                        border: 1px solid get-color($skin, panel, '+++++');
+                        color: #fff;
+
+                        &.active {             
+                            background-color: #456ADC;                                                              
+                        } 
+                    }    
+                }
+            }
+
+            .m-widget28__tab {
+                .m-widget28__tab-container {
+                    .m-widget28__tab-items {
+                        .m-widget28__tab-item {
+                            > span {
+
+                                &:first-child {
+                                    color: get-color($skin, regular, '-----');     
+                                }
+
+                                &:last-child {
+                                    color: get-color($skin, regular, '--');       
+                                }
+                            }
+
+                            border-bottom: 1px solid get-color($skin, panel);
+
+                            &:last-child {
+                                border-bottom: none; 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .m-widget28__pic {             
+            background-color: #5075E4;              
+        }                               
+    }
+} 
+
+//== Build Component Base
+@include m-build-component--widget28-base();
+
+//== Build Component Skin
+@include m-build-component--widget28-skin();
+
+ 

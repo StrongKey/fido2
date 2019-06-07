@@ -1,0 +1,32 @@
+//
+//** Forms
+// 
+
+.custom-select {
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.custom-file {
+	width: 100%;
+
+	.custom-file-input {
+		&:focus~.custom-file-control {
+	    	@include shadow(none);
+		}
+	}
+
+	.custom-file-label {
+		text-align: left;
+
+		&:after {
+	    	float: left;
+		}
+
+		&.selected:after {
+	  		//content: "" !important;
+		}
+	}
+}
+

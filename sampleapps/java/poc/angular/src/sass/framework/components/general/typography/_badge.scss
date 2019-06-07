@@ -1,0 +1,79 @@
+//
+//** Badge Component
+//
+
+.m-badge {	
+	background: #eaeaea;
+	color: #444;
+	font-size: 0.8rem;	
+	line-height: 20px;
+	min-height: 20px;
+	min-width: 20px;
+	vertical-align: middle;
+	text-align: center;
+	display: inline-block;	
+	padding: 0px 3px;
+	@include border-radius(0.75rem);
+
+
+	&.m-badge--square {
+		@include border-radius(0);
+	}
+
+	&.m-badge--wide {
+		letter-spacing: 0.6px;  
+		padding: 1px 10px;  
+
+		@include border-radius(0);
+		
+		@include rounded {
+			@include border-radius(0.75rem);
+		}
+	}
+
+	&.m-badge--rounded {
+		@include border-radius(0.25rem);
+	}
+
+	&.m-badge--dot {
+		padding: 0;
+		line-height: 6px;
+		min-height: 6px;
+		min-width: 6px;	
+		height: 6px;
+		width: 6px;	
+		@include border-radius(100%);
+	}
+
+	&.m-badge--dot-small {
+		padding: 0;
+		line-height: 4px;
+		min-height: 4px;
+		min-width: 4px;	
+		height: 4px;
+		width: 4px;	
+		@include border-radius(100%);
+	}
+
+	&.m-badge--bordered {
+		border: 1px solid #efefef;		 
+		min-height: 22px;
+		min-width: 22px;
+		@include border-radius(100%);
+	}
+}
+
+//== Brand colors
+@each $name, $color in $m--state-colors {		
+
+	.m-badge.m-badge--#{$name} {
+		background-color: array-get($color, base);
+		color: array-get($color, inverse);
+	}	
+
+	.m-badge.m-badge-bordered--#{$name} {
+		border-color: array-get($color, base);		
+	} 	 
+}
+
+ 

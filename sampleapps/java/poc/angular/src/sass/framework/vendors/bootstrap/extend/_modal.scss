@@ -1,0 +1,85 @@
+//
+//** Modal Customization
+// 
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--modal-base() {
+    //== Base
+    .modal {	
+        .modal-content {
+            border: 0;
+            @include border-radius(0);
+            @include rounded {
+                @include border-radius(array-get($m--border-radius, general));
+            }
+
+            .modal-header {
+                padding: 25px;
+                
+                .modal-title {
+                    font-weight: get-font-weight(bold);
+                    font-size: get-font-size(regular, '++');
+                }
+
+                .close  {
+                    line-height: 0;
+                    @include m-generate-close-icon();
+                    font-size: 0;
+
+                    &:before {
+                        font-size: get-font-size(icon, '-');
+                    }
+                    
+                    outline:none !important;
+                    span {
+                        display: none;    
+                    }
+                }
+            }
+
+            .modal-body {
+                padding: 25px;
+            }
+
+            .modal-footer {
+                padding: 25px;
+            }
+        }    
+    }
+
+    .modal-open {
+        overflow: auto !important;
+        padding: 0 !important;
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--modal-skin($skin) {
+    .modal {    
+        .modal-content {
+            @include shadow(get-shadow($skin));
+
+            .modal-header {
+                .modal-title {
+                    color: get-color($skin, regular, '+');
+                }
+
+                .close  {
+                    span {
+                        color: get-color($skin, regular);
+                    }
+                }
+            }
+        }   
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--modal-base();
+
+//== Component Skin - Light
+@include m-build-component--modal-skin(light);

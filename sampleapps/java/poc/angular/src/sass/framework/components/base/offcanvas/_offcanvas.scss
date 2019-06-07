@@ -1,0 +1,187 @@
+//
+//** Offcanvas Component
+//
+
+//== Component Base
+@mixin m-build-component--offcanvas-base($class, $layout) {
+	$width: array-get($layout, width);
+
+	.#{$class} {
+		display: block !important;
+		z-index: array-get($layout, zindex);
+		position: fixed;
+		-webkit-overflow-scrolling: touch;
+		top: 0;
+		bottom: 0;
+		overflow-y: auto; 				
+		-webkit-transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		width: $width !important;
+		transition: array-get($layout, transition);
+
+		@if (array-get($layout, direction) == right) {
+			right: -($width + 10px);
+		}
+
+		@if (array-get($layout, direction) == left) {
+			left: -($width + 10px);
+		} 
+
+		&.#{$class}--on {	
+			transition: array-get($layout, transition);
+
+			@if (array-get($layout, direction) == right) {
+				right: 0;
+			}
+
+			@if (array-get($layout, direction) == left) {
+				left: 0;
+			} 
+		}
+	}
+
+	.#{$class}-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		overflow: hidden;
+		z-index: array-get($layout, zindex) - 1;
+		background: rgba(#000000, 0.1);
+		animation: m-offcanvas-overlay-fade-in .3s linear 1;
+	}
+
+	@if array-get($layout, close) != null {
+		//== Mobile close button
+		.#{$class}-close {
+			@if (array-get($layout, direction) == left) {
+				left: - (array-get($layout, close, layout, size));
+			}
+
+			@if (array-get($layout, direction) == right) {
+				right: - (array-get($layout, close, layout, size));
+			}
+
+			width:  array-get($layout, close, layout, size);
+			height: array-get($layout, close, layout, size);	
+			top: 1px;
+			z-index: array-get($layout, zindex) + 1;
+			transition: array-get($layout, transition);
+
+			position: fixed;
+			border: 0;
+			box-shadow: none;
+			@include rounded {
+				border-radius: 3px; 
+			}			
+			cursor: pointer;
+			outline: none !important;
+			text-align: center;
+			vertical-align: center;
+			display: inline-block;
+
+			&:hover {
+				text-decoration: none;
+			}
+
+			> i {					
+				line-height: 0;
+				font-size: array-get($layout, close, layout, font-size);
+				@include vertical-horizontal-center();
+			}
+
+			.#{$class}--on & {			
+				transition: array-get($layout, transition);
+
+				@if (array-get($layout, direction) == left) {
+					left: $width - array-get($layout, close, layout, size) - 1px;
+				}
+
+				@if (array-get($layout, direction) == right) {
+					right: $width - array-get($layout, close, layout, size) - 1px;
+				}
+			}
+
+			&.#{$class}-close--skin-dark {
+				background-color: array-get($layout, close, skins, dark, bg, default);
+
+				> i {
+					color: array-get($layout, close, skins, dark, icon, default);
+				}
+
+				&:hover {
+					background-color: array-get($layout, close, skins, dark, bg, hover);
+
+					> i {
+						color: array-get($layout, close, skins, dark, icon, hover);
+					}
+				}
+			}
+
+			&.#{$class}-close--skin-light {
+				background-color: array-get($layout, close, skins, light, bg, default);
+
+				> i {
+					color: array-get($layout, close, skins, light, icon, default);
+				}
+
+				&:hover {
+					background-color: array-get($layout, close, skins, light, bg, hover);
+					> i {
+						color: array-get($layout, close, skins, light, icon, hover);
+					}
+				}
+			}
+		}
+	}
+}
+
+//== Component Generate 
+@mixin m-generate-component--offcanvas($class, $mode, $layout) {
+	// close icon
+	.#{$class}-close {
+		display: none;
+	}
+
+	@if $mode == default {
+		@include m-build-component--offcanvas-base($class, $layout);
+	}
+
+	@if $mode == desktop {
+		@include desktop {
+			@include m-build-component--offcanvas-base($class, $layout);
+		}
+	}
+
+	@if $mode == desktop-and-tablet {
+		@include desktop-and-tablet {
+			@include m-build-component--offcanvas-base($class, $layout);
+		}
+	}
+
+	@if $mode == tablet {
+		@include tablet {
+			@include m-build-component--offcanvas-base($class, $layout);
+		}
+	}
+
+	@if $mode == tablet-and-mobile {
+		@include tablet-and-mobile {
+			@include m-build-component--offcanvas-base($class, $layout);
+		}
+	}
+
+	@if $mode == mobile {
+		@include mobile {
+			@include m-build-component--offcanvas-base($class, $layout);
+		}
+	}
+
+	@include responsive-below(array-get($layout, width)) {
+		.#{$class} {
+			width: 90% !important;
+		}
+	}
+}

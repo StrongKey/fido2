@@ -1,0 +1,305 @@
+//
+//** Pricing Tables 2 Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--pricing-tables-base() {
+	.m-pricing-table-2 {		 
+		padding: 0 0 2.86rem 0;
+
+		.m-pricing-table-2__head {
+			text-align: center;
+			background-color: #22B9FF;
+			padding: 8.57rem 0 25rem 0;
+
+			.m-pricing-table-2__title {
+			  	text-align:center; 
+			  	margin-top: -3.57rem; 
+			}	
+
+			.btn-group {
+				text-align:center;
+				display: inline-block;
+				margin: 2.5rem auto 0 auto; 
+
+			  	.btn {
+			  		margin-right: -0.21rem;
+				  	padding: 1rem 1.93rem 1rem 1.93rem;
+				}  				
+			}
+		}
+
+		.m-pricing-table-2__content {
+		  	.m-pricing-table-2__container {
+			  	margin: 0 auto;		  	 
+			  	max-width: 75%;			   
+			  	margin-top: -21.64rem;	  		 
+			  	 
+				.m-pricing-table-2__items {
+				  	background-color: #fff;			  	   
+				  	position: relative;				  			  	 
+				  	text-align: center;			  	 
+				  	padding: 2.14rem 0.71rem 2.14rem 0.71rem; 			  	 	
+
+					.m-pricing-table-2__item {
+					  	border-right: 1px solid #e1f1ff;				  	
+					  	width: 100%; 					  	 
+
+						&:last-child {
+						    border-right: none;
+						}					
+
+						.m-pricing-table-2__visual { 
+							position: relative;
+							margin-top: 6.8rem;
+							left: 50%;
+    						transform: translateX(-50%) translateY(-50%);
+
+							.m-pricing-table-2__hexagon {
+								height: 0;
+								background: #F4FCFF;
+								left: 50%;
+    							transform: translateX(-50%) translateY(-50%);
+								position: absolute; 
+
+								&:before {
+									content: "";
+								    position: absolute;
+									top: -2.14rem;								 
+									width: 13.2rem;
+									height: 0;
+									border-left: 3.35rem solid transparent;
+									border-right: 3.35rem solid transparent;
+									border-bottom: 5.71rem solid #F4FCFF;
+									left: 50%;
+    								transform: translateX(-50%) translateY(-50%);
+								}
+
+								&:after {
+									content: "";
+									position: absolute;								 
+									top: 3.57rem; 
+									width: 13.21rem;
+									height: 0;
+									border-left: 3.35rem solid transparent;
+									border-right: 3.35rem solid transparent;
+									border-top: 5.71rem solid #F4FCFF;
+									left: 50%;
+    								transform: translateX(-50%) translateY(-50%);
+								}		 
+							}
+
+							.m-pricing-table-2__icon {
+								margin-top: 0.8rem;
+								left: 50%;
+    							transform: translateX(-50%) translateY(-50%);
+								position: absolute;						
+
+								> i {
+									font-size: 6.43rem;							
+								} 
+							}
+						}					
+					 
+						.m-pricing-table-2__subtitle {					  					  	 
+						  	margin-top: 17.1rem;	
+						  	font-size: 1.64rem;				  	
+						}
+
+						.m-pricing-table-2__features {					  				  	 
+						  	margin: 2.14rem 0 1.8rem;
+						  	line-height: 2.2;
+
+						  	> span {
+						  		display: block;
+						  		font-weight: get-font-weight(bolder);
+						  	}
+						}
+
+						.m-pricing-table-2__price {
+							font-size: 3.21rem;
+							font-weight: get-font-weight(boldest);						 
+						}
+
+						.m-pricing-table-2__label {
+							margin: 0.64rem 0 0 0.35rem;
+							font-size: 25px;
+							position: absolute;
+						}
+
+						.m-pricing-table-2__btn {
+							margin: 2.14rem auto 2.14rem auto;
+
+							> .btn {
+								padding: 0.86rem 3.6rem 0.86rem 3.6rem; 
+								font-size: 0.86rem;								 
+							}							 
+						}
+					}	 
+				}	
+			}
+	 	}
+	}
+
+	@include minimal-desktop() {
+		.m-pricing-table-2 {			 
+			 
+			.m-pricing-table-2__content {
+				padding: 0 2.14rem 0 2.14rem;
+
+				.m-pricing-table-2__container {
+					max-width: 90%;
+
+					.m-pricing-table-2__items {				    	 			    	 
+
+				    	.m-pricing-table-2__item {
+				    		border-right: 1px solid get-color(light, panel);				    		 
+				    		padding-left: 0.71rem;
+				    		padding-right: 0.71rem;
+				    		
+				    		&:last-child {
+							  	border-right: none;
+							}
+				    		 
+							.m-pricing-table-2__btn {
+								margin: 1.43rem auto 3.6rem auto;
+							}
+				    	}
+				  	}
+				}
+			}		
+		}		 				
+	}  
+
+	@include tablet() {
+		.m-pricing-table-2 {			 
+			.m-pricing-table-2__content {
+				padding: 0 2.14rem 0 2.14rem;
+
+				.m-pricing-table-2__container {
+					max-width: 90%;
+
+					.m-pricing-table-2__items {				    			    	 
+
+				    	.m-pricing-table-2__item {
+				    		border-bottom: 1px solid get-color(light, panel);
+				    		border-right: none;
+				    		padding-left: 0.71rem;
+				    		padding-right: 0.71rem;
+				    		
+				    		&:last-child {
+							  	border-bottom: none;
+							}
+				    		 
+							.m-pricing-table-2__btn {
+								margin: 1.43rem auto 3.6rem auto;
+							}
+				    	}
+				  	}
+				}
+			}		
+		}		 				
+	}  
+
+	@include mobile() {
+		.m-pricing-table-2 {	
+			.m-pricing-table-2__head {		 
+				.m-pricing-table-2__title {
+					top: 4%;
+					
+					> h1 {						
+						font-size: 1.8rem;
+					}				 					 								 					 
+				}
+
+			    .btn-group {	
+			    	top: 8%;			    	
+			    	 
+					.btn {
+					  	padding: 0.71rem 0.71rem 0.71rem 0.71rem;				  		 
+					}					  					    			
+			    }
+			}    
+
+			.m-pricing-table-2__content {				 
+
+				.m-pricing-table-2__container {
+					width: 100%;
+
+					.m-pricing-table-2__items {				    	 
+				    	.m-pricing-table-2__item {
+				    		border-bottom: 1px solid get-color(light, panel);
+				    		border-right: none;
+				    		padding-left: 0.71rem;
+				    		padding-right: 0.71rem;
+				    		
+				    		&:last-child {
+							  	border-bottom: none;
+							} 
+
+							.m-pricing-table-2__btn {
+								margin: 1.43rem auto 3.6rem auto;
+							}
+				    	}
+				  	}
+				}
+			}		
+		}		 				
+	} 
+}
+
+//== Snippet Skin
+@mixin m-build-snippet--pricing-tables-skin() {
+	$skin: get-default-skin();
+	.m-pricing-table-2 {
+		.m-pricing-table-2__head {				 
+			.btn-group {				 
+				.btn {
+					@include shadow(get-shadow($skin, '++++'));
+
+					background: #fff;
+					color: get-color($skin, regular, '---');
+
+					&.active {
+						background: get-brand-color();
+						color: get-brand-inverse-color();   
+					}
+				}
+			}
+		}
+		
+		.m-pricing-table-2__content {					 
+			.m-pricing-table-2__container {				 
+				.m-pricing-table-2__items {
+					@include shadow(get-shadow($skin, '-')); 	    
+					
+					.m-pricing-table-2__item { 	
+						.m-pricing-table-2__subtitle {
+							color: get-color($skin, regular);
+						}
+
+						.m-pricing-table-2__features {
+							> span {
+								color: get-color($skin, regular, '-----');
+							}						 
+						}
+
+						.m-pricing-table-2__price {
+							color: get-color($skin, regular, '-');
+						}
+
+						.m-pricing-table-2__label {
+							color: get-color($skin, regular, '----');
+						}
+					}
+				}
+			}
+		}	
+	}
+}
+
+//== Build Snippet Base
+@include m-build-snippet--pricing-tables-base();
+
+//== Build Snippet - Skin
+@include m-build-snippet--pricing-tables-skin();

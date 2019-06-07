@@ -1,0 +1,130 @@
+//
+//** Summernote Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--summernote-base() {
+    .note-popover {
+        display: none;
+    }   
+
+    .note-editor {
+        @include rounded {
+            @include border-radius(array-get($m--border-radius, general));
+        }
+
+        .note-toolbar-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal {
+            .modal-header {
+                .close {
+                    position: absolute;
+                    right: 25px; 
+                }
+            }
+        } 
+
+        .panel-heading.note-toolbar {
+            padding: 5px 10px 10px 10px;
+            
+            @include rounded {
+                @include border-top-left-radius(array-get($m--border-radius, general));
+                @include border-top-right-radius(array-get($m--border-radius, general));
+            }
+
+            .btn {
+                outline: none !important;
+            }
+
+            .dropdown-menu {
+                min-width: 185px;
+            }
+
+            .note-color .dropdown-menu {
+                min-width: 350px;
+                padding: 10px; 
+
+                > li {
+                    display: table;
+                    table-layout: fixed;
+
+                    > .btn-group {
+                        display: table-cell !important;
+
+                        &:first-child {
+                            padding-right: 10px;
+                        }
+
+                        .note-color-reset {
+                            margin: 5px 0 10px 0;
+                        }
+
+                        .note-palette-title {
+                            margin: 5px 0;
+                            text-align: left;
+                            border: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--summernote-skin($skin) {
+    .note-editor {
+        &.note-frame {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+
+            .panel-heading.note-toolbar {
+                background: get-color($skin, panel, '--');  
+            }
+        
+            .note-statusbar {
+                background: get-color($skin, panel, '--');       
+            }
+        }
+    }
+
+    .note-editable {
+        .table.table-bordered {
+            th,td {
+                border: 1px solid get-color($skin, panel, '+');
+            }
+        }
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--summernote-validation-state($state, $color) {
+    .m-form.m-form--state .has-#{$state} {
+        .note-editor {
+            &.note-frame {
+                 border: 1px solid $color;
+            }
+        }   
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--summernote-base();
+
+//== Component Skin - Light
+@include m-build-component--summernote-skin(light);
+    
+//== Component Validation States
+@include m-build-component--summernote-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--summernote-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--summernote-validation-state(danger, array-get($m--state-colors, danger, base));  

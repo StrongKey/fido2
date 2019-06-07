@@ -1,0 +1,108 @@
+//
+//** Summernote Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--markdown-base() {
+    .md-editor {
+        @include rounded {
+            @include border-radius(array-get($m--border-radius, general));
+        }
+
+        @include not-rounded {
+            @include border-radius(0 !important);
+        }
+
+        outline: none !important;
+
+        .md-footer, 
+        .md-header {
+            padding: 10px 10px;
+        }
+
+        .md-header {
+            @include rounded {
+                @include border-top-left-radius(array-get($m--border-radius, general));
+                @include border-top-right-radius(array-get($m--border-radius, general));
+            }
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+
+            .btn-group {
+                margin-right: 10px;
+            }
+        }
+
+        .md-footer {
+            @include border-bottom-left-radius(array-get($m--border-radius, general));
+            @include border-bottom-right-radius(array-get($m--border-radius, general));
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+        }
+
+        > textarea {
+            padding: 10px 10px;
+            @include border-bottom-left-radius(array-get($m--border-radius, general));
+            @include border-bottom-right-radius(array-get($m--border-radius, general));
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--markdown-skin($skin) {
+    .md-editor {
+        border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+
+        &.active {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+            @include shadow(none);  
+        }
+
+        .md-footer, 
+        .md-header {
+            background: get-color($skin, panel, '-');
+        }
+
+        > textarea {
+            background: get-color($skin, panel, '-');
+        }
+
+        &.active {
+            > textarea {
+                background: get-color($skin, panel, '--');
+            }
+        }
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--markdown-validation-state($state, $color) {
+    .m-form.m-form--state .has-#{$state} {
+        .md-editor {
+            border: 1px solid $color; 
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--markdown-base();
+
+//== Component Skin - Light
+@include m-build-component--markdown-skin(light);
+    
+//== Component Validation States
+@include m-build-component--markdown-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--markdown-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--markdown-validation-state(danger, array-get($m--state-colors, danger, base));  

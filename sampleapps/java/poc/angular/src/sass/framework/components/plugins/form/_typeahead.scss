@@ -1,0 +1,79 @@
+//
+//** Typeahead Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--typeahead-base() {
+    .m-typeahead {
+        .twitter-typeahead {
+            display: block !important;
+        }
+
+        .tt-menu {
+            border: 0;
+            margin: 0;
+            min-width: 275px;
+            padding: 5px 0;
+
+            @include border-radius(0);
+
+            @include rounded {
+                @include border-radius(array-get($m--border-radius, dropdown));
+            }
+
+            .tt-dataset {
+                .tt-suggestion {
+                    padding: 5px 15px;
+                    font-size: get-font-size(regular);
+                }
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--typeahead-skin($skin) {
+    .m-typeahead {
+        .form-control {
+            &.tt-hint {
+                color: get-color($skin, regular, '--');
+            }
+            
+            &.tt-input {
+                //color: get-color($skin, regular, '+++');
+            }
+        }
+
+
+        .tt-menu {
+            background: get-color($skin, box);
+            @include shadow(get-shadow($skin));
+
+            .tt-dataset {
+                .tt-suggestion {
+                    color: get-color($skin, regular);
+                    cursor: pointer;
+
+                    .tt-highlight {
+                        color: get-color($skin, regular, '+++');
+                        font-weight: get-font-weight(bolder);
+                    }
+
+                    &:hover {
+                        background: get-color($skin, panel, '-');
+                    }
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--typeahead-base();
+
+//== Component Skin - Light
+@include m-build-component--typeahead-skin(light);

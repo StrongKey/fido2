@@ -1,0 +1,66 @@
+//
+//** Body
+// Page body container
+
+//== General Mode
+.m-body {	
+	.m-header--static & {
+		//height: calc(100% - #{array-get($m-config-header, header, default, height, desktop)});
+	}
+	
+	.m-content {
+		padding: array-get($m-config-base, body, content, padding, desktop, y) array-get($m-config-base, body, content, padding, desktop, x); 
+	}
+
+	.m-content--skin-light & {
+		background-color: array-get($m-config-base, body, content, bg-color, light);
+	}
+
+	.m-content--skin-light2 & {
+		background-color: array-get($m-config-base, body, content, bg-color, light2);
+	} 
+}
+
+body {
+	&.m-content--skin-light {
+		background-color: array-get($m-config-base, body, content, bg-color, light);
+	}
+
+	&.m-content--skin-light2 {
+		background-color: array-get($m-config-base, body, content, bg-color, light2);
+	}
+}
+
+//== Desktop Mode
+@include desktop {
+	.m-body {	
+		// fixed header
+		.m-header--fixed & {			
+			padding-top: array-get($m-config-header, header, default, height, desktop) !important; 
+		}
+	}
+}
+
+// Tablet & Mobile Mode
+@include tablet-and-mobile {
+	.m-body {
+		// fixed header
+		.m-header--fixed-mobile & {
+			@include transition(padding-top array-get($m-config-header, header, fixed, transition));  
+			padding-top: array-get($m-config-header, header, default, height, mobile) !important;   
+		}
+
+		// fixed and minimized header
+		.m-header--fixed-mobile.m-header--minimize & {
+			padding-top: array-get($m-config-header, header, fixed, minimize, height, mobile); 
+		}
+
+		.m-content {
+			padding: array-get($m-config-base, body, content, padding, mobile, y) array-get($m-config-base, body, content, padding, mobile, x); 
+
+			.m-aside-right--enabled & {
+				padding-bottom: 0;
+			}
+		}
+	}
+}

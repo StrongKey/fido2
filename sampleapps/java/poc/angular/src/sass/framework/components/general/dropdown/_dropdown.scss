@@ -1,0 +1,458 @@
+//
+//** Dropdown Component
+//
+
+//==== Helper Mixins ====//
+
+//== Dropdown base
+@mixin m-build-component--dropdown-base($layout) {
+    .m-dropdown {
+        position: relative;
+
+        &.m-dropdown--inline {
+            display: inline-block;
+        }
+
+        // dropdown toggle
+        .m-dropdown__toggle {
+            .la-ellipsis-h {
+                font-size: get-font-size(icon, '+++++');
+            }
+        }
+        
+        // dropdowndown wrapper
+        .m-dropdown__wrapper {   
+            top: 100%;
+            text-align: left;
+            display: none;           
+            position: absolute;            
+            z-index: array-get($layout, base, self, zindex);
+            padding-top: array-get($layout, base, self, space);
+            width: array-get($layout, base, self, width, default);
+
+            // rounded mode
+            @include rounded {
+                @include border-radius(array-get($layout, base, self, border-radius));
+                .m-dropdown__inner {
+                    @include border-radius(array-get($layout, base, self, border-radius));
+
+                    .mCSB_container,
+                    .mCustomScrollBox,
+                    .m-dropdown__content,
+                    .m-dropdown__scrollable {
+                        @include border-radius(array-get($layout, base, self, border-radius)); 
+                    }
+                }
+            }
+
+            @include fix-animation-lags();
+            @include fix-fixed-position-lags();
+        }
+
+        // dropdown header, body and footer
+        .m-dropdown__wrapper {         
+            .m-dropdown__header {
+                padding: array-get($layout, base, header, self, padding);
+
+                @include rounded {
+                    @include border-radius(array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius) 0 0);
+                }
+
+                .m-dropdown__header-title {
+                    display: block;
+                    padding: array-get($layout, base, header, title, padding);
+                    font-size: get-font-size(regular, '++++');
+                    font-weight: get-font-weight(bold);                
+                }
+
+                .m-dropdown__header-subtitle {
+                    display: block;
+                    padding: array-get($layout, base, header, subtitle, padding);   
+                    font-size: get-font-size(regular);
+                }
+            }
+
+            .m-dropdown__body {
+                padding: array-get($layout, base, body, padding);
+
+                .mCSB_scrollTools {
+                    right: array-get($layout, base, body, scrollbar, right);
+                }
+
+                &.m-dropdown__body--paddingless {
+                    padding: 0;
+
+                    .mCSB_scrollTools {
+                        right: 0;
+                    }
+                }
+            }
+
+            .m-dropdown__footer {
+                padding: array-get($layout, base, footer, padding);
+            }
+        }
+
+        // rounded mode
+        @include rounded {
+            // dropdown header bg fill mode
+            &.m-dropdown--header-bg-fil {
+                .m-dropdown__wrapper {
+                    .m-dropdown__inner {
+                        @include border-radius(array-get($layout, base, self, border-radius) + 4px array-get($layout, base, self, border-radius) + 4px array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius));
+                    
+                        .m-dropdown__header {
+                            @include border-radius(array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius) 0 0);
+                        }  
+                    }
+                } 
+            }
+
+            // dropdown footer bg fill mode
+            &.m-dropdown--footer-bg-fil {
+                .m-dropdown__wrapper {
+                    .m-dropdown__inner {
+                        @include border-radius(array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius) + 4px array-get($layout, base, self, border-radius) + 4px);
+                    
+                        .m-dropdown__footer {
+                            @include border-radius(0 0 array-get($layout, base, self, border-radius) array-get($layout, base, self, border-radius));
+                        }  
+                    }
+                } 
+            }
+        }
+
+        // open and hover states
+        &.m-dropdown--open,
+        &.m-dropdown--hoverable:hover {
+            .m-dropdown__wrapper { 
+                display: block;
+                @include animation('m-dropdown-fade-in .3s ease 1, m-dropdown-move-up .3s ease-out 1'); 
+
+                // ie8-11 versions hack
+                @include hack-ie8-11 {
+                    @include animation(none);
+                }   
+            }
+        }
+
+        // dropdowndown placement - top
+        &.m-dropdown--up {
+            .m-dropdown__wrapper {    
+                padding-top: 0;    
+                top: auto;
+                bottom: 100%;
+                padding-bottom: array-get($layout, base, self, space);   
+            }
+
+            &.m-dropdown--open,
+            &.m-dropdown--hoverable:hover {
+                .m-dropdown__wrapper { 
+                    display: block;
+                    @include animation('m-dropdown-fade-in .3s ease 1, m-dropdown-move-down .3s ease-out 1');
+                    
+                    // ie8-11 versions hack
+                    @include hack-ie8-11 {
+                        @include animation(none);
+                    }   
+                }
+            }
+        }  
+
+        // align to right
+        &.m-dropdown--align-right {
+            .m-dropdown__wrapper {
+                right: 0;
+            }
+
+            // push dropdowndown to the right
+            &.m-dropdown--align-push {
+                .m-dropdown__wrapper {
+                    margin-right: -(array-get($layout, base, self, align-push-offset));
+                }
+            }
+        }
+
+        // align to left
+        &.m-dropdown--align-left {
+            .m-dropdown__wrapper {
+                left: 0;
+            }
+
+            // push dropdowndown to the left
+            &.m-dropdown--align-push {
+                .m-dropdown__wrapper {
+                    margin-left: -(array-get($layout, base, self, align-push-offset));
+                }
+            }
+        }
+
+        // align to center
+        &.m-dropdown--align-center {
+            .m-dropdown__wrapper {
+                left: 50%;
+                width: array-get($layout, base, self, width, default);
+                margin-left: -(array-get($layout, base, self, width, default) / 2);
+            }
+        }
+    }
+
+    // desktop mode
+    @include desktop() {
+         //== Dropdown
+        .m-dropdown {
+            // dropdown width options
+            @each $name, $width in array-get($layout, base, self, width) {
+                @if ($name != default) {
+                    &.m-dropdown--#{$name} {
+                        .m-dropdown__wrapper {
+                            width: $width;
+                        }
+                    }
+                }
+            }
+
+            // align to center
+            &.m-dropdown--align-center {
+                @each $name, $width in array-get($layout, base, self, width) {
+                    @if ($name != default) {
+                        &.m-dropdown--#{$name} {
+                            .m-dropdown__wrapper {
+                                width: $width;
+                                margin-left: -($width / 2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }    
+
+    // mobile full width mode
+    @include mobile() { 
+        //== Full width mode
+        .m-dropdown.m-dropdown--mobile-full-width.m-dropdown--align-center,
+        .m-dropdown.m-dropdown--mobile-full-width {
+            > .m-dropdown__wrapper {
+                width: auto;
+                margin: 0 auto;
+                left: array-get($layout, base, self, mobile-indent);
+                right: array-get($layout, base, self, mobile-indent);
+
+                .m-dropdown__header {
+                    .m-dropdown__header-title {
+                        font-size: get-font-size(regular, '++');
+                        font-weight: get-font-weight(bolder); 
+                    }
+
+                    .m-dropdown__header-subtitle {
+                        font-size: get-font-size(regular);
+                    }
+                }
+            }
+        }
+    }
+
+    // dropoff
+    .m-dropdown__dropoff {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        display: block;
+        z-index: array-get($layout, base, self, zindex) - 1;
+    }
+
+    // dropdown animations
+    @include keyframes(m-dropdown-fade-in) {
+        from   { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @include keyframes(m-dropdown-move-up) {
+        from   { margin-top: array-get($layout, base, self, animation, offset); }
+        to { margin-top: 0; }
+    }
+
+    @include keyframes(m-dropdown-arrow-move-up) {
+        from   { margin-top: array-get($layout, base, self, animation, offset); }
+        to { margin-top: 0px; } 
+    }
+
+    @include keyframes(m-dropdown-move-down) {
+        from   { margin-bottom: array-get($layout, base, self, animation, offset); }
+        to { margin-bottom: 0; }
+    }
+
+    @include keyframes(m-dropdown-arrow-move-down) {
+        from   { margin-bottom: array-get($layout, base, self, animation, offset); }
+        to { margin-bottom: 0px; } 
+    }
+}
+
+//== Smooth arrow base
+@mixin m-build-component--dropdown-smooth-arrow-base($layout) {
+    .m-dropdown.m-dropdown--arrow {
+
+        // placement - bottom
+        .m-dropdown__wrapper {  
+            padding-top: array-get($m-smooth-arrows, size, default, top, height);
+        }
+
+        // placement - top
+        &.m-dropdown--up {
+            .m-dropdown__wrapper {  
+                padding-top: 0;
+                padding-bottom: array-get($m-smooth-arrows, size, default, bottom, height);
+
+                .m-dropdown__arrow {             
+                    @include m--build-smooth-arrow-vertical(top, default);
+                    top: auto;
+                    position: absolute;
+                    margin-top: 0;
+
+                    // ie8-11 versions hack
+                    @include hack-ie8-11 {
+                         margin-top: -1px;
+                    }  
+
+                    // edge all versions hack
+                    @include hack-edge-all {
+                        margin-top: -1px;
+                    }
+                }        
+            }
+        }
+
+        // dropdowndown arrow
+        &.m-dropdown--up .m-dropdown__arrow,
+        .m-dropdown__arrow {
+            @include m--build-smooth-arrow-vertical(bottom, default);
+            top: 0;
+            position: absolute;
+            
+            // left arrow
+            &.m-dropdown__arrow--left {
+                left: array-get($layout, base, arrow, smooth, offset);
+                margin-left: 0;
+            }
+
+            // right arrow
+            &.m-dropdown__arrow--right {
+                right: array-get($layout, base, arrow, smooth, offset);
+                left: auto;
+                margin-left: auto;
+            }            
+        }
+    }
+}
+
+//== Classic arrow base
+@mixin m-build-component--dropdown-classic-arrow-base($layout) {
+    .m-dropdown.m-dropdown--arrow {
+        .m-dropdown__arrow {
+            display: none !important;
+        }
+
+        // placement - bottom
+        .m-dropdown__wrapper1 {  
+            padding-top: array-get($layout, base, arrow, classic, size) - 1px;
+        }
+
+        // placement - top
+        &.m-dropdown--up1 {
+            .m-dropdown__wrapper {  
+                padding-top: 0;
+                padding-bottom: array-get($layout, base, arrow, classic, size) - 1px;
+
+                .m-dropdown__arrow {             
+                    border: 0;
+                    @include m--build-classic-arrow(bottom, array-get($layout, base, arrow, classic, size));
+                    top: auto;
+                    position: absolute;
+                    margin-top: 0;
+
+                    // ie8-11 versions hack
+                    @include hack-ie8-11 {
+                        margin-top: -1px;
+                    }
+
+                    // edge all versions hack
+                    @include hack-edge-all {
+                        margin-top: -1px;
+                    }
+                }        
+            }
+        }
+
+        // dropdowndown arrow
+        &.m-dropdown--up1 .m-dropdown__arrow1,
+        .m-dropdown__arrow1 {            
+            @include m--build-classic-arrow(top, array-get($layout, base, arrow, classic, size));
+            top: 0;
+            position: absolute;
+            left: 50%;
+            margin-left: -(array-get($layout, base, arrow, classic, size));
+            
+            // left arrow
+            &.m-dropdown__arrow--left {
+                left: array-get($layout, base, arrow, classic, offset);
+                margin-left: 0;
+            }
+
+            // right arrow
+            &.m-dropdown__arrow--right {
+                right: array-get($layout, base, arrow, classic, offset);
+                left: auto;
+                margin-left: auto;
+            }            
+        }
+    }
+}
+
+//== Dropdown skin
+@mixin m-build-component--dropdown-skin($layout, $skin) {
+
+    @include component-skin(m-dropdown, $skin) {
+        
+        @include m-component--dropdown--set-bg-color( array-get($layout, self, bg-color), array-get($layout, self, box-shadow) );
+
+        .m-dropdown__header {
+            @include shadow( array-get($layout, header, self, box-shadow) );
+        }
+        
+        &.m-dropdown--header-bg-fill {
+            @include m-component--dropdown--set-arrow-color( array-get($layout, header, self, bg-color) );
+
+            .m-dropdown__header {
+                background-color: array-get($layout, header, self, bg-color);
+
+                .m-dropdown__header-title {
+                    color: array-get($layout, header, title, color);               
+                }
+
+                .m-dropdown__header-subtitle {
+                    color: array-get($layout, header, subtitle, color);            
+                }
+            }
+        }          
+    }
+}
+
+//==== Generate Dropdown ====//
+
+//== Build Dropdown Base
+@include m-build-component--dropdown-base( array-get($m--dropdown, layout ) );
+
+@if smooth-arrow() {
+    @include m-build-component--dropdown-smooth-arrow-base( array-get($m--dropdown, layout ) );
+} @else {
+    @include m-build-component--dropdown-classic-arrow-base( array-get($m--dropdown, layout ) );
+}
+
+//== Build Dropdown - Default Skin
+@include m-build-component--dropdown-skin( array-get($m--dropdown, skins, dark), dark);
+
+//== Build Dropdown - Light Skin
+@include m-build-component--dropdown-skin( array-get($m--dropdown, skins, light), light);

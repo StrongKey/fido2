@@ -1,0 +1,330 @@
+//
+//** Bootstrap Daterangepicker Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--daterangepicker-base() {
+   	.daterangepicker {
+        padding: 10px;
+        margin-top: 5px;
+
+        @include not-rounded {
+            @include border-radius(0 !important);
+        }
+
+   	    .daterangepicker_input {
+            .input-mini {
+                height: auto;
+                padding: array-get($m--forms, input, layout, self, size, default, padding, y) array-get($m--forms, input, layout, self, size, default, padding, x);
+                padding-left: array-get($m--forms, input, layout, self, size, default, padding, x) + 1.2rem;
+                line-height: array-get($m--forms, input, layout, self, size, default, line-height);  
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }
+            }
+
+            i {
+                top: 10px;
+            }
+        }	
+
+        td, th {
+            width: 35px;
+            height: 35px;
+            @include border-radius(3px);
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+            font-weight: get-font-weight(regular);
+            border: 0;
+            vertical-align: middle;
+            line-height: 0;
+        }
+
+        thead {
+            .fa.fa-chevron-right,
+            .fa.fa-chevron-left {
+                display: inline-block;
+                font: normal normal normal 16px/1 "LineAwesome";
+                font-size: inherit;
+                text-decoration: inherit;
+                text-rendering: optimizeLegibility;
+                text-transform: none;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+                font-smoothing: antialiased;
+            }
+
+            .fa.fa-chevron-left:before {
+                content: "\f111";
+            }
+
+            .fa.fa-chevron-right:before {
+                content: "\f112";
+            }
+
+            th {
+                font-weight: get-font-weight(bolder);
+
+                &.month {
+                    
+                }
+
+                &.prev,
+                &.next {
+                    font-size: get-font-size(icon);
+                }
+            }
+        }
+
+        tbody {
+            td {
+
+                &.in-range {
+                    &.start-date {
+                        &.today {
+                            @include border-top-left-radius(0);
+                            @include border-bottom-left-radius(0);
+                        }
+                    }
+
+                    &.end-date {
+                        &.today {
+                            @include border-top-right-radius(0);
+                            @include border-bottom-right-radius(0);
+                        }
+                    }
+                }
+
+                &.today.in-range,
+                &.today {
+                    @include border-radius(3px);
+                    position: relative;
+                        
+                    &:before {
+                        content: '';
+                        display: inline-block;
+                        border: solid transparent;
+                        border-width: 0 0 7px 7px;
+                        border-bottom-color: #ffffff;
+                        border-top-color: rgba(0, 0, 0, 0.2);
+                        position: absolute;
+                        bottom: 4px;
+                        right: 4px;
+                    }
+                }   
+            }
+        }
+
+        select.monthselect,
+        select.yearselect,
+        select.hourselect,
+        select.minuteselect,
+        select.ampmselect {
+            @include border-radius(3px);
+            padding: array-get($m--forms, input, layout, self, size, sm, padding, y) array-get($m--forms, input, layout, self, size, sm, padding, x);
+            outline: none !important;
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+        }
+
+        .calendar-time {
+            margin: 15px 0 5px 0;
+
+            select.hourselect,
+            select.minuteselect,
+            select.ampmselect {
+                width: 70px;
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }
+            }
+
+            i {
+                left: 3px;
+                top: 5px;
+                display: inline-block;
+                font: normal normal normal 16px/1 "LineAwesome";
+                font-size: get-font-size(icon, '+');
+                text-decoration: inherit;
+                text-rendering: optimizeLegibility;
+                text-transform: none;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+                font-smoothing: antialiased;
+
+                &:before {
+                    content: "\f18f";
+                }
+            }
+        }
+
+        .ranges {
+            padding: 10px;
+            margin: 5px 5px 5px 10px;
+            
+            ul {
+                width: 210px;
+
+                li {
+                    @include border-radius(3px);
+
+                    @include not-rounded {
+                        @include border-radius(0 !important);
+                    }
+                    background: transparent;
+                    padding: 8px 12px;
+                    margin-bottom: 10px;
+                    font-weight: get-font-weight(bold);
+                    border-color: transparent;
+                }
+            } 
+
+            .range_inputs {
+                margin-top: 0;
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }
+
+                .btn {
+                    padding: 0.6rem 1.6rem;
+                    @include border-radius(40px);
+
+                    @include not-rounded {
+                        @include border-radius(0 !important);
+                    }
+                    margin-right: 6px;
+                }
+            }
+        }
+   	}
+}
+
+//== Component Skin
+@mixin m-build-component--daterangepicker-skin($skin) {
+    .daterangepicker {
+
+        .daterangepicker_input {
+            .input-mini {
+                height: auto;
+                border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default);  
+
+                &.active,
+                &:focus {
+                    border: 1px solid array-get($m--forms, input, skins, $skin, default, border, focus);  
+                }
+            }
+
+            i {
+                color: get-color($skin, icon, '++');
+            }
+        }   
+
+        thead {
+            th {
+                &.prev,
+                &.next {
+                    &:hover {
+                        background: get-color($skin, panel);
+                    }
+                }
+            }
+        }
+
+        tbody {
+            td {
+                &.available:hover,
+                &:hover {
+                    background: get-color($skin, panel);
+                }
+
+                &.off {
+                    color: get-color($skin, regular, '--');
+                }
+
+                &.available {
+                    color: get-color($skin, regular);
+                }
+
+                &.today {
+                    background: lighten(get-state-color(primary, base), 10%);
+                    color: get-state-color(primary, inverse);
+                        
+                    &:before {
+                        border-bottom-color: #ffffff;
+                        border-top-color: rgba(0, 0, 0, 0.2);
+                    }
+
+                    &.in-range {
+                        @include border-radius(0);
+                    }
+                }
+
+                &.in-range, 
+                &.active {
+                    background: get-state-color(primary, base);
+                    color: get-state-color(primary, inverse);
+
+                    &:hover {
+                        background: get-state-color(primary, base);
+                        color: get-state-color(primary, inverse);
+                    }
+                } 
+            }
+        }
+
+        select.monthselect,
+        select.yearselect,
+        select.hourselect,
+        select.minuteselect,
+        select.ampmselect {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default);  
+           
+            &.active,
+            &:focus {
+                border: 1px solid array-get($m--forms, input, skins, $skin, default, border, focus);  
+            }
+        }
+
+        .calendar-time {
+
+            i {
+                color: get-color($skin, icon, '++');
+            }
+        }
+
+        .ranges {
+            li {
+                border: 1px solid get-color($skin, panel);
+                color: get-color($skin, regular, '--');
+
+                &:hover {
+                    background: transparent;
+                    color: get-color($skin, regular, '--');
+                    background: lighten(get-state-color(brand, base), 38%);
+                }
+
+                &.active {
+                    background: get-state-color(brand, base);
+                    color: get-state-color(brand, inverse);
+                    border: 1px solid get-state-color(brand, base);
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--daterangepicker-base();
+
+//== Component Skin - Light
+@include m-build-component--daterangepicker-skin(light);

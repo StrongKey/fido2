@@ -1,0 +1,243 @@
+//
+//** Nav Component Config
+//
+
+$m--forms: (
+	// inputs
+	input: (
+		// layout
+		layout: (
+			// input self
+			self: (
+				border-radius: 0.25rem,
+				size: (
+					default: (
+						padding: (
+							x: $input-btn-padding-x,
+							y: $input-btn-padding-y
+						),
+						line-height: $input-btn-line-height,
+						fixed: 200px,
+						border-radius: 0.25rem,
+						pill-radius: 1.3rem
+					),
+					lg: (
+						padding: (
+							x: $input-btn-padding-x-lg,
+							y: $input-btn-padding-y-lg
+						),
+						line-height: $input-btn-line-height-lg,
+						fixed: 300px,
+						border-radius: 0.25rem,
+						pill-radius: 2rem
+					),
+					sm: (
+						padding: (
+							x: $input-btn-padding-x-sm,
+							y: $input-btn-padding-y-sm
+						),
+						line-height: $input-btn-line-height-sm,
+						fixed: 150px,
+						border-radius: 0.25rem,
+						pill-radius: 1.1rem
+					)
+				),
+				font-family: 'sans-serif, Arial'
+			),
+			// input icon
+			icon: (
+				default: (
+					width: 3.2rem,
+					font-size: (
+						metronic: 1.3em,
+						fontawesome: 1.2em,
+						lineawesome: 1.4em
+					)
+				),
+				lg: (
+					width: 4.2rem,
+					font-size: (
+						metronic: 1.4em,
+						fontawesome: 1.3em,
+						lineawesome: 1.6em
+					)
+				),
+				sm: (
+					width: 2.7rem,
+					font-size: (
+						metronic: 1em,
+						fontawesome: 1em,
+						lineawesome: 1.1em
+					)
+				)
+			)
+		),
+
+		// skins
+		skins: (
+			light: (
+				// default input
+				default: (
+					color: (
+						default: get-color(light, regular),
+						focus: get-color(light, regular),
+						disabled: get-color(light, regular, '-'),
+						placeholder: get-color(light, regular, '----')
+					),
+					bg: (
+						disabled: get-color(light, panel, '-')
+					),
+					border: (
+						default: get-color(light, panel),
+						disabled: get-color(light, panel, '-'),
+						focus: get-brand-color() // 
+					)
+				),
+				// solid input
+				solid: (
+					color: (
+						default: get-color(light, regular),
+						focus: get-color(light, regular),
+						disabled: get-color(light, regular, '--'),
+						placeholder: get-color(light, regular, '----')
+					),
+					bg: (
+						default: get-color(light, panel, '-'),
+						focus: get-color(light, panel),
+						disabled: get-color(light, panel, '--')
+					),
+					border: (
+						default: get-color(light, panel, '-'),
+						focus: get-brand-color(), // 
+						disabled: get-color(light, panel, '--')				
+					)
+				),
+				air: (
+					box-shadow: (
+						default: 0px 3px 20px 0px rgba(get-brand-color(), 0.11),
+						focus: 0px 3px 20px 0px rgba(get-brand-color(), 0.17)
+					)
+				)			
+			),
+
+			dark: (
+				// default input
+				default: (
+					color: (
+						default: get-color(light, regular),
+						focus: get-color(light, regular),
+						disabled: get-color(light, regular, '--'),
+						placeholder: get-color(light, regular, '-')
+					),
+					bg: (
+						disabled: get-color(light, panel, '-')
+					),
+					border: (
+						default: get-color(light, panel),
+						disabled: get-color(light, panel, '--'),
+						focus: get-brand-color() // 
+					)
+				),
+				// solid input
+				solid: (
+					color: (
+						default: get-color(light, regular),
+						focus: get-color(light, regular),
+						disabled: get-color(light, regular, '---'),
+						placeholder: get-color(light, regular, '-')
+					),
+					bg: (
+						default: get-color(light, panel, '-'),
+						focus: get-color(light, panel),
+						disabled: get-color(light, panel, '---')
+					),
+					border: (
+						default: get-color(light, panel, '-'),
+						focus: get-brand-color(), // 
+						disabled: get-color(light, panel, '---')				
+					)
+				),
+				air: (
+					box-shadow: (
+						default: 0px 3px 20px 0px rgba(get-brand-color(), 0.11),
+						focus: 0px 3px 20px 0px rgba(get-brand-color(), 0.17)
+					)
+				)					
+			)
+		)
+	),
+
+	// input group
+	input-group: (
+		layout: (
+			addon: (
+				padding: (
+					x: 0.75rem
+				)
+			)
+		)
+	),
+
+	// checkbox & radio
+	checkbox-radio: (		
+		// layout
+		layout: (
+			self: (
+				size: 18px,
+				transition: all 0.3s
+			),
+			tick: (
+				radio: 6px,
+			)
+		),
+
+		// skins
+		skins: (
+			light: (
+				outline: (
+					border: (
+						default: get-color(light, panel, '+++'),
+						checked: get-color(light, panel, '+++')
+					),
+					tick: darken(get-color(light, panel, '++'), 35%)
+				),
+				solid: (
+					bg: (
+						default: get-color(light, panel, '+'),
+						checked: get-color(light, panel, '++')
+					),
+					tick: darken(get-color(light, panel, '++'), 35%)
+				),
+				air: (
+					box-shadow: (
+						default: 0px 3px 20px 0px rgba(get-brand-color(), 0.11),
+						solid: 0px 3px 20px 0px rgba(get-brand-color(), 0.17)
+					)
+				)
+			),
+
+			dark: (
+				outline: (
+					border: (
+						default: get-color(light, panel, '+++'),
+						checked: get-color(light, panel, '+++')
+					),
+					tick: darken(get-color(light, panel, '++'), 35%)
+				),
+				solid: (
+					bg: (
+						default: get-color(light, panel, '+++'),
+						checked: get-color(light, panel, '+++')
+					),
+					tick: darken(get-color(light, panel, '++'), 35%)
+				),
+				air: (
+					box-shadow: (
+						default: 0px 3px 20px 0px rgba(get-brand-color(), 0.11),
+						solid: 0px 3px 20px 0px rgba(get-brand-color(), 0.17)
+					)
+				)
+			)				
+		)
+	)
+);

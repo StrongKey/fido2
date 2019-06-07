@@ -1,0 +1,15 @@
+//
+//** Container Configs
+//
+
+//== Containers Widths
+// Define the maximum width of '.m-container' for different screen sizes.
+
+$m--container-widths: (
+  sm: 576px,
+  md: 720px,
+  lg: 940px,
+  xl: 1140px,
+  xxl: 1340px,
+  xxxl: 1540px
+) !default;

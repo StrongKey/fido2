@@ -1,0 +1,45 @@
+//
+//** User Pics List Component
+//
+
+//== Component Base
+@mixin m-build-component--list-pics-base() {
+    .m-list-pics {
+    	> a {
+    		margin-right: 0.25rem;
+			> img {								 
+				width: 3.36rem;
+				@include border-radius(50%);
+			}			
+		}
+		 
+		&.m-list-pics--rounded {
+			> a {
+				> img {								 
+					width: 3.36rem;
+					@include border-radius(0);
+				}
+			}
+		}
+
+		&.m-list-pics--sm {
+			> a {
+				> img {					
+					width: 2.14rem;					
+				}
+			}
+		}
+
+		&.m-list-pics-rounded--sm {
+			> a {
+				> img {					
+					width: 2.14rem;	
+					@include border-radius(0);				
+				}
+			}
+		}		
+	}
+}
+
+//== Build Component Base
+@include m-build-component--list-pics-base();

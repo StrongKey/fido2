@@ -1,0 +1,77 @@
+//
+//** Spinner 1
+//
+
+//== Mixins
+@mixin m-build-component--spinner-base($config) {
+	// Spinner markup
+	.m-spinner {
+	    display: inline-block;
+	    width: array-get($config, default, size);
+	    height: array-get($config, default, size);
+	    margin: 0 auto;
+	    border-radius: 100%;  
+	    @include opacity(0);
+	    @include animation(m-spinner-scaleout 0.9s infinite ease-in-out);
+
+	    &.m-spinner--lg {
+			width: array-get($config, lg, size);
+	    	height: array-get($config, lg, size);
+		}
+
+		&.m-spinner--sm {
+			width: array-get($config, sm, size);
+	    	height: array-get($config, sm, size);
+		}
+
+		.btn & {
+			position: relative;
+			line-height: 0;
+		}
+	}
+
+	// Spinner animation
+	@include keyframes(m-spinner-scaleout) {
+	    0% { 
+	        @include opacity(0.3);
+	        @include transform(scale(0));
+	    } 
+	    100% {        
+	        @include opacity(1);
+	        @include transform(scale(1.0));
+	    }
+	}
+}
+
+@mixin m-build-component--spinner-skin($skin) {
+	@include component-skin(m-spinner, $skin) {
+		background-color: get-color($skin, panel, '+');
+	}
+}
+
+@mixin m-build-component--spinner-states() {
+    @each $name, $color in $m--state-colors {
+        .m-spinner.m-spinner--#{$name} {
+            background-color: array-get($color, base);
+        }
+    }
+}
+
+@mixin m-set-component--spinner-size($size) {
+	@include attr(width, $size);
+	@include attr(height, $size);
+}
+
+@mixin m-set-component--spinner-color($color) {
+	background-color: $color;
+}
+
+//== Build
+
+@include m-build-component--spinner-base( array-get($m--spinners, spinner) );
+
+@include m-build-component--spinner-skin( light );
+
+@include m-build-component--spinner-skin( dark );
+
+@include m-build-component--spinner-states();

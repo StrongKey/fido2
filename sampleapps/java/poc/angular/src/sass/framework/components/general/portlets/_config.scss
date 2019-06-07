@@ -1,0 +1,37 @@
+//
+//** Portlet Config
+//
+
+$m--portlet: (
+	layout: (
+		self: (
+			space: 2.2rem
+		)
+	),
+	skins: (
+		light: (
+			tools: (
+				nav: (
+					icon: (
+						color: (
+							default: darken(get-state-color(metal), 7%), 
+							hover: get-brand-color()
+						)
+					)
+				) 
+			)
+		),
+		dark: (
+			tools: (
+				nav: (
+					icon: (
+						color: (
+							default: rgba(#fff, 0.6),
+							hover: #fff
+						)
+					)
+				)
+			)
+		)
+	)
+);

@@ -1,0 +1,80 @@
+//
+//** Chart Widget 2 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget10-base() {
+     // Widget 6
+    .m-widget10 { 
+        // Chart
+        .m-widget10__chart {
+            margin-top: 1rem;
+            margin-bottom: 3.5rem;
+            position: relative;
+
+            canvas {
+                @include rounded {
+                    @include border-radius(8px);
+                }
+            } 
+        }
+
+        // Items
+        .m-widget10__items {            
+            // Item
+            .m-widget10__item {
+                // Stats
+                .m-widget10__stats {
+                    font-size: get-font-size(regular, '+');
+                    font-weight: get-font-weight(boldest);                      
+                }
+                
+                // Text
+                .m-widget10__text {
+                    font-size: get-font-size(regular, '-');
+                    font-weight: get-font-weight(regular);
+                    float: right;
+                    margin-top: 0.3rem;
+                }
+
+                // Progress
+                .progress {
+                    margin-bottom: 1.6rem;
+                    .progress-bar {
+
+                    }
+                }    
+            }            
+        }
+        // Description
+        .m-widget10__desc {
+            margin-top: 1.6rem;
+            font-size: get-font-size(regular);
+            font-weight: get-font-weight(regular);
+        }        
+    }     	 
+} 
+ 
+
+//== Component Skin
+@mixin m-build-component--widget10-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget10 {
+    	.m-widget10__items {
+            .m-widget10__stats {
+                color: get-color($skin, regular, '-');
+            }
+    		.m-widget10__text {
+                color: get-color($skin, regular, '----');
+            }
+    	}
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget10-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget10-skin();
+                        

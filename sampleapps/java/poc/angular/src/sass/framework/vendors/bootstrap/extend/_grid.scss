@@ -1,0 +1,63 @@
+//
+//** Grid Customization
+// 
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--grid-base() {
+    // row col without padding
+    .row.m-row--no-padding {
+        margin-left: 0;
+        margin-right: 0;
+
+        > div {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .row.m-row--full-height {
+        height: 100%;
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--grid-skin() {
+    $skin: get-default-skin();
+    $border-color: get-color($skin, panel);
+
+    // row separator
+    .row[class*="m-row--col-separator-"] {
+        > div {
+            border-bottom: 1px solid $border-color;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    @each $name, $value in $m--layout-breakpoints {
+        @include responsive-above($value) {
+            .row.m-row--col-separator-#{$name} {
+                > div {
+                    border-bottom:0;
+                    border-right: 1px solid $border-color;
+
+                    &:last-child {
+                        border-right: 0;
+                    }
+                }   
+            }
+        }        
+    }    
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--grid-base();
+
+//== Component Skin
+@include m-build-component--grid-skin();

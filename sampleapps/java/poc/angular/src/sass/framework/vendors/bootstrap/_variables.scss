@@ -1,0 +1,63 @@
+//
+//** Override Bootstrap Variables
+//
+
+// Fonts
+$font-family-base:									array-get($m--font-families, regular);
+
+$theme-colors: (
+  primary: array-get($m--state-colors, primary, base),
+  secondary: get-color($m--default-skin, panel),
+  success: array-get($m--state-colors, success, base),
+  info: array-get($m--state-colors, info, base),
+  warning: array-get($m--state-colors, warning, base),
+  danger: array-get($m--state-colors, danger, base),
+  light: #f8f9fa,
+  dark: #343a40  //array-get($m--state-colors, metal, base);
+);
+
+// Tabs
+$nav-tabs-border-color:                       		get-color($m--default-skin, panel);
+$nav-tabs-link-hover-border-color:            		get-color($m--default-skin, panel);
+$nav-tabs-active-link-hover-color:            		get-color($m--default-skin, regular);
+//$nav-tabs-active-link-hover-bg:               	$body-bg;
+$nav-tabs-active-link-hover-border-color:     		get-color($m--default-skin, panel);
+$nav-tabs-justified-link-border-color:        		get-color($m--default-skin, panel);
+//$nav-tabs-justified-active-link-border-color: 	$body-bg;
+
+$nav-pills-active-link-color: 						array-get($m--state-colors, primary, inverse);
+$nav-pills-active-link-bg:    						array-get($m--state-colors, primary, base);
+
+// Form & Button Controls
+
+$input-btn-padding-y:       						.65rem;
+$input-btn-padding-x:       						1rem;
+$input-btn-line-height:     						1.25;
+
+$input-btn-padding-y-sm:    						.35rem;
+$input-btn-padding-x-sm:    						.75rem;
+$input-btn-line-height-sm:  						1.5;
+
+$input-btn-padding-y-lg:    						1rem;
+$input-btn-padding-x-lg:    						1.5rem;
+$input-btn-line-height-lg:  						1.5;
+
+// Tables
+
+$table-bg:                      transparent !default;
+$table-accent-bg:               get-color($m--default-skin, panel, '-');
+$table-hover-bg:                get-color($m--default-skin, panel, '--');
+$table-active-bg:               get-state-color(primary);
+
+$table-border-color:            get-color($m--default-skin, panel, '-');
+
+$table-head-bg:                 get-color($m--default-skin, panel);
+$table-head-color:              get-color($m--default-skin, regular);
+
+/*
+$table-inverse-bg:              $gray-900 !default;
+$table-inverse-accent-bg:       rgba($white, .05) !default;
+$table-inverse-hover-bg:        rgba($white, .075) !default;
+$table-inverse-border-color:    lighten($gray-900, 7.5%) !default;
+$table-inverse-color:           $body-bg !default;
+*/

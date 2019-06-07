@@ -1,0 +1,175 @@
+//
+//** Bootstrap Timepicker Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--touchspin-base() {
+   	.bootstrap-touchspin {
+        @include rounded {
+            @include border-top-left-radius(array-get($m--forms, input, layout, self, size, default, border-radius));
+            @include border-bottom-left-radius(array-get($m--forms, input, layout, self, size, default, border-radius));
+        }
+
+        @include not-rounded {
+            @include border-radius(0 !important);
+        }
+
+        .form-control.bootstrap-touchspin-vertical-btn {
+            @include rounded {
+                @include border-top-left-radius(array-get($m--forms, input, layout, self, size, default, border-radius), '!important');
+                @include border-bottom-left-radius(array-get($m--forms, input, layout, self, size, default, border-radius), '!important');
+            }
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+        }
+
+   		.input-group-btn-vertical {
+            width: auto;
+            display: inline-block;
+
+            .btn {
+                padding: 0.13rem 0.3rem; 
+                line-height: 1;
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }
+            }
+
+            i {
+                top: 0;
+                left: 0;
+                text-align: center;
+                font-size: .9rem;
+                vertical-align: middle;
+                position: static;
+                line-height: 0;
+            }
+        }
+
+        .input-group-addon {
+            padding: array-get($m--forms, input, layout, self, size, default, padding, y) array-get($m--forms, input, layout, self, size, default, padding, x);
+            line-height: array-get($m--forms, input, layout, self, size, default, line-height);
+
+            > i {
+                line-height: 0;
+                vertical-align: middle;
+            }
+
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+        }
+
+        .input-group-btn {
+            &:first-child {
+                .btn {
+                    @include rounded {
+                        @include border-top-right-radius(0);
+                        @include border-bottom-right-radius(0); 
+                    }
+                    border-right: 0;
+
+                    @include not-rounded {
+                        @include border-radius(0 !important);
+                    }
+                }
+
+                & + .input-group-addon {
+                    border-right: 0 !important;
+                }
+            }
+
+            &:last-child {
+                .btn {
+                    border-left: 0;
+                    @include rounded {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-left-radius(0);
+                    }
+
+                    @include not-rounded {
+                        @include border-radius(0 !important);
+                    }
+                }
+            }
+        }
+
+        .form-control + .input-group-addon {
+            border-left: 0 !important;
+        }
+   	}
+}
+
+//== Component Base
+@mixin m-build-component--touchspin-skin($skin) {
+    .bootstrap-touchspin {
+        .input-group-btn-vertical {
+            .btn {
+                &.focus,
+                &:focus,
+                &:hover {
+                    background: get-color($skin, panel);
+                    border-color: get-color($skin, panel);
+                }
+            }
+        }
+
+        .input-group-addon {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default);
+        }
+    }
+
+    .m-bootstrap-touchspin-brand .bootstrap-touchspin {
+        .btn {
+            &.focus,
+            &:focus,
+            &:hover {
+                color: get-brand-inverse-color() !important;
+                background: get-brand-color() !important;
+
+                > i {
+                     color: get-brand-inverse-color() !important;
+                }
+            }
+        }
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--touchspin-validation-state($state, $color) {
+    .m-form--state {
+        .has-#{$state} {
+            .bootstrap-touchspin {
+                .input-group-btn-vertical {
+                    .btn {
+                        border-color: $color;
+                        
+                        &.focus,
+                        &:focus,
+                        &:hover {
+                            border-color: $color;
+                        }
+                    }
+                }
+            }
+        }
+    }    
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--touchspin-base();
+
+//== Component Skin - Light
+@include m-build-component--touchspin-skin(light);
+
+//== Component Validation States
+@include m-build-component--touchspin-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--touchspin-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--touchspin-validation-state(danger, array-get($m--state-colors, danger, base));  

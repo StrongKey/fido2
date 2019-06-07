@@ -1,0 +1,375 @@
+//
+//** Global Helper Classes
+//
+
+//== Margin & padding helpers
+
+@mixin m-margin-and-padding($mode) {
+	@if $mode == general {
+		$mode: '';
+	} @else {
+		$mode: "-" + $mode;
+	}
+
+	@for $i from 1 through 20 {
+		$num: $i * 5;
+
+		.m--margin-#{$num}#{$mode} {
+			margin: #{$num}px !important;
+		}
+
+		.m--margin-top-#{$num}#{$mode} {
+			margin-top: #{$num}px !important;
+		}
+
+		.m--margin-bottom-#{$num}#{$mode} {
+			margin-bottom: #{$num}px !important;
+		}
+
+		.m--margin-left-#{$num}#{$mode} {
+			margin-left: #{$num}px !important;
+		}
+
+		.m--margin-right-#{$num}#{$mode} {
+			margin-right: #{$num}px !important;
+		}
+
+		.m--padding-#{$num}#{$mode} {
+			padding: #{$num}px !important;
+		}
+
+		.m--padding-top-#{$num}#{$mode} {
+			padding-top: #{$num}px !important;
+		}
+
+		.m--padding-bottom-#{$num}#{$mode} {
+			padding-bottom: #{$num}px !important;
+		}
+
+		.m--padding-left-#{$num}#{$mode} {
+			padding-left: #{$num}px !important;
+		}
+
+		.m--padding-right-#{$num}#{$mode} {
+			padding-right: #{$num}px !important;
+		}
+	}
+}
+
+@include m-margin-and-padding(general);
+
+@include desktop {
+	@include m-margin-and-padding(desktop);
+}
+
+@include tablet {
+	@include m-margin-and-padding(tablet);
+}
+
+@include tablet-and-mobile {
+	@include m-margin-and-padding(tablet-and-mobile);
+}
+
+@include mobile {
+	@include m-margin-and-padding(mobile);
+}
+
+//== General helpers
+
+.m--full-height {
+	height: 100%;
+}
+
+.m--valign-top {
+	vertical-align: top;
+} 
+
+.m--space-5 {
+	display: block;
+	height: 0;
+	margin-bottom: 5px;
+}
+
+.m--space-10 {
+	display: block;
+	height: 0;
+	margin-bottom: 10px;
+}
+
+.m--space-15 {
+	display: block;
+	height: 0;
+	margin-bottom: 15px;
+}
+
+.m--space-20 {
+	display: block;
+	height: 0;
+	margin-bottom: 20px;
+}
+
+.m--space-30 {
+	display: block;
+	height: 0;
+	margin-bottom: 30px;
+}
+
+.m--space-40 {
+	display: block;
+	height: 0;
+	margin-bottom: 40px;
+}
+
+.m--valign-middle {
+	vertical-align: middle;
+}
+
+.m--valign-bottom {
+	vertical-align: bottom;
+}
+
+.m--block-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.m--align-right {
+	text-align: right;
+}
+
+.m--align-left {
+	text-align: left;
+}
+
+.m--align-center {
+	text-align: center;
+}
+
+.m--pull-right {
+	float: right;
+}
+
+.m--pull-left {
+	float: left;
+}
+
+.m--img-rounded {
+	border-radius: 50%;
+}
+
+.m--block-inline {
+	display: inline-block;
+}
+
+.m--icon-middle {
+	&:before {
+		vertical-align: middle;
+	}
+}
+
+.m--hide {
+	display: none !important;
+}
+
+.m--clearfix {
+	@include clearfix();
+}
+
+.m--marginless {
+	margin: 0 !important;
+}
+
+.m--img-centered {
+	text-align: center;
+}
+
+//== Text Transform
+.m--font-transform-u {
+	text-transform: uppercase;
+}
+
+.m--font-transform-l {
+	text-transform: lowercase;
+}
+
+.m--font-transform-c {
+	text-transform: capitalize;
+}
+
+.m--font-transform-i {
+	text-transform: initial;
+}
+
+//== Font Weights
+@each $name, $weight in $m--font-weights {
+	.m--font-#{$name} {
+		font-weight: $weight; 
+	}
+}
+
+//== Font Sizes
+@each $type, $sizes in $m--font-sizes {
+	@each $name, $size in $sizes {
+		$level: get-font-size-level($name);
+		
+		.m--#{$type}-font-size-#{$level} {
+			font-size: $size !important; 
+		}
+	}
+}
+
+//== Font Weights
+b, strong {
+    font-weight: bold;
+}
+
+//== State font color
+@each $name, $color in $m--state-colors {
+	.m--font-#{$name} {
+		color: array-get($color, base) !important; 
+	}
+
+	.m--font-inverse-#{$name} {
+		color: array-get($color, inverse) !important; 
+	}
+
+	.m--bg-#{$name} {
+		background-color: array-get($color, base) !important; 
+	}
+
+	.m--bg-fill-#{$name} {
+		background-color: array-get($color, base) !important; 
+		color: array-get($color, inverse) !important; 
+	}
+}
+
+//== Responsive Helpers
+.m--visible-desktop,
+.m--visible-desktop-inline-block,
+.m--visible-desktop-inline,
+.m--visible-desktop-table,
+.m--visible-desktop-table-cell,
+
+.m--visible-tablet,
+.m--visible-tablet-inline-block,
+.m--visible-tablet-inline,
+.m--visible-tablet-table,
+.m--visible-tablet-table-cell,
+
+.m--visible-tablet-and-mobile,
+.m--visible-tablet-and-mobile-inline-block,
+.m--visible-tablet-and-mobile-inline,
+.m--visible-tablet-and-mobile-table,
+.m--visible-tablet-and-mobile-table-cell,
+
+.m--visible-mobile,
+.m--visible-mobile-inline-block,
+.m--visible-mobile-inline,
+.m--visible-mobile-table,
+.m--visible-mobile-table-cell {
+	display: none !important;
+}
+
+@include desktop {
+	.m--visible-desktop {
+		display: block !important;
+	}
+
+	.m--visible-desktop-inline-block {
+		display: inline-block !important;
+	}
+
+	.m--visible-desktop-inline {
+		display: inline !important;
+	}
+
+	.m--visible-desktop-table {
+		display: table !important;
+	}	
+
+	.m--visible-desktop-table-cell {
+		display: table-cell !important;
+	}	
+
+	.m--hidden-desktop {
+		display: none !important;
+	}
+}
+
+@include tablet {
+	.m--visible-tablet {
+		display: block !important;
+	}
+
+	.m--visible-tablet-inline-block {
+		display: inline-block !important;
+	}
+
+	.m--visible-tablet-inline {
+		display: inline !important;
+	}
+
+	.m--visible-tablet-table {
+		display: table !important;
+	}	
+
+	.m--visible-tablet-table-cell {
+		display: table-cell !important;
+	}	
+
+	.m--hidden-tablet {
+		display: none !important;
+	}
+}
+
+@include tablet-and-mobile {
+	.m--visible-tablet-and-mobile {
+		display: block !important;
+	}
+
+	.m--visible-tablet-and-mobile-inline-block {
+		display: inline-block !important;
+	}
+
+	.m--visible-tablet-and-mobile-inline {
+		display: inline !important;
+	}
+
+	.m--visible-tablet-and-mobile-table {
+		display: table !important;
+	}	
+
+	.m--visible-tablet-and-mobile-table-cell {
+		display: table-cell !important;
+	}	
+
+	.m--hidden-tablet-and-mobile {
+		display: none !important;
+	}
+}
+
+@include mobile {
+	.m--visible-mobile {
+		display: block !important;
+	}
+
+	.m--visible-mobile-inline-block {
+		display: inline-block !important;
+	}
+
+	.m--visible-mobile-inline {
+		display: inline !important;
+	}
+
+	.m--visible-mobile-table {
+		display: table !important;
+	}	
+
+	.m--visible-mobile-table-cell {
+		display: table-cell !important;
+	}	
+
+	.m--hidden-mobile {
+		display: none !important;
+	}
+}

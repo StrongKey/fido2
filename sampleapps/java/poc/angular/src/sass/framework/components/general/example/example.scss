@@ -1,0 +1,45 @@
+//
+//** "Example" Component
+//
+
+// component class name format is ".m-[component name]" 
+.m-example {
+	// base markup
+	// ---
+
+	// custom component modifier
+	&.m-example--modifier {
+		// ---
+	}
+
+	// component child element
+	&.m-example__element {
+		// ---
+	}
+
+	// default skin 
+	// ---
+
+	// global and custom reverse skin
+	.m--style-skin-reverse &,
+	.m-example--skin-reverse & {
+		// ---
+	}
+
+	// brand colors
+	@each $name, $color in $m--state-colors {
+		// #{$name} - color name
+		// array-get($color, base) - base color
+		// array-get($color, font) - font color
+	}
+
+	// mandatory global rounded style mode
+	.m--style-rounded & {
+		// ---
+	}
+
+	// mandatory global air style mode
+	.m--style-air & {
+		// ---
+	}
+}

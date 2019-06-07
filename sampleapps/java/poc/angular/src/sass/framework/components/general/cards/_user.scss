@@ -1,0 +1,129 @@
+//
+//** User Card
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--card-user-base() {
+    .m-card-user {
+    	padding: 5px 0;
+        margin: 0;
+        display: table;
+        table-layout: fixed;
+
+        .m-card-user__pic {
+            display: table-cell;
+            text-align: right;
+            padding: 0 5px 0 0;
+            vertical-align: middle;
+            width: 70px;
+
+            img {
+                max-width: 70px !important;
+                margin: 0 !important;
+                @include border-radius(100%);
+            }
+
+            .m-card-user__no-photo {
+                height: 70px;
+                width: 70px;
+                display: inline-block;
+                text-align: center;
+                position: relative;
+                @include vertical-horizontal-center-flexbox();
+                @include border-radius(100%);
+
+                > span {
+                    line-height: 0;
+                    font-weight: get-font-weight(boldest); 
+                    font-size: get-font-size(regular, '+++');
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+        .m-card-user__details {
+            display: table-cell;
+            width: 100%;
+            text-align: left;
+            vertical-align: middle;
+            padding: 0 0 0 15px;
+
+            // name
+            .m-card-user__name {
+                display: block;
+                padding: 0 0 0 0;
+                font-size: get-font-size(regular, '+++');
+                font-weight: get-font-weight(bold);
+            }
+
+            // email
+            .m-card-user__email {
+                display: inline-block;
+                padding: 0 0 0 0;
+                font-size: get-font-size(regular); 
+            }
+        }    	
+
+        &.m-card-user--sm {
+            .m-card-user__pic {
+                width: 40px;
+                padding-right: 10px;
+
+                img {
+                    max-width: 40px !important;
+                }
+
+                .m-card-user__no-photo {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+
+            .m-card-user__details {
+                padding: 6px 0 0 0;
+
+                // name
+                .m-card-user__name {
+                    font-size: get-font-size(regular);
+                }
+
+                // email
+                .m-card-user__email {
+                    padding: 0 0 0 0;
+                    font-size: get-font-size(regular, '--'); 
+                }
+            }       
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--card-user-skin($skin) {
+
+    @include component-skin(m-card-user, $skin) {
+        .m-card-user__details {
+            // name
+            .m-card-user__name {
+                color: get-color($skin, regular, '++++');          
+            }
+
+            // email
+            .m-card-user__email {
+                @include m-set-component--typography-link-color(get-color($skin, regular, '+'), get-color($skin, regular, '+++'));
+            }
+        }      
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--card-user-base();
+
+//== Component Skin - Light
+@include m-build-component--card-user-skin(light); 
+
+//== Component Skin - Dark
+@include m-build-component--card-user-skin(dark); 

@@ -1,0 +1,190 @@
+//
+//** Timeline
+//
+
+//== Component base
+@mixin m-build-component--list-timeline-base($layout) {
+
+    .m-list-timeline__group {
+        margin: array-get($layout, group, self, margin); 
+    }
+
+    .m-list-timeline__heading {
+        margin: array-get($layout, group, heading, margin); 
+        font-weight: get-font-weight(boldest);   
+        font-size: get-font-size(regular);
+        text-transform: uppercase;
+    }    
+
+    .m-list-timeline__items {
+        position: relative;
+        padding: array-get($layout, group, items, self, padding);
+        margin: array-get($layout, group, items, self, margin);      
+
+        &:before {
+            position: absolute;
+            display: block;
+            content: '';
+            width: 1px;
+            height: 100%;
+            top: 0;
+            bottom: 0;
+            left: array-get($layout, group, self, line-offset);     
+        }  
+
+        .m-list-timeline__item {
+            position: relative;
+            display: table;
+            table-layout: fixed;
+            width: 100%;            
+            padding: array-get($layout, group, items, item, self, padding); 
+            margin: array-get($layout, group, items, item, self, margin); 
+
+            &:first-child,
+            &:last-child {
+                &:before {
+                    background-color: white;
+                    position: absolute;
+                    display: block;
+                    content: '';
+                    width: 1px;
+                    height: 50%;
+                    top: 0;
+                    bottom: 0;
+                    left: array-get($layout, group, self, line-offset); 
+                }  
+            }
+
+            &:last-child {
+                &:before {
+                    top: auto;
+                    bottom: 0;
+                }   
+            }            
+
+            .m-list-timeline__badge {
+                text-align: left;
+                vertical-align: middle;
+                display: table-cell;
+                position: relative;
+                width: array-get($layout, group, items, item, badge, width);
+
+                &:before {
+                    position: absolute;
+                    display: block;
+                    content: '';
+                    width: array-get($layout, group, items, item, badge, size);
+                    height: array-get($layout, group, items, item, badge, size);
+                    left: 0;                
+                    top: 50%;
+                    margin-top: -(array-get($layout, group, items, item, badge, size) / 2);
+                    @include border-radius(100%);
+                }
+            }
+
+            .m-list-timeline__icon {
+                text-align: left;
+                vertical-align: middle;
+                display: table-cell;
+                width: array-get($layout, group, items, item, icon, width);
+                padding: array-get($layout, group, items, item, icon, padding);    
+                line-height: 0;
+            }
+
+            @include icons-attr(font-size, (fontawesome: 1.2rem, lineawesome: 1.6rem, metronic: 1.6rem) );
+
+            .m-list-timeline__text {
+                display: table-cell;
+                text-align: left;
+                vertical-align: middle;
+                width: 100%;
+                padding: array-get($layout, group, items, item, text, padding);
+                font-size: get-font-size(regular);
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+
+            .m-list-timeline__time {                
+                display: table-cell;
+                text-align: right;
+                vertical-align: middle;
+                width: array-get($layout, group, items, item, time, width);
+                padding: array-get($layout, group, items, item, time, padding);
+                font-size: get-font-size(regular, '-');
+            }
+
+            &:first-child {
+                padding-top: 0;
+                margin-top: 0;
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+//== Component skin
+@mixin m-build-component--list-timeline-skin($layout, $skin) {
+
+    @include component-skin(m-list-timeline, $skin) {
+        
+        .m-list-timeline__items {
+            &:before {
+                background-color: get-color($skin, panel);
+            }
+
+            .m-list-timeline__item {
+                .m-list-timeline__badge {
+                    &:before {
+                        background-color: get-color($skin, panel);
+                    }
+
+                    @each $name, $color in $m--state-colors {
+                        &.m-list-timeline__badge--#{$name} {
+                            &:before {
+                                background-color: array-get($color, base);
+                            }
+                        }
+                    }
+                }
+
+                .m-list-timeline__icon {
+                    color: get-color($skin, icon);
+                }
+
+                .m-list-timeline__text {
+                    color: get-color($skin, regular);
+                }
+
+                .m-list-timeline__time {
+                    color: get-color($skin, regular, '--');   
+                }
+
+                &:first-child,
+                &:last-child {
+                    &:before {
+                        background-color: array-get($layout, self, bg-color);
+                    }
+                }
+
+                &.m-list-timeline__item--read {
+                    @include opacity(0.5);
+                }
+            }            
+        }
+    } 
+}
+
+//== Build Component Base
+@include m-build-component--list-timeline-base( array-get($m--lists, timeline, layout ) );
+
+//== Build Component - Light Skin
+@include m-build-component--list-timeline-skin( array-get($m--lists, timeline, skins, light), light );
+
+//== Build Component - Dark Skin
+@include m-build-component--list-timeline-skin( array-get($m--lists, timeline, skins, dark), dark );

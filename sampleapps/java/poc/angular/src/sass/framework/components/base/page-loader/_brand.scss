@@ -1,0 +1,54 @@
+//
+//** Page loader - Brand 
+//
+//
+
+//== Mixins
+@mixin m-build-component--page-loader-brand-base() {
+	.m-page-loader.m-page-loader--brand {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: array-get($m--page-loader, layout, self, zindex);
+		display: none;
+
+    	.m-page--loading & {	
+			display: flex;
+			justify-content: center;
+    		align-items: center;
+		}
+
+		&.m-page-loader--non-block {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			right: auto;
+			bottom: auto;
+			width: auto;
+
+			.m-page--loading-non-block & {	
+				display: inline-block;
+			}
+		}
+	}
+}
+
+@mixin m-build-component--page-loader-brand-skin() {
+    $skin: get-default-skin();
+
+    .m-page-loader.m-page-loader--brand {
+        background: get-color($skin, box);
+
+        &.m-page-loader--non-block {
+        	background: transparent;
+        }
+    }
+}
+
+//== Build
+
+@include m-build-component--page-loader-brand-base();
+
+@include m-build-component--page-loader-brand-skin();

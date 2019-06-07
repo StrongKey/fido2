@@ -1,0 +1,17 @@
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoActionsOnKey.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoActionsOnPolicy.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoGetPolicyInfo.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/PreregistrationRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/PatchFidoPolicyRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestCreateFidoPolicy.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/AuthenticationRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/RegistrationRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/CreateFidoPolicyRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/PreauthenticationRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/common/common.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/skfs/requests/PatchFidoKeyRequest.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/common/Constants.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoAuthenticate.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoGetKeysInfo.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/com/strongkey/apiclient/impl/RestFidoRegister.java
+/usr/local/workspace/github/fido2/server/apiclient/src/main/java/FidoEngine.java

@@ -1,0 +1,104 @@
+ //
+//** NoUiSlider Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--nouislider-base() {
+    .noUi-target {
+        @include not-rounded {
+            @include border-radius(0 !important);
+        }
+        
+        &.noUi-horizontal {
+            height: 15px;
+
+            .noUi-handle {
+                width: 24px;
+                height: 24px;
+                left: -17px;
+                top: -6px;
+                border-radius: 50%;
+                outline: none;
+
+                &::before {
+                    display: none;
+                }
+
+                &::after {
+                    display: none;
+                }                
+            }
+        }
+
+        &.noUi-vertical {
+            height: 150px;
+            width: 15px;
+
+            .noUi-handle {
+                width: 24px;
+                height: 24px;
+                left: -5.5px;
+                top: -6px;
+                border-radius: 50%;
+                outline: none;
+
+                &::before {
+                    display: none;
+                }
+
+                &::after {
+                    display: none;
+                }                
+            }
+        }
+
+
+        //== State colors
+        &.m-nouislider {
+            @each $name, $color in $m--state-colors {
+                &.m-nouislider--connect-#{$name} {
+                    .noUi-connect {
+                        background: array-get($color, base);
+                    }
+                }
+
+                &.m-nouislider--handle-#{$name} {
+                    .noUi-handle {
+                        border: 0;
+                        background: array-get($color, base);
+                        @include shadow(0 3px 6px -3px array-get($color, base));
+                    }
+                }
+            }   
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--nouislider-skin($skin) {     
+    .noUi-target {
+        border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default);  
+        background: get-color($skin, panel, '---');
+        @include shadow(none); 
+
+        .noUi-connect {
+            background: get-brand-color();  
+        }  
+
+        .noUi-handle {
+            border: 1px solid get-color($skin, panel, '++');
+            @include shadow(0 3px 6px -3px get-color($skin, panel, '+++++'));
+        }
+    }    
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--nouislider-base();
+
+//== Component Skin
+@include m-build-component--nouislider-skin(light);
+

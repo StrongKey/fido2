@@ -1,0 +1,200 @@
+//
+//** Bootstrap Datetimepicker Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--datepicker-base() {
+    .datepicker  {
+    	width: 265px;
+    	padding: 10px;
+        @include not-rounded {
+            @include border-radius(0);
+        }
+
+    	&.datepicker-orient-top {
+    		margin-top: 8px;
+    	}
+
+    	table {
+    		width: 100%;
+    	}
+
+    	td, th {
+    		width: 35px;
+    		height: 35px;
+            @include rounded {
+    		    @include border-radius(3px);
+            }
+            @include not-rounded {
+                @include border-radius(0);
+            }
+    		font-weight: get-font-weight(regular);
+    	}
+
+    	thead {
+    		th {
+    			&.prev,
+    			&.datepicker-switch,
+    			&.next {
+    				font-weight: get-font-weight(bolder);
+
+                    i {
+                        font-size: get-font-size(regular, '-');
+                    }
+    			}
+
+    			&.dow {
+    				font-weight: get-font-weight(bolder);
+    			}
+    		}
+    	}
+
+    	tbody {
+    		tr > td {
+    			&.day {
+
+	    			&.today {
+	    				position: relative;
+                        
+	    				&:before {
+						  	content: '';
+						  	display: inline-block;
+						  	border: solid transparent;
+						  	border-width: 0 0 7px 7px;
+						  	border-bottom-color: #ffffff;
+						  	border-top-color: rgba(0, 0, 0, 0.2);
+						  	position: absolute;
+						  	bottom: 4px;
+						  	right: 4px;
+						}
+	    			}	
+    			}    				
+    		}
+    	}
+
+    	tfoot {
+    		tr > th {
+    			&.today,
+    			&.clear {
+                    @include rounded {
+    				        @include border-radius(3px);
+                    }
+    				font-weight: get-font-weight(bolder);  
+    			}
+    		}
+    	}
+    }
+
+    .input-daterange {
+    	.input-group-addon {
+    		min-width: 44px;
+   		}
+
+        input {
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+            text-align: left;
+        }
+   	}
+}
+
+//== Component Skin
+@mixin m-build-component--datepicker-skin($skin) {
+    .datepicker  {
+        thead {
+            th {
+                &.prev,
+                &.datepicker-switch,
+                &.next {
+                    &:hover {
+                        background: get-color($skin, panel);
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr > td {
+                &.day {
+                    color: get-color($skin, regular);
+
+                    &:hover {
+                        background: get-color($skin, panel);
+                    }
+
+                    &.old {
+                        color: get-color($skin, regular, '--');
+                    }
+
+                    &.new {
+                        color: get-color($skin, regular);
+                    }    
+
+                    &.selected,
+                    &.selected:hover,
+                    &.active,
+                    &.active:hover {
+                        background: get-state-color(primary, base);
+                        color: get-state-color(primary, inverse);
+                    }   
+
+                    &.today {
+                        background: lighten(get-state-color(primary, base), 10%);
+                        color: get-state-color(primary, inverse);
+                        
+                        &:before {
+                            border-bottom-color: #ffffff;
+                            border-top-color: rgba(0, 0, 0, 0.2);
+                        }
+                    }   
+
+                    &.range {
+                        background: get-color($skin, panel, '-');
+                    }
+                }       
+
+                span.month {
+                    color: get-color($skin, regular);
+
+                    &.focused,
+                    &:hover {
+                        background: get-color($skin, panel);
+                    }
+
+                    &.active:hover,
+                    &.active {
+                        background: get-state-color(primary, base);
+                        color: get-state-color(primary, inverse);
+                    }
+                }               
+            }
+        }
+
+        tfoot {
+            tr > th {
+                &.today,
+                &.clear {
+
+                    &:hover {
+                        background: get-color($skin, panel);
+                    }
+                }
+            }
+        }
+
+        &.datepicker-inline {
+            border: 1px solid get-color($skin, panel, '-');
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--datepicker-base();
+
+//== Component Skin - Light
+@include m-build-component--datepicker-skin(light);

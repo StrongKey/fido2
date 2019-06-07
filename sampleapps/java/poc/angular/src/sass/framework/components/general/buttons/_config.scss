@@ -1,0 +1,139 @@
+//
+//** Button Component Config
+//
+
+$m--buttons: (
+	layout: (
+		//== Self
+		self: (
+			border-radius: 0.25rem,
+			transition: 'color 0.15s ease-in-out, background-color 0.15s ease-in-out, background 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+		),
+
+		//== Default bootstrap button paddings
+		default: (
+			default: (
+				self: (
+					padding: (
+						x: $input-btn-padding-x,
+						y: $input-btn-padding-y
+					)
+				),
+				icon: (
+					font-size: (
+						lineawesome: 1.3rem, 
+						fontawesome: 1.1rem, 
+						metronic: 1.3rem
+					),
+					icon-only-size: 33px
+				)
+			),
+			lg: (
+				self: (
+					padding: (
+						x: $input-btn-padding-x-lg,
+						y: $input-btn-padding-y-lg
+					)
+				),				
+				icon: (
+					font-size: (
+						lineawesome: 1.5rem, 
+						fontawesome: 1.3rem, 
+						metronic: 1.5rem
+					),
+					icon-only-size: 43px
+				)
+			),
+			sm: (
+				self: (
+					padding: (
+						x: $input-btn-padding-x-sm,
+						y: $input-btn-padding-y-sm
+					),
+				),
+				icon: (
+					font-size: (
+						lineawesome: 1.1rem, 
+						fontawesome: 1rem, 
+						metronic: 1.1rem
+					),
+					icon-only-size: 30px
+				)
+			)
+		),
+
+		//== Custom button paddings and fonts
+		custom: (
+			default: (
+				self: (
+					font-size: 1rem,
+					padding: (
+						x: 2rem,
+						y: 0.75rem
+					)
+				),
+				icon: (
+					font-size: (
+						lineawesome: 1.3rem, 
+						fontawesome: 1.1rem, 
+						metronic: 1.3rem
+					),
+					icon-only-size: 40px
+				)
+			),
+			lg: (
+				self: (
+					font-size: 1.2rem,
+					padding: (
+						x: 2.5rem,
+						y: 1rem
+					)
+				),
+				icon: (
+					font-size: (
+						lineawesome: 1.5rem, 
+						fontawesome: 1.2rem, 
+						metronic: 1.5rem
+					),
+					icon-only-size: 50px
+				)
+			),
+			sm: (
+				self: (
+					font-size: 0.9rem,
+					padding: (
+						x: 1rem,
+						y: .5rem
+					)
+				),
+				icon: (
+					font-size: (
+						lineawesome: 1.1rem, 
+						fontawesome: 1rem, 
+						metronic: 1.1rem
+					),
+					icon-only-size: 30px
+				)
+			)
+		)
+	),
+
+	skins: (
+		light: (
+			air: (
+				box-shadow:(
+					default: 0px 3px 20px 0px rgba(get-brand-color(), 0.17),
+					hover: 0px 3px 20px 0px rgba(get-brand-color(), 0.26)
+				)
+			)
+		),
+		dark: (			
+			air: (
+				box-shadow:(
+					default: 0px 3px 20px 0px rgba(get-brand-color(), 0.17),
+					hover: 0px 3px 20px 0px rgba(get-brand-color(), 0.26)
+				)
+			)
+		)
+	)
+);

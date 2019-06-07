@@ -1,0 +1,112 @@
+//
+//** Timeline 2 Component
+//
+
+//== Component Base
+@mixin m-build-component--timeline-2-base() {
+	.m-timeline-2 {	
+		&:before {     
+	    	content: '';
+	    	position: absolute;     
+	    	left: 4.89rem;
+	    	width: 0.214rem;
+	    	height: 100%;	    	
+	  	}
+
+	  	.m-timeline-2__items {	  		
+	  		.m-timeline-2__item {
+	  			display: table;	  			
+	  			position: relative;	
+
+	  			.m-timeline-2__item-time {
+	  				display: table-cell;	  				 
+	  				font-size: get-font-size(regular, '+++');
+	  				font-weight: get-font-weight(bolder);
+	  				vertical-align: top;
+	  				position: absolute;	  				 
+	  				padding-top: 0.18rem;   								
+	  			}	  			 
+
+		  		.m-timeline-2__item-cricle {	  				
+		  			@include border-radius(50%); 
+		  			border: 0.89rem solid white;	  				 
+		  			z-index: 1;	 		  				 
+		  			top: 0.2rem;		  				
+		  			left: 4.1rem;
+		  			position: relative;
+
+		  			> i {
+		  				font-size: 1.78rem; 
+		  				top: -0.93rem;
+		  				left: -0.57rem;
+		  				position: absolute;						
+		  			}	  				 
+		  		}
+		  		 
+	  			.m-timeline-2__item-text {
+	  				display: table-cell;  				
+	  				vertical-align: top;
+	  				font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bold); 				 
+	  				padding-bottom: 0.3rem; 
+	  				padding-left: 5rem;
+
+	  				&.m-timeline-2__item-text--bold {
+	  					font-size: get-font-size(regular, '++');
+	  					font-weight: get-font-weight(bolder);
+	  					padding-top: 0.21rem;		  				
+		  			}
+
+		  			> span {
+		  				font-weight: get-font-weight(boldest);
+		  			}
+	  			}
+
+	  			.m-list-pics {
+	  				display: table-cell;
+	  				vertical-align: top; 	  				  				
+	  			}	  			 
+	  		}
+	  	}
+	}
+}
+
+
+
+
+//== Component Skin
+@mixin m-build-component--timeline-2-skin() {
+	$skin: get-default-skin();
+	.m-timeline-2 {
+		&:before {     	
+	    	background-color: #E7E9F5;
+	  	}
+
+	  	.m-timeline-2__items {
+	  		.m-timeline-2__item {
+	  			.m-timeline-2__item-time {
+	  				color: get-color($skin, regular, '---');
+	  			}
+	  			
+	  			.m-timeline-2__item-text {	  				 
+	  				color: get-color($skin, regular, '--');
+
+	  				&.m-timeline-2__item-text--bold {
+	  					color: get-color($skin, regular, '-'); 		  				
+		  			}
+
+	  				> span {
+
+	  				}
+	  			}	  			 
+	  		}
+	  	}
+	}
+}
+
+//== Build Component Base
+@include m-build-component--timeline-2-base();
+
+//== Build Component Skin
+@include m-build-component--timeline-2-skin();
+

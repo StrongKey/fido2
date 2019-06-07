@@ -1,0 +1,526 @@
+//
+//** Global Helper Functions
+//
+
+/// Remove the unit of a length
+/// @param {Number} $number - Number to remove unit from
+/// @return {Number} - Unitless number
+@function strip-unit($number) {
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+
+    @return $number;
+}
+
+//== Map Get Deep
+// Given a map and a list of keys, find the value at the given key
+@function array-get($map, $keys...) {
+    @if length($keys) == 1 {
+        $keys: nth($keys, 1);
+    }
+
+    $warn: "#{nth($keys, 1)}";
+    $length: length($keys);
+    $get: map-get($map, nth($keys, 1));
+
+    @if $length > 1 {
+        @for $i from 2 through $length {
+            @if $get != null and type-of($get) == 'map' {
+                $warn: $warn + "->#{nth($keys, $i)}";
+                $get: map-get($get, nth($keys, $i));
+
+                @if $get == null {
+                    @return null;
+                }
+            }
+            @else {
+                @return array-get-warning($warn, $get, nth($keys, $i));
+            }
+        }
+    }
+
+    @return $get;
+}
+
+//== Checks if array has given key
+@function array-has($map, $keys...) {
+    @if length($keys) == 1 {
+        $keys: nth($keys, 1);
+    }
+
+    $warn: "#{nth($keys, 1)}";
+    $length: length($keys);
+    $get: map-get($map, nth($keys, 1));
+
+    @if $length > 1 {
+        @for $i from 2 through $length {
+            @if $get != null and type-of($get) == 'map' {
+                $warn: $warn + "->#{nth($keys, $i)}";
+                $get: map-get($get, nth($keys, $i));
+
+                @if $get == null {
+                    @return false;
+                }
+            }
+            @else {
+                 @return false;
+            }
+        }
+    }
+
+    @if $get != null {
+        @return true;
+    } 
+    @else {
+        @return false;   
+    }
+}
+
+//== Map Get Deep Warning
+// Displays a warning if the retrieved value is `null`
+@function array-get-warning($warn, $get, $key) {
+    @if $get == null {
+        @warn "Map has no value for key search `#{$warn}`";
+    }
+    @else if type-of($get) != 'map' {
+        @warn "Non-map value found for key search `#{$warn}`, cannot search for key `#{$key}`";
+    }
+    @return null;
+}
+
+//== General readible font color for give background color
+@function get-display-color($color) {
+    @if (lightness( $color ) > 50) {
+      //@return #000000; // Lighter color, return black
+      @return darken($color, 50%)
+    }
+    @else {
+      //@return #FFFFFF; // Darker color, return white
+      @return lighten($color, 50%)
+    }
+}
+
+//== Typography Functions ==//
+
+//== Get font size for given level($i can accent '-, --, ---, ----, -----, +, ++, +++, ++++, +++++)
+@function get-font-size-level($i) {
+    @if ($i == 'up1') {
+        @return 'lg1';
+    }
+
+    @if ($i == 'up2') {
+        @return 'lg2';
+    }
+
+    @if ($i == 'up3') {
+        @return 'lg3';
+    }
+
+    @if ($i == 'up4') {
+        @return 'lg4';
+    }
+
+    @if ($i == 'up5') {
+        @return 'lg5';
+    }
+
+    @if ($i == 'down1') {
+        @return 'sm1';
+    }
+
+    @if ($i == 'down2') {
+        @return 'sm2';
+    }
+
+    @if ($i == 'down3') {
+        @return 'sm3';
+    }
+
+    @if ($i == 'down4') {
+        @return 'sm4';
+    }
+
+    @if ($i == 'down5') {
+        @return 'sm5';
+    }
+
+    @return '';
+}
+
+//== Get font color for given level($i can accent '-, --, ---, ----, -----, +, ++, +++, ++++, +++++)
+@function get-font-color-level($i) {
+    @if ($i == '1') {
+        @return '+';
+    }
+
+    @if ($i == 'up2') {
+        @return '++';
+    }
+
+    @if ($i == 'up3') {
+        @return '+++';
+    }
+
+    @if ($i == 'up4') {
+        @return '++++';
+    }
+
+    @if ($i == 'up5') {
+        @return '+++++';
+    }
+
+    @if ($i == 'down1') {
+        @return '-';
+    }
+
+    @if ($i == 'down2') {
+        @return '--';
+    }
+
+    @if ($i == 'down3') {
+        @return '---';
+    }
+
+    @if ($i == 'down4') {
+        @return '----';
+    }
+
+    @if ($i == 'down5') {
+        @return '-----';
+    }
+
+    @return '';
+}
+
+@function get-color($skin, $type, $i: base) {
+    @if ($skin == light) {
+        @if ($i == '+') {
+            $i: darken1;
+        }
+
+        @if ($i == '++') {
+            $i: darken2;
+        }
+
+        @if ($i == '+++') {
+            $i: darken3;
+        }
+
+        @if ($i == '++++') {
+            $i: darken4;
+        }
+
+        @if ($i == '+++++') {
+            $i: darken5;
+        }
+
+        @if ($i == '-') {
+            $i: lighten1;
+        }
+
+        @if ($i == '--') {
+            $i: lighten2;
+        }
+
+        @if ($i == '---') {
+            $i: lighten3;
+        }
+
+        @if ($i == '----') {
+            $i: lighten4;
+        }
+
+        @if ($i == '-----') {
+            $i: lighten5;
+        }
+    }
+
+    @if ($skin == dark) {
+        @if ($i == '-') {
+            $i: darken1;
+        }
+
+        @if ($i == '--') {
+            $i: darken2;
+        }
+
+        @if ($i == '---') {
+            $i: darken3;
+        }
+
+        @if ($i == '----') {
+            $i: darken4;
+        }
+
+        @if ($i == '-----') {
+            $i: darken4;
+        }
+
+        @if ($i == '+') {
+            $i: lighten1;
+        }
+
+        @if ($i == '++') {
+            $i: lighten2;
+        }
+
+        @if ($i == '+++') {
+            $i: lighten3;
+        }
+
+        @if ($i == '++++') {
+            $i: lighten4;
+        }
+
+        @if ($i == '+++++') {
+            $i: lighten4;
+        }
+    }    
+
+    @return array-get($m--typography-colors, $skin, $type, $i);
+}
+
+@function get-shadow($skin, $i: base) {
+    @if ($skin == light) {
+        @if ($i == '+') {
+            $i: darken1;
+        }
+
+        @if ($i == '++') {
+            $i: darken2;
+        }
+
+        @if ($i == '+++') {
+            $i: darken3;
+        }
+
+        @if ($i == '++++') {
+            $i: darken4;
+        }
+
+        @if ($i == '+++++') {
+            $i: darken5;
+        }
+
+        @if ($i == '-') {
+            $i: lighten1;
+        }
+
+        @if ($i == '--') {
+            $i: lighten2;
+        }
+
+        @if ($i == '---') {
+            $i: lighten3;
+        }
+
+        @if ($i == '----') {
+            $i: lighten4;
+        }
+
+        @if ($i == '-----') {
+            $i: lighten5;
+        }
+    }
+
+    @if ($skin == dark) {
+        @if ($i == '-') {
+            $i: darken1;
+        }
+
+        @if ($i == '--') {
+            $i: darken2;
+        }
+
+        @if ($i == '---') {
+            $i: darken3;
+        }
+
+        @if ($i == '----') {
+            $i: darken4;
+        }
+
+        @if ($i == '-----') {
+            $i: darken5;
+        }
+
+        @if ($i == '+') {
+            $i: lighten1;
+        }
+
+        @if ($i == '++') {
+            $i: lighten2;
+        }
+
+        @if ($i == '+++') {
+            $i: lighten3;
+        }
+
+        @if ($i == '++++') {
+            $i: lighten4;
+        }
+
+        @if ($i == '+++++') {
+            $i: lighten5;
+        }
+    }    
+
+    @return array-get($m--box-shadows, $skin, $i);
+}
+
+@function get-brand-color($i: null) {
+    $base: array-get($m--state-colors, brand, base);
+
+    @if $i == '+' {
+        $base: darken($base, 5%);
+    }
+
+    @if $i == '++' {
+        $base: darken($base, 10%);
+    }
+
+    @if $i == '+++' { 
+        $base: darken($base, 15%);
+    }
+
+    @if $i == '++++' {
+        $base: darken($base, 20%);
+    }
+
+    @if $i == '-' {
+        $base: lighten($base, 5%);
+    }
+
+    @if $i == '--' {
+        $base: lighten($base, 10%);
+    }
+
+    @if $i == '---' {
+        $base: lighten($base, 15%);
+    }
+
+    @if $i == '----' {
+        $base: lighten($base, 20%);
+    }
+
+    @return $base;
+}
+
+@function get-brand-inverse-color($i: null) {
+    $base: array-get($m--state-colors, brand, inverse);
+
+    @if $i == '-' {
+        $base: darken($base, 5%);
+    }
+
+    @if $i == '--' {
+        $base: darken($base, 10%);
+    }
+
+    @if $i == '---' {
+        $base: darken($base, 15%);
+    }
+
+    @if $i == '----' {
+        $base: darken($base, 20%);
+    }
+
+    @if $i == '+' {
+        $base: lighten($base, 5%);
+    }
+
+    @if $i == '++' {
+        $base: lighten($base, 10%);
+    }
+
+    @if $i == '+++' {
+        $base: lighten($base, 15%);
+    }
+
+    @if $i == '++++' {
+        $base: lighten($base, 20%);
+    }
+
+    @return $base;
+}
+
+@function get-state-color($name, $type: null) {
+    @if ($type == null) {
+        $type: base;
+    }
+
+    @return array-get($m--state-colors, $name, $type);
+}
+
+@function get-font-size($type, $size: base) {
+    // get increased font sizes
+    @if ($size == '+') {
+        $size: up1;
+    }
+
+    @if ($size == '++') {
+        $size: up2;
+    }
+
+    @if ($size == '+++') {
+        $size: up3;
+    }
+
+    @if ($size == '++++') {
+        $size: up4;
+    }
+
+    @if ($size == '+++++') {
+        $size: up5;
+    }
+
+    // get decreased font sizes
+    @if ($size == '-') {
+        $size: down1;
+    }
+
+    @if ($size == '--') {
+        $size: down2;
+    }
+
+    @if ($size == '---') {
+        $size: down3;
+    }
+
+    @if ($size == '----') {
+        $size: down4;
+    }
+
+    @if ($size == '-----') {
+        $size: down5;
+    }
+
+    @return array-get($m--font-sizes, $type, $size);   
+}
+
+@function get-font-weight($type) {
+    @return array-get($m--font-weights, $type);   
+}
+
+@function get-heading-font-family() {
+    @return array-get($m--font-families, heading);   
+}
+
+@function get-regular-font-family() {
+    @return array-get($m--font-families, regular);   
+}
+
+//== Skin functions
+@function get-default-skin() {
+    @return $m--default-skin;
+}
+
+//== Layout functions
+@function smooth-arrow() {
+    @if ($m--arrow-style == smooth) {
+        @return true;
+    } @else {
+        @return false;
+    }
+}

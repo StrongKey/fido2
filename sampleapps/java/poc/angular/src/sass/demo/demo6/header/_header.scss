@@ -1,0 +1,138 @@
+//
+//** Header
+//
+
+//== General Mode
+.m-header {
+	//== Layouts
+	.m-page--wide &, 
+	.m-page--fluid & {
+		background-color: array-get($m-config-header, header, default, bg-color);
+	}	
+
+	.m-page--boxed & {
+		.m-header-head {
+			background-color: array-get($m-config-header, header, default, bg-color);
+		} 
+	}
+}
+
+//== Desktop Mode
+@include desktop {
+	.m-header {			
+		height: array-get($m-config-header, header, default, height, desktop);
+
+		// fixed header mode
+		.m-header--fixed & {
+			@include transition(array-get($m-config-header, header, fixed, transition));
+			@include fix-fixed-position-lags();
+			z-index: array-get($m-config-header, header, fixed, zindex);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;   
+		}
+
+		// static header mode
+		.m-header-head {
+			@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+			@include shadow(get-shadow(light, '-'));	
+
+			.m-header--static.m-aside-left--fixed & {
+				@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				padding-left: array-get($m-config-aside, aside-left, self, default, width);
+			}
+
+			.m-header--static.m-aside-left--fixed.m-aside-left--minimize & {
+				@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				padding-left: array-get($m-config-aside, aside-left, self, minimize, width);
+			}
+		}
+
+		// fixed header hidable mode
+		.m-header--fixed.m-header--hide & {
+			height: array-get($m-config-header, header, default, height, desktop);
+			@include transition(array-get($m-config-header, header,fixed, hidable, transition-hide));
+			@include transform(translateY(-100%));
+		}
+
+		.m-header--fixed.m-header--show & {
+			height: array-get($m-config-header, header, default, height, desktop);
+			@include transition(array-get($m-config-header, header, fixed, hidable, transition-show));
+			@include transform(translateY(0));
+		}
+
+		//== Title
+		.m-header-head {
+			.m-header__title {
+				display: table;
+				height: 100%;
+				float: left;
+
+				.m-header__title-text {
+					vertical-align: middle;
+					display: table-cell;			
+					padding: array-get($m-config-header, title, padding, desktop); 
+					color: array-get($m-config-header, title, color);
+					font-size: array-get($m-config-header, title, font-size, desktop);
+					font-weight: get-font-weight(bolder);
+
+					@include minimal-desktop() {
+						padding: array-get($m-config-header, title, padding, min-desktop); 
+					}
+				}
+			}
+		}		
+	}
+}
+
+//== Mobile Mode
+@include tablet-and-mobile {
+	.m-header {
+		height: array-get($m-config-header, header, default, height, mobile) !important;
+
+		// header nav
+		.m-header__nav {
+			top: -100%;
+			position: relative;
+		}
+
+		> .m-container > .m-grid {
+			height: array-get($m-config-header, header, default, height, mobile);
+			> .m-grid__col {
+				height: array-get($m-config-header, header, default, height, mobile);
+			}
+		}
+
+		.m-header--fixed-mobile & {
+			@include fix-fixed-position-lags();
+			z-index: array-get($m-config-header, header, fixed, zindex);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;   
+		}
+
+		// fixed header hidable mode
+		.m-header--fixed-mobile.m-header--hide & {
+			height: array-get($m-config-header, header, default, height, mobile);
+			@include transition(array-get($m-config-header, header, fixed, hidable, transition-hide));
+			@include transform(translateY(-100%));
+		}
+
+		.m-header--fixed-mobile.m-header--show & {
+			height: array-get($m-config-header, header, default, height, mobile);
+			@include transition(array-get($m-config-header, header, fixed, hidable, transition-show));
+			@include transform(translateY(0));
+		}
+
+		//== Title
+		.m-header-head {
+			@include shadow(get-shadow(light, '-'));
+			
+			.m-header__title {
+				display: none;
+			}
+		}
+	}
+}

@@ -1,0 +1,327 @@
+//
+//** DataTables Plugin Customization
+//
+
+//== Mixins
+@mixin m-build-plugin--datatables-base() {
+    //== Pagination colors
+    $page-size: 2.25rem;
+
+    .dataTables_wrapper {
+        padding: 0 !important;
+        
+        //== Table
+        .dataTable {
+            width: 100% !important;
+            border-collapse: initial !important;
+            border-spacing: 0 !important;
+            margin: 1rem 0 !important;
+
+            //== General
+            th, td {
+                vertical-align: middle;
+
+                //== Row checkbox
+                .m-checkbox {
+                    margin-top: 0.3rem;
+                    margin-bottom: 0;
+                }
+
+                //== Cell alignments
+                &.dt-center { 
+                    text-align: center; 
+                }
+                
+                &.dt-left { 
+                    text-align: left; 
+                }
+                
+                &.dt-right { 
+                    text-align: right; 
+                }
+            }
+
+            //== Filter 
+            .filter {
+                 th, td {
+                    vertical-align: top;
+
+                    .input-group + .input-group {
+                        margin-top: 0.5rem;
+                    }
+
+                    .btn + .btn {
+                        margin-top: 0.5rem;
+                    }
+                }
+            }
+
+            //== Group
+            .group {
+                th, td {
+                    font-size: get-font-size(regular, '+');
+                    font-weight: get-font-weight(bolder);
+                }
+            }
+        }
+
+        //== Scrollable
+        .dataTables_scroll {
+            margin: 1rem 0 !important;
+            
+            .dataTable {
+                margin: 0 !important;
+            }
+        }
+
+        //== Pagination
+        .dataTables_paginate {
+            .pagination {
+                .page-item {
+                    margin-left: 0.4rem;
+                    > .page-link {
+                        @include rounded {
+                            @include border-radius(50%);
+                        }                        
+                        cursor: pointer;
+                        display: inline-block;
+                        @include vertical-horizontal-center-flexbox();
+                        height: $page-size;
+                        min-width: $page-size;
+                        vertical-align: middle;
+                        padding: 0.5rem;
+                        text-align: center;
+                        position: relative;
+                        
+                        font-size: 1rem;
+                        line-height: 1rem;
+                        font-weight: get-font-weight(bold);
+
+                        > i {
+                            font-size: 1rem;
+                            text-align: center;
+                            display: inline-block;
+                        }
+                    }
+                }            
+            }
+        }
+
+        //== Filter 
+        .text-right,
+        .text-left {
+            .dataTables_filter {
+                display: inline-block;
+            } 
+        }
+
+        //== Info
+        .dataTables_info {
+            padding-top: 0.45rem;
+        }
+
+        //== Custom pager
+        .dataTables_pager {
+            text-align: right;
+
+            //== Length 
+            .dataTables_length {
+                margin-right: 0.5rem;
+                display: inline-block;
+
+                & + .dataTables_paginate {
+                    margin-left: 1rem;
+                }
+            }
+
+            //== Info
+            .dataTables_info {
+                display: inline-block;
+                margin-right: 0.5rem;
+            }
+
+            //== Pagination
+            .dataTables_paginate {
+                display: inline-block;
+            }
+        }
+
+        @include tablet-and-mobile {
+            .dataTables_pager {
+                margin-top: 1rem;
+                text-align: center;
+            }
+        }
+
+        @include mobile {
+            .dataTables_paginate {
+                margin-left: 0 !important;
+
+                .pagination .page-item:first-child {
+                    margin-left: 0 !important;
+                }
+            }
+
+            .dataTables_paginate {
+                .pagination {
+                    @include flexbox-justify-content(center !important);
+                }
+            }
+        }
+
+        //== Responsive mode toggle icon
+        table.dataTable.dtr-inline.collapsed > tbody > {
+            tr[role="row"] > td:first-child:before {
+                @include shadow(none);
+                @include border-radius(0);
+                top: 50%;
+                left: 8px;
+                height: 18px;
+                width: 18px;
+                margin-top: -9px;
+                font-size: 18px;             
+                color: get-brand-color();
+                border: 0;
+                background-color: transparent;
+
+                @include la-icon-self('\f2c3');
+            }
+
+            tr.parent > td:first-child:before {
+                @include la-icon-self('\f28f');
+
+                color: get-brand-color();
+                background-color: transparent;
+            }
+        }
+
+        //== Responsive mode row expand details 
+        .child {
+            .dtr-details {
+                display: table !important;
+
+                > li {
+                    display: table-row !important;
+                    border: 0 !important;
+
+                    .dtr-title {
+                        display: table-cell;
+                        vertical-align: top;
+                        border-bottom: 1px dashed #efefef;
+                        font-weight: get-font-weight(bolder);
+                        padding: 0.5rem 2rem 0.5rem 0;
+
+                        &:after {
+                            content: ':';
+                        }
+                    }
+
+                    .dtr-data {
+                        display: table-cell;
+                        vertical-align: top;   
+                        border-bottom: 1px dashed #efefef;            
+                        padding: 0.5rem 0;
+                    }
+
+                    &:last-child {
+                        .dtr-title {
+                            border-bottom: 0;
+                        }
+
+                        .dtr-data {
+                            border-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin m-build-plugin--datatables-skin() {
+    $skin: get-default-skin(); 
+
+    //== Pagination colors
+    $base_color: #f4f3f8;
+    $page-default: darken($base-color, 3%);
+    $page-default-font: get-color($skin, regular, '---');
+    $page-hover: get-brand-color();
+    $page-hover-font: get-brand-inverse-color();
+    $page-active: get-brand-color();
+    $page-active-font: get-brand-inverse-color();
+    
+    .dataTables_wrapper {
+
+         //== Table
+        .dataTable {
+            //== General
+            th, td {
+                color: get-font-color(light, regular, '+');
+            }
+
+            //== Row selected
+            .selected {
+                th, td {
+                    background-color: get-color(light, panel, '+');
+                    color: get-color(light, regular, '+');
+                }
+            }
+
+            //== Group
+            .group {
+                th, td {
+                    background-color: get-color(light, panel, '-');
+                }
+            }
+        }
+
+        //== Pagination
+        .pagination {
+            .page-item {
+                > .page-link {
+                    color: $page-default-font;
+                    border: 0;
+                }
+
+                &.previous,
+                &.next,
+                &.last,
+                &.first {
+                    > .page-link {
+                        background: $page-default;
+
+                        &:hover {
+                            background: $page-hover;
+                            color: $page-hover-font;
+                        }
+                    }
+                }
+
+                &.active {
+                    > .page-link {
+                        background: $page-active;
+                        color: $page-active-font;
+                    }
+                }
+
+                &:hover {
+                    > .page-link {
+                        background: $page-hover;
+                        color: $page-hover-font;
+                    }
+                }
+
+                &.disabled,
+                &.disabled:hover {
+                    > .page-link {
+                        @include opacity(0.6);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//== Build
+@include m-build-plugin--datatables-base();
+@include m-build-plugin--datatables-skin();

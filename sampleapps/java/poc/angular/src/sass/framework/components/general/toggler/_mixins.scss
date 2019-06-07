@@ -1,0 +1,198 @@
+@mixin m-build--toggler($class, $config) {
+	$space: array-get($config, thickness) + array-get($config, space);
+
+	.#{$class} {
+		display: inline-block;
+	  	position: relative;
+	  	overflow: hidden;
+	  	margin: 0;
+	  	padding: 0;
+	  	width: array-get($config, width);
+	  	height: array-get($config, height);
+	  	font-size: 0;
+	  	text-indent: -9999px;
+	    -webkit-appearance: none;
+	    -moz-appearance: none;
+	    appearance: none;
+	    box-shadow: none;
+	    border-radius: none; 
+	    border: none;
+	    cursor: pointer;
+	    background: none;
+	    outline: none !important;
+
+	    @include transition(all array-get($config, transition-duration) ease);
+		
+		span {
+	  		display: block;
+	  		position: absolute;
+	  		top: (array-get($config, height) / 2) - (array-get($config, thickness)) + 1px;
+	  		height: array-get($config, thickness);
+	  		min-height: array-get($config, thickness);  
+	  		width: 100%;
+	  		//background: array-get($config, color, default);
+	  		@include rounded {
+	  			@include border-radius(array-get($config, radius));
+	  		}
+
+	  		@include transition(all array-get($config, transition-duration) ease);
+
+	  		&::before,
+	  		&::after {
+	  			position: absolute;
+			  	display: block;
+			  	left: 0;
+			  	width: 100%;
+			  	height: array-get($config, thickness);
+			  	min-height: array-get($config, thickness);
+			  	//background: array-get($config, color, default);
+			  	content: "";
+			  	@include rounded {
+			  		@include border-radius(array-get($config, radius));
+			  	}
+
+			  	@include transition(all array-get($config, transition-duration) ease);
+	  		}
+
+	  		&::before {
+	  			top: -($space);
+	  		}
+
+	  		&::after {
+	  			bottom: -($space);
+	  		}
+		}
+
+	    // left direction style
+	    &.#{$class}--left {
+	    	span {
+	    		&:before {
+	    			@include transition(all array-get($config, transition-duration) ease);
+	    			left: auto;
+	    			right: 0px;
+	    			width: 50%;
+	    		}
+
+	    		&:after {
+	    			@include transition(all array-get($config, transition-duration) ease);
+	    			left: auto;
+	    			right: 0px;
+	    			width: 75%;
+	    		}
+	    	}
+
+	    	// hover states
+	    	&:hover {
+	    		span {
+		    		&:after, 
+		    		&:before {
+		    			width: 100%;
+		    			@include transition(all array-get($config, transition-duration) ease);
+		    		}
+		    	}
+	    	}
+
+	    	// active state
+		    &.#{$class}--active {
+		    	span {
+		    		&:before {
+		    			@include transition(all array-get($config, transition-duration) ease);
+		    			left: 0px;
+		    			right: auto;
+		    			width: 50%;
+		    		}
+
+		    		&:after {
+		    			@include transition(all array-get($config, transition-duration) ease);
+		    			left: 0px;
+		    			right: auto;
+		    			width: 75%;
+		    		}
+		    	}
+		    }
+	    }
+
+	    // right direction style
+	    &.#{$class}--right {
+	    	span {
+		    	&:before {
+		    		left: 0px;
+		    		right: auto;
+		    		width: 50%;
+		    		@include transition(width array-get($config, transition-duration) ease);
+		    	}
+
+		    	&:after {
+		    		left: 0px;
+		    		right: auto;
+		    		width: 75%;
+		    		@include transition(width array-get($config, transition-duration) ease);
+		    	}
+		    }
+
+	    	// hover states
+	    	&:hover {
+	    		span {
+		    		&:after, 
+		    		&:before {
+		    			width: 100%;
+		    			@include transition(width array-get($config, transition-duration) ease);
+		    		}
+		    	}
+	    	}
+
+	    	// active state
+		    &.#{$class}--active {
+		    	span {
+		    		&:before {
+		    			left: auto;
+	    				right: 0px;
+		    			width: 50%;
+		    			@include transition(width array-get($config, transition-duration) ease);
+		    		}
+
+		    		&:after {
+		    			left: auto;
+	    				right: 0px;
+		    			width: 75%;
+		    			@include transition(width array-get($config, transition-duration) ease);
+		    		}
+		    	}
+		    }
+	    }
+	}
+}
+
+@mixin m-customize--toggler-color($class, $config) {
+	span {
+ 		background: array-get($config, default);
+
+  		&::before,
+  		&::after {
+		  	background: array-get($config, default);
+  		}
+	}
+
+    //active & hover state 
+    &:hover {	   
+    	span { 	
+	    	background: array-get($config, hover);
+
+	    	&::before,
+	  		&::after {
+	  			background: array-get($config, hover);
+	  		}
+	  	}
+    }
+
+    &.#{$class}--active {
+    	span { 	
+	    	background: array-get($config, active);
+
+	    	&::before,
+	  		&::after {
+	  			background: array-get($config, active);
+	  		}
+	  	}
+    }
+}

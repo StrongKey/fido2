@@ -1,0 +1,25 @@
+//
+//** Widget 22 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget22-base() {
+    .m-widget22 {    
+        
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget22-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget22 {    
+
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget22-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget22-skin();

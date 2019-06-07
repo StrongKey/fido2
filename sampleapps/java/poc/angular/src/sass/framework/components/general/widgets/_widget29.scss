@@ -1,0 +1,107 @@
+//
+//** Widget 29 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget29-base() {
+    .m-widget29 { 
+    	.m-widget_content { 
+    		margin-bottom: 1rem;   		 
+    		padding: 2.2rem 2.4rem;
+
+    		&:last-child {
+    			margin-bottom: 0;
+    		}
+
+    		.m-widget_content-title {
+    			font-size: get-font-size(regular, '++');
+    			font-weight: get-font-weight(boldest);
+    		}
+
+    		.m-widget_content-items {
+    			width: 100%;
+    			display: table;
+    			table-layout: fixed;    			
+
+    			.m-widget_content-item {
+    				display: table-cell;     				     				  				 
+
+    				> span {
+    					display: block;
+    					text-align: left;
+
+    					&:first-child {    						 
+    						font-weight: get-font-weight(bolder);
+                            font-size: get-font-size(regular, '-');
+    						margin: 0.7rem 0 0.3rem 0;
+    					}
+
+
+    					&:last-child {
+    						font-size: get-font-size(regular, '++++');
+    						font-weight: get-font-weight(boldest);
+    					}
+    				}
+    			}
+    		}
+    	}    	 	 	 
+	}
+
+	@include mobile {
+		.m-widget29 { 
+	    	.m-widget_content { 	    		   		 
+	    		padding: 2.2rem 1rem;	
+
+	    		.m-widget_content-items {
+	    			.m-widget_content-item {
+	    				> span {
+	    					padding-right: 1rem;
+
+	    					&:last-child {
+	    						padding-right: 0;
+	    					}
+	    				}
+	    			} 
+	    		}    		 
+	    	}    	 	 	 
+		}
+	}
+}
+
+//== Component Skin
+@mixin m-build-component--widget29-skin() {
+    $skin: get-default-skin();  
+
+    .m-widget29 { 
+    	.m-widget_content {
+    		background-color: #fff;
+    		 
+    		.m-widget_content-title {
+    			color: get-color($skin, regular, '--');
+    		}
+
+    		.m-widget_content-items {
+    			.m-widget_content-item {
+    				> span {      					
+    					&:first-child {    						 
+    						color: get-color($skin, regular, '----'); 
+    					}    					
+    				}    				
+    			}
+
+    			.m-widget_content-item:last-child {
+    				> span:last-child {
+    					color: #FE21BE;	 
+    				}
+    			}
+    		}
+    	}    	 	 	 
+	}
+}
+
+
+//== Build Component Base
+@include m-build-component--widget29-base();
+
+//== Build Component Skin
+@include m-build-component--widget29-skin();        

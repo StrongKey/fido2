@@ -1,0 +1,61 @@
+//
+//** SweetAlert Component
+//
+
+//== Mixins
+@mixin m-build-component--sweetalert-base() {
+	body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown), 
+	html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+		overflow: auto;
+
+		@include hack-ie8-11 {
+			overflow: visible;
+		}
+	}
+
+	.swal2-popup {	   	
+		@include rounded {
+			@include border-radius( array-get($m--border-radius, general) );
+		}
+		padding: 3rem;
+
+		.swal2-title {
+			font-weight: get-font-weight(bolder);
+			font-size: get-font-size(regular, '+++');
+			margin: 0 0 1rem;
+		}
+
+		.swal2-content {
+			font-weight: get-font-weight(normal);
+			font-size: get-font-size(regular);
+		}
+
+		.btn {
+			margin: 15px 5px 0;
+		}
+	}
+}
+
+@mixin m-build-component--sweetalert-skin() {
+	$skin: get-default-skin();
+
+	.swal2-container.swal2-shown {
+    	background-color: rgba(0, 0, 0, 0.2);
+	}
+
+    .swal2-popup {	   	
+
+		.swal2-title {
+			color: get-color($skin, regular);
+		}
+
+		.swal2-content {
+			color: get-color($skin, regular, '-');
+		}
+	}
+}
+
+//== Build
+@include m-build-component--sweetalert-base();
+
+@include m-build-component--sweetalert-skin();

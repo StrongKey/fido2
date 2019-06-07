@@ -1,0 +1,181 @@
+//
+//** Widget 30 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget30-base() {
+    .m-widget30 { 
+    	.m-widget_head {
+            padding: 0;
+            max-width: 100%;
+            margin: 0 auto 2rem auto;  
+
+            .m-widget_head-owlcarousel-items {                
+                .m-widget_head-owlcarousel-item {
+                    cursor: pointer;                       
+                    text-align: center; 
+                    padding: 1rem 0;
+                    margin: 1rem 0.5rem;
+                    @include border-radius(0.3rem);                     
+
+                    > span {
+                        display: block;
+
+                        &:first-child {
+                            font-size: get-font-size(regular, '+');
+                            font-weight: get-font-weight(boldest); 
+                        } 
+
+                        &:last-child {                                                       
+                            font-weight: get-font-weight(bolder); 
+                        } 
+                    }                                      
+                }
+
+                .center > div {
+                    cursor: auto;                            
+                }  
+            }
+        }
+
+        .m-widget_body {
+            .m-widget_body-owlcarousel-items {
+                .m-widget_body-owlcarousel-item {
+                    .m-widget_body-items {    
+                        padding: 0 2.2rem;
+
+                        .m-widget_body-item {
+                            display: table;
+                            width: 100%;  
+                            margin-bottom: 1.5rem;
+                            padding-bottom: 1.5rem;
+                            border-bottom: 1px dashed red;
+
+                            .m-widget_body-item-desc {
+                                width: 100%;                                
+                                text-align: left; 
+                                padding: 0 1rem; 
+                                font-weight: get-font-weight(bolder);                                
+
+                                > span {
+                                    &:first-child {
+                                        font-size: get-font-size(regular, '+');
+                                        font-weight: get-font-weight(boldest);
+                                    } 
+
+                                    &:last-child {
+                                        font-size: get-font-size(regular, '--');
+                                    }   
+                                }                                                                                              
+                            }  
+
+                            .m-widget_body-item-price {
+                                font-size: get-font-size(regular, '++');
+                                font-weight: get-font-weight(boldest);
+                            }                                                                               
+
+                            > div {                                
+                                display: table-cell;
+                                vertical-align: middle;                                 
+
+                                > img {
+                                    width: 3rem;
+                                    height: 3rem;
+                                    @include border-radius(100%);                                   
+                                }
+
+                                > span {
+                                    display: block;
+                                }
+
+                                &:last-child {
+                                    text-align: right;
+                                }
+                            }
+
+                            &:last-child {
+                                border-bottom: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }                	 	 
+	}	 
+}
+
+//== Component Skin
+@mixin m-build-component--widget30-skin() {
+    $skin: get-default-skin();  
+
+    .m-widget30 { 
+        .m-widget_head {           
+            .m-widget_head-owlcarousel-items {                
+                .m-widget_head-owlcarousel-item {                
+                    @include shadow(get-shadow($skin, '-'));  
+
+                    > span {
+                        &:first-child {
+                            color: get-color($skin, regular, '--'); 
+                        } 
+
+                        &:last-child {
+                            color: get-color($skin, regular, '-----');
+                        } 
+                    }                                      
+                }
+
+                .center > div {                       
+                    background-color: get-state-color(accent, base);                   
+                    
+                    > span {
+                        &:first-child {
+                            color: get-state-color(accent, inverse);
+                        } 
+
+                        &:last-child {
+                            color: lighten(get-state-color(accent, base), 10%); 
+                        }   
+                    }                                                                                
+                }  
+            }
+        }
+
+        .m-widget_body {
+            .m-widget_body-owlcarousel-items {
+                .m-widget_body-owlcarousel-item {
+                                      
+
+                    .m-widget_body-items {                        
+                        .m-widget_body-item {                            
+                            border-bottom: 1px dashed get-color($skin, panel);
+
+                            .m-widget_body-item-desc {   
+                                color: get-color($skin, regular, '--'); 
+
+                                > span:last-child {
+                                    color: get-color($skin, regular, '-----');
+                                }                                                                                                
+                            }  
+
+                            .m-widget_body-item-price {
+                                color: get-state-color(accent, base);
+                            }                   
+
+                            &:last-child {
+                                border-bottom: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }                        
+    } 
+}
+
+
+//== Build Component Base
+@include m-build-component--widget30-base();
+
+//== Build Component Skin
+@include m-build-component--widget30-skin();        

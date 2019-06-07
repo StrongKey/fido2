@@ -1,0 +1,144 @@
+//
+//** Option Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--option-base() {
+    .m-option  {
+        display: table;
+        width: 100%;
+        padding: 1.4em;         
+
+        @include rounded {
+            @include border-radius( 6px );
+        }
+        
+        .m-option__control {
+        	display: table-cell;
+        	vertical-align: top; 
+        	width: 2.7rem;
+            padding-top: 0.1rem;      	
+
+        	.m-radio {
+        		display: block;
+        	}
+        }
+
+        .m-option__label {
+        	display: table-cell;
+
+        	.m-option__head {
+        		display: table;
+        		width: 100%;         		    		
+
+        		.m-option__title {
+        			display: table-cell;
+        			vertical-align: top;
+        			width: 100%; 
+        			font-size: get-font-size(regular, '+');       			
+        		}
+
+        		.m-option__focus {
+        			display: table-cell;
+        			vertical-align: top; 
+        			font-size: get-font-size(regular, '+');
+    				font-weight: get-font-weight(boldest);   				      			
+        		}
+        	}
+
+        	.m-option__body {
+        		display: block;
+        		padding-top: 0.7rem; 
+        		font-size: get-font-size(regular, '-');       		
+        	}
+        }
+
+        &.m-option--plain {     
+            padding: 0; 
+            margin-top: -0.2rem;
+            margin-bottom: 2rem;       
+
+            .m-option__control {                        
+                vertical-align: middle;                                               
+                width: 2.7rem;
+
+                .m-radio {                    
+                    margin-bottom: 1.6rem;                     
+                }
+            }
+
+            .m-option__label {                            
+                vertical-align: middle;
+
+                .m-option__head {  
+                    .m-option__title {
+                                                           
+                    }                    
+                }
+
+                .m-option__body {                    
+                    padding-top: 0.2rem;                              
+                }
+            }
+        }
+    }     
+}
+
+//== Component Skin
+@mixin m-build-component--option-skin() {
+    $skin: get-default-skin();
+
+    .m-option {
+    	border: 1px solid get-color($skin, panel);
+
+    	.m-option__label {
+    		.m-option__head {
+    			.m-option__title {
+    				color: get-color($skin, regular, '+');
+    			}
+    			
+    			.m-option__focus {
+    				color: get-color($skin, regular, '+');
+    			}	
+    		}
+
+    		.m-option__body {        		 
+        		color: get-color($skin, regular, '------');
+        	}	
+    	}
+
+        &.m-option--plain {
+            border: none;
+        }	
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--option-validation-state($state, $color) {
+    .has-#{$state} {
+        .m-option {
+            .m-option__label {
+                .m-option__head {
+                    .m-option__title {
+                        color: $color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--option-base();
+
+//== Component Skin
+@include m-build-component--option-skin();
+
+//== Component Validation States
+@include m-build-component--option-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--option-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--option-validation-state(danger, array-get($m--state-colors, danger, base));  
