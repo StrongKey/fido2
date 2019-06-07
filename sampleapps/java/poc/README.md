@@ -28,31 +28,31 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
 2. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
-    sudo mkdir -p /usr/local/strongkey/webauthntutorial/etc
+    sudo mkdir -p /usr/local/strongkey/poc/etc
     ```
 
 3. Create a configuration file for the Relying Party web application.
 
     ```sh
-    sudo vi /usr/local/strongkey/webauthntutorial/etc/webauthntutorial.properties
+    sudo vi /usr/local/strongkey/poc/etc/poc.properties
     ```
 4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
 
    ```
-   webauthntutorial.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
-   webauthntutorial.cfg.property.mailhost.type=**[SendMail or SSL or StartTLS]**
-   webauthntutorial.cfg.property.mailhost=**[localhost or hostname of mailhost]**
-   webauthntutorial.cfg.property.mail.smtp.port=**[25 (SendMail) or mail server's port]**
-   webauthntutorial.cfg.property.smtp.from=**[local-part of email address]**
-   webauthntutorial.cfg.property.smtp.fromName=**[Human readable name associated with email]**
-   webauthntutorial.cfg.property.smtp.auth.user=**[Username used to login to mail server]**
-   webauthntutorial.cfg.property.smtp.auth.password=**[Password used to login to mail server]**
-   webauthntutorial.cfg.property.email.subject=Verify your email address
-   webauthntutorial.cfg.property.email.type=HTML
+   poc.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
+   poc.cfg.property.mailhost.type=**[SendMail or SSL or StartTLS]**
+   poc.cfg.property.mailhost=**[localhost or hostname of mailhost]**
+   poc.cfg.property.mail.smtp.port=**[25 (SendMail) or mail server's port]**
+   poc.cfg.property.smtp.from=**[local-part of email address]**
+   poc.cfg.property.smtp.fromName=**[Human readable name associated with email]**
+   poc.cfg.property.smtp.auth.user=**[Username used to login to mail server]**
+   poc.cfg.property.smtp.auth.password=**[Password used to login to mail server]**
+   poc.cfg.property.email.subject=Verify your email address
+   poc.cfg.property.email.type=HTML
    ```
    Save and exit
 
-5. Download the Relying Party web application distribution [pocserver-v0.9-dist.tgz](./server/pocserver-v0.9-dist.tgz).
+5. Download the Relying Party web application distribution [pocserver-v0.9-dist.tgz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz
