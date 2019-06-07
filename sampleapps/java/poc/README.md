@@ -75,11 +75,44 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
     ```sh
     curl -k https://localhost:8181/pocserver/fido2/application.wadl
     ```
+At this point, we have the POC server installed and will continue to install the frontend angular application.
 
+9. Switch to (or login as) the strongkey user. The default password for the strongkey user is ShaZam123.
+```
+su - strongkey
+```
+
+10. Download the web application distribution for the fido server [poc-ui-dist.tar.gz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz).
+```
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
+```
+
+11. Extract the downloaded file
+
+```
+tar xvzf poc-ui-dist.tar.gz
+```
+12. Copy all the files to the payara docroot.
+
+```
+cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
+```
+13. Optional: You can modify the background image and the logo image.
+
+```
+cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/bg/background.jpg
+cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/logo/logo.png
+```
+14. The application is deployed in the docroot and can be accessed.
+
+```
+https://<FQDN>:8181/
+```
 
 ## Removal
 
 To uninstall the RP sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://github.com/StrongKey/fido2/blob/master/docs/Installation_Guide_Linux.md#removal). Removing the StrongKey FIDO Server also removes the sample RP web application and sample WebAuthn client.
+If this POC was installed on top of the FIDO server, the clean up script will erase the FIDO server as well. If this was a standalone install, the cleanup script will only remove the POC application.
 
 ## Contributing to the Sample Relying Party Web Application 
 
