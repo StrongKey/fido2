@@ -36,7 +36,7 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
     ```sh
     sudo vi /usr/local/strongkey/poc/etc/poc.properties
     ```
-4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server.
+4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO server and an email server. (You can also use GMAIL as the mail server with your own gmail account to send emails out. Just make sure that you enable access through your google account's security settings.)
 
    ```
    poc.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
@@ -100,8 +100,8 @@ cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
 13. Optional: You can modify the background image and the logo image.
 
 ```
-cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/bg/background.jpg
-cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/image/logo/logo.png
+cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
+cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
 ```
 14. The application is deployed in the docroot and can be accessed.
 
