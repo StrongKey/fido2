@@ -73,7 +73,7 @@ While this web-application can show you how to use W3C's WebAuthn (a subset of t
 8. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
-    curl -k https://localhost:8181/pocserver/fido2/application.wadl
+    curl -k https://localhost:8181/poc/fido2/application.wadl
     ```
 At this point, we have the POC server installed and will continue to install the frontend angular application.
 
