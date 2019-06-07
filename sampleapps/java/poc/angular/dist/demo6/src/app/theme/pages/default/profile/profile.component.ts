@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, NgZone, ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Helpers } from '../../../../helpers';
 import { Router, ActivatedRoute } from "@angular/router";
 import { SecurityKey } from '../../../../auth/_models/securitykey.model';
@@ -51,17 +51,17 @@ export class ProfileComponent implements OnInit {
     }
 
     addKey() {
-      if(this.newDisplayName){
-        this.restService.preregisterExisting(this.newDisplayName)
-            .then(resp => {
-                let response = JSON.parse(JSON.stringify(resp));
-                let body = response.body;
-                this.redirectToFIDO(body.Response);
-            });
-      }
-      else{
-        this._sharedService.setError("Enter a display name.");
-      }
+        if (this.newDisplayName) {
+            this.restService.preregisterExisting(this.newDisplayName)
+                .then(resp => {
+                    let response = JSON.parse(JSON.stringify(resp));
+                    let body = response.body;
+                    this.redirectToFIDO(body.Response);
+                });
+        }
+        else {
+            this._sharedService.setError("Enter a display name.");
+        }
 
     }
 
@@ -97,12 +97,12 @@ export class ProfileComponent implements OnInit {
 
             }
             else {
-              if(randomIDs.length === this.fidoKeys.length && this.fidoKeys.length > 1){
-                this._sharedService.setError("Cannot delete all keys. To delete all keys, you need to delete this account(use the Advanced tab).");
-              }
-              else{
-                this._sharedService.setError("Please register a second key before deleting the last key. To delete this account, use the Advanced tab.");
-              }
+                if (randomIDs.length === this.fidoKeys.length && this.fidoKeys.length > 1) {
+                    this._sharedService.setError("Cannot delete all keys. To delete all keys, you need to delete this account(use the Advanced tab).");
+                }
+                else {
+                    this._sharedService.setError("Please register a second key before deleting the last key. To delete this account, use the Advanced tab.");
+                }
                 this.deSelectKeys();
             }
         }

@@ -40,14 +40,12 @@ export class SharedService {
     }
 
     getIsLoggedInFromServer() {
-        let restURL = ConstantsService.baseURL + "/basicserver/fido2";
+        let restURL = ConstantsService.baseURL + ":8181/poc/fido2/isLoggedIn";
         let _headers = new Headers({ 'Content-Type': 'application/json' });
         this.http.post(restURL, { headers: _headers })
             .toPromise()
             .then(resp => {
                 let responseJSON = resp.json();
-                console.log("response JSON in sharedService == " + JSON.stringify(responseJSON));
-                console.log("responseJSON response = " + responseJSON.Response);
                 if (responseJSON.Response.length > 0 && responseJSON.Response != "") {
                     this._username.next(responseJSON.Response);
                     this._isLoggedIn.next(true);
@@ -55,7 +53,6 @@ export class SharedService {
                 else
                     this._isLoggedIn.next(false);
             });
-
     }
 
     setUser(user: User) {
