@@ -27,5 +27,4 @@ public enum AuthenticatorStatus {
     FIDO_CERTIFIED_L4plus,
     FIDO_CERTIFIED_L5,
     FIDO_CERTIFIED_L5plus
-    
 }

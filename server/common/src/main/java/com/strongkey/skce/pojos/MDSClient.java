@@ -7,8 +7,9 @@
 
 package com.strongkey.skce.pojos;
 
+import java.util.List;
 import javax.json.JsonObject;
 
 public interface MDSClient {
-    public JsonObject getTrustAnchors(String aaguid);    
+    public JsonObject getTrustAnchors(String aaguid, List<String> allowedStatusList);    
 }

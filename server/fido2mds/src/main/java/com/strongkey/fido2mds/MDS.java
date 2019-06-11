@@ -93,7 +93,7 @@ public class MDS implements MDSClient {
 
     @Override
     @Lock(LockType.READ)
-    public JsonObject getTrustAnchors(String aaguid) {
+    public JsonObject getTrustAnchors(String aaguid, List<String> allowedStatusList) {
         JsonObjectBuilder ret = Json.createObjectBuilder();
         JsonArrayBuilder errors = Json.createArrayBuilder();
         JsonObjectBuilder error = Json.createObjectBuilder();
@@ -111,6 +111,10 @@ public class MDS implements MDSClient {
                             status.getStatus()==AuthenticatorStatus.USER_VERIFICATION_BYPASS 
                             ) {
                         error.add("message", "Authenticator status = "+status.getStatus().name());
+                        errors.add(error);
+                    }
+                    else if(!allowedStatusList.contains(status.getStatus().name())){
+                        error.add("message", "Authenticator status = " + status.getStatus().name() + "not allowed by policy");
                         errors.add(error);
                     }
                 }
@@ -150,62 +154,6 @@ public class MDS implements MDSClient {
         }
         ret.add("errors", errors);
         return ret.build();
-    }
-    
-    protected void doMain() {
-
-        int srvCount = 1;
-        int count = 1;
-
-        for (MDSService service : mdsList) {
-
-            System.out.println("Service #" + (srvCount++));
-
-            for (String key : service.getKeys()) {
-
-                MetadataTOCPayloadEntry entry = service.getTOCEntry(key);
-                if (entry != null) {
-                    //System.out.println("##############################################");
-                    //System.out.println("#" + (count++) + " " + entry.getAaguid());
-                    //System.out.println("attestationCertificateKeyIdentifiers: " + entry.getAttestationCertificateKeyIdentifiers());
-                    for (StatusReport report : entry.getStatusReports()) {
-                        System.out.print(report.getStatus().name() + " ");
-                    }
-                    if (entry.getStatusReports().size() > 0) {
-                        System.out.println();
-                    }
-                }
-
-                MetadataStatement st = service.getMetadataStatement(key);
-                if (st != null) {
-                    String stuff = " Stuff: ";
-                    List<String> l1 = st.getAttestationRootCertificates();
-                    List<EcdaaTrustAnchor> l2 = st.getEcdaaTrustAnchors();
-                    if (l1 != null) {
-                        if (l1.size() > 0) {
-                            stuff += "Has " + l1.size() + " X509 ";
-                        }
-                    }
-                    if (l2 != null) {
-                        if (l2.size() > 0) {
-                            stuff += "Has " + l2.size() + " ECDAA ";
-                        }
-                    }
-                    System.out.println(st.getAaguid() + stuff);
-                    //System.out.println(st);
-                } else {
-                    System.out.println("No Metadata Statement for " + key);
-                }
-
-            }
-        }
-
-        
-        JsonObject ret = getTrustAnchors("b05639be-13f8-4599-bec9-8834ee86a23b");
-        System.out.println(ret);
-        JsonObject ret2 = getTrustAnchors("91dfead7-959e-4475-ad26-9b0d482be089");      
-        System.out.println(ret2);
-        
     }
 }
 

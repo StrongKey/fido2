@@ -49,8 +49,6 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x9.ECNamedCurveTable;
-import org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 
 @Stateless
 public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPolicyLocal {
@@ -183,7 +181,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         System.arraycopy(aaguidbytes, 8, aaguidbytes2, 0, 8);
         UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1),
                 Longs.fromByteArray(aaguidbytes2));
-        JsonObject trustAnchors = mds.getTrustAnchors(uuid.toString());
+        JsonObject trustAnchors = mds.getTrustAnchors(uuid.toString(), mdsOp.getAllowedCertificationLevel());
         
         FIDO2AttestationStatement attStmt = attObject.getAttStmt();
         if(attStmt == null){
@@ -230,7 +228,6 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         Set<TrustAnchor> rootAnchors = new HashSet<>();
         JsonArray roots = trustAnchors.getJsonArray("attestationRootCertificates");
         
-        //TODO perform comprehensive checks on errors
         JsonArray errors = trustAnchors.getJsonArray("errors");
         if(!errors.isEmpty()){
             throw new SKIllegalArgumentException("MDS error(s): " + errors.toString());
