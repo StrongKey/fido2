@@ -83,7 +83,7 @@ public class SKFEServlet {
     private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
         try {
             Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.0/u2fServletHelperBean_v1!com.strongauth.skfe.txbeans.u2fServletHelperBeanLocal_v1");
+            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.0/u2fServletHelperBean_v1!com.strongauth.skfe.txbeans.v1.u2fServletHelperBeanLocal_v1");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
