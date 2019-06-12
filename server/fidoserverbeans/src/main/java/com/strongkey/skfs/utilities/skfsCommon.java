@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -46,6 +47,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 
 public class skfsCommon {
 
@@ -195,6 +197,7 @@ public class skfsCommon {
             }
         }
 
+        Security.addProvider(new BouncyCastleFipsProvider());
         cron.flushUserSessionsJob();
 
         cron.flushFIDOKeysJob();
