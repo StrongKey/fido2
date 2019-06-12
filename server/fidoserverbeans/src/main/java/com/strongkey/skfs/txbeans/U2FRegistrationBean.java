@@ -21,14 +21,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
-import javax.ejb.ApplicationException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-@ApplicationException()
 @Stateless
 public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
 
