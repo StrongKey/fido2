@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
     </parent>
-    <groupId>com.strongauth</groupId>
+    <groupId>com.strongkey</groupId>
     <artifactId>fidoserverEAR</artifactId>
     <version>4.0</version>
     <packaging>ear</packaging>
@@ -81,16 +81,15 @@
         
         <!-- REPL -->
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>replicationEJB</artifactId>
-            <version>4.0</version>
+            <version>4.1.0</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>replicationWAR</artifactId>
-            <version>4.0</version>
-            <type>war</type>
+            <version>4.1.0</version>
         </dependency>
 
     </dependencies>

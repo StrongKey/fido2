@@ -120,7 +120,7 @@ public class getFidoKeys implements getFidoKeysLocal {
      * @param KH - User Key Handle for the key to be retrieved
      * @return - Returns the unique registered key identified by the parameters
      * passed
-     * @throws com.strongauth.skce.utilities.SKFEException
+     * @throws com.strongkey.skce.utilities.SKFEException
      */
     @Override
     public FidoKeys getByUsernameKH(Long did, String username, String KH) throws SKFEException {

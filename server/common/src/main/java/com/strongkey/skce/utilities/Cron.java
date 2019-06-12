@@ -7,8 +7,6 @@
 
 package com.strongkey.skce.utilities;
 
-//import com.strongauth.skfe.utilities.skfeLogger;
-
 /**
  * Class that takes care of periodic jobs (multiple of them); each job can be
  * defined with a specific time delay for the first time start, and a different

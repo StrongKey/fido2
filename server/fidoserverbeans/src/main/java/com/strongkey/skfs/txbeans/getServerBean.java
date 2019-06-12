@@ -37,7 +37,7 @@ public class getServerBean implements getServerBeanLocal {
      *
      * @param fqdn String the unique name of the Server to exclude from the search
      * @return Collection - a collection of active SAKA subscribers
-     * @throws com.strongauth.skce.utilities.SKFEException
+     * @throws com.strongkey.skce.utilities.SKFEException
      */
     @Override
      public Collection<Servers> byActiveSubscribers(String fqdn) throws SKFEException {

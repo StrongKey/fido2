@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
     </parent>
-    <groupId>com.strongauth</groupId>
+    <groupId>com.strongkey</groupId>
     <artifactId>crypto</artifactId>
     <version>4.0</version>
     <packaging>jar</packaging>
