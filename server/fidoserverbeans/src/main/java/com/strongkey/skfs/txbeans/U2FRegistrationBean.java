@@ -9,12 +9,12 @@ package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.core.U2FRegistrationResponse;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -53,7 +53,8 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.JSON_KEY_CLIENTDATA, "String");
         if (browserdata == null || browserdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'clientData'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
+            throw new IllegalArgumentException(" Missing 'clientData'");
+//            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
         }
         //parse browserdata
 
