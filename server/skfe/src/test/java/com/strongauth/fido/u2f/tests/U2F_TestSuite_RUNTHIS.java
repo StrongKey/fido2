@@ -57,10 +57,11 @@ import org.junit.runners.Suite;
  *******************************************************************************/
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({com.strongauth.fido.u2f.tests.U2F_SOAP_RegistrationTest.class,
+@Suite.SuiteClasses({
+//    com.strongauth.fido.u2f.tests.U2F_SOAP_RegistrationTest.class,
 //    com.strongauth.fido.u2f.tests.U2F_REST_AuthenticationTest.class,
 //    com.strongauth.fido.u2f.tests.U2F_REST_RegistrationTest.class,
-                     com.strongauth.fido.u2f.tests.U2F_SOAP_AuthenticationTest.class
+//                     com.strongauth.fido.u2f.tests.U2F_SOAP_AuthenticationTest.class
                      })
 
 public class U2F_TestSuite_RUNTHIS {
