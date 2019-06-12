@@ -113,6 +113,7 @@ import com.strongkey.skfs.txbeans.updateFidoKeysLocal;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
@@ -536,8 +537,14 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 responseJSON = FIDO2Regejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata);
             }
         } catch (Exception ex) {
+            if (ex.getCause() instanceof SKIllegalArgumentException) {
+                System.out.println("IllegalArgumentException : " + ex.getCause().getMessage());
+                System.out.println("IllegalArgumentException : " + ex.getCause().getLocalizedMessage());
+            }
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getCause().getMessage());
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getCause().getLocalizedMessage());
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
             return skfsCommon.buildRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getCause().getMessage());
         }
