@@ -46,7 +46,9 @@ import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.logging.Level;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -58,12 +60,11 @@ import javax.ws.rs.Produces;
  * REST based web services that serve FIDO U2F protocol based functionality.
  *
  */
-@Stateless
 @Path("")
 public class SKFEServlet {
 
     @EJB
-    authorizeLdapUserBeanLocal authorizebean;// = lookupauthorizeLdapUserBeanLocal();
+    authorizeLdapUserBeanLocal authorizebean = lookupauthorizeLdapUserBeanLocal();
 
     String skfehome = skfsCommon.getSkfeHome();
 
@@ -74,28 +75,28 @@ public class SKFEServlet {
      * Enterprise Java Beans used in this servlet.
      */
     @EJB
-    u2fServletHelperBeanLocal_v1 u2fHelperBean;// = lookup_u2fServletHelperBeanLocal_v1();
+    u2fServletHelperBeanLocal_v1 u2fHelperBean = lookup_u2fServletHelperBeanLocal_v1();
 
     /**
      * methods to look up for ejb resources
      */
-//    private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
-//        try {
-//            Context c = new InitialContext();
-//            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/skfebeans-4.0/u2fServletHelperBean_v1!com.strongauth.skfe.txbeans.u2fServletHelperBeanLocal_v1");
-//        } catch (NamingException ne) {
-//            throw new RuntimeException(ne);
-//        }
-//    }
-//
-//    private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
-//        try {
-//            Context c = new InitialContext();
-//            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
-//        } catch (NamingException ne) {
-//            throw new RuntimeException(ne);
-//        }
-//    }
+    private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
+        try {
+            Context c = new InitialContext();
+            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.0/u2fServletHelperBean_v1!com.strongauth.skfe.txbeans.u2fServletHelperBeanLocal_v1");
+        } catch (NamingException ne) {
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+        } catch (NamingException ne) {
+            throw new RuntimeException(ne);
+        }
+    }
 
     // CTOR
     public SKFEServlet() {
