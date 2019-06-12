@@ -77,7 +77,8 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 
 echo "Installing required linux packages ..."
 if [[ ! -z $YUM_CMD ]]; then
-    yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs curl >/dev/null 2>&1
+    yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+    systemctl restart rng-tools
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
     apt install unzip libaio1 openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
