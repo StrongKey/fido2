@@ -56,7 +56,11 @@ public interface authorizeLdapUserBeanLocal {
      * user - either ENC or DEC for encryption and decryption respectively
      * @return boolean value indicating either True (for authenticated) or False
      * (for unauthenticated or failure in processing)
+<<<<<<< HEAD
      * @throws com.strongkey.skce.utilities.SKCEException
+=======
+     * @throws com.strongauth.skce.utilities.SKCEException
+>>>>>>> adding old v1 api back to the fido2 server
      */
     boolean execute(Long did,
             String username,

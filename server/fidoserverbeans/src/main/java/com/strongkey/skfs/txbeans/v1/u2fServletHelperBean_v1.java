@@ -76,6 +76,10 @@
  */
 package com.strongkey.skfs.txbeans.v1;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> adding old v1 api back to the fido2 server
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceMaps;
@@ -164,7 +168,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
     u2fGetKeysInfoBeanLocal u2fgetkeysbean;
     @EJB
     originVerfierBeanLocal originverifierbean;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> adding old v1 api back to the fido2 server
     // fido2 method beans
     @EJB
     generateFido2PreregisterChallengeLocal_v1 fido2preregbean;
@@ -249,26 +257,46 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0001", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0001", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0014"), " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+        }
+        if (!skfsCommon.isValidJsonObject(payload)) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0014"), " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-5002"), protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+        }
+        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-5002"), protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
@@ -278,7 +306,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String username = (String) applianceCommon.getJsonValue(payload,
                     skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
             if (username == null || username.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " username");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username");
             }
 
@@ -290,13 +322,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             try {
                 FEreturn fer = u2fpreregbean.execute(Long.parseLong(did), protocol, username);
                 if (fer != null) {
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0046"), fer.toString());
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0046"), fer.toString());
+>>>>>>> adding old v1 api back to the fido2 server
 
                     logs = fer.getLogmsg();
                     regChallenge = (U2FRegistrationChallenge) fer.getResponse();
                     if (regChallenge == null) {
                         //  Chould not generate registration nonce.
+<<<<<<< HEAD
                         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0025"), "");
+=======
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0025"), "");
+>>>>>>> adding old v1 api back to the fido2 server
                         return skfsCommon.buildPreRegisterResponse(null, logs, skfsCommon.getMessageProperty("FIDO-ERR-0025") + "");
                     } else {
                         //  Fetch sessionid, nonce & appid from the Challenge object
@@ -319,11 +359,19 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         }
                         //end publish
 
+<<<<<<< HEAD
                         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0021"), " username=" + username);
                     }
                 }
             } catch (SKFEException ex) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+=======
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0021"), " username=" + username);
+                    }
+                }
+            } catch (SKFEException ex) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildPreRegisterResponse(null, logs, skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
             } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
                 Logger.getLogger(u2fServletHelperBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -333,14 +381,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             //  Look into the database to check for key handles
             String[] authresponses = null;
             try {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0031"), "");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0031"), "");
+>>>>>>> adding old v1 api back to the fido2 server
                 Collection<FidoKeys> kh_coll = getkeybean.getByUsername(Long.parseLong(did), username);
                 if (kh_coll != null) {
                     authresponses = new String[kh_coll.size()];
                     Iterator it = kh_coll.iterator();
                     int i = 0;
 
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0032"), "");
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0032"), "");
+>>>>>>> adding old v1 api back to the fido2 server
                     while (it.hasNext()) {
                         FidoKeys key = (FidoKeys) it.next();
                         if (key != null) {
@@ -359,10 +415,17 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         }
                     }
 
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0033"), "");
                 }
             } catch (SKFEException ex) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0033"), "");
+                }
+            } catch (SKFEException ex) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildPreRegisterResponse(null, "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0008") + ex.getMessage());
             }
@@ -383,7 +446,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
                     signDataArray = arrayBuilder.build();
 
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0034", " signdata array length = "
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0034", " signdata array length = "
+>>>>>>> adding old v1 api back to the fido2 server
                             + authresponses.length);
                 }
 
@@ -408,19 +475,31 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                             .build();
                 }
             } catch (Exception ex) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", ex.getMessage());
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", ex.getMessage());
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildPreRegisterResponse(null, "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0014") + ex.getMessage());
             }
 
             // Build the output json object
             String response = skfsCommon.buildPreRegisterResponse(combined_regresponse, logs, errmsg);
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0035", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0035", "");
+>>>>>>> adding old v1 api back to the fido2 server
 
             out = new Date();
             long rt = out.getTime() - in.getTime();
             //  4. Log output and return
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                     + "\nU2FRegistration Challenge parameters = " + response);
             return response;
         } else {
@@ -485,19 +564,31 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0003", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0003", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0004", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0004")
                     + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
@@ -507,14 +598,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0004", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0004"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0016", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0016", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0016"));
         }
 
@@ -529,6 +628,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String responseJSON;
 
         //begine u2f code
+<<<<<<< HEAD
         try {
             if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
                 responseJSON = U2FRegejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata, protocol);
@@ -543,11 +643,25 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  9.  Build the output json object
 
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0037", "");
+=======
+        if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
+            responseJSON = U2FRegejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata, protocol);
+        } else {
+            responseJSON = FIDO2Regejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata);
+        }
+        //  9.  Build the output json object
+
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0037", "");
+>>>>>>> adding old v1 api back to the fido2 server
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  10. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0004", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0004", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -596,30 +710,50 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0005", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0005", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
                     + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
                     + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002")
                     + protocol);
         }
@@ -633,12 +767,17 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 skfsConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
         // fetch options inputs if they exist (TODO refactor when options are no longer in payload)
         String userVerification = (String) applianceCommon.getJsonValue(payload,
+<<<<<<< HEAD
                 skfsConstants.FIDO2_ATTR_USERVERIFICATION, "String");
+=======
+                                skfsConstants.FIDO2_ATTR_USERVERIFICATION, "String");
+>>>>>>> adding old v1 api back to the fido2 server
         JsonObjectBuilder optionsBuilder = Json.createObjectBuilder();
         if (userVerification != null) {
             optionsBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
         }
         JsonObject options = optionsBuilder.build();
+<<<<<<< HEAD
 
         if (username == null || username.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
@@ -646,13 +785,26 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     + " username");
         }
 
+=======
+        
+        if (username == null || username.isEmpty()) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " username");
+            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+                    + " username");
+        }
+        
+>>>>>>> adding old v1 api back to the fido2 server
         //  4. Process pre-authentication
         String responseJSON = twofpreauth(did, protocol, username, options, extensions, "preauthenticate");
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  5. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0006", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0006", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\nU2FAuthentication Challenge parameters = " + responseJSON);
         return responseJSON;
     }
@@ -703,19 +855,31 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0007", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0007", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0010", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
@@ -725,14 +889,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0010", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0010"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0017", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0017"));
         }
 
@@ -748,14 +920,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     protocol,
                     "authentication");
         } catch (SKFEException ex) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0034", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0034"));
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  5. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0008", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0008", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -776,11 +956,19 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String responseJSON;
         if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
             try {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0031", "");
                 Collection<FidoKeys> kh_coll
                         = getkeybean.getByUsernameStatus(Long.parseLong(did), username, applianceConstants.ACTIVE_STATUS);
                 if (kh_coll == null || kh_coll.size() <= 0) {
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0007", "");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0031", "");
+                Collection<FidoKeys> kh_coll
+                        = getkeybean.getByUsernameStatus(Long.parseLong(did), username, applianceConstants.ACTIVE_STATUS);
+                if (kh_coll == null || kh_coll.size() <= 0) {
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0007", "");
+>>>>>>> adding old v1 api back to the fido2 server
                     return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0007"));
                 }
 
@@ -795,7 +983,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 int i = 0;
 
                 //  Populate all key handles and their respective origins.
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0032", "");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0032", "");
+>>>>>>> adding old v1 api back to the fido2 server
                 while (it.hasNext()) {
                     FidoKeys key = (FidoKeys) it.next();
                     if (key != null) {
@@ -814,7 +1006,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0008")
                         + ex.getMessage());
             }
@@ -832,11 +1028,19 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         logs = logs + fer.getLogmsg();
                     }
                 }
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0026",
                         " key handles count = " + keyhandles.length);
 
                 if (authresponses != null) {
                     String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0026",
+                        " key handles count = " + keyhandles.length);
+
+                if (authresponses != null) {
+                    String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfe.cfg.property.entropylength")));
+>>>>>>> adding old v1 api back to the fido2 server
 
                     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                     JsonArrayBuilder allowedCredBuilder = Json.createArrayBuilder();
@@ -848,9 +1052,16 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         JsonArray trasnportArrsy = authChallenge.getTransports();
                         String KHHash = skfsCommon.getDigest(keyhandle, "SHA-256");
 
+<<<<<<< HEAD
                         //                    String khurlsafe = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(Base64.decode(keyhandle));
                         //                    System.out.println("KH b64 = " + keyhandle);
                         //                    System.out.println("KH b64URL = " + khurlsafe);
+=======
+    //                    String khurlsafe = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(Base64.decode(keyhandle));
+    //                    System.out.println("KH b64 = " + keyhandle);
+    //                    System.out.println("KH b64URL = " + khurlsafe);
+
+>>>>>>> adding old v1 api back to the fido2 server
                         //  add a user session of type preauthenticate.
                         UserSessionInfo session = new UserSessionInfo(username,
                                 nonce, appid, skfsConstants.FIDO_USERSESSION_AUTH, upkeys[k], "");
@@ -869,10 +1080,17 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                             throw new RuntimeException(e.getLocalizedMessage());
                         }
                         //end publish
+<<<<<<< HEAD
                         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0021", " username=" + username);
 
                         arrayBuilder.add(authChallenge.toJsonObject(appid));
                         //                    allowedCredBuilder.add(Json.createObjectBuilder().add("type", "public-key").add("id", keyhandle).add("transports", trasnportArrsy));
+=======
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0021", " username=" + username);
+
+                        arrayBuilder.add(authChallenge.toJsonObject(appid));
+    //                    allowedCredBuilder.add(Json.createObjectBuilder().add("type", "public-key").add("id", keyhandle).add("transports", trasnportArrsy));
+>>>>>>> adding old v1 api back to the fido2 server
                         allowedCredBuilder.add(Json.createObjectBuilder().add("type", "public-key").add("id", keyhandle)); // TODO: fix transport array (removed it)
                     }
                     signDataArray = arrayBuilder.build();
@@ -897,12 +1115,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 Logger.getLogger(u2fServletHelperBean.class.getName()).log(Level.SEVERE, null, ex);
             }
             responseJSON = skfsCommon.buildPreAuthResponse(jsonObject, logs, errmsg);
+<<<<<<< HEAD
         } else {
+=======
+        }
+        else{
+>>>>>>> adding old v1 api back to the fido2 server
             responseJSON = fido2preauthbean.execute(Long.parseLong(did), username, options, extensions);
         }
 
         // Build the output json object
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0036", "");
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0036", "");
+>>>>>>> adding old v1 api back to the fido2 server
 
         return responseJSON;
     }
@@ -916,8 +1143,13 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String logs = "";
         String errmsg = "";
         String response = null;
+<<<<<<< HEAD
         String responseJSON;
 
+=======
+        String responseJSON ;
+        
+>>>>>>> adding old v1 api back to the fido2 server
         //  based on the structure of the regresponse, decide the protocol version.
         if (protocol == null || protocol.trim().isEmpty()) {
             protocol = skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2;
@@ -927,7 +1159,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String browserdata = (String) applianceCommon.getJsonValue(authresponse,
                     skfsConstants.JSON_KEY_CLIENTDATA, "String");
             if (browserdata == null || browserdata.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'clientData'");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0011", " Missing 'clientData'");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'clientData'");
             }
@@ -943,13 +1179,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 String bdnonce = jsonObject.getString(skfsConstants.JSON_KEY_NONCE);
                 String bdorigin = jsonObject.getString(skfsConstants.JSON_KEY_SERVERORIGIN);
                 if (bdreqtype == null || bdnonce == null || bdorigin == null) {
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
+>>>>>>> adding old v1 api back to the fido2 server
                             skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Missing 'registrationData'");
                     return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5011")
                             + " Missing 'registrationData'");
                 }
             } catch (Exception ex) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
+>>>>>>> adding old v1 api back to the fido2 server
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'clientDATA'");
                 return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'clientDATA'");
@@ -962,7 +1206,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String signdata = (String) applianceCommon.getJsonValue(authresponse,
                     skfsConstants.JSON_KEY_SIGNATUREDATA, "String");
             if (signdata == null || signdata.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'signatureData'");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0011", " Missing 'signatureData'");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'signatureData'");
             }
@@ -970,7 +1218,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String keyhandle = (String) applianceCommon.getJsonValue(authresponse,
                     skfsConstants.JSON_USER_KEY_HANDLE_SERVLET, "String");
             if (keyhandle == null || keyhandle.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'keyHandle'");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0011", " Missing 'keyHandle'");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'keyHandle'");
             }
@@ -979,7 +1231,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String version = (String) applianceCommon.getJsonValue(authmetadata,
                     skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
             if (version == null || version.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
             }
@@ -987,7 +1243,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String modifyloc = (String) applianceCommon.getJsonValue(authmetadata,
                     skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
             if (modifyloc == null || modifyloc.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
             }
@@ -995,7 +1255,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String username_received = (String) applianceCommon.getJsonValue(authmetadata,
                     skfsConstants.FIDO_METADATA_KEY_USERNAME, "String");
             if (username_received == null || username_received.isEmpty()) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - username");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - username");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019")
                         + " Missing metadata - username");
             }
@@ -1011,7 +1275,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 //  calculate the hash of keyhandle received
                 KHhash = skfsCommon.getDigest(keyhandle, "SHA-256");
             } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash");
             }
@@ -1019,6 +1287,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             //  Look for the sessionid in the sessionmap and retrieve the username
             UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
             if (user == null) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0006", "");
                 return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0006"));
             } else if (user.getSessiontype().equalsIgnoreCase(skfsConstants.FIDO_USERSESSION_AUTH)) {
@@ -1028,6 +1297,17 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 appid_Received = user.getAppid();
                 challenge = user.getNonce();
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0042", " appid=" + appid_Received);
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
+                return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0006"));
+            } else if (user.getSessiontype().equalsIgnoreCase(skfsConstants.FIDO_USERSESSION_AUTH)) {
+                username = user.getUsername();
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0022", " username=" + username);
+
+                appid_Received = user.getAppid();
+                challenge = user.getNonce();
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0042", " appid=" + appid_Received);
+>>>>>>> adding old v1 api back to the fido2 server
             }
 
             //verify that the call is for the right user
@@ -1040,7 +1320,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             //appid verifier
             String origin = skfsCommon.getOriginfromBrowserdata(browserdata);
             if (!originverifierbean.execute(appid_Received, origin)) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0032", "");
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0032", "");
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0032")
                         + " : " + appid_Received + "-" + origin);
             }
@@ -1057,13 +1341,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             try {
                 fer = u2fauthbean.execute(Long.parseLong(did), protocol, authresponse, userpublickey, challenge, appid_Received);
             } catch (SKFEException ex) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
+>>>>>>> adding old v1 api back to the fido2 server
                 return skfsCommon.buildAuthenticateResponse("", "",
                         skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
             }
 
             if (fer != null) {
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", fer.getResponse());
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0046", fer.getResponse());
+>>>>>>> adding old v1 api back to the fido2 server
                 logs = fer.getLogmsg();
                 U2FAuthenticationResponse authResponse = (U2FAuthenticationResponse) fer.getResponse();
                 if (authResponse != null) {
@@ -1080,9 +1372,15 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     if (userpresence != skfsConstants.USER_PRESENT_FLAG) {
                         //  Remove the sessionid from the sessionmap
                         skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
+<<<<<<< HEAD
                         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
                         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0031", "");
+=======
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0023", "");
+
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0031", "");
+>>>>>>> adding old v1 api back to the fido2 server
                         return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0031"));
                     }
                     //  Persist sign counter info & the user presence bytes to the database - TBD
@@ -1106,9 +1404,15 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                                  */
                                 //  Remove the user session from the sessionmap
                                 skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
+<<<<<<< HEAD
                                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
                                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0030", "");
+=======
+                                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0023", "");
+
+                                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0030", "");
+>>>>>>> adding old v1 api back to the fido2 server
                                 return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0030"));
                             }
                         }
@@ -1120,14 +1424,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         }
                         Boolean status = jo.getBoolean(skfsConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
                         if (status) {
+<<<<<<< HEAD
                             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0027", "");
                         } else {
                             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0026", " new value=" + newCounter);
+=======
+                            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0027", "");
+                        } else {
+                            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0026", " new value=" + newCounter);
+>>>>>>> adding old v1 api back to the fido2 server
                         }
                     }
 
                     //  Remove the sessionid from the sessionmap
                     skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", " username=" + username);
                 } else {
                     //  Remove the sessionid from the sessionmap
@@ -1135,6 +1446,15 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", "");
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0023", " username=" + username);
+                } else {
+                    //  Remove the sessionid from the sessionmap
+                    skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0023", "");
+
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0015", "");
+>>>>>>> adding old v1 api back to the fido2 server
                     return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0015") + "");
                 }
 
@@ -1162,7 +1482,12 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         }
 
         // Build the output json object
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0038", "");
+=======
+        
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0038", "");
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -1211,31 +1536,51 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0013", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0013", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
                     + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014",
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014",
+>>>>>>> adding old v1 api back to the fido2 server
                     " Invalid json");
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
                     + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002")
                     + " protocol");
         }
@@ -1246,7 +1591,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
         JsonObject extensions = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> adding old v1 api back to the fido2 server
         // fetch options inputs if they exist (TODO refactor when options are no longer in payload)
         String userVerification = (String) applianceCommon.getJsonValue(payload,
                 skfsConstants.FIDO2_ATTR_USERVERIFICATION, "String");
@@ -1255,9 +1604,15 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             optionsBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
         }
         JsonObject options = optionsBuilder.build();
+<<<<<<< HEAD
 
         if (username == null || username.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+=======
+        
+        if (username == null || username.isEmpty()) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " username");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
                     + " username");
         }
@@ -1267,7 +1622,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0014", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0014", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\nU2FAuthorization Challenge parameters = " + responseJSON);
         return responseJSON;
     }
@@ -1317,18 +1676,30 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0015"), "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0015"), "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0010", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
@@ -1337,7 +1708,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0010", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0010"));
         }
@@ -1345,7 +1720,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0017", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0017"));
         }
@@ -1361,7 +1740,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     protocol,
                     "authorization");
         } catch (SKFEException ex) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0034", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildAuthenticateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0034"));
         }
@@ -1369,7 +1752,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0016", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0016", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -1425,29 +1812,49 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0009", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0009", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
@@ -1457,7 +1864,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST,
                 "JsonObject");
         if (request == null || request.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0021", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
@@ -1467,7 +1878,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String username = (String) applianceCommon.getJsonValue(
                 deregistrationrequest, skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'username'");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing 'username'");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'username'");
         }
@@ -1475,7 +1890,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String randomid = (String) applianceCommon.getJsonValue(
                 deregistrationrequest, skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'randomid'");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing 'randomid'");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeregisterResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'randomid'");
         }
@@ -1483,20 +1902,32 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  5. handover the job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2fderegbean.execute(did, protocol, username, randomid);
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0046", skcero);
+>>>>>>> adding old v1 api back to the fido2 server
         if (skcero.getErrorkey() != null) {
             responseJSON = skfsCommon.buildDeregisterResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully deleted user registered security key";
             responseJSON = skfsCommon.buildDeregisterResponse(response, "", "");
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0039", "");
+>>>>>>> adding old v1 api back to the fido2 server
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  6. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -1551,27 +1982,47 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0019"), "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0019"), "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+        }
+        if (!skfsCommon.isValidJsonObject(payload)) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+        }
+        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
@@ -1579,14 +2030,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject request = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
         if (request == null || request.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0021", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019"));
         }
 
@@ -1597,7 +2056,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String username = (String) applianceCommon.getJsonValue(activationrequest,
                 skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
         }
@@ -1605,7 +2068,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String randomid = (String) applianceCommon.getJsonValue(activationrequest,
                 skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
         }
@@ -1614,7 +2081,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String version = (String) applianceCommon.getJsonValue(activationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
         if (version == null || version.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019")
                     + " Missing metadata - version");
         }
@@ -1622,7 +2093,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String modifyloc = (String) applianceCommon.getJsonValue(activationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
         if (modifyloc == null || modifyloc.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildActivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0019")
                     + " Missing metadata - modifylocation");
@@ -1631,20 +2106,32 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  6. handover job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2factbean.execute(did, protocol, username, randomid, modifyloc);
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0046", skcero);
+>>>>>>> adding old v1 api back to the fido2 server
         if (skcero.getErrorkey() != null) {
             responseJSON = skfsCommon.buildActivateResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully activated user registered security key";
             responseJSON = skfsCommon.buildActivateResponse(response, "", "");
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0052", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0052", "");
+>>>>>>> adding old v1 api back to the fido2 server
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  7. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0020", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0020", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -1701,30 +2188,50 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0017", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0017", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
@@ -1733,14 +2240,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         JsonObject request = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
         if (request == null || request.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0021", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", "");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019"));
         }
 
@@ -1751,7 +2266,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String username = (String) applianceCommon.getJsonValue(deactivationrequest,
                 skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
         }
@@ -1759,7 +2278,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String randomid = (String) applianceCommon.getJsonValue(deactivationrequest,
                 skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
         }
@@ -1768,7 +2291,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String version = (String) applianceCommon.getJsonValue(deactivationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
         if (version == null || version.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
         }
@@ -1776,7 +2303,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String modifyloc = (String) applianceCommon.getJsonValue(deactivationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
         if (modifyloc == null || modifyloc.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildDeactivateResponse("", "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
         }
@@ -1784,20 +2315,32 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  6. handover job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2fdeactbean.execute(did, protocol, username, randomid, modifyloc);
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0046", skcero);
+>>>>>>> adding old v1 api back to the fido2 server
         if (skcero.getErrorkey() != null) {
             responseJSON = skfsCommon.buildDeactivateResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully de-activated user registered security key";
             responseJSON = skfsCommon.buildDeactivateResponse(response, "", "");
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0051", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0051", "");
+>>>>>>> adding old v1 api back to the fido2 server
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  7. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0018", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0018", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
@@ -1849,30 +2392,50 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0011", "[TXID=" + ID + "]"
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0011", "[TXID=" + ID + "]"
+>>>>>>> adding old v1 api back to the fido2 server
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " payload");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
         if (!skfsCommon.isValidJsonObject(payload)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " protocol");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
         if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-5002", protocol);
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
@@ -1881,7 +2444,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         String username = (String) applianceCommon.getJsonValue(payload,
                 skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
         if (username == null || username.isEmpty()) {
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " username");
+>>>>>>> adding old v1 api back to the fido2 server
             return skfsCommon.buildPreRegisterResponse(null, "",
                     skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username");
         }
@@ -1889,7 +2456,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  3. Hand over the job to an ejb.
         String responseJSON;
         SKCEReturnObject skcero = u2fgetkeysbean.execute(Long.parseLong(did), username);
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0046", skcero);
+>>>>>>> adding old v1 api back to the fido2 server
         if (skcero.getErrorkey() != null) {
             responseJSON = skfsCommon.buildGetKeyInfoResponse(null, "", skcero.getErrormsg());
         } else {
@@ -1901,21 +2472,35 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             }
 
             responseJSON = skfsCommon.buildGetKeyInfoResponse(keysJsonObj, "", "");
+<<<<<<< HEAD
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0040", "");
+=======
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0040", "");
+>>>>>>> adding old v1 api back to the fido2 server
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
+<<<<<<< HEAD
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0012", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+=======
+        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "FIDO-MSG-0012", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+>>>>>>> adding old v1 api back to the fido2 server
         return responseJSON;
     }
 
     private String decryptKH(String token) {
         String retvalue = token;
+<<<<<<< HEAD
         if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
             String clusterid = "1";
             String domainid = skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
+=======
+        if (skfsCommon.getConfigurationProperty("skfe.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
+            String clusterid = "1";
+            String domainid = skceCommon.getConfigurationProperty("skfe.cfg.property.db.keyhandle.encrypt.saka.domainid");
+>>>>>>> adding old v1 api back to the fido2 server
             String sakausername = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "username");
             String sakapassword = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "password");
             String hosturl = skceCommon.getWorkingHostURLInCluster(Long.parseLong(clusterid), Long.parseLong(domainid));
@@ -1923,21 +2508,33 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             if (port == null) {
                 // Create URL for calling web-service
                 URL baseUrl = com.strongkey.saka.web.EncryptionService.class.getResource(".");
+<<<<<<< HEAD
                 String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
+=======
+                String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfe.cfg.property.saka.encryption.wsdlsuffix");
+>>>>>>> adding old v1 api back to the fido2 server
                 URL url = null;
                 try {
                     url = new URL(baseUrl, hosturl + ENCRYPTION_SERVICE_WSDL_SUFFIX);
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(FidoKeys.class.getName()).log(Level.SEVERE, null, ex);
                 }
+<<<<<<< HEAD
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "SKCE-MSG-4028", hosturl);
+=======
+                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, "SKCE-MSG-4028", hosturl);
+>>>>>>> adding old v1 api back to the fido2 server
 
                 //  Check to see if the url is available.
                 if (skceCommon.isURLAccessible(url)) {
                     // Create EncryptionService and Encryption objects
                     EncryptionService cryptosvc = new EncryptionService(url);
                     port = cryptosvc.getEncryptionPort();
+<<<<<<< HEAD
                     skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "SKCE-MSG-4013", hosturl);
+=======
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "SKCE-MSG-4013", hosturl);
+>>>>>>> adding old v1 api back to the fido2 server
                 }
             }
 

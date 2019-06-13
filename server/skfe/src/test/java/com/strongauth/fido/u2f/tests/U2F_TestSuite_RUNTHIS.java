@@ -57,11 +57,18 @@ import org.junit.runners.Suite;
  *******************************************************************************/
 
 @RunWith(Suite.class)
+<<<<<<< HEAD
 @Suite.SuiteClasses({
 //    com.strongauth.fido.u2f.tests.U2F_SOAP_RegistrationTest.class,
 //    com.strongauth.fido.u2f.tests.U2F_REST_AuthenticationTest.class,
 //    com.strongauth.fido.u2f.tests.U2F_REST_RegistrationTest.class,
 //                     com.strongauth.fido.u2f.tests.U2F_SOAP_AuthenticationTest.class
+=======
+@Suite.SuiteClasses({com.strongauth.fido.u2f.tests.U2F_SOAP_RegistrationTest.class,
+//    com.strongauth.fido.u2f.tests.U2F_REST_AuthenticationTest.class,
+//    com.strongauth.fido.u2f.tests.U2F_REST_RegistrationTest.class,
+                     com.strongauth.fido.u2f.tests.U2F_SOAP_AuthenticationTest.class
+>>>>>>> adding old v1 api back to the fido2 server
                      })
 
 public class U2F_TestSuite_RUNTHIS {
