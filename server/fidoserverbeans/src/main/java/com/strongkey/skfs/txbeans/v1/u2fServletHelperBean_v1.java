@@ -536,11 +536,10 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 responseJSON = FIDO2Regejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata);
             }
         } catch (Exception ex) {
-            if (ex.getCause().getClass() == IllegalArgumentException.class) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-            }
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-            return skfsCommon.buildRegisterResponse(null, "", ex.getMessage());
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getCause().getMessage());
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getCause().getLocalizedMessage());
+            return skfsCommon.buildRegisterResponse(null, "",
+                    skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getCause().getMessage());
         }
         
         //  9.  Build the output json object
