@@ -46,7 +46,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -61,7 +60,7 @@ public class replCommon {
     private static final ResourceBundle defaultReplConfig = ResourceBundle.getBundle("resources.repl.replication-configuration");
     
         // Property files used by this application for application messages
-    private static final ResourceBundle msgrb = ResourceBundle.getBundle("resources.repl.replication-messages_" + Locale.getDefault());
+    private static final ResourceBundle msgrb = ResourceBundle.getBundle("resources.repl.replication-messages");
     
     // Location where Replication is installed on this machine
     private static final String replhome;
