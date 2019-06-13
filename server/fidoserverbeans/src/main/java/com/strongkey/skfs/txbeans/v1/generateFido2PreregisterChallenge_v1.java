@@ -357,7 +357,6 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
             if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
                     && !authselect.getUserVerification().contains(skfsConstants.POLICY_CONST_PREFERRED)){
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
-
             }
             return authselectResponse;
         }
