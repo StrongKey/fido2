@@ -18,6 +18,7 @@ import com.strongkey.skfs.fido2.FIDO2AttestationStatement;
 import com.strongkey.skfs.fido2.FIDO2AuthenticatorData;
 import com.strongkey.skfs.policybeans.verifyFido2RegistrationPolicyLocal;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
@@ -107,7 +108,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             Boolean isSignatureValid = attObject.getAttStmt().verifySignature(browserdataBase64, attObject.getAuthData());
             if (!isSignatureValid) {
                 skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDO-MSG-2001", "Registration Signature verification : " + isSignatureValid);
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
                         + "Registration Signature verification : " + isSignatureValid));
             }
             
@@ -145,7 +146,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             ex.printStackTrace();
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-2001"), ex.getLocalizedMessage());
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
                     + ex.getLocalizedMessage()));
         }
     }
@@ -161,12 +162,12 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             verifyAcceptedValue(registrationObject, skfsConstants.JSON_KEY_REQUEST_TYPE, new String[]{ "public-key" });
             if(!registrationObject.getString(skfsConstants.JSON_KEY_ID).equals(registrationObject.getString(skfsConstants.JSON_KEY_RAW_ID))){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "id does not match rawId");
-                throw new IllegalArgumentException("Json improperly formatted");
+                throw new SKIllegalArgumentException("Json improperly formatted");
             }
         }
         catch(JsonException ex){
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Json improperly formatted");
-            throw new IllegalArgumentException("Json improperly formatted");
+            throw new SKIllegalArgumentException("Json improperly formatted");
         }
     }
     
@@ -175,7 +176,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             JsonValue jsonValue = jsonObject.get(field);
             if(jsonValue == null || jsonValue.toString().isEmpty()){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Missing " + field);
-                throw new IllegalArgumentException("Missing " + field);
+                throw new SKIllegalArgumentException("Missing " + field);
             }
         }
     }
@@ -187,7 +188,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
                     org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(
                     java.util.Base64.getUrlDecoder().decode(base64UrlString)))){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid Base64: " + field + " value: " + base64UrlString);
-                throw new IllegalArgumentException("Invalid Base64: " + field);
+                throw new SKIllegalArgumentException("Invalid Base64: " + field);
             }
         }
     }
@@ -197,7 +198,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         ArrayList acceptedList = new ArrayList(Arrays.asList(acceptedValues));
         if(returnedValue == null || !acceptedList.contains(returnedValue)){
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid " + field);
-            throw new IllegalArgumentException("Invalid " + field);
+            throw new SKIllegalArgumentException("Invalid " + field);
         }
     }
     
@@ -206,7 +207,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         JsonObject response = responseObject.getJsonObject(skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE);
         if(response == null){
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid response");
-            throw new IllegalArgumentException("Invalid response");
+            throw new SKIllegalArgumentException("Invalid response");
         }
         return response;
     }
@@ -225,7 +226,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             return skfsCommon.getJsonObjectFromString(browserdataJsonString);
         } catch (UnsupportedEncodingException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid clientDataJSON");
-            throw new IllegalArgumentException("Invalid clientDataJSON");
+            throw new SKIllegalArgumentException("Invalid clientDataJSON");
         }
     }
     
@@ -244,7 +245,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             return skfsCommon.getJsonObjectFromString(registrationmetadata);
         } catch (JsonException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Metadata Json improperly formatted");
-            throw new IllegalArgumentException("Metadata Json improperly formatted");
+            throw new SKIllegalArgumentException("Metadata Json improperly formatted");
         }
     }
     
@@ -269,7 +270,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
     private String retrieveUsernameFromSessionMap(UserSessionInfo userInfo, String challengeDigest){
         if (userInfo == null) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
-            throw new IllegalArgumentException("Challenge does not exist in map");
+            throw new SKIllegalArgumentException("Challenge does not exist in map");
         } else {
             String sessionUsername = userInfo.getUsername();
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0022", " username=" + sessionUsername);
@@ -279,7 +280,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
     
     private void verifyUsernameMatch(String metadataUsername, String sessionUsername){
         if (!metadataUsername.equalsIgnoreCase(sessionUsername)) {
-            throw new IllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-0037"));
+            throw new SKIllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-0037"));
         }
     }
     
@@ -289,11 +290,11 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             URI rporiginURI = new URI(rporigin);
             if(!originURI.equals(rporiginURI)){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid Origin");
-                throw new IllegalArgumentException("Invalid Origin: " + originURI + " != " + rporiginURI);
+                throw new SKIllegalArgumentException("Invalid Origin: " + originURI + " != " + rporiginURI);
             }
         } catch (URISyntaxException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid Origin: " + ex.getLocalizedMessage());
-            throw new IllegalArgumentException("Invalid Origin " + ex.getLocalizedMessage());
+            throw new SKIllegalArgumentException("Invalid Origin " + ex.getLocalizedMessage());
         }
     }
     
@@ -313,7 +314,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             return attObject;
         } catch (IOException | NoSuchAlgorithmException | NoSuchProviderException | InvalidKeySpecException | InvalidParameterSpecException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-ERR-5011", "Invalid attestaionObject: " + ex);
-            throw new IllegalArgumentException("Invalid attestaionObject");
+            throw new SKIllegalArgumentException("Invalid attestaionObject");
         }
     }
     
