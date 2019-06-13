@@ -1039,8 +1039,12 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         " key handles count = " + keyhandles.length);
 
                 if (authresponses != null) {
+<<<<<<< HEAD
                     String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfe.cfg.property.entropylength")));
 >>>>>>> adding old v1 api back to the fido2 server
+=======
+                    String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
+>>>>>>> adding old config properties back for v1 api
 
                     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                     JsonArrayBuilder allowedCredBuilder = Json.createArrayBuilder();
@@ -2493,6 +2497,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
     private String decryptKH(String token) {
         String retvalue = token;
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
             String clusterid = "1";
             String domainid = skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
@@ -2501,6 +2506,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String clusterid = "1";
             String domainid = skceCommon.getConfigurationProperty("skfe.cfg.property.db.keyhandle.encrypt.saka.domainid");
 >>>>>>> adding old v1 api back to the fido2 server
+=======
+        if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
+            String clusterid = "1";
+            String domainid = skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
+>>>>>>> adding old config properties back for v1 api
             String sakausername = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "username");
             String sakapassword = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "password");
             String hosturl = skceCommon.getWorkingHostURLInCluster(Long.parseLong(clusterid), Long.parseLong(domainid));
@@ -2509,10 +2519,14 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 // Create URL for calling web-service
                 URL baseUrl = com.strongkey.saka.web.EncryptionService.class.getResource(".");
 <<<<<<< HEAD
+<<<<<<< HEAD
                 String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
 =======
                 String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfe.cfg.property.saka.encryption.wsdlsuffix");
 >>>>>>> adding old v1 api back to the fido2 server
+=======
+                String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
+>>>>>>> adding old config properties back for v1 api
                 URL url = null;
                 try {
                     url = new URL(baseUrl, hosturl + ENCRYPTION_SERVICE_WSDL_SUFFIX);
