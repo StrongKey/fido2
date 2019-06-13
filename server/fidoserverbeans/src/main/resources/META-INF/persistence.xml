@@ -3,9 +3,9 @@
   <persistence-unit name="FIDOPU" transaction-type="JTA">
     <jta-data-source>jdbc/strongkeylite</jta-data-source>
     <class>com.strongkey.appliance.entitybeans.Domains</class>
-    <class>com.strongauth.appliance.entitybeans.Servers</class>
+    <class>com.strongkey.appliance.entitybeans.Servers</class>
     <class>com.strongkey.skfe.entitybeans.FidoKeys</class>
-    <class>com.strongauth.replication.entitybeans.Replication</class>
+    <class>com.strongkey.replication.entitybeans.Replication</class>
     <class>com.strongkey.skfs.entitybeans.FidoUsers</class>
     <class>com.strongkey.skfs.entitybeans.AttestationCertificates</class>
     <class>com.strongkey.skfs.entitybeans.FidoPolicies</class>
