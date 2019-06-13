@@ -37,6 +37,9 @@ OPENDJ=OpenDJ-3.0.0.zip
 
 SERVICE_LDAP_BIND_PASS=Abcd1234!
 SERVICE_LDAP_BASEDN='dc=strongauth,dc=com'
+SAKA_DID=1
+SERVICE_LDAP_SVCUSER_PASS=Abcd1234!
+SKCE_LDIF=skce.ldif
 
 # Other vars
 STRONGKEY_HOME=/usr/local/strongkey
@@ -375,6 +378,27 @@ if [ $INSTALL_OPENDJ = 'Y' ]; then
                                   --trustAll \
                                   --no-prompt
 fi
+
+##### Adding default opendj users #####
+SLDNAME=${SERVICE_LDAP_BASEDN%%,dc*}
+sed -r "s|dc=strongauth,dc=com|$SERVICE_LDAP_BASEDN|
+        s|dc: strongauth|dc: ${SLDNAME#dc=}|
+        s|did: .*|did: ${SAKA_DID}|
+        s|did=[0-9]+,|did=${SAKA_DID},|
+        s|^ou: [0-9]+|ou: ${SAKA_DID}|
+        s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
+        s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKCE_LDIF > /tmp/skce.ldif
+
+echo "Importing default users..."
+$OPENDJ_HOME/bin/ldapmodify --filename /tmp/skce.ldif \
+                             --hostName $(hostname) \
+                             --port 1389 \
+                             --bindDN 'cn=Directory Manager' \
+                             --bindPassword "$SERVICE_LDAP_BIND_PASS" \
+                             --trustAll \
+                             --noPropertiesFile \
+                             --defaultAdd >/dev/null
+
 
 ##### Start MariaDB and Payara #####
 echo -n "Creating $DBSIZE SKFS Internal Database..."
