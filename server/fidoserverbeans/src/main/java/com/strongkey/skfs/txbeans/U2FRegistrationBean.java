@@ -13,6 +13,7 @@ import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.core.U2FRegistrationResponse;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
@@ -53,7 +54,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.JSON_KEY_CLIENTDATA, "String");
         if (browserdata == null || browserdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'clientData'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
         }
         //parse browserdata
 
