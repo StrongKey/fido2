@@ -49,9 +49,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -62,6 +60,7 @@ import javax.ws.rs.core.Response;
 import org.everit.json.schema.ValidationException;
 import org.json.JSONObject;
 
+@Stateless
 @Path("")
 public class FidoAdminServlet {
     
@@ -69,64 +68,64 @@ public class FidoAdminServlet {
     
        
     @EJB
-    authorizeLdapUserBeanLocal authorizebean = lookup_authorizeLdapUserBeanLocal();
+    authorizeLdapUserBeanLocal authorizebean;// = lookup_authorizeLdapUserBeanLocal();
     @EJB
-    addFidoPolicyLocal addpolicybean = lookup_addFidoPolicyLocal();
+    addFidoPolicyLocal addpolicybean ;//= lookup_addFidoPolicyLocal();
     @EJB
-    getFidoPolicyLocal getpolicybean = lookup_getFidoPolicyLocal();
+    getFidoPolicyLocal getpolicybean ;//= lookup_getFidoPolicyLocal();
     @EJB
-    updateFidoPolicyLocal updatepolicybean = lookup_updateFidoPolicyLocal();
+    updateFidoPolicyLocal updatepolicybean ;//= lookup_updateFidoPolicyLocal();
     @EJB
-    deleteFidoPolicyLocal deletepolicybean = lookup_deleteFidoPolicyLocal();
+    deleteFidoPolicyLocal deletepolicybean ;//= lookup_deleteFidoPolicyLocal();
     
     /**
      * methods to look up for ejb resources
      */
-    private authorizeLdapUserBeanLocal lookup_authorizeLdapUserBeanLocal() {
-        try {
-            Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
-        } catch (NamingException ne) {
-            throw new RuntimeException(ne);
-        }
-    }
-    
-    private addFidoPolicyLocal lookup_addFidoPolicyLocal() {
-        try {
-            Context c = new InitialContext();
-            return (addFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/addFidoPolicy!com.strongauth.skfe.policybeans.addFidoPolicyLocal");
-        } catch (NamingException ne) {
-            throw new RuntimeException(ne);
-        }
-    }
-    
-    private getFidoPolicyLocal lookup_getFidoPolicyLocal() {
-        try {
-            Context c = new InitialContext();
-            return (getFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/getFidoPolicy!com.strongauth.skfe.policybeans.getFidoPolicyLocal");
-        } catch (NamingException ne) {
-            throw new RuntimeException(ne);
-        }
-    }
-    
-    private updateFidoPolicyLocal lookup_updateFidoPolicyLocal() {
-        try {
-            Context c = new InitialContext();
-            return (updateFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/updateFidoPolicy!com.strongauth.skfe.policybeans.updateFidoPolicyLocal");
-        } catch (NamingException ne) {
-            throw new RuntimeException(ne);
-        }
-    }
-    
-    private deleteFidoPolicyLocal lookup_deleteFidoPolicyLocal() {
-        try {
-            Context c = new InitialContext();
-            return (deleteFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/deleteFidoPolicy!com.strongauth.skfe.policybeans.deleteFidoPolicyLocal");
-        } catch (NamingException ne) {
-            throw new RuntimeException(ne);
-        }
-    }
-    
+//    private authorizeLdapUserBeanLocal lookup_authorizeLdapUserBeanLocal() {
+//        try {
+//            Context c = new InitialContext();
+//            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+//        } catch (NamingException ne) {
+//            throw new RuntimeException(ne);
+//        }
+//    }
+//    
+//    private addFidoPolicyLocal lookup_addFidoPolicyLocal() {
+//        try {
+//            Context c = new InitialContext();
+//            return (addFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/addFidoPolicy!com.strongauth.skfe.policybeans.addFidoPolicyLocal");
+//        } catch (NamingException ne) {
+//            throw new RuntimeException(ne);
+//        }
+//    }
+//    
+//    private getFidoPolicyLocal lookup_getFidoPolicyLocal() {
+//        try {
+//            Context c = new InitialContext();
+//            return (getFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/getFidoPolicy!com.strongauth.skfe.policybeans.getFidoPolicyLocal");
+//        } catch (NamingException ne) {
+//            throw new RuntimeException(ne);
+//        }
+//    }
+//    
+//    private updateFidoPolicyLocal lookup_updateFidoPolicyLocal() {
+//        try {
+//            Context c = new InitialContext();
+//            return (updateFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/updateFidoPolicy!com.strongauth.skfe.policybeans.updateFidoPolicyLocal");
+//        } catch (NamingException ne) {
+//            throw new RuntimeException(ne);
+//        }
+//    }
+//    
+//    private deleteFidoPolicyLocal lookup_deleteFidoPolicyLocal() {
+//        try {
+//            Context c = new InitialContext();
+//            return (deleteFidoPolicyLocal) c.lookup("java:app/skfebeans-4.0/deleteFidoPolicy!com.strongauth.skfe.policybeans.deleteFidoPolicyLocal");
+//        } catch (NamingException ne) {
+//            throw new RuntimeException(ne);
+//        }
+//    }
+//    
     @POST
     @Path("/" + skfsConstants.CREATE_FIDO_POLICY)
     @Consumes({"application/x-www-form-urlencoded"})
