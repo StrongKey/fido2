@@ -8,9 +8,10 @@
 package com.strongkey.skfs.policybeans;
 
 import com.google.common.primitives.Longs;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.skce.pojos.MDSClient;
+import com.strongkey.skce.pojos.UserSessionInfo;
+import com.strongkey.skce.utilities.PKIXChainValidation;
 import com.strongkey.skfs.fido.policyobjects.CounterPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.CryptographyPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
@@ -19,13 +20,13 @@ import com.strongkey.skfs.fido.policyobjects.RegistrationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
 import com.strongkey.skfs.fido2.ECKeyObject;
 import com.strongkey.skfs.fido2.FIDO2AttestationObject;
-import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skce.utilities.PKIXChainValidation;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.fido2.FIDO2AttestationStatement;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
+import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertPath;
@@ -211,7 +212,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
                 certchain.add(attestationCert);
             }
         } else {
-            throw new IllegalArgumentException("Expected Certificate chain missing");
+            throw new SKIllegalArgumentException("Expected Certificate chain missing");
         }
         CertPath certPath = CertificateFactory.getInstance("X.509", "BCFIPS").generateCertPath(certchain);
         
@@ -222,12 +223,12 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         //TODO perform comprehensive checks on errors
         JsonArray errors = trustAnchors.getJsonArray("errors");
         if(!errors.isEmpty()){
-            throw new IllegalArgumentException("MDS error(s): " + errors.toString());
+            throw new SKIllegalArgumentException("MDS error(s): " + errors.toString());
         }
         
         //TODO handle case where aaguid is not in MDS
         if(roots == null){
-            throw new IllegalArgumentException("Root certificates not found in MDS");
+            throw new SKIllegalArgumentException("Root certificates not found in MDS");
         }
         for(int rootIndex = 0; rootIndex < roots.size(); rootIndex++) {
             byte[] certBytes = java.util.Base64.getDecoder().decode(roots.getString(rootIndex));
@@ -236,7 +237,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         
         //Verify chain chains up to one of the roots.
         if(!PKIXChainValidation.pkixvalidate(certPath, rootAnchors, false, isPolicyQualifiersRejected)){    //TODO check CRLs if they exist, otherwise don't
-            throw new IllegalArgumentException("Failed to verify certificate path");
+            throw new SKIllegalArgumentException("Failed to verify certificate path");
         }
         
         //TODO att ECDAA attestation
@@ -282,13 +283,13 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         
         //Double check that what was stored in UserSessionInfo is valid for the policy
         if(regOp.getAuthenticatorSelection() == null){
-            throw new IllegalArgumentException("Policy Exception: Null policy");
+            throw new SKIllegalArgumentException("Policy Exception: Null policy");
         }
         if(!regOp.getAuthenticatorSelection().getUserVerification().contains(userVerificationReq)){
-            throw new IllegalArgumentException("Policy Exception: Prereg userVerificationRequirement does not meet policy");
+            throw new SKIllegalArgumentException("Policy Exception: Prereg userVerificationRequirement does not meet policy");
         }
         if(!regOp.getAttestation().contains(attestationPreference)){
-            throw new IllegalArgumentException("Policy Exception: Prereg AttestationConveyancePreference does not meet policy");
+            throw new SKIllegalArgumentException("Policy Exception: Prereg AttestationConveyancePreference does not meet policy");
         }
         
         //If None attestation was requested (or defaulted to), ensure None attestation is given

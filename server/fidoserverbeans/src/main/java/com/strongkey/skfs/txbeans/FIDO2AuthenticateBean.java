@@ -9,17 +9,18 @@ package com.strongkey.skfs.txbeans;
 
 import com.google.common.primitives.Bytes;
 import com.strongkey.appliance.utilities.applianceCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.crypto.utility.cryptoCommon;
-import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skce.pojos.FidoKeysInfo;
 import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
+import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.fido2.FIDO2AuthenticatorData;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.policybeans.verifyFido2AuthenticationPolicyLocal;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.StringReader;
 import java.net.URI;
 import java.security.KeyFactory;
@@ -70,7 +71,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
         if (id == null || id.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'id'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                     + " Missing 'id'"));
         }
         String b64urlsafeId;
@@ -79,7 +80,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
         } catch (Exception ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'id'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid 'id'"));
         }
         skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
@@ -87,13 +88,13 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
         if (!id.equals(b64urlsafeId)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'id'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid 'id'"));
         }
 
         if (rawId == null || rawId.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'rawId'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                     + " Missing 'rawId'"));
         }
 
@@ -101,20 +102,20 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
         if (!rawId.equals(b64urlsaferawId)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'rawId'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid rawIdid'"));
         }
 
         if (credential_type == null || credential_type.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'credential_type'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                     + " Missing 'credential_type'"));
         }
 
         if (!credential_type.equalsIgnoreCase("public-key")) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'credential_type'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid 'credential_type'"));
         }
 
@@ -122,7 +123,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                 skfsConstants.JSON_KEY_CLIENTDATAJSON, "String");
         if (browserdata == null || browserdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'clientData'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                     + " Missing 'clientData'"));
         }
         //parse browserdata
@@ -139,20 +140,20 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             if (bdreqtype == null || bdnonce == null || bdorigin == null) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Missing 'authenticationnData'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Missing 'authenticationnData'"));
             }
             if (!bdreqtype.equalsIgnoreCase("webauthn.get")) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'request type'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'request type'"));
             }
 
             if (bdorigin.isEmpty()) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'bdorigin'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'bdorigin'"));
             }
             
@@ -163,7 +164,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             if(origin == null){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'origin'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'origin'"));
             }
             
@@ -175,7 +176,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             if (!bdoriginURI.equals(originURI)) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'origin'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'origin'"));
             }
 
@@ -184,7 +185,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     skfsConstants.JSON_KEY_AUTHENTICATORDATA, "String");
             if (authenticatorObject == null || authenticatorObject.isEmpty()) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'authenticatorObject'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                         + " Missing 'authenticatorObject'"));
             }
             skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-2001", "authenticatorObject : " + authenticatorObject);
@@ -198,7 +199,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                         skfsConstants.JSON_KEY_USERHANDLE, "String");
                 if (userHandle == null) { //|| userHandle.isEmpty()
                     skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'userHandle'");
-                    throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+                    throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                             + " Missing 'userHandle'"));
                 }
             }
@@ -207,7 +208,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     skfsConstants.JSON_KEY_SIGNATURE, "String");
             if (signature == null || signature.isEmpty()) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'signature'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                         + " Missing 'signature'"));
             }
             skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-2001", "Signature : " + signature);
@@ -219,7 +220,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             String rpidServletExtracted = originURI.getHost();
             if (!Base64.toBase64String(authenticatorData.getRpIdHash()).equals(Base64.toBase64String(skfsCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
                         + " RPID Hash invalid'"));
             }
             byte[] signedBytes = Bytes.concat(authData, skfsCommon.getDigestBytes(java.util.Base64.getDecoder().decode(browserdata), "SHA-256"));
@@ -228,14 +229,14 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
             if (modifyloc == null || modifyloc.isEmpty()) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation"));
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation"));
             }
 
             String username_received = (String) applianceCommon.getJsonValue(authmetadata,
                     skfsConstants.FIDO_METADATA_KEY_USERNAME, "String");
             if (username_received == null || username_received.isEmpty()) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - username");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0019")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0019")
                         + " Missing metadata - username"));
             }
             
@@ -249,12 +250,12 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     if (tokenBindingStatus == null || tokenBindingStatus.isEmpty()
                             || !validTokenBindingStatuses.contains(tokenBindingStatus)) {
                         skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Invalid 'tokenBinding'");
-                        throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+                        throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                                 + " Invalid 'tokenBinding'"));
                     }
                 }
             } catch (ClassCastException ex) {
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                         + " Missing 'tokenBinding'"));
             }
 
@@ -274,7 +275,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
             if (user == null) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0006")));
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0006")));
             } else if (user.getSessiontype().equalsIgnoreCase(skfsConstants.FIDO_USERSESSION_AUTH)) {
                 username = user.getUsername();
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0022", " username=" + username);
@@ -286,7 +287,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             
             // Verify username received in metadata matches the username for the received challenge
             if (!username_received.equalsIgnoreCase(username)) {
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0037")));
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0037")));
             }
 
             //  3. Do processing
@@ -318,7 +319,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
                 if (!isSignatureValid) {
                     skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDO-MSG-2001", "Authentication Signature verification : " + isSignatureValid);
-                    throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
+                    throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
                             + "Authentication Signature verification : " + isSignatureValid));
                 }
 
@@ -358,7 +359,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             ex.printStackTrace();
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'authenticatorDATA'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid 'authenticatorDATA'"));
         }
         String responseJSON = skfsCommon.buildReturn(wsresponse);
@@ -373,7 +374,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             return "RSA";
         }
         else{
-            throw new IllegalArgumentException("Unknown Key Type");
+            throw new SKIllegalArgumentException("Unknown Key Type");
         }
     }
 }

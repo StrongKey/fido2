@@ -9,13 +9,9 @@ package com.strongkey.skfs.policybeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
+import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.core.U2FUtility;
 import com.strongkey.skfs.fido.policyobjects.AuthenticationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.CryptographyPolicyOptions;
@@ -27,6 +23,11 @@ import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
+import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -63,14 +64,14 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         try{
             userId = getUserId(did, username);
         } catch (SKFEException ex) {
-            throw new IllegalArgumentException(skfsCommon.buildReturn(ex.getLocalizedMessage()));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(ex.getLocalizedMessage()));
         }
         
         //Gather useful information
         FidoPolicyObject fidoPolicy = getpolicybean.getPolicyByDidUsername(did, username);
         if (fidoPolicy == null) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "No policy found");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + "No policy found"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + "No policy found"));
         }
         String challenge = generateChallenge(fidoPolicy.getCryptographyOptions());
         
@@ -130,7 +131,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
             return response;
         } catch (SKFEException | NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", ex.getLocalizedMessage());
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + ex.getLocalizedMessage()));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + ex.getLocalizedMessage()));
         }
     }
     
@@ -189,12 +190,12 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         if (authOp.getUserVerification().contains(rpRequestedUserVerification)) {
             userVerificationResponse = rpRequestedUserVerification;
         } else if (rpRequestedUserVerification != null) {
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
+            throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
         }
 
         // If an option is unset, verify the policy allows for the default behavior.
         if (userVerificationResponse == null && !authOp.getUserVerification().contains(skfsConstants.POLICY_CONST_PREFERRED)) {
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
+            throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
         }
         return userVerificationResponse;
     }

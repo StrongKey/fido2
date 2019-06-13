@@ -537,8 +537,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             }
         } catch (Exception ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-            return skfsCommon.buildRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage());
+            return skfsCommon.buildRegisterResponse(null, "", ex.getMessage());
         }
         
         //  9.  Build the output json object
