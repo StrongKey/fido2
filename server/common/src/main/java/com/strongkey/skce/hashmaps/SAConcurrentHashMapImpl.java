@@ -217,7 +217,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
                 sessionids = skceMaps.sessionMap.keySet();
             }
 
-            String agelimit = skceCommon.getConfigurationProperty("skfs.cfg.property.usersession.flush.cutofftime.seconds");
+            String agelimit = skceCommon.getConfigurationProperty("skce.cfg.property.usersession.flush.cutofftime.seconds");
 
             long sessionagelimit;
             if (agelimit == null || agelimit.trim().isEmpty()) {
@@ -257,7 +257,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
 //                usernames = Common.userkeysMap.keySet();
 //            }
 //
-//            String agelimit = Common.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
+//            String agelimit = Common.getConfigurationProperty("skce.cfg.property.userkeypointers.flush.cutofftime.seconds");
 //            long ukp_entry_agelimit;
 //
 //            if (agelimit == null || agelimit.trim().isEmpty()) {
@@ -296,7 +296,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
             if (skceMaps.FIDOkeysmap != null) {
                 fkids = skceMaps.FIDOkeysmap.keySet();
             }
-            String agelimit = skceCommon.getConfigurationProperty("skfs.cfg.property.fidokeys.flush.cutofftime.seconds");
+            String agelimit = skceCommon.getConfigurationProperty("skce.cfg.property.fidokeys.flush.cutofftime.seconds");
 
             long sessionagelimit;
             if (agelimit == null || agelimit.trim().isEmpty()) {

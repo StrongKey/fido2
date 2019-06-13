@@ -79,5 +79,19 @@
             <type>ejb</type>
         </dependency>
         
+        <!-- REPL -->
+        <dependency>
+            <groupId>com.strongauth</groupId>
+            <artifactId>replicationEJB</artifactId>
+            <version>4.0</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.strongauth</groupId>
+            <artifactId>replicationWAR</artifactId>
+            <version>4.0</version>
+            <type>war</type>
+        </dependency>
+
     </dependencies>
 </project>

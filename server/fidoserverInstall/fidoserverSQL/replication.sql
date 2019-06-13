@@ -10,11 +10,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2001-2019 StrongAuth, Inc.
+ * Copyright (c) 2001-2019 StrongAuth, Inc.  
  *
- * create.txt
- *
- * Script that creates table for MySQL.
+ * REPLICATION table for MySQL
  *
  * $Date$
  * $Revision$
@@ -23,12 +21,16 @@
  *
  */
 
-source domains.sql
-source servers.sql
-source fido_keys.sql
-source fido_users.sql
-source fido_policies.sql
-source attestation_certificates.sql
-source replication.sql
+create table REPLICATION (
+        ssid		tinyint unsigned not null,
+        rpid		bigint unsigned not null,
+        tsid		tinyint unsigned not null,
+        objectype	tinyint unsigned not null,
+        objectop	tinyint unsigned not null,
+	objectpk        varchar(520) not null,
+        scheduled       datetime,
+		primary key (ssid, rpid, tsid)
+        )
+	engine=innodb;
 
 /* EOF */
