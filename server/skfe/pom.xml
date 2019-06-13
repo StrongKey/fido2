@@ -2,22 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-<<<<<<< HEAD
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-=======
-        <artifactId>strongauth</artifactId>
-        <groupId>com.strongauth</groupId>
->>>>>>> adding old v1 api back to the fido2 server
         <version>4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-<<<<<<< HEAD
     <groupId>com.strongkey</groupId>
-=======
-    <groupId>com.strongauth</groupId>
->>>>>>> adding old v1 api back to the fido2 server
     <artifactId>skfe</artifactId>
     <version>4.0</version>
     <packaging>war</packaging>

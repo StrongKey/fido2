@@ -55,10 +55,7 @@ import com.strongkey.skfs.policybeans.generateFido2PreregisterChallenge;
 import com.strongkey.skfs.policybeans.getCachedFidoPolicyMDSLocal;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
 import com.strongkey.skfs.utilities.SKFEException;
-<<<<<<< HEAD
 import com.strongkey.skfs.utilities.SKIllegalArgumentException;
-=======
->>>>>>> adding old v1 api back to the fido2 server
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
@@ -333,33 +330,21 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_ATTACHMENT, rpRequestedAttachment);
             }
             else if(rpRequestedAttachment != null){
-<<<<<<< HEAD
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_ATTACHMENT);
-=======
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_ATTACHMENT);
->>>>>>> adding old v1 api back to the fido2 server
             }
             
             if(authselect.getRequireResidentKey().contains(rpRequestedRequireResidentKey)){
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_RESIDENTKEY, rpRequestedRequireResidentKey);
             }
             else if (rpRequestedRequireResidentKey != null) {
-<<<<<<< HEAD
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY);
-=======
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY);
->>>>>>> adding old v1 api back to the fido2 server
             }
 
             if(authselect.getUserVerification().contains(rpRequestedUserVerification)){
                 authselectBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, rpRequestedUserVerification);
             }
             else if (rpRequestedUserVerification != null) {
-<<<<<<< HEAD
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
-=======
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION);
->>>>>>> adding old v1 api back to the fido2 server
             }
         }
         authselectResponse = authselectBuilder.build();
@@ -367,19 +352,12 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
         if(!authselectResponse.isEmpty()){
             if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_RESIDENTKEY, null) == null 
                     && !authselect.getRequireResidentKey().contains(false)){
-<<<<<<< HEAD
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
             }
             if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
                     && !authselect.getUserVerification().contains(skfsConstants.POLICY_CONST_PREFERRED)){
                 throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
-=======
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
-            }
-            if(authselectResponse.getString(skfsConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
-                    && !authselect.getUserVerification().contains(skfsConstants.POLICY_CONST_PREFERRED)){
-                throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
->>>>>>> adding old v1 api back to the fido2 server
+
             }
             return authselectResponse;
         }
@@ -395,20 +373,12 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
             attestionResponse = rpRequestedAttestation;
         }
         else if(rpRequestedAttestation != null){
-<<<<<<< HEAD
             throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION);
-=======
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION);
->>>>>>> adding old v1 api back to the fido2 server
         }
         
         // If an option is unset, verify the policy allows for the default behavior.
         if(attestionResponse == null && !regOp.getAttestation().contains(skfsConstants.FIDO2_CONST_ATTESTATION_NONE)){
-<<<<<<< HEAD
             throw new SKIllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION + "Missing");
-=======
-            throw new IllegalArgumentException("Policy violation: " + skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION + "Missing");
->>>>>>> adding old v1 api back to the fido2 server
         }
         return attestionResponse;
     }
