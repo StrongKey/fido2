@@ -10,7 +10,7 @@ package com.strongkey.skfs.messaging;
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.strongkeyLogger;
-import com.strongauth.replication.messaging.ZMQBacklogProcessor;
+import com.strongkey.replication.messaging.ZMQBacklogProcessor;
 import com.strongkey.skce.utilities.skceCommon;
 import com.strongkey.skce.utilities.skceConstants;
 import java.sql.Connection;

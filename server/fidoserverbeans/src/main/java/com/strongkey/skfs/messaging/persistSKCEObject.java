@@ -7,14 +7,14 @@
 package com.strongkey.skfs.messaging;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.strongkey.appliance.entitybeans.Domains;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceMaps;
 import com.strongkey.appliance.utilities.strongkeyLogger;
-import com.strongauth.skce.txbeans.persistSKCEObjectRemote;
-import com.strongkey.appliance.entitybeans.Domains;
 import com.strongkey.fido2mds.MDS;
 import com.strongkey.skce.pojos.MDSClient;
 import com.strongkey.skce.pojos.UserSessionInfo;
+import com.strongkey.skce.txbeans.persistSKCEObjectRemote;
 import com.strongkey.skce.utilities.skceConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;

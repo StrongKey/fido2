@@ -30,7 +30,7 @@
  * *********************************************
  *
  */
-package com.strongauth.repl.utilities;
+package com.strongkey.repl.utilities;
 
 import com.strongkey.appliance.entitybeans.Servers;
 import com.strongkey.appliance.utilities.applianceConstants;

@@ -189,7 +189,7 @@ public class AttestationCertificates implements Serializable {
 
     @Override
     public String toString() {
-        return "com.strongauth.skce.entitybeans.AttestationCertificates[ attestationCertificatesPK=" + attestationCertificatesPK + " ]";
+        return "AttestationCertificates[ attestationCertificatesPK=" + attestationCertificatesPK + " ]";
     }
 
 }

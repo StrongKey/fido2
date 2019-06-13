@@ -32,7 +32,7 @@
  *
  *
  */
-package com.strongauth.skfews.fido2.rest;
+package com.strongkey.skfews.fido2.rest;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal;

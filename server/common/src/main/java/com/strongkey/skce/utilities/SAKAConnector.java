@@ -7,7 +7,6 @@
 
 package com.strongkey.skce.utilities;
 
-//import com.strongauth.skfe.utilities.skfeLogger;
 import com.strongkey.saka.web.Encryption;
 
 public class SAKAConnector implements Runnable {

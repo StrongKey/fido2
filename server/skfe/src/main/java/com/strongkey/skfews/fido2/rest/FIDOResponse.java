@@ -1,4 +1,4 @@
-/**
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License, as published by the Free Software Foundation and
@@ -12,10 +12,10 @@
  *
  * Copyright (c) 2001-2018 StrongAuth, Inc.
  *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
+ * $Date: 
+ * $Revision:
+ * $Author: mishimoto $
+ * $URL: 
  *
  * *********************************************
  *                    888
@@ -28,23 +28,30 @@
  *  888  888  "Y88P"   "Y888  "Y8888   88888P'
  *
  * *********************************************
+ * 
  *
- * ApplicationConfig class to define RESTful interface for SKFEServlet class.
  *
  */
-package com.strongauth.skfews.u2f.rest;
+package com.strongkey.skfews.fido2.rest;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import javax.json.Json;
 
-@ApplicationPath("/rest")
-public class ApplicationConfig extends Application {
-
+public class FIDOResponse {
+    private final String response;
+    private final String message;
+    private final String error;
+    
+    public FIDOResponse(String response, String message, String error){
+        this.response = response;
+        this.message = message;
+        this.error = error;
+    }
+    
     @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(SKFEServlet.class));
+    public String toString(){
+        return Json.createObjectBuilder()
+                .add("Response", response)
+                .add("Message", message)
+                .add("Error", error).build().toString();
     }
 }
