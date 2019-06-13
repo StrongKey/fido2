@@ -21,12 +21,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
+import javax.ejb.ApplicationException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+@ApplicationException()
 @Stateless
 public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
 
@@ -44,6 +46,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
     @EJB
     updateFidoUserBeanLocal updateldapbean;
 
+    
     @Override
     public String execute(Long did, String registrationresponse, String registrationmetadata, String protocol) {
         String wsresponse="";
@@ -53,8 +56,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.JSON_KEY_CLIENTDATA, "String");
         if (browserdata == null || browserdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'clientData'");
-            throw new IllegalArgumentException(" Missing 'clientData'");
-//            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
+            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
         }
         //parse browserdata
 
