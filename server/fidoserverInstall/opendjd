@@ -24,7 +24,7 @@ start () {
 	echo -n $"Starting $prog: "
 
 	# start daemon
-	daemon $PROGRAMSTART --quiet
+	daemon $PROGRAMSTART
         RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && touch /var/lock/subsys/OpenDJ
@@ -34,7 +34,7 @@ start () {
 stop () {
 	# stop daemon
 	echo -n $"Stopping $prog: "
-	daemon $PROGRAMSTOP --quiet
+	daemon $PROGRAMSTOP 
 	RETVAL=$?
 	echo
 	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/OpenDJ
