@@ -7,8 +7,7 @@
 
 package com.strongkey.apiws.rest;
 
-//import com.strongauth.apiws.fido2.rest.FidoAdminServlet;
-import com.strongauth.apiws.filters.CrossOriginResourceSharingFilter;
+import com.strongkey.apiws.filters.CrossOriginResourceSharingFilter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;

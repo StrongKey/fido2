@@ -83,7 +83,7 @@ public class skfsLogger {
         StackTraceElement err[] = ex.getStackTrace();
         StringBuilder sb = new StringBuilder(1024);
         for (StackTraceElement err1 : err) {
-            if (err1.toString().contains("com.strongauth") || err1.toString().contains("Caused by")) {
+            if (err1.toString().contains("com.strongauth") || err1.toString().contains("com.strongkey") ||  err1.toString().contains("Caused by")) {
                 sb.append('\t').append(err1).append('\n');
             }
         }

@@ -1,21 +1,20 @@
 /*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License, as published by the Free
+ * Software Foundation and available at
+ * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1 or above.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * Copyright (c) 2001-2018 StrongAuth, Inc.
  *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
+ * $Date$ $Revision$
+ * $Author$ $URL:
+ * https://svn.strongauth.com/repos/jade/trunk/skce/skfe/src/main/java/com/strongauth/skfews/u2f/rest/SKFEServlet.java
+ * $
  *
  * *********************************************
  *                    888
@@ -29,66 +28,128 @@
  *
  * *********************************************
  *
- * Servlet for FIDO U2F protocol based functionality. This servlet exposes 
- * SOAP (Simple Object Access Protocol) based web services to the calling 
+ * Servlet for FIDO U2F protocol based functionality. This servlet exposes REST
+ * (Representational State Transfer) based web services to the calling
  * applications.
  *
  */
-package com.strongauth.skfews.u2f.soap;
+package com.strongkey.skfews.u2f.rest;
 
+
+import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal;
 import com.strongkey.skce.jaxb.SKCEServiceInfoType;
-import com.strongkey.skce.utilities.SKCEException;
 import com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1;
+import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.logging.Level;
 import javax.ejb.EJB;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 /**
- * SOAP based web services that serve FIDO U2F protocol based functionality.
+ * REST based web services that serve FIDO U2F protocol based functionality.
  *
  */
-@WebService(serviceName = "soap")
+@Path("")
 public class SKFEServlet {
 
-    @Context
-    private HttpServletRequest request;
-    
     @EJB
-    u2fServletHelperBeanLocal_v1 u2fHelper;
-    @EJB
-    authorizeLdapUserBeanLocal authorizebean; // ldap user authorization bean 
-    // CTOR
+    authorizeLdapUserBeanLocal authorizebean = lookupauthorizeLdapUserBeanLocal();
 
+    String skfehome = skfsCommon.getSkfeHome();
+
+    @javax.ws.rs.core.Context
+    private HttpServletRequest request;
+
+    /*
+     * Enterprise Java Beans used in this servlet.
+     */
+    @EJB
+    u2fServletHelperBeanLocal_v1 u2fHelperBean = lookup_u2fServletHelperBeanLocal_v1();
+
+    /**
+     * methods to look up for ejb resources
+     */
+    private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
+        try {
+            Context c = new InitialContext();
+            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.0/u2fServletHelperBean_v1!com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1");
+        } catch (NamingException ne) {
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+        } catch (NamingException ne) {
+            throw new RuntimeException(ne);
+        }
+    }
+
+    // CTOR
     public SKFEServlet() {
     }
     
     /**
      * Basic null checks before the compound input objects are accessed.
      * 
-     * @param svcinfo       SKCEServiceInfoType; service credentials information
+     * @param svcinfo String; Json string with service credentials information
      * 
-     * @return void; if all checks passed
-     * @throws SKCEException; in case any check fails
+     * @return SKCEServiceInfoType; if all checks passed
+     * @throws SKFEException; in case any check fails
      */
-    private void basicInputChecks(String methodname, 
-                                  SKCEServiceInfoType svcinfo) throws SKCEException 
-    {       
+    private SKCEServiceInfoType basicInputChecks(String methodname,
+            String svcinfo) throws SKFEException {
         String prefix = methodname + " web-service; ";
-        
-        if ( svcinfo==null ) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "SKCEWS-ERR-3014", 
+
+        if (svcinfo == null || svcinfo.trim().isEmpty()) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "SKCEWS-ERR-3014",
                     "svcinfo");
-            throw new SKCEException(skfsCommon.getMessageProperty("SKCEWS-ERR-3014")
+            throw new SKFEException(skfsCommon.getMessageProperty("SKCEWS-ERR-3014")
+                    .replace("{0}", "") + prefix + "svcinfo");
+        } else if (!skfsCommon.isValidJsonObject(svcinfo)) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014",
+                    prefix + "Invalid json; svcinfo");
+            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-0014")
+                    .replace("{0}", "") + prefix + "Invalid json; svcinfo");
+        }
+
+        try {
+            //  Parse out the needed key-values from json
+            String did = (String) applianceCommon.getJsonValue(svcinfo, "did", "String");
+            String svcusername = (String) applianceCommon.getJsonValue(svcinfo, "svcusername", "String");
+            String svcpassword = (String) applianceCommon.getJsonValue(svcinfo, "svcpassword", "String");
+            String protocol = (String) applianceCommon.getJsonValue(svcinfo, "protocol", "String");
+
+            //  Construct serviceinfo object
+            SKCEServiceInfoType si = new SKCEServiceInfoType();
+            si.setDid(Integer.parseInt(did));
+            si.setSvcusername(svcusername);
+            si.setSvcpassword(svcpassword);
+            if (protocol != null && !protocol.trim().isEmpty()) {
+                si.setProtocol(protocol);
+            }
+            return si;
+
+        } catch (Exception ex) {
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "SKCEWS-ERR-3053",
+                    "svcinfo");
+            throw new SKFEException(skfsCommon.getMessageProperty("SKCEWS-ERR-3053")
                     .replace("{0}", "") + prefix + "svcinfo");
         }
+
     }
 
     /*
@@ -111,32 +172,29 @@ public class SKFEServlet {
      * challenge and returns the same to the caller, which typically is a
      * Relying Party (RP) application.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
-     * @param payload - payload
-     * 
+     * @param payload
      * @return - A Json in String format. The Json will have 3 key-value pairs;
-     * 1. 'Challenge' : U2F Reg Challenge parameters; a json again 2. 'Message'
-     * : String, with a list of messages that explain the process. 3. 'Error' :
-     * String, with error message incase something went wrong. Will be empty if
-     * successful.
+     * 1. 'Challenge' : 'U2F Reg Challenge parameters; a json again' 2.
+     * 'Message' : String, with a list of messages that explain the process. 3.
+     * 'Error' : String, with error message incase something went wrong. Will be
+     * empty if successful.
      */
-    @WebMethod(operationName = "preregister")
-    public String preregister(
-            @WebParam(name = "svcinfo")  SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_PREREGISTER)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String preregister(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -146,28 +204,29 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("preregister", svcinfo);
+            SKCEServiceInfoType si = basicInputChecks("preregister", svcinfo);
             
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
 
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildPreRegisterResponse(null, "", ex.getLocalizedMessage());
         }
         
-        //  2. Input checks
+        //  Service credentials input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
-        //authenticate
+        
+        // Service credentials' authentication and authorization
         boolean isAuthorized;
         try {
             isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
@@ -179,8 +238,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        
-        return u2fHelper.preregister(did, protocol, payload);
+        return u2fHelperBean.preregister(did, protocol, payload);
     }
 
     /*
@@ -207,32 +265,30 @@ public class SKFEServlet {
      * should happen with in a certain time limit after the preregister is
      * finished; otherwise, the user session would be invalidated.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above
      * 
      * @param payload - U2F Registration Response parameters in Json form.
      * Should contain sessionid, browserData and enrollData.
-     * 
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : String, with a simple message telling if the process was
      * successful or not. 2. 'Message' : String, with a list of messages that
      * explain the process. 3. 'Error' : String, with error message incase
      * something went wrong. Will be empty if successful.
      */
-    @WebMethod(operationName = "register")
-    public String register(
-            @WebParam(name = "svcinfo")  SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_REGISTER)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String register(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -242,26 +298,24 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("register", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
+            SKCEServiceInfoType si = basicInputChecks("register", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
             
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildRegisterResponse(null, "", ex.getLocalizedMessage());
         }
         
-        //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -275,7 +329,8 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.register(did, protocol, payload);
+        
+        return u2fHelperBean.register(did, protocol, payload);
     }
 
     /*
@@ -297,32 +352,29 @@ public class SKFEServlet {
      * Step-1 for fido authenticator authentication. This methods generates a
      * challenge and returns the same to the caller.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
      * @param payload - username
-     * 
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Challenge' : 'U2F Auth Challenge parameters; a json again' 2.
      * 'Message' : String, with a list of messages that explain the process. 3.
      * 'Error' : String, with error message incase something went wrong. Will be
      * empty if successful.
      */
-    @WebMethod(operationName = "preauthenticate")
-    public String preauthenticate(
-            @WebParam(name = "svcinfo")  SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_PREAUTH)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String preauthenticate(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -332,13 +384,12 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("preauthenticate", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("preauthenticate", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
@@ -346,12 +397,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -365,7 +416,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.preauthenticate(did, protocol, payload);
+        return u2fHelperBean.preauthenticate(did, protocol, payload);
     }
 
     /*
@@ -391,17 +442,15 @@ public class SKFEServlet {
      * preauthenticate is finished; otherwise, the user session would be
      * invalidated.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above
      * 
      * @param payload
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -410,11 +459,12 @@ public class SKFEServlet {
      * explain the process. 3. 'Error' : String, with error message incase
      * something went wrong. Will be empty if successful.
      */
-    @WebMethod(operationName = "authenticate")
-    public String authenticate(
-            @WebParam(name = "svcinfo")  SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_AUTHENTICATE)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String authenticate(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -424,13 +474,12 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("authenticate", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("authenticate", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
@@ -438,12 +487,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -457,7 +506,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.authenticate(did, protocol, payload);
+        return u2fHelperBean.authenticate(did, protocol, payload);
     }
 
     /*
@@ -479,18 +528,15 @@ public class SKFEServlet {
      * Step-1 for fido based transaction confirmation using u2f authenticator.
      * This methods generates a challenge and returns the same to the caller.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
      * @param payload - String indicating transaction reference.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -499,11 +545,12 @@ public class SKFEServlet {
      * 'Error' : String, with error message incase something went wrong. Will be
      * empty if successful.
      */
-    @WebMethod(operationName = "preauthorize")
-    public String preauthorize(
-            @WebParam(name = "svcinfo")  SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_PREAUTHORIZE)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String preauthorize(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -513,13 +560,12 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("preauthorize", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("preauthorize", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
@@ -527,12 +573,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -546,7 +592,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.preauthorize(did, protocol, payload);
+        return u2fHelperBean.preauthorize(did, protocol, payload);
     }
 
     /*
@@ -573,30 +619,29 @@ public class SKFEServlet {
      * preauthorize is finished; otherwise, the user session would be
      * invalidated.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * 
-     * @param payload
-     * @return - A Json in String format. The Json will have 3 key-value pairs;
-     * 1. 'Response' : String, with a simple message telling if the process was
-     * successful or not. 2. 'Message' : String, with a list of messages that
-     * explain the process. 3. 'Error' : String, with error message incase
-     * something went wrong. Will be empty if successful.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above
+     *
+     * @param payload * @return - A Json in String format. The Json will have 3
+     * key-value pairs; 1. 'Response' : String, with a simple message telling if
+     * the process was successful or not. 2. 'Message' : String, with a list of
+     * messages that explain the process. 3. 'Error' : String, with error
+     * message incase something went wrong. Will be empty if successful.
+     * @return 
      */
-    @WebMethod(operationName = "authorize")
-    public String authorize(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_AUTHORIZE)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String authorize(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -606,13 +651,13 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("authorize", svcinfo);
+            SKCEServiceInfoType si = basicInputChecks("authorize", svcinfo);
             
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
@@ -620,12 +665,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -639,7 +684,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.authorize(did, protocol, payload);
+        return u2fHelperBean.authorize(did, protocol, payload);
     }
 
     /*
@@ -664,33 +709,30 @@ public class SKFEServlet {
      * id to point to a unique registered key for that user. This random id can
      * be obtained by calling getkeysinfo method.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
      * @param payload - U2F de-registration parameters in Json form. Should
      * contain username and randomid.
-     * 
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : String, with a simple message telling if the process was
      * successful or not. 2. 'Message' : Empty string since there is no
      * cryptographic work involved in de-registration 3. 'Error' : String, with
      * error message incase something went wrong. Will be empty if successful.
      */
-    @WebMethod(operationName = "deregister")
-    public String deregister(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_DEREGISTER)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String deregister(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -700,13 +742,12 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("deregister", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("deregister", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildDeregisterResponse(null, "", ex.getLocalizedMessage());
@@ -714,12 +755,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -733,7 +774,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.deregister(did, protocol, payload);
+        return u2fHelperBean.deregister(did, protocol, payload);
     }
 
     /*
@@ -755,18 +796,15 @@ public class SKFEServlet {
      * a unique registered key for that user. This random id can be obtained by
      * calling getkeysinfo method.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
      * @param payload - U2F de-activation parameters in Json form. Should
      * contain username and randomid.
@@ -776,11 +814,12 @@ public class SKFEServlet {
      * cryptographic work involved in de-activation 3. 'Error' : String, with
      * error message incase something went wrong. Will be empty if successful.
      */
-    @WebMethod(operationName = "deactivate")
-    public String deactivate(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_DEACTIVATE)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String deactivate(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -790,13 +829,12 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("deactivate", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("deactivate", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
@@ -804,12 +842,12 @@ public class SKFEServlet {
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -823,7 +861,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.deactivate(did, protocol, payload);
+        return u2fHelperBean.deactivate(did, protocol, payload);
     }
 
     /*
@@ -845,18 +883,15 @@ public class SKFEServlet {
      * the random id to point to a unique registered key for that user. This
      * random id can be obtained by calling getkeysinfo method.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
      * @param payload - U2F activation parameters in Json form. Should contain
      * username and randomid.
@@ -866,11 +901,12 @@ public class SKFEServlet {
      * cryptographic work involved in activation 3. 'Error' : String, with error
      * message incase something went wrong. Will be empty if successful.
      */
-    @WebMethod(operationName = "activate")
-    public String activate(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_ACTIVATE)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String activate(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -880,26 +916,25 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("activate", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("activate", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildActivateResponse(null, "", ex.getLocalizedMessage());
+            return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -913,7 +948,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.activate(did, protocol, payload);
+        return u2fHelperBean.activate(did, protocol, payload);
     }
 
     /*
@@ -938,20 +973,17 @@ public class SKFEServlet {
      * used (last modified) from, a random id (which has a time-to-live) that
      * has to be sent back as a token during de-registration.
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
      * 
-     * @param payload - username
+     * @param payload - Json input containing required data
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : A Json array, each entry signifying metadata of a key
      * registered; Metadata includes randomid and its time-to-live, creation and
@@ -960,11 +992,12 @@ public class SKFEServlet {
      * String, with error message incase something went wrong. Will be empty if
      * successful.
      */
-    @WebMethod(operationName = "getkeysinfo")
-    public String getkeysinfo(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo,
-            @WebParam(name = "payload") String payload) 
-    {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_GETKEYSINFO)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String getkeysinfo(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         //  Local variables       
         //  Service credentials
         String did;
@@ -974,26 +1007,25 @@ public class SKFEServlet {
         
         //  SKCE domain id validation
         try {
-            basicInputChecks("getkeysinfo", svcinfo);
-            
-            did             = Integer.toString(svcinfo.getDid());
-            svcusername     = svcinfo.getSvcusername();
-            svcpassword     = svcinfo.getSvcpassword();
-            protocol        = svcinfo.getProtocol();
-            
+            SKCEServiceInfoType si = basicInputChecks("getkeysinfo", svcinfo);
+            did = Integer.toString(si.getDid());
+            svcusername = si.getSvcusername();
+            svcpassword = si.getSvcpassword();
+            protocol = si.getProtocol();
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildGetKeyInfoResponse(null, "", ex.getLocalizedMessage());
+            return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
         
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
+            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
+            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
         //authenticate
         boolean isAuthorized;
@@ -1007,7 +1039,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.getkeysinfo(did, protocol, payload);
+        return u2fHelperBean.getkeysinfo(did, protocol, payload);
     }
 
     /*
@@ -1031,24 +1063,25 @@ public class SKFEServlet {
      *
      * This method is *Not implemented yet*
      *
-     * @param svcinfo   - Object that carries SKCE service information. 
-     *                    Information bundled is :
+     * @param svcinfo - Object that carries SKCE service information.
+     * Information bundled is :
      * 
-     * (1) did          - Unique identifier for a SKCE encryption domain
-     * (2) svcusername  - SKCE service credentials : username requesting the 
-     *                    service. The service credentials are looked up in 
-     *                    the 'service' setup of authentication system based 
-     *                    on LDAP / AD.
-     *                    The user should be authorized to encrypt.
-     * (3) svcpassword -  SKCE service credentials : password of the service 
-     *                    username specified above
-     * (4) protocol    -  U2F protocol version to comply with.
+     * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
+     * - SKCE service credentials : username requesting the service. The service
+     * credentials are looked up in the 'service' setup of authentication system
+     * based on LDAP / AD. The user should be authorized to encrypt. (3)
+     * svcpassword - SKCE service credentials : password of the service username
+     * specified above (4) protocol - U2F protocol version to comply with.
+     * @param payload
      * 
      * @return
      */
-    @WebMethod(operationName = "getserverinfo")
-    public String getserverinfo(
-            @WebParam(name = "svcinfo") SKCEServiceInfoType svcinfo) {
+    @POST
+    @Path("/" + skfsConstants.FIDO_METHOD_GETSERVERINFO)
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    public String getserverinfo(@FormParam("svcinfo") String svcinfo,
+            @FormParam("payload") String payload) {
         return "not implemented yet";
     }
 }

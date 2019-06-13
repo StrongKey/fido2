@@ -6,12 +6,12 @@
  */
 package com.strongkey.skfs.messaging;
 
+import com.strongkey.appliance.entitybeans.Domains;
 import com.strongkey.appliance.entitybeans.Servers;
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.strongkeyLogger;
-import com.strongauth.replication.messaging.ZMQPublisher;
-import com.strongkey.appliance.entitybeans.Domains;
+import com.strongkey.replication.messaging.ZMQPublisher;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.utilities.skceConstants;
 import com.strongkey.skfe.entitybeans.FidoKeys;

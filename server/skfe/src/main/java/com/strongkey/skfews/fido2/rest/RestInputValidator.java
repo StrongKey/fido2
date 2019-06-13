@@ -32,7 +32,7 @@
  *
  *
  */
-package com.strongauth.skfews.fido2.rest;
+package com.strongkey.skfews.fido2.rest;
 
 import java.io.IOException;
 import java.io.InputStream;

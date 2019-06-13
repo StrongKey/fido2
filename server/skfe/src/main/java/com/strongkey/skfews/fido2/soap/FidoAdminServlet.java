@@ -32,11 +32,11 @@
  *
  *
  */
-package com.strongauth.skfews.fido2.soap;
+package com.strongkey.skfews.fido2.soap;
 
 
-import com.strongauth.skfews.fido2.rest.FIDOResponse;
-import com.strongauth.skfews.fido2.rest.RestInputValidator;
+import com.strongkey.skfews.fido2.rest.FIDOResponse;
+import com.strongkey.skfews.fido2.rest.RestInputValidator;
 import com.strongauth.skfews.fido2.soap.jaxb.ObjectFactory;
 import com.strongauth.skfews.fido2.soap.jaxb.SvcInfoType;
 import com.strongkey.appliance.utilities.applianceCommon;
