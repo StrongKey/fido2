@@ -368,7 +368,8 @@ chown -R strongkey:strongkey $STRONGKEY_HOME
 
 ##### Start OpenDJ #####
 if [ $INSTALL_OPENDJ = 'Y' ]; then
-        service opendjd start
+        service opendjd restart
+        sleep 10;
         $OPENDJ_HOME/bin/dsconfig set-global-configuration-prop \
                                   --hostname $(hostname) \
                                   --port 4444 \
