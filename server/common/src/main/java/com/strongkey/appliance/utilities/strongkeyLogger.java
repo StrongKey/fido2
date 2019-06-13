@@ -4,9 +4,9 @@
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
  * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
-
 package com.strongkey.appliance.utilities;
 
+import com.strongkey.skce.utilities.skceConstants;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +17,8 @@ public class strongkeyLogger {
 
     // Logger for the application
     private static final Logger APPL_LOGGER = Logger.getLogger("APPL", "resources.appliance.appliance-messages");
+    private static final Logger REPL_LOGGER = Logger.getLogger("REPL", "resources.repl.replication-messages");
+    private static final Logger SKEE_LOGGER = Logger.getLogger("SKEE", "resources.skce.skce-messages");
 
     static {
 
@@ -36,7 +38,13 @@ public class strongkeyLogger {
      * called
      */
     public static void entering(String logger, String sourceClass, String sourceMethod) {
-        APPL_LOGGER.entering(sourceClass, sourceMethod);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.entering(sourceClass, sourceMethod);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.entering(sourceClass, sourceMethod);
+        } else {
+            APPL_LOGGER.entering(sourceClass, sourceMethod);
+        }
 
     }
 
@@ -50,35 +58,77 @@ public class strongkeyLogger {
      * called
      */
     public static void exiting(String logger, String sourceClass, String sourceMethod) {
-        APPL_LOGGER.exiting(sourceClass, sourceMethod);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.exiting(sourceClass, sourceMethod);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.exiting(sourceClass, sourceMethod);
+        } else {
+            APPL_LOGGER.exiting(sourceClass, sourceMethod);
+        }
     }
 
     public static void log(String logger, java.util.logging.Level level, String key, Object param) {
-        APPL_LOGGER.log(level, key, param);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.log(level, key, param);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.log(level, key, param);
+        } else {
+            APPL_LOGGER.log(level, key, param);
+        }
 
     }
 
     public static void log(String logger, java.util.logging.Level level, String key, Object[] params) {
-        APPL_LOGGER.log(level, key, params);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.log(level, key, params);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.log(level, key,params);
+        } else {
+            APPL_LOGGER.log(level, key, params);
+        }
     }
 
     public static void log(String logger, java.util.logging.Level level, String key) {
-        APPL_LOGGER.log(level, key);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.log(level, key);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.log(level, key);
+        } else {
+            APPL_LOGGER.log(level, key);
+        }
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key, Object param) {
-        APPL_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
+        } else {
+            APPL_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
+        }
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key) {
-        APPL_LOGGER.logp(level, sourceClass, sourceMethod, key);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.logp(level, sourceClass, sourceMethod, key);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.logp(level, sourceClass, sourceMethod, key);
+        } else {
+            APPL_LOGGER.logp(level, sourceClass, sourceMethod, key);
+        }
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key, Object[] params) {
-        APPL_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
+        if (logger.equalsIgnoreCase(applianceConstants.REPL_LOGGER)) {
+            REPL_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
+        } else if (logger.equalsIgnoreCase(skceConstants.SKEE_LOGGER)) {
+            SKEE_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
+        } else {
+            APPL_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
+        }
     }
 
     public static void printStrongAuthStackTrace(String logger, String sourceclassname, String sourcemethod, Exception ex) {

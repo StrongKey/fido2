@@ -1,0 +1,159 @@
+package com.strongkey.skfs.messaging;
+
+option java_package = "com.strongkey.skfs.messaging";
+option java_outer_classname = "ZMQSKCEReplicationProtos";
+
+/**
+ * DOMAINS
+ */
+
+message Domains
+{
+    required int64              did = 1;
+    required string             name = 2;
+    required string             status = 3;
+    required string             replication_status = 4;
+    optional string             encryption_certificate = 5;
+    optional string             encryption_certificate_uuid = 6;
+    optional string             signing_certificate = 7;
+    optional string             signing_certificate_uuid = 8;
+    optional string             skce_signingdn = 9;
+    optional string             skfe_appid = 10;
+    optional string             notes = 11;
+}
+
+
+message FidoKeys
+{
+    required int64              sid = 1;
+    required int64              did = 2;
+    optional string             userid = 3;
+    required string             username = 4;
+    required int64              fkid = 5;
+    required string             keyhandle = 6;
+    required string             appid = 7;
+    required string             publickey = 8;
+    optional string             khdigest = 9;
+    optional string             khdigest_type = 10;
+    optional int64              transports = 11;
+    optional int64              attsid = 12;
+    optional int64              attdid = 13;
+    optional int64              attcid = 14;
+    required int64              counter = 15;
+    optional string             fido_version = 16;
+    optional string             fido_protocol = 17;
+    optional string             aaguid = 18;
+    optional string             registration_settings = 19;
+    optional int64              registration_settings_version = 20;
+    required int64              create_date = 21;
+    required string             create_location = 22;
+    optional int64              modify_date = 23;
+    optional string             modify_location = 24;
+    required string             status = 25;
+    optional string             signature = 26;
+}
+
+message FidoUsers
+{
+    required int64              sid = 1;
+    required int64              did = 2;
+    required string             username = 3;
+    optional string             userdn = 4;
+    required string             fido_keys_enabled = 5;
+    required string             two_step_verification = 6;
+    optional string             primary_email = 7;
+    optional string             registered_emails = 8;
+    optional string             primary_phone_number = 9;
+    optional string             registered_phone_numbers = 10;
+    optional string             two_step_target = 11;
+    optional string             signature = 12;
+    required string             status = 13;
+}
+
+message UserSessionInfo
+{
+    required string             username = 1;
+    required string             nonce = 2;
+    required string             appid = 3;
+    required string             sessiontype = 4;
+    required int64              creationdate = 5;
+    required string             user_public_key = 6;
+    optional int64              fkid = 7;
+    optional int64              skid = 8;
+    optional int64              sid = 9;
+    optional string             sessionid = 10;
+    required string             mapkey = 11;
+    optional string             userid = 12;
+    optional string             usericon = 13;
+    optional string             fidopolicymapkey = 14;
+}
+
+/**
+ * KEEPALIVE - Dummy object to keep ZMQ alive - no such table
+ */
+
+message KeepAlive
+{
+    required int64              dummy = 1;
+}
+
+/**
+ * SERVERS
+ */
+
+message Servers
+{
+    required int64              sid = 1;
+    required string             fqdn = 2;
+    required string             status = 3;
+    required string             replication_role = 4;
+    required string             replication_status = 5;
+    optional string             mask = 6;
+    optional string             notes = 7;
+}
+
+/**
+ * SERVER_DOMAINS
+ */
+
+message ServerDomains
+{
+    required int64              sid = 1;
+    required int64              did = 2;
+    required string             pseudo_number = 3;
+    required string             status = 4;
+    optional string             migrating_key = 5;
+    optional string             notes = 6;
+}
+
+message AttestationCertificates
+{
+    required int64              sid = 1;
+    required int64              did = 2;
+    required int64              attcid = 3;
+    optional int64              parent_sid = 4;
+    optional int64              parent_did = 5;
+    optional int64              parent_attcid = 6;
+    required string             certificate = 7;
+    required string             issuer_dn = 8;
+    required string             subject_dn = 9;
+    required string             serial_number = 10;
+    optional string             signature = 11;
+}
+
+message FidoPolicies
+{
+    required int64              sid = 1;
+    required int64              did = 2;
+    required int64              pid = 3;
+    required int64              start_date = 4;
+    optional int64              end_date = 5;
+    required string             certificate_profile_name = 6;
+    required string             policy = 7;
+    required int64              version = 8;
+    required string             status = 9;
+    optional string             notes = 10;
+    required int64              create_date = 11;
+    optional int64              modify_date = 12;
+    optional string             signature = 13;
+}

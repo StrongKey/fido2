@@ -8,9 +8,9 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Servers;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
