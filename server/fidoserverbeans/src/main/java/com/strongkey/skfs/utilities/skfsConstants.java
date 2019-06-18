@@ -299,7 +299,7 @@ public class skfsConstants {
     
     public static final String FIDO2_PREAUTH_ATTR_CHALLENGE = "challenge";
     public static final String FIDO2_PREAUTH_ATTR_TIMEOUT = "timeout";
-    public static final String FIDO2_PREAUTH_ATTR_RPID = "rpid";
+    public static final String FIDO2_PREAUTH_ATTR_RPID = "rpId";
     public static final String FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS = "allowCredentials";
     public static final String FIDO2_PREAUTH_ATTR_UV = "userVerification";
     public static final String FIDO2_PREAUTH_ATTR_EXTENSIONS = "extensions";
