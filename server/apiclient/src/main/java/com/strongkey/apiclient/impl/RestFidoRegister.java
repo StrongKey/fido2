@@ -70,11 +70,14 @@ public class RestFidoRegister {
         PreregistrationRequest prereg = new PreregistrationRequest();
         prereg.setProtocol(fidoprotocol);
         prereg.setUsername(accountname);
+        prereg.setDisplayname(accountname);
+        prereg.setOptions("{}");
         ObjectWriter ow = new ObjectMapper().writer();
         String json = ow.writeValueAsString(prereg);
 
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
+        System.out.println("body: " + json);
 
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
         String contentSHA = common.calculateSha256(json);

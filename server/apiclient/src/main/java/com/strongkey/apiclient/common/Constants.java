@@ -11,7 +11,7 @@ public class Constants {
 
     //Operation names - for the web service
     public static final String REST_SUFFIX = "/api/domains/";
-    public static final String PRE_REGISTER_ENDPOINT = "/fidokeys/challenge";
+    public static final String PRE_REGISTER_ENDPOINT = "/fidokeys/registration/challenge";
     public static final String REGISTER_ENDPOINT = "/fidokeys";
     public static final String PRE_AUTH_ENDPOINT = "/fidokeys/authenticate/challenge";
     public static final String AUTHENTICATE_ENDPOINT = "/fidokeys/authenticate";
