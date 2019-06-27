@@ -16,7 +16,7 @@ public class skfsLogger {
     private static final String classname = "skfsLogger";
 
     // Logger for the application
-    private static final Logger SKFE_LOGGER = Logger.getLogger("SKFE", "resources.skfs-messages");
+    private static final Logger SKFS_LOGGER = Logger.getLogger("SKFS", "resources.skfs-messages");
 
     static {
 
@@ -36,7 +36,7 @@ public class skfsLogger {
      * called
      */
     public static void entering(String logger, String sourceClass, String sourceMethod) {
-        SKFE_LOGGER.entering(sourceClass, sourceMethod);
+        SKFS_LOGGER.entering(sourceClass, sourceMethod);
     }
 
     /**
@@ -49,34 +49,34 @@ public class skfsLogger {
      * called
      */
     public static void exiting(String logger, String sourceClass, String sourceMethod) {
-        SKFE_LOGGER.exiting(sourceClass, sourceMethod);
+        SKFS_LOGGER.exiting(sourceClass, sourceMethod);
     }
 
     public static void log(String logger, java.util.logging.Level level, String key, Object param) {
-        SKFE_LOGGER.log(level, key, param);
+        SKFS_LOGGER.log(level, key, param);
     }
 
     public static void log(String logger, java.util.logging.Level level, String key, Object[] params) {
-        SKFE_LOGGER.log(level, key, params);
+        SKFS_LOGGER.log(level, key, params);
     }
 
     public static void log(String logger, java.util.logging.Level level, String key) {
-        SKFE_LOGGER.log(level, key);
+        SKFS_LOGGER.log(level, key);
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key, Object param) {
-        SKFE_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
+        SKFS_LOGGER.logp(level, sourceClass, sourceMethod, key, param);
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key) {
-        SKFE_LOGGER.logp(level, sourceClass, sourceMethod, key);
+        SKFS_LOGGER.logp(level, sourceClass, sourceMethod, key);
     }
 
     public static void logp(String logger, java.util.logging.Level level,
             String sourceClass, String sourceMethod, String key, Object[] params) {
-        SKFE_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
+        SKFS_LOGGER.logp(level, sourceClass, sourceMethod, key, params);
     }
 
     public static void printStrongAuthStackTrace(String logger, String sourceclassname, String sourcemethod, Exception ex) {
