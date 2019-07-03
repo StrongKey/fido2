@@ -34,7 +34,7 @@
  * applications.
  *
  */
-package com.strongkey.skfews.u2f.soap;
+package com.strongauth.skfews.u2f.soap;
 
 import com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal;
 import com.strongkey.skce.jaxb.SKCEServiceInfoType;

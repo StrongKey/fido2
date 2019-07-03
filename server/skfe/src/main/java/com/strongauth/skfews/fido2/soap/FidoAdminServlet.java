@@ -32,7 +32,7 @@
  *
  *
  */
-package com.strongkey.skfews.fido2.soap;
+package com.strongauth.skfews.fido2.soap;
 
 
 import com.strongkey.skfews.fido2.rest.FIDOResponse;

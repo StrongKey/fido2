@@ -9,7 +9,7 @@
 
     <groupId>com.strongkey</groupId>
     <artifactId>authenticationBeans</artifactId>
-    <version>4.0</version>
+    <version>4.2.0</version>
     <packaging>ejb</packaging>
 
     <name>authenticationBeans</name>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
+            <version>4.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
