@@ -9,7 +9,7 @@
 
     <groupId>com.strongkey</groupId>
     <artifactId>authenticationBeans</artifactId>
-    <version>4.2.0</version>
+    <version>4.0</version>
     <packaging>ejb</packaging>
 
     <name>authenticationBeans</name>

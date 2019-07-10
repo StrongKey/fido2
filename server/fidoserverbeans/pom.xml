@@ -115,15 +115,8 @@
         </dependency>
         <dependency>
             <groupId>com.strongkey</groupId>
-            <artifactId>replicationWAR</artifactId>
-            <version>4.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.strongkey</groupId>
             <artifactId>replicationEJB</artifactId>
-            <version>4.1.0</version>
+            <version>4.2.0</version>
             <scope>provided</scope>
         </dependency>
         

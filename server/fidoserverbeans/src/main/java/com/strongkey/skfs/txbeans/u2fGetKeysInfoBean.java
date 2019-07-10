@@ -112,7 +112,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
         JsonArrayBuilder keysArrayBuilder = Json.createArrayBuilder();
         try {
             Collection<FidoKeys> kh_coll = getkeybean.getByUsername(did, username);
-            if (!kh_coll.isEmpty()) {
+            if (kh_coll != null){
                 Iterator it = kh_coll.iterator();
 
                 //  Initialize a map to store the randomid to the regkeyid
@@ -175,9 +175,10 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
 //                    skceMaps.getMapObj().put(skfsConstants.MAP_USER_KEY_POINTERS,username, ukp);
 //                    skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-0030"), "");
                 }
-            } else {
-                return skcero;
-            }
+            } 
+//            else {
+//                return skcero;
+//            }
         } catch (Exception ex) {
             skcero.setErrorkey("FIDO-ERR-0001");
             skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Could not parse user keys; " + ex.getLocalizedMessage());

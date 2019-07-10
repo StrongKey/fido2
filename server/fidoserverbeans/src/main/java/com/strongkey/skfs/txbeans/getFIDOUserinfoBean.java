@@ -7,12 +7,12 @@
 
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.entitybeans.FidoUsers;
+import com.strongkey.skfs.pojos.FIDOUserMetadata;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.entitybeans.FidoUsers;
-import com.strongkey.skfs.pojos.FIDOUserMetadata;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
