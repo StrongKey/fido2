@@ -218,7 +218,7 @@ public class FidoUsers implements Serializable {
 
     @Override
     public String toString() {
-        return "com.strongauth.skce.entitybeans.FidoUsers[ fidoUsersPK=" + fidoUsersPK + " ]";
+        return "FidoUsers[ fidoUsersPK=" + fidoUsersPK + " ]";
     }
 
 }

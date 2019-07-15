@@ -9,12 +9,13 @@ package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.skce.pojos.UserSessionInfo;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.core.U2FRegistrationResponse;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -44,7 +45,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
     @EJB
     updateFidoUserBeanLocal updateldapbean;
 
-    @Override
+   @Override
     public String execute(Long did, String registrationresponse, String registrationmetadata, String protocol) {
         String wsresponse="";
         //  check for needed fields in registrationresponse and metadata
@@ -53,7 +54,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.JSON_KEY_CLIENTDATA, "String");
         if (browserdata == null || browserdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'clientData'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005") + " Missing 'clientData'"));
         }
         //parse browserdata
 
@@ -69,13 +70,13 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
             if (bdreqtype == null || bdnonce == null || bdorigin == null) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                         skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Missing 'registrationData'");
-                throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Missing 'registrationData'"));
             }
         } catch (Exception ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE,
                     skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'clientDATA'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-5011")
                     + " Invalid 'clientDATA'"));
         }
         ////
@@ -83,7 +84,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.JSON_KEY_REGSITRATIONDATA, "String");
         if (regdata == null || regdata.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0005", " Missing 'registrationData'");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0005")
                     + " Missing 'registrationData'"));
         }
 
@@ -92,21 +93,21 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                 skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
         if (version == null || version.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0018", " Missing metadata - version");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
                     + " Missing metadata - version"));
         }
         String createloc = (String) applianceCommon.getJsonValue(registrationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_CREATE_LOC, "String");
         if (createloc == null || createloc.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0018", " Missing metadata - createlocation");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
                     + " Missing metadata - createlocation"));
         }
         String username_received = (String) applianceCommon.getJsonValue(registrationmetadata,
                 skfsConstants.FIDO_METADATA_KEY_USERNAME, "String");
         if (username_received == null || username_received.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0018", " Missing metadata - username");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0018")
                     + " Missing metadata - username"));
         }
 
@@ -120,12 +121,12 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
             chDigest = skfsCommon.getDigest(ch, "SHA-256");
         } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash"));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash"));
         }
         UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(skfsConstants.MAP_USER_SESSION_INFO, chDigest);
         if (user == null) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0006")));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0006")));
         } else {
             session_username = user.getUsername();
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0022", " username=" + session_username);
@@ -134,7 +135,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
         //verify that the call is for the right user
         if (!session_username.equalsIgnoreCase(username_received)) {
             //throw erro saying wrong username sent
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0037")));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0037")));
         }
 
         //  6. Verify appid
@@ -142,7 +143,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
         String origin = skfsCommon.getOriginfromBrowserdata(browserdata);
         if (!originverifierbean.execute(appid, origin)) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0032", "");
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0032")
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0032")
                     + " : " + appid + "-" + origin));
         }
 
@@ -204,12 +205,12 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
 
                     wsresponse = "Successfully processed registration response";
                 } else {
-                    throw new IllegalArgumentException(skfsCommon.buildReturn("Failed to process registration response"));
+                    throw new SKIllegalArgumentException(skfsCommon.buildReturn("Failed to process registration response"));
                 }
             }
         } catch (SKFEException ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
-            throw new IllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage()));
+            throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage()));
         }
         return skfsCommon.buildReturn(wsresponse);
     }

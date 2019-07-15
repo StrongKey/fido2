@@ -80,12 +80,12 @@ if [ ! $? -eq 0 ]; then
 	exit 1
 fi
 
-$JAVA_HOME/bin/keytool -list -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME >/dev/null
+keytool -list -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME >/dev/null
 if [ $? -eq 0 ]; then
-	$JAVA_HOME/bin/keytool -delete -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME 
+	keytool -delete -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME 
 fi
 
-RESULT=`$JAVA_HOME/bin/keytool -importcert -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME -file $HOSTNAME.pem 2>&1`
+RESULT=`keytool -importcert -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME -file $HOSTNAME.pem 2>&1`
 if [ ! $? -eq 0 ]; then
 	echo -e "\E[31m$RESULT at: \E[0m$KEY_PATH"
 else

@@ -1,0 +1,38 @@
+{
+  "definitions":{
+    "name": {
+      "description": "Name to be given to the created policy",
+      "type": "string"
+    },
+    "version": {
+      "description": "The version of the policy being created",
+      "type": "string",
+      "enum": [
+        "1"
+      ]
+    },
+    "startdate": {
+      "description": "The date this policy takes effect (Unix time in seconds)",
+      "type": "integer"
+    },
+    "enddate": {
+      "description": "The date this policy ends (Unix time in seconds)",
+      "type": "integer"
+    },
+    "status": {
+      "description": "Status of the policy being created",
+      "type": "string",
+      "enum": [
+        "Active", "Inactive"
+      ]
+    },
+    "notes": {
+      "description": "Optional notes",
+      "type": "string"
+    },
+    "pid": {
+      "description": "Policy id",
+      "type": "integer"
+    }
+  }
+}

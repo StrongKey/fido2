@@ -1,0 +1,64 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          opendjd
+# Required-Start:    $syslog $time $remote_fs
+# Required-Stop:     $syslog $time $remote_fs
+# Default-Start:     3 4 5
+# Default-Stop:      0 2 1 6
+# Description:       Init script for Opendj
+### END INIT INFO
+
+
+# Source function library.
+. /etc/skfsrc
+if [ -f /etc/init.d/functions ]; then
+        . /etc/init.d/functions
+fi
+
+PROGRAMSTART="--user strongkey /usr/local/strongkey/OpenDJ-3.0.0/bin/start-ds"
+PROGRAMSTOP="--user strongkey /usr/local/strongkey/OpenDJ-3.0.0/bin/stop-ds"
+
+prog="OpenDJ 3.0.0 Directory Service"
+
+start () {
+	echo -n $"Starting $prog: "
+
+	# start daemon
+	daemon $PROGRAMSTART
+        RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && touch /var/lock/subsys/OpenDJ
+	return $RETVAL
+}
+
+stop () {
+	# stop daemon
+	echo -n $"Stopping $prog: "
+	daemon $PROGRAMSTOP 
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/OpenDJ
+}
+
+restart() {
+	stop
+	start
+}
+
+case $1 in
+	start)
+		start
+	;;
+	stop)
+		stop
+	;;
+	restart)
+		restart
+	;;
+	*)
+
+	echo $"Usage: $prog {start|stop|restart}"
+	exit 3
+esac
+
+exit $RETVAL

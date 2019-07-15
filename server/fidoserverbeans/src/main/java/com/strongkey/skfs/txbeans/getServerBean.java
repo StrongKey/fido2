@@ -8,9 +8,9 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Servers;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -37,7 +37,7 @@ public class getServerBean implements getServerBeanLocal {
      *
      * @param fqdn String the unique name of the Server to exclude from the search
      * @return Collection - a collection of active SAKA subscribers
-     * @throws com.strongauth.skce.utilities.SKFEException
+     * @throws com.strongkey.skce.utilities.SKFEException
      */
     @Override
      public Collection<Servers> byActiveSubscribers(String fqdn) throws SKFEException {

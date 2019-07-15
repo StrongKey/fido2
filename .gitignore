@@ -12,6 +12,7 @@ fidoserver/fido2mds/src/main/resources/authenticator/metadata/eSecu_FIDO2_Metada
 fidoserver/fido2mds/src/main/resources/authenticator/metadata/feitian-AllinOneFIDO2_USB_BLE_NFC.json
 fidoserver/fido2mds/src/main/resources/authenticator/metadata/feitian-BioFIDO2_USB_withCN.json
 fidoserver/fido2mds/src/main/resources/authenticator/metadata/feitian-ePassFIDO2_USB.json
+server/fidoserverbeans/nb-configuration.xml
 server/api/target/
 server/authenticationBeans/target/
 server/common/target/
@@ -22,3 +23,6 @@ server/fidoserverbeans/target/
 server/keymanager/target/
 /sampleapps/java/basic/server/target/
 /sampleapps/java/poc/server/target/
+/server/skfe/nbproject/
+/server/skfe/target/
+/server/apiclient/target/

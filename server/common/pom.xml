@@ -4,11 +4,11 @@
     
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
     </parent>
     
-    <groupId>com.strongauth</groupId>
+    <groupId>com.strongkey</groupId>
     <artifactId>common</artifactId>
     <version>4.0</version>
     <packaging>jar</packaging>
@@ -21,6 +21,11 @@
     </properties>
     
     <dependencies>
+        <dependency>
+            <groupId>org.zeromq</groupId>
+            <artifactId>jeromq</artifactId>
+            <version>0.4.3</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
@@ -45,7 +50,7 @@
             <version>1.6</version>
         </dependency>
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>crypto</artifactId>
             <version>4.0</version>
             <type>jar</type>

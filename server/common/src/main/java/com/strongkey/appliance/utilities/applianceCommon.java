@@ -4,7 +4,6 @@
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
  * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
-
 package com.strongkey.appliance.utilities;
 
 import com.strongkey.appliance.objects.applianceException;
@@ -26,13 +25,15 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -73,6 +74,13 @@ public class applianceCommon {
     private static final Long serverid;
 
     private static String localhost;
+
+    private static final Lock publock = new ReentrantLock(true);
+    private static final Lock sublock = new ReentrantLock(true);
+    private static final Lock acklock = new ReentrantLock(true);
+    private static final Lock blplock = new ReentrantLock(true);
+
+    private static final Long REP_STATE_LOCK_WAITTIME;
 
     /*
 *****************************************
@@ -144,8 +152,11 @@ Y8P          Y8P 888
         }
 
         //set replication status
-        setReplicateStatus(Boolean.FALSE);
+//        setReplicateStatus(Boolean.FALSE);
 
+        REP_STATE_LOCK_WAITTIME = Long.parseLong(getApplianceConfigurationProperty("appliance.cfg.property.messaging.statechange.waittime"));
+
+        putReplicationMaps();
     }
 
     /**
@@ -320,6 +331,57 @@ Y8P          Y8P 888
         }
 
         return hash;
+    }
+
+    /**
+     * Convenience method to get a lock for an operation
+     *
+     * @param locktype
+     * @return boolean - Returns true if the lock was acquired, false otherwise
+     *
+     * Bug ID 264 - When attempting to get a lock, threads rely on luck to
+     * determine the order in which locks are obtained. This creates situations
+     * where a particularly unlucky thread continuously fails to get a lock
+     * until it runs out of attempts.
+     *
+     * We have reworked the locking mechanism to ensure threads obtain locks in
+     * FIFO order. This introduces fairness to the lock and ensures no thread
+     * has to wait longer than need be.
+     */
+    public static boolean getLock(String locktype) {
+        try {
+            if (locktype.equalsIgnoreCase("PUB")) {
+                return publock.tryLock(REP_STATE_LOCK_WAITTIME, TimeUnit.SECONDS);
+            } else if (locktype.equalsIgnoreCase("SUB")) {
+                return sublock.tryLock(REP_STATE_LOCK_WAITTIME, TimeUnit.SECONDS);
+            } else if (locktype.equalsIgnoreCase("ACK")) {
+                return acklock.tryLock(REP_STATE_LOCK_WAITTIME, TimeUnit.SECONDS);
+            } else if (locktype.equalsIgnoreCase("BLP")) {
+                return blplock.tryLock(REP_STATE_LOCK_WAITTIME, TimeUnit.SECONDS);
+            } else {
+                return false;
+            }
+        } catch (InterruptedException ex) {
+            strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.SEVERE, classname, "getLock", "APPL-ERR-1096", locktype);
+            return false;
+        }
+    }
+
+    /**
+     * Convenience method to release a lock after completing the operation
+     *
+     * @param locktype
+     */
+    public static void releaseLock(String locktype) {
+        if (locktype.equalsIgnoreCase("PUB")) {
+            publock.unlock();
+        } else if (locktype.equalsIgnoreCase("SUB")) {
+            sublock.unlock();
+        } else if (locktype.equalsIgnoreCase("ACK")) {
+            acklock.unlock();
+        } else if (locktype.equalsIgnoreCase("BLP")) {
+            blplock.unlock();
+        }
     }
 
     /**
@@ -640,7 +702,6 @@ Y8P          Y8P 888
         }
         return newdn;
     }
-    
 
     //common between skcc  and fso
     /**
@@ -655,7 +716,7 @@ Y8P          Y8P 888
         number = Integer.toString(num);
         return number;
     }
-    
+
     /**
      * Convert the JSON represented as a String into a JsonObject
      *
@@ -674,7 +735,7 @@ Y8P          Y8P 888
         }
         return null;
     }
-    
+
     /**
      * Given a JSON string and a search-key, this method looks up the 'key' in
      * the JSON and if found, returns the associated value. Returns NULL in all
@@ -728,6 +789,29 @@ Y8P          Y8P 888
             return null;
         }
     }
+
+    public static void putReplicationMaps() {
+
+        //ka
+        entitynames.put(applianceConstants.ENTITY_TYPE_KEEP_ALIVE, "ENTITY_TYPE_KEEP_ALIVE");
+
+        //ce
+        entitynames.put(applianceConstants.ENTITY_TYPE_FIDO_KEYS, "ENTITY_TYPE_FIDO_KEYS");
+        entitynames.put(applianceConstants.ENTITY_TYPE_DOMAINS, "ENTITY_TYPE_DOMAINS");
+        entitynames.put(applianceConstants.ENTITY_TYPE_FIDO_USERS, "ENTITY_TYPE_FIDO_USERS");
+        entitynames.put(applianceConstants.ENTITY_TYPE_MAP_USER_SESSION_INFO, "ENTITY_TYPE_MAP_USER_SESSION_INFO");
+        entitynames.put(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, "ENTITY_TYPE_FIDO_POLICIES");
+        entitynames.put(applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES, "ENTITY_TYPE_ATTESTATION_CERTIFICATES");
+
+        repops.put(applianceConstants.REPLICATION_OPERATION_ADD, "REPLICATION_OPERATION_ADD");
+        repops.put(applianceConstants.REPLICATION_OPERATION_DELETE, "REPLICATION_OPERATION_DELETE");
+        repops.put(applianceConstants.REPLICATION_OPERATION_UPDATE, "REPLICATION_OPERATION_UPDATE");
+        repops.put(applianceConstants.REPLICATION_OPERATION_KEEP_ALIVE, "REPLICATION_OPERATION_KEEP_ALIVE");
+        repops.put(applianceConstants.REPLICATION_OPERATION_HASHMAP_ADD, "REPLICATION_OPERATION_HASHMAP_ADD");
+        repops.put(applianceConstants.REPLICATION_OPERATION_HASHMAP_DELETE, "REPLICATION_OPERATION_HASHMAP_DELETE");
+        repops.put(applianceConstants.REPLICATION_OPERATION_HASHMAP_UPDATE, "REPLICATION_OPERATION_HASHMAP_UPDATE");
+    }
+
 
     /*
     *****************************************************************************************

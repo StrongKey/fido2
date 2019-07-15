@@ -15,6 +15,7 @@ import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido2.FIDO2AuthenticatorData;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.logging.Level;
@@ -73,12 +74,12 @@ public class verifyFido2AuthenticationPolicy implements verifyFido2Authenticatio
         
         //Double check that what was stored in UserSessionInfo is valid for the policy
         if (!authOp.getUserVerification().contains(userVerificationReq)) {
-            throw new IllegalArgumentException("Policy Exception: Preauth userVerificationRequirement does not meet policy");
+            throw new SKIllegalArgumentException("Policy Exception: Preauth userVerificationRequirement does not meet policy");
         }
 
         //If User Verification was required, verify it was provided
         if (userVerificationReq.equalsIgnoreCase(skfsConstants.POLICY_CONST_REQUIRED) && !authData.isUserVerified()) {
-            throw new IllegalArgumentException("User Verification required by policy");
+            throw new SKIllegalArgumentException("User Verification required by policy");
         }
     }
 }

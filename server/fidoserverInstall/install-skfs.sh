@@ -23,6 +23,7 @@ BUFFERPOOLSIZE=512m
 
 # Flags to indicate if a module should be installed
 INSTALL_GLASSFISH=Y
+INSTALL_OPENDJ=Y
 INSTALL_MARIA=Y
 INSTALL_FIDO=Y
 
@@ -31,7 +32,14 @@ GLASSFISH=payara-4.1.2.181.zip
 JEMALLOC=jemalloc-3.6.0-1.el7.x86_64.rpm
 MARIA=mariadb-10.2.13-linux-x86_64.tar.gz
 MARIACONJAR=mariadb-java-client-2.2.2.jar
+OPENDJ=OpenDJ-3.0.0.zip
 # End Required Distributables
+
+SERVICE_LDAP_BIND_PASS=Abcd1234!
+SERVICE_LDAP_BASEDN='dc=strongauth,dc=com'
+SAKA_DID=1
+SERVICE_LDAP_SVCUSER_PASS=Abcd1234!
+SKCE_LDIF=skce.ldif
 
 # Other vars
 STRONGKEY_HOME=/usr/local/strongkey
@@ -41,7 +49,11 @@ GLASSFISH_CONFIG=$GLASSFISH_HOME/domains/domain1/config
 MARIAVER=mariadb-10.2.13-linux-x86_64
 MARIATGT=mariadb-10.2.13
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
+OPENDJVER=opendj
+OPENDJTGT=OpenDJ-3.0.0
+OPENDJ_HOME=$STRONGKEY_HOME/$OPENDJTGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SKCE_BASE_LDIF=skce-base.ldif
 
 function check_exists {
 for ARG in "$@"
@@ -77,13 +89,14 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 
 echo "Installing required linux packages ..."
 if [[ ! -z $YUM_CMD ]]; then
-    yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs curl >/dev/null 2>&1
+    yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+    systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
-    apt install unzip libaio1 openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
+    apt install unzip libncurses5 libaio1 openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
     # modify rng tools to use dev urandom as the vm may not have a harware random number generator
     if ! grep -q "^HRNGDEVICE=/dev/urandom" /etc/default/rng-tools ; then
-            echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tool
+            echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tools
     fi
     systemctl restart rng-tools
 else
@@ -113,6 +126,11 @@ if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
         wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/j/jemalloc-3.6.0-1.el7.x86_64.rpm -q
 fi
 
+
+if [ ! -f $SKFS_SOFTWARE/$OPENDJ ]; then
+        echo "Downloading OpenDJ ..."
+        wget https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/OpenDJ-3.0.0.zip -q
+fi
 
 # Make sure we can resolve our own hostname
 get_ip "$(hostname)" > /dev/null
@@ -170,8 +188,9 @@ EOFSUDOERS
 cat > /etc/skfsrc << EOFSKFSRC
     export GLASSFISH_HOME=$GLASSFISH_HOME
         export MYSQL_HOME=$MARIA_HOME
+        export OPENDJ_HOME=$OPENDJ_HOME
    export STRONGKEY_HOME=$STRONGKEY_HOME
-              export PATH=\$GLASSFISH_HOME/bin:\$MYSQL_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
+              export PATH=\$OPENDJ_HOME/bin:\$GLASSFISH_HOME/bin:\$MYSQL_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
 
 alias str='cd $STRONGKEY_HOME'
 alias dist='cd $STRONGKEY_HOME/dist'
@@ -303,9 +322,84 @@ if [ $INSTALL_GLASSFISH = 'Y' ]; then
         cp $SKFS_SOFTWARE/$MARIACONJAR $GLASSFISH_HOME/lib
 fi
 
+if [ $INSTALL_OPENDJ = 'Y' ]; then
+        echo "Installing OpenDJ..."
+        if [ $SHOWALL ]; then
+                unzip $SKFS_SOFTWARE/$OPENDJ -d $STRONGKEY_HOME
+        else
+                unzip $SKFS_SOFTWARE/$OPENDJ -d $STRONGKEY_HOME > /dev/null
+        fi
+
+        mv $STRONGKEY_HOME/$OPENDJVER $OPENDJ_HOME
+
+        cp $SKFS_SOFTWARE/99-user.ldif $OPENDJ_HOME/template/config/schema
+
+        export "OPENDJ_JAVA_HOME=$JAVA_HOME"
+        if [ $SHOWALL ]; then
+                $OPENDJ_HOME/setup --cli --acceptLicense --no-prompt \
+                                   --ldifFile $SKFS_SOFTWARE/$SKCE_BASE_LDIF \
+                                   --rootUserPassword $SERVICE_LDAP_BIND_PASS \
+                                   --baseDN $SERVICE_LDAP_BASEDN \
+                                   --hostname $(hostname) \
+                                   --ldapPort 1389 \
+                                   --doNotStart
+        else
+                $OPENDJ_HOME/setup --cli --acceptLicense --no-prompt \
+                                   --ldifFile $SKFS_SOFTWARE/$SKCE_BASE_LDIF \
+                                   --rootUserPassword $SERVICE_LDAP_BIND_PASS \
+                                   --baseDN $SERVICE_LDAP_BASEDN \
+                                   --hostname $(hostname) \
+                                   --ldapPort 1389 \
+                                   --doNotStart \
+                                   --quiet
+        fi
+
+
+        sed -i '/^control-panel/s|$| -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true|' $OPENDJ_HOME/config/java.properties
+        $OPENDJ_HOME/bin/dsjavaproperties >/dev/null
+
+        cp $SKFS_SOFTWARE/opendjd /etc/init.d/
+        chmod 755 /etc/init.d/opendjd
+        /lib/systemd/systemd-sysv-install enable opendjd
+fi                
 
 ##### Change ownership of files #####
 chown -R strongkey:strongkey $STRONGKEY_HOME
+
+##### Start OpenDJ #####
+if [ $INSTALL_OPENDJ = 'Y' ]; then
+        service opendjd restart
+        sleep 10;
+        $OPENDJ_HOME/bin/dsconfig set-global-configuration-prop \
+                                  --hostname $(hostname) \
+                                  --port 4444 \
+                                  --bindDN "cn=Directory Manager" \
+                                  --bindPassword "$SERVICE_LDAP_BIND_PASS" \
+                                  --set check-schema:false \
+                                  --trustAll \
+                                  --no-prompt
+fi
+
+##### Adding default opendj users #####
+SLDNAME=${SERVICE_LDAP_BASEDN%%,dc*}
+sed -r "s|dc=strongauth,dc=com|$SERVICE_LDAP_BASEDN|
+        s|dc: strongauth|dc: ${SLDNAME#dc=}|
+        s|did: .*|did: ${SAKA_DID}|
+        s|did=[0-9]+,|did=${SAKA_DID},|
+        s|^ou: [0-9]+|ou: ${SAKA_DID}|
+        s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
+        s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKCE_LDIF > /tmp/skce.ldif
+
+echo "Importing default users..."
+$OPENDJ_HOME/bin/ldapmodify --filename /tmp/skce.ldif \
+                             --hostName $(hostname) \
+                             --port 1389 \
+                             --bindDN 'cn=Directory Manager' \
+                             --bindPassword "$SERVICE_LDAP_BIND_PASS" \
+                             --trustAll \
+                             --noPropertiesFile \
+                             --defaultAdd >/dev/null
+
 
 ##### Start MariaDB and Payara #####
 echo -n "Creating $DBSIZE SKFS Internal Database..."
@@ -376,11 +470,13 @@ if [ $INSTALL_FIDO = 'Y' ]; then
         	--validationmethod meta-data \
         	--property ServerName=localhost:DatabaseName=skfs:port=3306:user=skfsdbuser:password=$MARIA_SKFSDBUSER_PASSWORD:DontTrackOpenResources=true \
         	SKFSPool
-	$GLASSFISH_HOME/bin/asadmin create-jdbc-resource --connectionpoolid SKFSPool jdbc/skfs
+	$GLASSFISH_HOME/bin/asadmin create-jdbc-resource --connectionpoolid SKFSPool jdbc/strongkeylite
 	$GLASSFISH_HOME/bin/asadmin set server.resources.jdbc-connection-pool.SKFSPool.max-pool-size=1000
 	$GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.max-thread-pool-size=1000
 	$GLASSFISH_HOME/bin/asadmin set server.thread-pools.thread-pool.http-thread-pool.min-thread-pool-size=10
 fi
+
+
 
 $GLASSFISH_HOME/bin/asadmin delete-jvm-options $($GLASSFISH_HOME/bin/asadmin list-jvm-options | sed -n '/\(-XX:NewRatio\|-XX:MaxPermSize\|-XX:PermSize\|-client\|-Xmx\|-Xms\)/p' | sed 's|:|\\\\:|' | tr '\n' ':')
 $GLASSFISH_HOME/bin/asadmin create-jvm-options -Djtss.tcs.ini.file=$STRONGKEY_HOME/lib/jtss_tcs.ini:-Djtss.tsp.ini.file=$STRONGKEY_HOME/lib/jtss_tsp.ini:-Xmx${XMXSIZE}:-Xms${XMXSIZE}:-server:-Djdk.tls.ephemeralDHKeySize=2048:-Dproduct.name="":-XX\\:-DisableExplicitGC

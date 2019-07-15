@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
-         <relativePath>../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.strongkey</groupId>
@@ -23,13 +23,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>common</artifactId>
             <version>4.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>crypto</artifactId>
             <version>4.0</version>
         </dependency>
@@ -49,16 +49,13 @@
             <artifactId>spring-web</artifactId>
             <version>${springWeb.version}</version>
         </dependency>  
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
-        </dependency>              
+
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.9.6</version>
         </dependency>    
+                
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-cbor</artifactId>

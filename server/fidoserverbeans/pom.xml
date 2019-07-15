@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.strongauth</groupId>
+    <groupId>com.strongkey</groupId>
     <artifactId>fidoserverbeans</artifactId>
     <version>4.0</version>
     <packaging>ejb</packaging>
@@ -69,6 +69,11 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.jvnet.staxex</groupId>
             <artifactId>stax-ex</artifactId>
             <version>1.7.7</version>
@@ -109,22 +114,23 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
-            <type>jar</type>
+            <groupId>com.strongkey</groupId>
+            <artifactId>replicationEJB</artifactId>
+            <version>4.2.0</version>
+            <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>fido2mds</artifactId>
             <version>4.0</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.strongauth</groupId>
+                    <groupId>com.strongkey</groupId>
                     <artifactId>common</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.strongauth</groupId>
+                    <groupId>com.strongkey</groupId>
                     <artifactId>crypto</artifactId>
                 </exclusion>
             </exclusions>

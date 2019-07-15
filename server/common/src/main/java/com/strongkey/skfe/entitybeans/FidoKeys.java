@@ -427,6 +427,6 @@ public class FidoKeys implements Serializable {
 
     @Override
     public String toString() {
-        return "com.strongauth.skce.entitybeans.FidoKeys[ fidoKeysPK=" + fidoKeysPK + " ]";
+        return "FidoKeys[ fidoKeysPK=" + fidoKeysPK + " ]";
     }
 }

@@ -1,0 +1,145 @@
+dn: did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: organizationalUnit
+objectClass: top
+objectClass: encryptionDomain
+description: domain id 1
+ou: 1
+domainName: domain 1
+did: 1
+
+dn: did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: organizationalUnit
+objectClass: top
+objectClass: encryptionDomain
+description: domain id 1
+ou: 1
+domainName: domain 1
+did: 1
+
+dn: cn=service-cc-ce,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+userPassword: {SSHA}ZqhJaB87fCpqanujMdECiJn6ruswaXlb6r5vvw==
+description: Credential for CryptoCabinet - has access to Encryption and Decryption
+uid: service-cc-ce
+cn: service-cc-ce
+sn: service-cc-ce
+
+dn: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+userPassword: {SSHA}nklQGQl02bhdLQCnEPisiTPLd+/O38RUKqcjNQ==
+givenName: svcfidouser
+cn: svcfidouser
+sn: svcfidouser
+
+dn: cn=skceping,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+userPassword: {SSHA}rFO/ouf/GTFAUBA2eSHb16JchFAUFgKyFaKXSw==
+givenName: skceping
+cn: skceping
+sn: skceping
+
+dn: cn=skceadmin,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+userPassword: {SSHA}FZpd0vjE7rna8EN9xY54QhQxQKS0uujk6Gd9Hw==
+givenName: skceadmin
+uid: skceadmin
+cn: skceadmin
+sn: skceadmin
+
+dn: cn=AdminAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=skceadmin,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=skceping,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+cn: AdminAuthorized
+
+dn: cn=FIDOUsers,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FIDOUsers
+
+dn: cn=Services,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=service-cc-ce,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+cn: Services
+
+dn: cn=FidoAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoAuthorized
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=EncryptionAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: EncryptionAuthorized
+uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=encryptonly,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=DecryptionAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: DecryptionAuthorized
+uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=decryptonly,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=encryptonly,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: top
+objectClass: fidoinetorgperson
+FIDOKeysEnabled: false
+TwoStepVerification: false
+givenName: encryptonly
+cn: encryptonly
+sn: encryptonly
+userPassword: {SSHA}Fcvg/GnlTnXcb3XEDgZtk2Pp2EPUky+lqD0pqg==
+did: 1
+
+dn: cn=decryptonly,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: top
+objectClass: fidoinetorgperson
+FIDOKeysEnabled: false
+TwoStepVerification: false
+givenName: decryptonly
+cn: decryptonly
+sn: decryptonly
+userPassword: {SSHA}NLa0poMDolYAQjP2fgTJPt7FcrbmElSEhK5wdA==
+did: 1
+
+dn: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: top
+objectClass: fidoinetorgperson
+userPassword: {SSHA}5iDDXtncAL2xxGIvlQQU8Duq0Aa+ETm2qZNPoQ==
+FIDOKeysEnabled: false
+TwoStepVerification: false
+did: 1
+cn: encryptdecrypt
+sn: encryptdecrypt
+

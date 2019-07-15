@@ -19,6 +19,13 @@ service mysqld restart
 service mysqld stop 
 service glassfishd stop 
 
+if [ -f /etc/rc.d/init.d/opendjd ]; then
+        echo "Uninstalling OpenDJ..." | tee -a $LOGNAME
+        service opendjd stop
+        chkconfig --del opendjd
+        rm /etc/rc.d/init.d/opendjd
+fi
+
 echo "Restoring original system files..." | tee -a $LOGNAME
 if [ -f /etc/bashrc ]; then
         sed -i '/skfsrc/d' /etc/bashrc

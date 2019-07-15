@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
     </parent>
-    <groupId>com.strongauth</groupId>
+    <groupId>com.strongkey</groupId>
     <artifactId>fidoserverEAR</artifactId>
     <version>4.0</version>
     <packaging>ear</packaging>
@@ -60,6 +60,13 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>skfe</artifactId>
+            <version>4.0</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>fidoserverbeans</artifactId>
             <version>4.0</version>
             <type>ejb</type>
@@ -68,9 +75,23 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>authenticationBeans</artifactId>
-            <version>4.0</version>
+            <version>4.2.0</version>
             <type>ejb</type>
         </dependency>
         
+        <!-- REPL -->
+        <dependency>
+            <groupId>com.strongkey</groupId>
+            <artifactId>replicationEJB</artifactId>
+            <version>4.2.0</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.strongkey</groupId>
+            <artifactId>replicationWAR</artifactId>
+            <type>war</type>
+            <version>4.2.0</version>
+        </dependency>
+
     </dependencies>
 </project>

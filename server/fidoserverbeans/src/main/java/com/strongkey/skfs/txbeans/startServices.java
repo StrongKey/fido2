@@ -4,12 +4,12 @@
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
  * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
-
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.appliance.entitybeans.Domains;
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceMaps;
+import com.strongkey.appliance.entitybeans.Domains;
+import com.strongkey.skfs.messaging.SKCEBacklogProcessor;
 import com.strongkey.skfs.utilities.skfsCommon;
 import java.util.Collection;
 import javax.annotation.PostConstruct;
@@ -43,9 +43,15 @@ public class startServices {
 //                    cryptoCommon.putPublicKey(did + SIGN_SUFFIX, cryptoCommon.getPublicKeyFromCertificate(d.getSigningCertificate()));
                 }
             }
-            
+
             //set replication to false
-            applianceCommon.setReplicateStatus(Boolean.FALSE);
+            if (applianceCommon.getApplianceConfigurationProperty("appliance.cfg.property.replicate").equalsIgnoreCase("true")) {
+                applianceCommon.setReplicateStatus(Boolean.TRUE);
+                SKCEBacklogProcessor.getInstance();
+
+            } else {
+                applianceCommon.setReplicateStatus(Boolean.FALSE);
+            }
         }
     }
 }
