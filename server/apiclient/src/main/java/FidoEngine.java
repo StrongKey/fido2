@@ -23,12 +23,13 @@ public class FidoEngine {
         System.out.println("Copyright (c) 2001-"+Calendar.getInstance().get(Calendar.YEAR)+" StrongAuth, Inc. All rights reserved.");
         System.out.println();
 
-        String usage = "Usage: java -jar apiclient.jar R <hostport> <did> <accesskey> <secretkey> <fidoprotocol> <username> <origin>\n"
+        String usage = "Command: R (registration) | A (authentication) | G (getkeysinfo) | DA (deactivate) | AC (activate) | DR (deregister) | CP (createpolicy) | PP (updatepolicy) | DP (deletepolicy) | gp (getpolicy) "
+                     + "Usage: java -jar apiclient.jar R <hostport> <did> <accesskey> <secretkey> <fidoprotocol> <username> <origin>\n"
                      + "       java -jar apiclient.jar A <hostport> <did> <accesskey> <secretkey> <fidoprotocol> <username> <origin> <authcounter>\n"
                      + "       java -jar apiclient.jar G <hostport> <did> <accesskey> <secretkey> <username> \n"
                      + "       java -jar apiclient.jar D <hostport> <did> <accesskey> <secretkey> <random-id> \n"
                      + "       java -jar apiclient.jar U <hostport> <did> <accesskey> <secretkey> <random-id> <Active/Inactive>\n"
-                     + "       java -jar apiclient.jar CP <hostport> <did> <accesskey> <secretkey> <start-date> <end-date> <certificate-profile-name> <version> <status> <notes> <policy>\n"
+                     + "       java -jar apiclient.jar CP <hostport> <did> <accesskey> <secretkey> <start-date> <end-date> <cert-profile-name> <version> <status> <notes> <policy>\n"
                      + "       java -jar apiclient.jar PP <hostport> <did> <accesskey> <secretkey> <sid-pid> <start-date> <end-date> <version> <status> <notes> <policy>\n"
                      + "       java -jar apiclient.jar DP <hostport> <did> <accesskey> <secretkey> <sid-pid>\n"
                      + "       java -jar apiclient.jar GP <hostport> <did> <accesskey> <secretkey> <metatdataonly> <sid-pid>\n\n"
@@ -53,7 +54,16 @@ public class FidoEngine {
                      + "         Active/Inactive     : status to set the fido-key to.\n"
                      + "         good/bad signature  : Optional; boolean value that simulates emiting good/bad signatures\n"
                      + "                                 true for good signature | false for bad signature\n"
-                     + "                                 default is true\n";
+                     + "                                 default is true\n"
+                     + "         start-date          : Unix Timestamp (in milliseconds) when the policy should take effect\n"
+                     + "         end-date            : Unix Timestamp (in milliseconds) when the policy should end. Can be \"null\"\n"
+                     + "         cert-profile-name   : A human readable name for the policy\n"
+                     + "         version             : Version of the policy (currently only value of 1 is accepted)\n"
+                     + "         status              : Active/Inactive. Status to set the policy to.\n"
+                     + "         notes               : Optional notes to store with the policy.\n"
+                     + "         policy              : A JSON object defining the FIDO2 policy.\n"
+                     + "         sid-pid             : Policy identifier returned by creating a policy.\n"
+                     + "         metadataonly        : Boolean. If true, returns only the metadata of the policy. If false, returns the metadata + the policy JSON.\n";
 
         try {
             switch (args[0]) {
@@ -114,7 +124,10 @@ public class FidoEngine {
                         break;
                     }
 
-                    RestCreateFidoPolicy.create(args[1], args[2], args[3], args[4], Long.parseLong(args[5]), Long.parseLong(args[6]), args[7], Integer.parseInt(args[8]), args[9], args[10], args[11]);
+                    Long enddate = null;
+                    if (!args[6].equalsIgnoreCase("null"))
+                         enddate = Long.parseLong(args[6]);
+                    RestCreateFidoPolicy.create(args[1], args[2], args[3], args[4], Long.parseLong(args[5]), enddate, args[7], Integer.parseInt(args[8]), args[9], args[10], args[11]);
                     System.out.println("\nDone with Create!\n");
                     break;
 
@@ -124,7 +137,10 @@ public class FidoEngine {
                         break;
                     }
 
-                    RestFidoActionsOnPolicy.patch(args[1], args[2], args[3], args[4], args[5], Long.parseLong(args[6]), Long.parseLong(args[7]), Integer.parseInt(args[8]), args[9], args[10], args[11]);
+                    enddate = null;
+                    if (!args[7].equalsIgnoreCase("null"))
+                         enddate = Long.parseLong(args[7]);
+                    RestFidoActionsOnPolicy.patch(args[1], args[2], args[3], args[4], args[5], Long.parseLong(args[6]), enddate, Integer.parseInt(args[8]), args[9], args[10], args[11]);
                     System.out.println("\nDone with patch!\n");
                     break;
 

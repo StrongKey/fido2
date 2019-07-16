@@ -56,14 +56,12 @@ public class addFidoPolicy implements addFidoPolicyLocal {
     public Response execute(Long did, CreateFidoPolicyRequest request) {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
 
-        JSONObject json;
         JSONObject policy;
         try {
-            json = new JSONObject(request.getPolicy());
-            policy = json.getJSONObject("policy");
+            policy = new JSONObject(request.getPolicy());
         } catch (JSONException ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-1000", ex.getLocalizedMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-1000") + "Check server logs for details.").build();
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5011", ex.getLocalizedMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-5011") + "Check server logs for details.").build();
         }
 
         //Base64 Policy
@@ -78,7 +76,8 @@ public class addFidoPolicy implements addFidoPolicyLocal {
         fidopolicyPK.setSid(sid.shortValue());
         fidopolicy.setFidoPoliciesPK(fidopolicyPK);
         fidopolicy.setStartDate(new Date(request.getStartDate()));
-        fidopolicy.setEndDate(new Date(request.getEndDate()));
+        if (request.getEndDate() != null)
+            fidopolicy.setEndDate(new Date(request.getEndDate()));
         fidopolicy.setCertificateProfileName(request.getCertificateProfileName());
         fidopolicy.setPolicy(policyBase64);
         fidopolicy.setVersion(request.getVersion());
@@ -99,7 +98,7 @@ public class addFidoPolicy implements addFidoPolicyLocal {
                         sid,
                         pid.longValue(),
                         new Date(request.getStartDate()),
-                        new Date(request.getEndDate()));
+                        (request.getEndDate() != null) ? new Date(request.getEndDate()) : null);
             MDSClient mds = null;
             if (fidoPolicyObject.getMdsOptions() != null) {
                 mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());

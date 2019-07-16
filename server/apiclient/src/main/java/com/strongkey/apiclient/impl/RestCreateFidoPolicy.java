@@ -43,7 +43,8 @@ public class RestCreateFidoPolicy {
 
         CreateFidoPolicyRequest cfpr = new CreateFidoPolicyRequest();
         cfpr.setStartDate(startdate);
-        cfpr.setEndDate(enddate);
+        if (enddate != null)
+            cfpr.setEndDate(enddate);
         cfpr.setCertificateProfileName(certificateProfileName);
         cfpr.setVersion(version);
         cfpr.setStatus(status);
@@ -51,7 +52,6 @@ public class RestCreateFidoPolicy {
         cfpr.setPolicy(policy);
         ObjectWriter ow = new ObjectMapper().writer();
         String json = ow.writeValueAsString(cfpr);
-        System.out.println(json);
 
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);

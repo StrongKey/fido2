@@ -46,6 +46,9 @@ cp $fidoserver/fidoserverEAR/target/fidoserver.ear $fidoserver/fidoserverInstall
 mkdir $fidoserver/fidoserverInstall/keymanager
 cp -R $fidoserver/keymanager/target/dist/* $fidoserver/fidoserverInstall/keymanager
 
+mkdir $fidoserver/fidoserverInstall/apiclient
+cp -R $fidoserver/apiclient/target/dist/* $fidoserver/fidoserverInstall/apiclient
+
 # Create archives
 echo "-Packaging fidoserver..."
 tar zcf fido2server-v${version}-dist.tgz -C $fidoserver/fidoserverInstall .
@@ -56,4 +59,5 @@ echo "Success!"
 
 rm -f $fidoserver/fidoserverInstall/fidoserver.ear 
 rm -rf $fidoserver/fidoserverInstall/keymanager
+rm -rf $fidoserver/fidoserverInstall/apiclient
 exit 0

@@ -84,14 +84,12 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
         if(request.getNotes() != null)
             fidopolicy.setNotes(request.getNotes());
         if (request.getPolicy() != null) {
-            JSONObject json;
             JSONObject policy;
             try {
-                json = new JSONObject(request.getPolicy());
-                policy = json.getJSONObject("policy");
+                policy = new JSONObject(request.getPolicy());
             } catch (JSONException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-1000", ex.getLocalizedMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-1000") + "Check server logs for details.").build();
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5011", ex.getLocalizedMessage());
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-5011") + "Check server logs for details.").build();
             }
             String policyBase64 = Base64.getEncoder().encodeToString(policy.toString().getBytes());
             fidopolicy.setPolicy(policyBase64);

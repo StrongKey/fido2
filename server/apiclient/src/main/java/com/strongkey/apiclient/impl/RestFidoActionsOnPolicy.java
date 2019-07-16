@@ -117,7 +117,8 @@ public class RestFidoActionsOnPolicy {
 
         PatchFidoPolicyRequest pfpr = new PatchFidoPolicyRequest();
         pfpr.setStartDate(startdate);
-        pfpr.setEndDate(enddate);
+        if (enddate != null)
+            pfpr.setEndDate(enddate);
         pfpr.setVersion(version);
         pfpr.setStatus(status);
         pfpr.setNotes(notes);
