@@ -10,7 +10,6 @@ package com.strongkey.skfs.entitybeans;
 import java.io.Serializable;
 import java.util.Date;
 import javax.json.Json;
-import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;

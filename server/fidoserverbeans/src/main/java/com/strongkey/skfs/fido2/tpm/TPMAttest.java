@@ -10,10 +10,6 @@ package com.strongkey.skfs.fido2.tpm;
 import com.strongkey.skce.utilities.TPMConstants;
 import java.util.Arrays;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMAttest implements TPMMarshallable {
     private final int magic;
     private final short type;

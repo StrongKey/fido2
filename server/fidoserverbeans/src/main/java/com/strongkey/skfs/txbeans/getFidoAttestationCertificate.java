@@ -14,10 +14,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-/**
- *
- * @author mishimoto
- */
 @Stateless
 public class getFidoAttestationCertificate implements getFidoAttestationCertificateLocal {
 

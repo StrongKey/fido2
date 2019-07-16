@@ -10,10 +10,6 @@ package com.strongkey.fido2mds.data;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author dpatterson
- */
 public class MemoryStorage extends Storage {
 
     private final Map<String, Map<String, String>> mapOfMaps = new HashMap<>();

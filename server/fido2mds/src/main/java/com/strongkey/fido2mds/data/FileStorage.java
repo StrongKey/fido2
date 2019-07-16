@@ -16,10 +16,6 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- *
- * @author dpatterson
- */
 public class FileStorage extends Storage {
 
     private static final String BASE_DIR = "target/tmp/";

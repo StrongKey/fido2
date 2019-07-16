@@ -11,10 +11,6 @@ import com.strongkey.skce.utilities.TPMConstants;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMECCUnique implements TPMUnique {
     private TPM2B x;
     private TPM2B y;

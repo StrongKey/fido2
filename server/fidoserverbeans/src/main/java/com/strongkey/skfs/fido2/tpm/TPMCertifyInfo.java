@@ -11,10 +11,6 @@ import com.strongkey.skce.utilities.TPMConstants;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMCertifyInfo implements TPMMarshallable {
     TPM2B name;
     TPM2B qualifiedName;

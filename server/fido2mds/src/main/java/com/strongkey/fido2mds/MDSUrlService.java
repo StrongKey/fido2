@@ -43,10 +43,6 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 
-/**
- *
- * @author dpatterson
- */
 class MDSUrlService extends MDSService {
 
     private static final Logger logger = Logger.getLogger(MDSUrlService.class.getName());

@@ -2,14 +2,13 @@
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
  * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
+ * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
 
 package com.strongkey.apiws.rest;
 
 import com.strongkey.apiws.utility.PATCH;
 import com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal;
-import com.strongkey.skfs.entitybeans.FidoPolicies;
 import com.strongkey.skfs.policybeans.addFidoPolicyLocal;
 import com.strongkey.skfs.policybeans.deleteFidoPolicyLocal;
 import com.strongkey.skfs.policybeans.getFidoPolicyLocal;

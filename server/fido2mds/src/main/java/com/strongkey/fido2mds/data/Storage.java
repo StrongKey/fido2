@@ -7,10 +7,6 @@
 
 package com.strongkey.fido2mds.data;
 
-/**
- *
- * @author dpatterson
- */
 public abstract class Storage {
 
     public Storage() {

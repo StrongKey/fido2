@@ -17,10 +17,6 @@ import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-/**
- *
- * @author pmarathe
- */
 @Stateless
 public class getDBUserInfoBean implements getDBUserInfoBeanLocal {
 

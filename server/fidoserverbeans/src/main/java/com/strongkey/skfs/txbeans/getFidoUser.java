@@ -28,10 +28,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-/**
- *
- * @author pmarathe
- */
 @Stateless
 public class getFidoUser implements getFidoUserLocal {
 

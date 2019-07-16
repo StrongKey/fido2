@@ -13,10 +13,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * @author dpatterson
- */
 public abstract class MDSService {
     protected Map<String,MetadataTOCPayloadEntry> tocEntryMap;
     protected Map<String,MetadataStatement> metadataStatementMap;

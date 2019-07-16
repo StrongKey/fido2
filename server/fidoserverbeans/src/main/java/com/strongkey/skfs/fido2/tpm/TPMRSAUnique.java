@@ -9,10 +9,6 @@ package com.strongkey.skfs.fido2.tpm;
 
 import java.util.Arrays;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMRSAUnique extends TPM2B implements TPMUnique {
 
     public TPMRSAUnique(byte[] data) {

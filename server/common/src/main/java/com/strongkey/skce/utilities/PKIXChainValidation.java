@@ -21,10 +21,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author mishimoto
- */
 public class PKIXChainValidation {
     
     final static String USE_OCSP = "false";
