@@ -11,10 +11,6 @@ import com.strongkey.skfs.entitybeans.FidoUsers;
 import com.strongkey.skfs.utilities.SKFEException;
 import javax.ejb.Local;
 
-/**
- *
- * @author pmarathe
- */
 @Local
 public interface getFidoUserLocal {
     FidoUsers GetByUsername(Long did, String username) throws SKFEException;

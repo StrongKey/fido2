@@ -10,14 +10,15 @@ package com.strongkey.skfs.policybeans;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
 import java.util.Collection;
 import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface getFidoPolicyLocal {
+    public Response getPolicies(Long did, String sidpid, Boolean metadataonly);
+
     public FidoPolicies getbyPK(Long did, Long sid, Long pid);
-    
+
     public Collection<FidoPolicies> getAllActive();
+
+    public Collection<FidoPolicies> getbyDid(Long did);
 }

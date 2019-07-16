@@ -7,10 +7,6 @@
 
 package com.strongkey.fido2mds.structures;
 
-/**
- *
- * @author mishimoto
- */
 public enum AuthenticatorStatus {
     NOT_FIDO_CERTIFIED,
     FIDO_CERTIFIED,

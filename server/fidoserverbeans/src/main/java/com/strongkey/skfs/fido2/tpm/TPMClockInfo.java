@@ -10,10 +10,6 @@ package com.strongkey.skfs.fido2.tpm;
 import com.strongkey.skce.utilities.TPMConstants;
 import org.bouncycastle.util.Arrays;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMClockInfo implements TPMMarshallable {
     private final long clock;
     private final int resetCount;

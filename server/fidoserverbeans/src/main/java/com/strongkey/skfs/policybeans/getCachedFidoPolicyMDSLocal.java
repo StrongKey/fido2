@@ -11,10 +11,6 @@ import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import javax.ejb.Local;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface getCachedFidoPolicyMDSLocal {
     public FidoPolicyObject getPolicyByDidUsername(Long did, String username);

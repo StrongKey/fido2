@@ -13,10 +13,6 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import javax.ejb.Local;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface addFidoAttestationCertificateLocal {
     public AttestationCertificatesPK execute(Long did, X509Certificate attCert, 

@@ -5,7 +5,6 @@
  * The license can be found at https://github.com/StrongKey/fido2/LICENSE
  */
 
-
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.skfs.utilities.SKFEException;

@@ -10,10 +10,6 @@ package com.strongkey.skfs.policybeans;
 import javax.ejb.Local;
 import javax.json.JsonObject;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface generateFido2PreregisterChallengeLocal {
     

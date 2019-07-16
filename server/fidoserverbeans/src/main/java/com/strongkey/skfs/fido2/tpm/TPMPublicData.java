@@ -11,10 +11,6 @@ import com.strongkey.skce.utilities.TPMConstants;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMPublicData implements TPMMarshallable {
     private final short algType;
     private final short nameAlg;

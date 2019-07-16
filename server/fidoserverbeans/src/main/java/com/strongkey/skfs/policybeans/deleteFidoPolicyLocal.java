@@ -7,14 +7,10 @@
 
 package com.strongkey.skfs.policybeans;
 
-import com.strongkey.skfs.utilities.SKFEException;
 import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface deleteFidoPolicyLocal {
-    public void execute(Long did, Long sid, Long pid) throws SKFEException;
+    public Response execute(Long did, String sidpid) ;
 }

@@ -9,10 +9,6 @@ package com.strongkey.skfs.fido2.tpm;
 
 import com.strongkey.skce.utilities.TPMConstants;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMScheme implements TPMMarshallable {
     private final short scheme;
     private final short schemeDetails;

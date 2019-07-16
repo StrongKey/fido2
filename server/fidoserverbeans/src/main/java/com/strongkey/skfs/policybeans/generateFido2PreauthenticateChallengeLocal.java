@@ -10,10 +10,6 @@ package com.strongkey.skfs.policybeans;
 import javax.ejb.Local;
 import javax.json.JsonObject;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface generateFido2PreauthenticateChallengeLocal {
     public String execute(Long did, String username, JsonObject options, JsonObject extensions);

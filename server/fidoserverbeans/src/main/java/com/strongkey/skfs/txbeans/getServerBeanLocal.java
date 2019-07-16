@@ -12,10 +12,6 @@ import com.strongkey.skfs.utilities.SKFEException;
 import java.util.Collection;
 import javax.ejb.Local;
 
-/**
- *
- * @author pmarathe
- */
 @Local
 public interface getServerBeanLocal {
     Collection<Servers> byActiveSubscribers(String fqdn) throws SKFEException;

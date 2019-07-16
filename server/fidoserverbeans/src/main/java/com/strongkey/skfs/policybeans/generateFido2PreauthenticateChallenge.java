@@ -42,10 +42,6 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
-/**
- *
- * @author mishimoto
- */
 @Stateless
 public class generateFido2PreauthenticateChallenge implements generateFido2PreauthenticateChallengeLocal {
 

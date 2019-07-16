@@ -221,6 +221,46 @@ public class FidoPolicies implements Serializable {
         return true;
     }
 
+    public JsonObjectBuilder toMetaDataJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("did", getFidoPoliciesPK().getDid());
+        job.add("sid", getFidoPoliciesPK().getSid());
+        job.add("pid", getFidoPoliciesPK().getPid());
+        job.add("startdate", getStartDate().getTime());
+        if (getEndDate() != null)
+            job.add("enddate", getEndDate().getTime());
+        job.add("name", getCertificateProfileName());
+        job.add("version", getVersion());
+        job.add("status", getStatus());
+        if (getNotes() != null)
+            job.add("notes", getNotes());
+        job.add("createDate", getCreateDate().getTime());
+        if (getModifyDate() != null)
+            job.add("modifyDate", getModifyDate().getTime());
+        return job;
+    }
+
+    public JsonObjectBuilder toJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("did", getFidoPoliciesPK().getDid());
+        job.add("sid", getFidoPoliciesPK().getSid());
+        job.add("pid", getFidoPoliciesPK().getPid());
+        job.add("startdate", getStartDate().getTime());
+        if (getEndDate() != null)
+            job.add("enddate", getEndDate().getTime());
+        job.add("name", getCertificateProfileName());
+        if (getPolicy() != null)
+            job.add("policy", getPolicy());
+        job.add("version", getVersion());
+        job.add("status", getStatus());
+        if (getNotes() != null)
+            job.add("notes", getNotes());
+        job.add("createDate", getCreateDate().getTime());
+        if (getModifyDate() != null)
+            job.add("modifyDate", getModifyDate().getTime());
+        return job;
+    }
+
     @Override
     public String toString() {
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -239,5 +279,4 @@ public class FidoPolicies implements Serializable {
         job.add("signature", getSignature());
         return job.build().toString();
     }
-
 }

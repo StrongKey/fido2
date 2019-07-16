@@ -10,10 +10,6 @@ package com.strongkey.skfs.txbeans;
 import com.strongkey.skfs.entitybeans.AttestationCertificates;
 import javax.ejb.Local;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface getFidoAttestationCertificateLocal {
     

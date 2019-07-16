@@ -7,10 +7,6 @@
 
 package com.strongkey.skfs.fido2.tpm;
 
-/**
- *
- * @author mishimoto
- */
 public interface TPMMarshallable {
     public byte[] marshalData();
 }

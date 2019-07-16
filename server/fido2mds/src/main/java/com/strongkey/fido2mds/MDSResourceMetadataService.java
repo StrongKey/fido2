@@ -22,10 +22,6 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-/**
- *
- * @author dpatterson
- */
 class MDSResourceMetadataService extends MDSService {
 
     private static final Logger logger = Logger.getLogger(MDSResourceMetadataService.class.getName());

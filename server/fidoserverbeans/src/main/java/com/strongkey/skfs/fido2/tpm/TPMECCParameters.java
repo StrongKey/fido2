@@ -7,10 +7,6 @@
 
 package com.strongkey.skfs.fido2.tpm;
 
-/**
- *
- * @author mishimoto
- */
 public class TPMECCParameters implements TPMParameters {
     private final TPMSymmetricStruct symmBits;
     

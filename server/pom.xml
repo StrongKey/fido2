@@ -34,6 +34,7 @@
         <module>fidoserverEAR</module>
         <module>api</module>
         <module>skfe</module>
+        <module>apiclient</module>
         <module>fido2mds</module>
         <module>fidoserverbeans</module>
         <module>common</module>

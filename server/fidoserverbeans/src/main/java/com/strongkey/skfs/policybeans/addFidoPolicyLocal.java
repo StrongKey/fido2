@@ -7,23 +7,12 @@
 
 package com.strongkey.skfs.policybeans;
 
-import com.strongkey.skfs.utilities.SKFEException;
-import java.util.Date;
+import com.strongkey.skfs.requests.CreateFidoPolicyRequest;
 import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-/**
- *
- * @author mishimoto
- */
 @Local
 public interface addFidoPolicyLocal {
     
-    public Integer execute(Long did,
-            Date startDate,
-            Date endDate,
-            String certificateProfileName,
-            String Policy,
-            Integer version,
-            String status,
-            String notes) throws SKFEException;
+    public Response execute(Long did, CreateFidoPolicyRequest request);
 }

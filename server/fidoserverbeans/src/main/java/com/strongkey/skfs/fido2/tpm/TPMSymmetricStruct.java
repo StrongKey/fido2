@@ -9,10 +9,6 @@ package com.strongkey.skfs.fido2.tpm;
 
 import com.strongkey.skce.utilities.TPMConstants;
 
-/**
- *
- * @author mishimoto
- */
 class TPMSymmetricStruct implements TPMMarshallable {
     private final short alg;
     private final short keyBits;

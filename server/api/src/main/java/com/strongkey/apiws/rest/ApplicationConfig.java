@@ -19,7 +19,6 @@ public class ApplicationConfig extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(APIServlet.class, CrossOriginResourceSharingFilter.class));
-//        return new HashSet<>(Arrays.asList(APIServlet.class, FidoAdminServlet.class));
+        return new HashSet<>(Arrays.asList(APIServlet.class, CrossOriginResourceSharingFilter.class, FidoAdminServlet.class));
     }
 }
