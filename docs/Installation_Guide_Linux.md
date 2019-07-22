@@ -83,6 +83,39 @@ __NOTE__: Both the signing and secret keys in the keystore use default values an
     ```java -jar keymanager.jar```
 
 
+
+## Clustering the StrongKey FIDO2 Server
+
+1. Individually install and configure all the FIDO2 Servers to be clustered.
+2. For each server determine the Fully Qualified Domain Name (FQDN) and assign it a unique server ID.
+3. On every server do the following:
+	a. Open the appliance configuration properties and modify the following:
+
+		appliance.cfg.property.serverid=<server-id> (set to the corresponding sid)
+		appliance.cfg.property.replicate=true (should be set to true)
+	b. Create the insert query for all the servers using the appropriate server ID for each, then import them to the MySQL database:
+
+		insert into SERVERS values (1, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		insert into SERVERS values (2, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		insert into SERVERS values (3, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		…
+	c. Now log into MySQL database:
+
+		mysql -u skfsdbuser -pAbracaDabra skfs
+	d. Truncate the existing *SERVERS* table:
+
+		truncate SERVERS;
+	  e. Insert the new server entries created in step above:
+
+		insert into SERVERS values (1, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		insert into SERVERS values (2, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		insert into SERVERS values (3, '<fqdn>', 'Active', 'Both', 'Active', null, null);
+		… 
+ 	f. Restart GlassFish:
+
+		sudo service glassfishd restart
+	g. Repeat the above sequence of steps (a&ndash;f) on all remaining StrongKey FIDO2 Servers.
+
 ## Removal
 
 To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
