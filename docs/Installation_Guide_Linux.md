@@ -89,6 +89,7 @@ __NOTE__: Both the signing and secret keys in the keystore use default values an
 1. Using the Installation steps in the previous section, individually install and configure all the FIDO2 Servers to be clustered.
 2. For each server determine the Fully Qualified Domain Name (FQDN) and assign it a unique server ID.
 3. On every server do the following:
+	
 	a. Open the appliance configuration properties and modify the following:
 
 		appliance.cfg.property.serverid=<server-id> (set to the corresponding sid)
