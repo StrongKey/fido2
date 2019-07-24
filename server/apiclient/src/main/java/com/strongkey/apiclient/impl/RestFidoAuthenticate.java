@@ -9,19 +9,17 @@ package com.strongkey.apiclient.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
 import com.strongkey.apiclient.common.Constants;
 import com.strongkey.apiclient.common.common;
-import com.strongauth.skfe.fido2.Fido2TokenSim;
 import com.strongkey.skfs.requests.AuthenticationRequest;
 import com.strongkey.skfs.requests.PreauthenticationRequest;
-import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.text.SimpleDateFormat;
@@ -33,7 +31,6 @@ import javax.crypto.ShortBufferException;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
@@ -193,23 +190,23 @@ public class RestFidoAuthenticate {
                         | IllegalBlockSizeException
                         | BadPaddingException
                         | InvalidKeySpecException
-                        | SignatureException ex) {
+                        ex) {
                 System.out.println("\n Exception : " + ex.getLocalizedMessage());
             } 
         } else if ("FIDO20".compareTo(fidoprotocol) == 0) {
-            Fido2TokenSim sim = new Fido2TokenSim(origin);
-            JsonObjectBuilder in = Json.createObjectBuilder();
-
-            in.add(Constants.WebAuthn.RELYING_PARTY_RPID, "");
-            in.add(Constants.WebAuthn.CHALLENGE,nonce);
-            
-            /*
-                {
-                    "challenge": "asdfasdfasdfasdf",
-                    "rpId": "example.com"
-                }
-            */
-            input = sim.get(in.build());
+//            Fido2TokenSim sim = new Fido2TokenSim(origin);
+//            JsonObjectBuilder in = Json.createObjectBuilder();
+//
+//            in.add(Constants.WebAuthn.RELYING_PARTY_RPID, "");
+//            in.add(Constants.WebAuthn.CHALLENGE,nonce);
+//            
+//            /*
+//                {
+//                    "challenge": "asdfasdfasdfasdf",
+//                    "rpId": "example.com"
+//                }
+//            */
+//            input = sim.get(in.build());
         }
 
         StringReader regresreader = new StringReader(input.toString());

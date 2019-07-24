@@ -9,12 +9,11 @@ package com.strongkey.apiclient.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
 import com.strongkey.apiclient.common.Constants;
 import com.strongkey.apiclient.common.common;
-import com.strongauth.skfe.fido2.Fido2TokenSim;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
-import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.InvalidAlgorithmParameterException;
@@ -35,9 +34,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
@@ -193,37 +190,37 @@ public class RestFidoRegister {
         
         } else if ("FIDO20".compareTo(fidoprotocol) == 0) {
             
-            JsonObject rpInfo = resJsonObj.getJsonObject("rp");
-            String rpName = rpInfo.getString("name");
-            String challenge = resJsonObj.getString("challenge");
-            
-            Fido2TokenSim sim = new Fido2TokenSim(origin);
-            JsonObjectBuilder in = Json.createObjectBuilder();
-            
-            JsonObjectBuilder rp = Json.createObjectBuilder();
-            rp.add(Constants.WebAuthn.RELYING_PARTY_NAME, rpName);
-            in.add(Constants.WebAuthn.RELYING_PARTY, rp);
-            
-            JsonObjectBuilder user = Json.createObjectBuilder();
-            user.add(Constants.WebAuthn.USER_NAME,accountname);
-            user.add(Constants.WebAuthn.USER_ID,accountname);
-            in.add(Constants.WebAuthn.USER,user);
-            
-            JsonArrayBuilder pubKeyParams = Json.createArrayBuilder();
-            JsonObjectBuilder alg1 = Json.createObjectBuilder();
-            alg1.add(Constants.WebAuthn.PUBKEYCREDPARAMS_ALG, -7);
-            alg1.add(Constants.WebAuthn.TYPE, "public-key");
-            pubKeyParams.add(alg1);
-
-            JsonObjectBuilder alg2 = Json.createObjectBuilder();
-            alg2.add(Constants.WebAuthn.PUBKEYCREDPARAMS_ALG, -257);
-            alg2.add(Constants.WebAuthn.TYPE, "public-key");
-            pubKeyParams.add(alg2);
-
-            in.add(Constants.WebAuthn.PUBKEYCREDPARAMS, pubKeyParams);
-            
-            in.add(Constants.WebAuthn.CHALLENGE,challenge);
-            in.add(Constants.WebAuthn.ATTESTATION_PREFERENCE,"direct");
+//            JsonObject rpInfo = resJsonObj.getJsonObject("rp");
+//            String rpName = rpInfo.getString("name");
+//            String challenge = resJsonObj.getString("challenge");
+//            
+//            Fido2TokenSim sim = new Fido2TokenSim(origin);
+//            JsonObjectBuilder in = Json.createObjectBuilder();
+//            
+//            JsonObjectBuilder rp = Json.createObjectBuilder();
+//            rp.add(Constants.WebAuthn.RELYING_PARTY_NAME, rpName);
+//            in.add(Constants.WebAuthn.RELYING_PARTY, rp);
+//            
+//            JsonObjectBuilder user = Json.createObjectBuilder();
+//            user.add(Constants.WebAuthn.USER_NAME,accountname);
+//            user.add(Constants.WebAuthn.USER_ID,accountname);
+//            in.add(Constants.WebAuthn.USER,user);
+//            
+//            JsonArrayBuilder pubKeyParams = Json.createArrayBuilder();
+//            JsonObjectBuilder alg1 = Json.createObjectBuilder();
+//            alg1.add(Constants.WebAuthn.PUBKEYCREDPARAMS_ALG, -7);
+//            alg1.add(Constants.WebAuthn.TYPE, "public-key");
+//            pubKeyParams.add(alg1);
+//
+//            JsonObjectBuilder alg2 = Json.createObjectBuilder();
+//            alg2.add(Constants.WebAuthn.PUBKEYCREDPARAMS_ALG, -257);
+//            alg2.add(Constants.WebAuthn.TYPE, "public-key");
+//            pubKeyParams.add(alg2);
+//
+//            in.add(Constants.WebAuthn.PUBKEYCREDPARAMS, pubKeyParams);
+//            
+//            in.add(Constants.WebAuthn.CHALLENGE,challenge);
+//            in.add(Constants.WebAuthn.ATTESTATION_PREFERENCE,"direct");
             
             /*
             {
@@ -246,7 +243,7 @@ public class RestFidoRegister {
                 }]
             }
             */
-            input = sim.create(in.build());
+//            input = sim.create(in.build());
         }
 
         StringReader regresreader = new StringReader(input.toString());
