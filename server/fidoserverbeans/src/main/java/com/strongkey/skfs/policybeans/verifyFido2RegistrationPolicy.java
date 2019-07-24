@@ -45,6 +45,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 
 @Stateless
 public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPolicyLocal {
@@ -109,9 +113,16 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
                 throw new SKFEException("Signature Algorithm not supported by policy (Attestation): " + attestationCert.getSigAlgName());
             }
 
-            //TODO verify that the curve used by the attestation key is approved
-//                if(algorithmType.equalsIgnoreCase("EC")){
-//                }
+            //Verify that the curve used by the attestation key is approved
+            if(attestationAlgType.equalsIgnoreCase("EC")){
+                byte[] enc = attestationKey.getEncoded();
+                SubjectPublicKeyInfo spki = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(enc));
+                AlgorithmIdentifier algid = spki.getAlgorithm();
+                ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier) algid.getParameters();
+                if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromOID(oid))){
+                    throw new SKFEException("EC Curve not supported by policy (Attestation)");
+                }
+            }
         }
 
         //Verify signing key
@@ -130,7 +141,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         if(signingAlgType.equalsIgnoreCase("EC")){
             ECKeyObject eckey = (ECKeyObject) attObject.getAuthData().getAttCredData().getFko();
             if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromFIDOECCCurveID(eckey.getCrv()))){
-                throw new SKFEException("Signature Algorithm not supported by policy (Signing)");
+                throw new SKFEException("EC Curve not supported by policy (Signing)");
             }
         }
         
@@ -154,7 +165,6 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             FIDO2AttestationObject attObject, Integer version) throws SKFEException {
     }
     
-    //TODO implement MDS for checking
     //TODO simplify logic
     private void verifyMDS(MdsPolicyOptions mdsOp, JsonObject clientJson, 
             FIDO2AttestationObject attObject, MDSClient mds, Integer version) throws SKFEException, CertificateException, NoSuchProviderException{
@@ -171,15 +181,13 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         System.arraycopy(aaguidbytes, 8, aaguidbytes2, 0, 8);
         UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1),
                 Longs.fromByteArray(aaguidbytes2));
-        JsonObject trustAnchors = mds.getTrustAnchors(uuid.toString());
+        JsonObject trustAnchors = mds.getTrustAnchors(uuid.toString(), mdsOp.getAllowedCertificationLevel());
         
         FIDO2AttestationStatement attStmt = attObject.getAttStmt();
-        //TODO check that none attestation is supported.
         if(attStmt == null){
             return;
         }
         
-        //TODO check that fido-u2f attestation is supported
         if(attObject.getAttFormat().equals("fido-u2f")){
             return;
         }
@@ -188,17 +196,17 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             isPolicyQualifiersRejected = false;
         }
         
-        //TODO check
-        List<Certificate> certchain = new ArrayList<>();
+        //TODO if no certificate chain returned, check/implement ECDAA
         ArrayList attBytesChain = attObject.getAttStmt().getX5c();
         if(attBytesChain == null || attBytesChain.isEmpty()){
             return;
         }
         
-        //TODO check that self attestation is supported.
+        List<Certificate> certchain = new ArrayList<>();
         X509Certificate leafCert = cryptoCommon.generateX509FromBytes((byte[]) attBytesChain.get(0)); //check leaf if it is self signed
         certchain.add(leafCert);
         if(leafCert.getSubjectDN().equals(leafCert.getIssuerDN())){
+            //TODO verify certificate properly self-signs itself
             return;
         }
         
@@ -220,13 +228,11 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         Set<TrustAnchor> rootAnchors = new HashSet<>();
         JsonArray roots = trustAnchors.getJsonArray("attestationRootCertificates");
         
-        //TODO perform comprehensive checks on errors
         JsonArray errors = trustAnchors.getJsonArray("errors");
         if(!errors.isEmpty()){
             throw new SKIllegalArgumentException("MDS error(s): " + errors.toString());
         }
         
-        //TODO handle case where aaguid is not in MDS
         if(roots == null){
             throw new SKIllegalArgumentException("Root certificates not found in MDS");
         }
@@ -239,8 +245,6 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         if(!PKIXChainValidation.pkixvalidate(certPath, rootAnchors, false, isPolicyQualifiersRejected)){    //TODO check CRLs if they exist, otherwise don't
             throw new SKIllegalArgumentException("Failed to verify certificate path");
         }
-        
-        //TODO att ECDAA attestation
     }
     
     //TODO expand checks as token binding spec changes
@@ -295,13 +299,8 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         //If None attestation was requested (or defaulted to), ensure None attestation is given
         //+ no attestation data is given. Conformance requirement.
         if (attestationPreference.equalsIgnoreCase(skfsConstants.POLICY_CONST_NONE)
-                && attObject.getAttFormat().equalsIgnoreCase(userVerificationReq)) {
+                && attObject.getAttFormat().equalsIgnoreCase(attestationPreference)) {
             throw new SKFEException("Policy requested none attestation, was given attestation");
-        }
-        
-        //If User Verification was required, verify it was provided
-        if(userVerificationReq.equalsIgnoreCase(skfsConstants.POLICY_CONST_REQUIRED) && !attObject.getAuthData().isUserVerified()){
-            throw new SKFEException("User Verification required by policy");
         }
         
         //If User Verification was required, verify it was provided

@@ -47,6 +47,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.x9.ECNamedCurveTable;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 
 public class skfsCommon {
@@ -789,6 +791,24 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             default:
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
                         "Unsupported Curve" + curveID);
+                throw new UnsupportedOperationException("Unsupported Curve");
+        }
+    }
+    
+    public static String getPolicyCurveFromOID(ASN1ObjectIdentifier oid) {
+        String curveName = ECNamedCurveTable.getName(oid);
+        switch (curveName) {
+            case "P-256":
+                return "secp256r1";
+            case "P-384":
+                return "secp384r1";
+            case "P-521":
+                return "secp521r1";
+//            case "X25519":             //TODO when BCFIPS 1.0.2 supports Curve25519, this probably will display X25519
+//                return "curve25519";
+            default:
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
+                        "Unsupported Curve" + oid);
                 throw new UnsupportedOperationException("Unsupported Curve");
         }
     }
