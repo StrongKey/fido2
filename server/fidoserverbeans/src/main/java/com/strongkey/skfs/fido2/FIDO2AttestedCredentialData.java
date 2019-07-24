@@ -7,7 +7,6 @@
 
 package com.strongkey.skfs.fido2;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
@@ -71,17 +70,21 @@ public class FIDO2AttestedCredentialData {
         System.arraycopy(data, 0, aaguid, 0, 16);
         remainingDataIndex += 16;
 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+                    "AAGUID : " + Base64.toBase64String(aaguid));
+        
         byte[] lengthValue = new byte[2];
         System.arraycopy(data, remainingDataIndex, lengthValue, 0, 2);
         remainingDataIndex += 2;
         length = ByteBuffer.wrap(lengthValue).getShort();
 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+                    "length : " + length);
+        
         credentialId = new byte[length];
         System.arraycopy(data, remainingDataIndex, credentialId, 0, length);
         remainingDataIndex += length;
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
-                    "AAGUID : " + Base64.toBase64String(aaguid));
         byte[] cbor = new byte[data.length - remainingDataIndex];
         System.arraycopy(data, remainingDataIndex, cbor, 0, data.length - remainingDataIndex);
 
