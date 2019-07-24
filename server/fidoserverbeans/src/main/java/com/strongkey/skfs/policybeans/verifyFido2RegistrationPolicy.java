@@ -45,6 +45,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.asn1.x9.ECNamedCurveTable;
+import org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 
 @Stateless
 public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPolicyLocal {
@@ -109,9 +115,16 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
                 throw new SKFEException("Signature Algorithm not supported by policy (Attestation): " + attestationCert.getSigAlgName());
             }
 
-            //TODO verify that the curve used by the attestation key is approved
-//                if(algorithmType.equalsIgnoreCase("EC")){
-//                }
+            //Verify that the curve used by the attestation key is approved
+            if(attestationAlgType.equalsIgnoreCase("EC")){
+                byte[] enc = attestationKey.getEncoded();
+                SubjectPublicKeyInfo spki = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(enc));
+                AlgorithmIdentifier algid = spki.getAlgorithm();
+                ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier) algid.getParameters();
+                if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromOID(oid))){
+                    throw new SKFEException("EC Curve not supported by policy (Attestation)");
+                }
+            }
         }
 
         //Verify signing key
@@ -130,7 +143,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         if(signingAlgType.equalsIgnoreCase("EC")){
             ECKeyObject eckey = (ECKeyObject) attObject.getAuthData().getAttCredData().getFko();
             if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromFIDOECCCurveID(eckey.getCrv()))){
-                throw new SKFEException("Signature Algorithm not supported by policy (Signing)");
+                throw new SKFEException("EC Curve not supported by policy (Signing)");
             }
         }
         
