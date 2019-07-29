@@ -299,7 +299,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         //If None attestation was requested (or defaulted to), ensure None attestation is given
         //+ no attestation data is given. Conformance requirement.
         if (attestationPreference.equalsIgnoreCase(skfsConstants.POLICY_CONST_NONE)
-                && attObject.getAttFormat().equalsIgnoreCase(attestationPreference)) {
+                && !attObject.getAttFormat().equalsIgnoreCase(attestationPreference)) {
             throw new SKFEException("Policy requested none attestation, was given attestation");
         }
         

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>fidoserver</artifactId>
-        <groupId>com.strongauth</groupId>
+        <groupId>com.strongkey</groupId>
         <version>4.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
@@ -57,9 +57,9 @@
             <version>4.5.6</version>
         </dependency>
         <dependency>
-            <groupId>com.strongauth</groupId>
+            <groupId>com.strongkey</groupId>
             <artifactId>skfetokensim</artifactId>
-            <version>4.0</version>
+            <version>4.2.0</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
