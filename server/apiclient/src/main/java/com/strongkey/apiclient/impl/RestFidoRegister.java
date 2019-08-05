@@ -9,9 +9,9 @@ package com.strongkey.apiclient.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
 import com.strongkey.apiclient.common.Constants;
 import com.strongkey.apiclient.common.common;
+import com.strongkey.skfe.tokensim.FIDOU2FTokenSimulator;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
 import java.io.IOException;
