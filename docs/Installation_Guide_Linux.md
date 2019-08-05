@@ -14,7 +14,7 @@
 
 -  The installation script installs Payara running HTTPS on port 8181, so make sure all firewall rules allow that port to be accessed.
 
-- StrongKey's FIDO2 Server must be installed before the sample Relying Party web application and sample WebAuthn Java client.
+- StrongKey's FIDO2 Server must be installed before the sample service provider web application and sample WebAuthn Java client.
 
 ----------------
 
@@ -119,4 +119,4 @@ To uninstall StrongKey FIDO2 Server, run the following command from the folder w
     sh
     sudo ./cleanup.sh
 
-This removes all StrongKey files plus the installed dependency packages. If you've installed the sample Relying Party web application and the StrongKey WebAuthn client, they will be removed as well.
+This removes all StrongKey files plus the installed dependency packages. If you've installed the sample service provider web application and the StrongKey WebAuthn client, they will be removed as well.
