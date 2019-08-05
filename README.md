@@ -19,7 +19,7 @@ Sample code is provided with a brief explanation of what each sample does:
 * Java Samples
   * [DEMO](https://fido2.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication.
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java Sample application.
-  * [POC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof Of Concept (POC) Java application.
+  * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application.
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
