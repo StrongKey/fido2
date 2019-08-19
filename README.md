@@ -2,7 +2,7 @@
 # README
 
 ## Overview
-StrongKey's FIDO2 Server, Community Edition is an open-source solution designed for DIY coders who want password-less FIDO2  logins for any application. Download the code and integrate it with your own web login, or study the OpenAPI documentation and contribute with your own code submissions.
+StrongKey's Certified FIDO2 Server, Community Edition is an open-source solution designed for DIY coders who want password-less FIDO2  logins for any application. Download the code and integrate it with your own web login, or study the OpenAPI documentation and contribute with your own code submissions.
 
 ![StrongKey FIDO Certificate](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2certified.png)
 
