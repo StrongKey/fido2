@@ -61,7 +61,9 @@ Follow the instructions below to install this sample.
 
 7. To test the sample application, open up a browser and go the the following url
 
+    ```
     https://<FQDN>:8181/basicserver
+    ```
 
 ## Removal
 
