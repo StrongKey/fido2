@@ -115,6 +115,9 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
             if(attestPref != null){
                 returnObjectBuilder.add(skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION, attestPref);
             }
+            else{
+                attestPref = skfsConstants.FIDO2_CONST_ATTESTATION_DIRECT;
+            }
         
         JsonObject extensionsJson = generateExtensions(fidoPolicy.getExtensionsOptions(), extensions);
         if (!extensionsJson.isEmpty()) {

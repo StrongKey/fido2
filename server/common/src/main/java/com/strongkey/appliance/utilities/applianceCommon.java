@@ -126,7 +126,13 @@ Y8P          Y8P 888
 
             while (it.hasNext()) {
                 String key = it.next();
-                baos.write(("\n\t" + key + ": " + appliancehrb.getString(key)).getBytes());
+                baos.write(("\n\t" + key + ": ").getBytes());
+                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
+                    baos.write(("**********").getBytes());
+                } else {
+                    baos.write((appliancehrb.getString(key)).getBytes());
+                }
+                
             }
             baos.close();
 

@@ -270,7 +270,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
     private String retrieveUsernameFromSessionMap(UserSessionInfo userInfo, String challengeDigest){
         if (userInfo == null) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
-            throw new SKIllegalArgumentException("Challenge does not exist in map");
+            throw new SKIllegalArgumentException("Request timed out, please try again");
         } else {
             String sessionUsername = userInfo.getUsername();
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0022", " username=" + sessionUsername);

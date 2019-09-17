@@ -18,29 +18,33 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
 - You must have a Java web application server. These instructions assume you are using Payara (GlassFish).
 - The instructions assume the default ports for all the applications installed; Payara runs HTTPS on port 8181 by default, so make sure all firewall rules allow that port to be accessible.
 
-## Installation Instructions
+## Installation Instructions without FIDO server
 
-1. If installing the sample application **on the same server** as the StrongKey FIDO Server, skip to Step 2. Otherwise, StrongKey's software stack must be installed. Follow these steps for a separate server install:
+1. If installing the sample application **on the separate server**, StrongKey's software stack must be installed. Follow these steps for a separate server install:
     * Complete Steps 1-5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) 
-    * Edit the *install-skfs.sh* script in a text editor; on the line "INSTALL_FIDO=Y" change the value of "Y" to "N"
+    * Edit the *install-skfs.sh* script in a text editor; on the line **"INSTALL_FIDO=Y"** change the value of **"Y"** to **"N"**
     * Run the script *install-skfs.sh*
     ```sh
      sudo ./install-skfs.sh
     ```
+    
+2.  Continue the installation by following the steps under [Installation Instructions with FIDO server](#Installation Instructions with FIDO server)
    
+## Installation Instructions with FIDO server
 
-2. Create the following directories to configure the WebAuthn servlet home folder.
+1. Create the following directories to configure the WebAuthn servlet home folder.
 
     ```sh
     sudo mkdir -p /usr/local/strongkey/poc/etc
     ```
 
-3. Create a configuration file for the service provider web application.
+2. Create a configuration file for the service provider web application.
 
     ```sh
     sudo vi /usr/local/strongkey/poc/etc/poc.properties
     ```
-4. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO Server and an email server. (You can also use GMail as the mail server with your own GMail account to send emails. Just make sure you enable access through the Google account's security settings.)
+3. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO Server and an email server. (You can also use GMail as the mail server with your own GMail account to send emails. Just make sure you enable access through the Google account's security settings.)
+   **If the mail server has a selfsigned scertificate, make sure to import it in the glassfish truststore before continuing**
 
    ```
    poc.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
@@ -56,62 +60,62 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
    ```
    Save and exit.
 
-5. Download the service provider web application distribution [pocserver-v0.9-dist.tgz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz).
+4. Download the service provider web application distribution [pocserver-v0.9-dist.tgz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz).
 
     ```sh
     wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/server/pocserver-v0.9-dist.tgz
     ```
 
-6. Extract the downloaded file to the current directory:
+5. Extract the downloaded file to the current directory:
 
     ```sh
     tar xvzf pocserver-v0.9-dist.tgz
     ```
 
-7. Execute the _install-pocserver.sh_ script as follows:
+6. Execute the _install-pocserver.sh_ script as follows:
 
     ```sh
     sudo ./install-pocserver.sh
     ```
 
-8. Test that the servlet is running by executing the following cURL command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
+7. Test that the servlet is running by executing the following cURL command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
     curl -k https://localhost:8181/poc/fido2/application.wadl
     ```
 At this point, the PoC server is installed. Continue to install the front end Angular application.
 
-9. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
-```
-su - strongkey
-```
+8. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
+    ```
+    su - strongkey
+    ```
 
-10. Download the web application distribution for the FIDO2 Server [poc-ui-dist.tar.gz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz).
-```
-wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
-```
+9. Download the web application distribution for the FIDO2 Server [poc-ui-dist.tar.gz](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz).
+    ```
+    wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
+    ```
 
-11. Extract the downloaded file.
+10. Extract the downloaded file.
 
-```
-tar xvzf poc-ui-dist.tar.gz
-```
-12. Copy all the files to the Payara _docroot_.
+    ```
+    tar xvzf poc-ui-dist.tar.gz
+    ```
+11. Copy all the files to the Payara _docroot_.
 
-```
-cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
-```
-13. Optional: Modify the background image and the logo image.
+    ```
+    cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
+    ```
+12. Optional: Modify the background image and the logo image.
 
-```
-cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
-cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
-```
-14. The application is deployed in _docroot_ and can be accessed.
+    ```
+    cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
+    cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
+    ```
+13. The application is deployed in _docroot_ and can be accessed.
 
-```
-https://<FQDN>:8181/
-```
+    ```
+    https://<FQDN>:8181/
+    ```
 
 ## Removal
 

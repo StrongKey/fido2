@@ -92,7 +92,12 @@ public class replCommon {
         try {
             while (it.hasNext()) {
                 String key = it.next();
-                baos.write(("\n\t" + key + ": " + defaultReplConfig.getString(key)).getBytes());
+                baos.write(("\n\t" + key + ": ").getBytes());
+                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
+                    baos.write(("**********").getBytes());
+                } else {
+                    baos.write((defaultReplConfig.getString(key)).getBytes());
+                }
             }
             baos.close();
         } catch (IOException ex) {
@@ -137,7 +142,13 @@ public class replCommon {
 
             while (it.hasNext()) {
                 String key = it.next();
-                baos.write(("\n\t" + key + ": " + replhrb.getString(key)).getBytes());
+                baos.write(("\n\t" + key + ": ").getBytes());
+                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
+                    baos.write(("**********").getBytes());
+                } else {
+                    baos.write(replhrb.getString(key).getBytes());
+                }
+                
             }
             baos.close();
 
