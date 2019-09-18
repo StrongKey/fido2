@@ -151,6 +151,12 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 if (usibean.getSkid() != null) {
                     usibuilder.setSkid(usibean.getSkid());
                 }
+                if (usibean.getDisplayName()!= null) {
+                    usibuilder.setDisplayName(usibean.getDisplayName());
+                }
+                if (usibean.getRpName()!= null) {
+                    usibuilder.setRpName(usibean.getRpName());
+                }
                 if (usibean.getSid() != null) {
                     usibuilder.setSid(usibean.getSid());
                 }
@@ -165,6 +171,12 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 }
                 if (usibean.getPolicyMapKey() != null){
                     usibuilder.setFidopolicymapkey(usibean.getPolicyMapKey());
+                }
+                if (usibean.getAttestationPreferance()!= null){
+                    usibuilder.setAttestationPreferance(usibean.getAttestationPreferance());
+                }
+                if (usibean.getUserVerificationReq()!= null){
+                    usibuilder.setUserVerificationReq(usibean.getUserVerificationReq());
                 }
                 ZMQSKCEReplicationProtos.UserSessionInfo usiproto
                         = usibuilder

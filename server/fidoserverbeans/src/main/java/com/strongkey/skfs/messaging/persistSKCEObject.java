@@ -256,10 +256,12 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     usersessioninfo.setNonce(usiproto.getNonce());
                     usersessioninfo.setAppid(usiproto.getAppid());
                     usersessioninfo.setSessiontype(usiproto.getSessiontype());
-                    usersessioninfo.setCreationdate(new Date(usiproto.getCreationdate()));
+                    usersessioninfo.setCreationdate(new Date());
                     usersessioninfo.setUserPublicKey(usiproto.getUserPublicKey());
                     usersessioninfo.setMapkey(usiproto.getMapkey());
 
+                    if(usiproto.hasDisplayName()) usersessioninfo.setDisplayName(usiproto.getDisplayName());
+                    if(usiproto.hasRpName()) usersessioninfo.setRpName(usiproto.getRpName());
                     if(usiproto.hasFkid()) usersessioninfo.setFkid((int) usiproto.getFkid());
                     if(usiproto.hasSkid()) usersessioninfo.setSkid((short) usiproto.getSkid());
                     if(usiproto.hasSid()) usersessioninfo.setSid((short) usiproto.getSid());
@@ -267,6 +269,8 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     if(usiproto.hasUserid()) usersessioninfo.setUserId(usiproto.getUserid());
                     if(usiproto.hasUsericon()) usersessioninfo.setUserIcon(usiproto.getUsericon());
                     if(usiproto.hasFidopolicymapkey()) usersessioninfo.setPolicyMapKey(usiproto.getFidopolicymapkey());
+                    if(usiproto.hasAttestationPreferance()) usersessioninfo.setAttestationPreferance(usiproto.getAttestationPreferance());
+                    if(usiproto.hasUserVerificationReq()) usersessioninfo.setuserVerificationReq(usiproto.getUserVerificationReq());
                 } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_MAP_USER_SESSION_INFO [" + objectpk  + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -277,6 +281,9 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
 
                 if (objectop == applianceConstants.REPLICATION_OPERATION_HASHMAP_ADD) {
                     skceMaps.getMapObj().put(skceConstants.MAP_USER_SESSION_INFO, usersessioninfo.getMapkey(), usersessioninfo);
+                    if(skceMaps.getMapObj().containsKey(skceConstants.MAP_USER_SESSION_INFO, usersessioninfo.getMapkey())){
+                        System.out.println(" containing ENTITY_TYPE_MAP_USER_SESSION_INFO [" + objectpk + "] has been added to map");
+                    }
                 }
                 break;
                 

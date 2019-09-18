@@ -59,11 +59,6 @@ Follow the instructions below to install this sample.
     curl -k https://localhost:8181/basicserver/fido2/application.wadl
     ```
 
-7. To test the sample application, open up a browser and go the the following url
-
-    ```
-    https://<FQDN>:8181/basicserver
-    ```
 
 ## Removal
 

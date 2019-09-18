@@ -87,7 +87,8 @@ function get_ip {
 YUM_CMD=$(which yum  2>/dev/null)
 APT_GET_CMD=$(which apt-get 2>/dev/null)
 
-echo "Installing required linux packages ..."
+echo -n "Installing required linux packages (openjdk, unzip, libaio, ncurses-compat-libs[only applicable for Amazon Linux], rng-tools, curl) ... "
+echo -n "The installer will skip packages that do not apply or are already installed. "
 if [[ ! -z $YUM_CMD ]]; then
     yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
     systemctl restart rngd
@@ -103,33 +104,47 @@ else
    echo "error can't install packages"
    exit 1;
 fi
+echo "Successful"
 
+JAVA_CMD=$(java -version 2>&1 >/dev/null | egrep "\S+\s+version")
+
+if [[ ! -z $JAVA_CMD ]]; then
+        :
+else
+        echo "java binary does not exist or cannot be executed"
+        exit 1
+fi
 
 # download required software
 if [ ! -f $SKFS_SOFTWARE/$GLASSFISH ]; then
-        echo "Downloading Payara ..."
+        echo -n "Downloading Payara ... "
         wget http://repo1.maven.org/maven2/fish/payara/distributions/payara/4.1.2.181/payara-4.1.2.181.zip -q
+        echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$MARIA ]; then
-        echo "Downloading MARIADB SERVER ..."
+        echo -n "Downloading Mariadb Server ... "
         wget https://downloads.mariadb.org/interstitial/mariadb-10.2.13/bintar-linux-x86_64/mariadb-10.2.13-linux-x86_64.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/ -O mariadb-10.2.13-linux-x86_64.tar.gz -q
+        echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$MARIACONJAR ]; then
-        echo "Downloading MARIADB JAVA CONNECTOR ..."
+        echo -n "Downloading Mariadb JAVA Connector ... "
         wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.2/mariadb-java-client-2.2.2.jar -q
+        echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
-        echo "Downloading JEMALLOC ..."
+        echo -n "Downloading Jemalloc ... "
         wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/j/jemalloc-3.6.0-1.el7.x86_64.rpm -q
+        echo "Successful"
 fi
 
 
 if [ ! -f $SKFS_SOFTWARE/$OPENDJ ]; then
-        echo "Downloading OpenDJ ..."
+        echo -n "Downloading OpenDJ ... "
         wget https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/OpenDJ-3.0.0.zip -q
+        echo "Successful"
 fi
 
 # Make sure we can resolve our own hostname
@@ -211,11 +226,11 @@ fi
 mkdir -p $STRONGKEY_HOME/certs $STRONGKEY_HOME/Desktop $STRONGKEY_HOME/dbdumps $STRONGKEY_HOME/lib $STRONGKEY_HOME/bin $STRONGKEY_HOME/appliance/etc $STRONGKEY_HOME/crypto/etc $SKFS_HOME/etc $SKFS_HOME/keystores
 
 ##### Install Fido #####
+cp $SKFS_SOFTWARE/certimport.sh $STRONGKEY_HOME/bin
 if [ $INSTALL_FIDO = 'Y' ]; then
 
-        echo "Installing SKFS..."
+        echo -n "Installing StrongKey FIDO2 Server (SKFS) ... " 
 
-        cp $SKFS_SOFTWARE/certimport.sh $STRONGKEY_HOME/bin
         cp $STRONGKEY_HOME/bin/* $STRONGKEY_HOME/Desktop/
 
         chmod 700 $STRONGKEY_HOME/Desktop/*.sh
@@ -233,12 +248,13 @@ if [ $INSTALL_FIDO = 'Y' ]; then
         cp $SKFS_SOFTWARE/signingkeystore.bcfks $SKFS_SOFTWARE/signingtruststore.bcfks $SKFS_HOME/keystores
         cp -R $SKFS_SOFTWARE/keymanager $STRONGKEY_HOME/
         cp -R $SKFS_SOFTWARE/apiclient $STRONGKEY_HOME/
+        echo "Successful"
 
 fi
 
 ##### MariaDB #####
 if [ $INSTALL_MARIA = 'Y' ]; then
-        echo "Installing MariaDB..."
+        echo -n "Installing MariaDB... "
         if [ $SHOWALL ]; then
                 tar zxvf $SKFS_SOFTWARE/$MARIA -C $STRONGKEY_HOME
         else
@@ -286,11 +302,22 @@ if [ $INSTALL_MARIA = 'Y' ]; then
 	thread_cache_size               = 1000
 	expire_logs_days                = 10
 	EOFMYCNF
+
+        echo "Successful"
+fi
+
+MYSQL_CMD=$(which yum  2>/dev/null)
+
+if [[ ! -z $MYSQL_CMD ]]; then
+        :
+else
+        echo "mysql binary does not exist or cannot be executed."
+        exit 1
 fi
 
 ##### Payara #####
 if [ $INSTALL_GLASSFISH = 'Y' ]; then
-        echo "Installing Payara..."
+        echo -n "Installing Payara... " 
         if [ $SHOWALL ]; then
                 unzip $SKFS_SOFTWARE/$GLASSFISH -d $STRONGKEY_HOME
         else
@@ -318,13 +345,15 @@ if [ $INSTALL_GLASSFISH = 'Y' ]; then
         keytool -importcert -noprompt -alias $(hostname) -file $STRONGKEY_HOME/certs/$(hostname).der --keystore $STRONGKEY_HOME/certs/cacerts -storepass changeit &>/dev/null
         keytool -importcert -noprompt -alias $(hostname) -file $STRONGKEY_HOME/certs/$(hostname).der --keystore $GLASSFISH_CONFIG/cacerts.jks -storepass changeit &>/dev/null
 
+        echo "Successful"
         ##### MariaDB JDBC Driver #####
-        echo "Installing JDBC Driver..."
+        echo -n "Installing JDBC Driver... "
         cp $SKFS_SOFTWARE/$MARIACONJAR $GLASSFISH_HOME/lib
+        echo "Successful"
 fi
 
 if [ $INSTALL_OPENDJ = 'Y' ]; then
-        echo "Installing OpenDJ..."
+        echo -n "Installing OpenDJ... "
         if [ $SHOWALL ]; then
                 unzip $SKFS_SOFTWARE/$OPENDJ -d $STRONGKEY_HOME
         else
@@ -362,6 +391,7 @@ if [ $INSTALL_OPENDJ = 'Y' ]; then
         cp $SKFS_SOFTWARE/opendjd /etc/init.d/
         chmod 755 /etc/init.d/opendjd
         /lib/systemd/systemd-sysv-install enable opendjd
+        echo "Successful"
 fi                
 
 ##### Change ownership of files #####
@@ -391,7 +421,7 @@ sed -r "s|dc=strongauth,dc=com|$SERVICE_LDAP_BASEDN|
         s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
         s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKCE_LDIF > /tmp/skce.ldif
 
-echo "Importing default users..."
+echo -n "Importing default users... "
 $OPENDJ_HOME/bin/ldapmodify --filename /tmp/skce.ldif \
                              --hostName $(hostname) \
                              --port 1389 \
@@ -401,6 +431,7 @@ $OPENDJ_HOME/bin/ldapmodify --filename /tmp/skce.ldif \
                              --noPropertiesFile \
                              --defaultAdd >/dev/null
 
+echo "Successful"
 
 ##### Start MariaDB and Payara #####
 echo -n "Creating $DBSIZE SKFS Internal Database..."
@@ -507,7 +538,7 @@ EOFAPPJSON
 	done
 
 	chown strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
-	echo "Deploying StrongKey FidoServer ..."
+	echo -n "Deploying StrongKey FidoServer ... "
 	cp $SKFS_SOFTWARE/fidoserver.ear /tmp
 	$GLASSFISH_HOME/bin/asadmin deploy /tmp/fidoserver.ear
 	rm /tmp/fidoserver.ear

@@ -13,15 +13,17 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * [The FIDO2 Project](https://fidoalliance.org/fido2/)
 
 ## Installation
-Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download the FIDO2 Server and get it running.
+1) Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download the FIDO2 Server and get it running as a stand-alone server.
+2) Follow [the clustering instructions](docs/Clustering_Guide_Linux.md) to download the FIDO2 Server and get it running as a cluster.
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
 
 * Java Samples
   * [DEMO](https://fido2.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication.
-  * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java Sample application.
+  * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application.
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application.
+  * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/android/): Proof of concept Android application.
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)

@@ -94,7 +94,12 @@ public class skfsCommon {
         try {
             while (it.hasNext()) {
                 String key = (String) it.next();
-                baos.write(("\n\t" + key + ": " + defaultSKFEConfig.getString(key)).getBytes());
+                baos.write(("\n\t" + key + ": ").getBytes());
+                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
+                    baos.write(("**********").getBytes());
+                } else {
+                    baos.write((defaultSKFEConfig.getString(key)).getBytes());
+                }
             }
             baos.close();
         } catch (IOException ex) {
@@ -145,7 +150,13 @@ public class skfsCommon {
 
             while (it.hasNext()) {
                 String key = (String) it.next();
-                baos.write(("\n\t" + key + ": " + skcehrb.getString(key)).getBytes());
+                baos.write(("\n\t" + key + ": ").getBytes());
+                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
+                    baos.write(("**********").getBytes());
+                } else {
+                    baos.write(skcehrb.getString(key).getBytes());
+                }
+                
             }
             baos.close();
 

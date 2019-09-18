@@ -7896,166 +7896,222 @@ public final class ZMQSKCEReplicationProtos {
         getUsernameBytes();
 
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>optional string displayName = 2;</code>
+     */
+    boolean hasDisplayName();
+    /**
+     * <code>optional string displayName = 2;</code>
+     */
+    java.lang.String getDisplayName();
+    /**
+     * <code>optional string displayName = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getDisplayNameBytes();
+
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    boolean hasRpName();
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    java.lang.String getRpName();
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getRpNameBytes();
+
+    /**
+     * <code>required string nonce = 4;</code>
      */
     boolean hasNonce();
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>required string nonce = 4;</code>
      */
     java.lang.String getNonce();
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>required string nonce = 4;</code>
      */
     com.google.protobuf.ByteString
         getNonceBytes();
 
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     boolean hasAppid();
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     java.lang.String getAppid();
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     com.google.protobuf.ByteString
         getAppidBytes();
 
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     boolean hasSessiontype();
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     java.lang.String getSessiontype();
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     com.google.protobuf.ByteString
         getSessiontypeBytes();
 
     /**
-     * <code>required int64 creationdate = 5;</code>
+     * <code>required int64 creationdate = 7;</code>
      */
     boolean hasCreationdate();
     /**
-     * <code>required int64 creationdate = 5;</code>
+     * <code>required int64 creationdate = 7;</code>
      */
     long getCreationdate();
 
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     boolean hasUserPublicKey();
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     java.lang.String getUserPublicKey();
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     com.google.protobuf.ByteString
         getUserPublicKeyBytes();
 
     /**
-     * <code>optional int64 fkid = 7;</code>
+     * <code>optional int64 fkid = 9;</code>
      */
     boolean hasFkid();
     /**
-     * <code>optional int64 fkid = 7;</code>
+     * <code>optional int64 fkid = 9;</code>
      */
     long getFkid();
 
     /**
-     * <code>optional int64 skid = 8;</code>
+     * <code>optional int64 skid = 10;</code>
      */
     boolean hasSkid();
     /**
-     * <code>optional int64 skid = 8;</code>
+     * <code>optional int64 skid = 10;</code>
      */
     long getSkid();
 
     /**
-     * <code>optional int64 sid = 9;</code>
+     * <code>optional int64 sid = 11;</code>
      */
     boolean hasSid();
     /**
-     * <code>optional int64 sid = 9;</code>
+     * <code>optional int64 sid = 11;</code>
      */
     long getSid();
 
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     boolean hasSessionid();
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     java.lang.String getSessionid();
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     com.google.protobuf.ByteString
         getSessionidBytes();
 
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     boolean hasMapkey();
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     java.lang.String getMapkey();
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     com.google.protobuf.ByteString
         getMapkeyBytes();
 
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     boolean hasUserid();
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     java.lang.String getUserid();
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     com.google.protobuf.ByteString
         getUseridBytes();
 
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     boolean hasUsericon();
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     java.lang.String getUsericon();
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     com.google.protobuf.ByteString
         getUsericonBytes();
 
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     boolean hasFidopolicymapkey();
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     java.lang.String getFidopolicymapkey();
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     com.google.protobuf.ByteString
         getFidopolicymapkeyBytes();
+
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    boolean hasUserVerificationReq();
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    java.lang.String getUserVerificationReq();
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    com.google.protobuf.ByteString
+        getUserVerificationReqBytes();
+
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    boolean hasAttestationPreferance();
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    java.lang.String getAttestationPreferance();
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    com.google.protobuf.ByteString
+        getAttestationPreferanceBytes();
   }
   /**
    * Protobuf type {@code com.strongkey.skfs.messaging.UserSessionInfo}
@@ -8118,75 +8174,99 @@ public final class ZMQSKCEReplicationProtos {
             case 18: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              nonce_ = bs;
+              displayName_ = bs;
               break;
             }
             case 26: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              appid_ = bs;
+              rpName_ = bs;
               break;
             }
             case 34: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              sessiontype_ = bs;
+              nonce_ = bs;
               break;
             }
-            case 40: {
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              creationdate_ = input.readInt64();
+              appid_ = bs;
               break;
             }
             case 50: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              userPublicKey_ = bs;
+              sessiontype_ = bs;
               break;
             }
             case 56: {
               bitField0_ |= 0x00000040;
-              fkid_ = input.readInt64();
+              creationdate_ = input.readInt64();
               break;
             }
-            case 64: {
+            case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              skid_ = input.readInt64();
+              userPublicKey_ = bs;
               break;
             }
             case 72: {
               bitField0_ |= 0x00000100;
-              sid_ = input.readInt64();
+              fkid_ = input.readInt64();
               break;
             }
-            case 82: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 80: {
               bitField0_ |= 0x00000200;
-              sessionid_ = bs;
+              skid_ = input.readInt64();
               break;
             }
-            case 90: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 88: {
               bitField0_ |= 0x00000400;
-              mapkey_ = bs;
+              sid_ = input.readInt64();
               break;
             }
             case 98: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              userid_ = bs;
+              sessionid_ = bs;
               break;
             }
             case 106: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              usericon_ = bs;
+              mapkey_ = bs;
               break;
             }
             case 114: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
+              userid_ = bs;
+              break;
+            }
+            case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00004000;
+              usericon_ = bs;
+              break;
+            }
+            case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00008000;
               fidopolicymapkey_ = bs;
+              break;
+            }
+            case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00010000;
+              userVerificationReq_ = bs;
+              break;
+            }
+            case 146: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00020000;
+              attestationPreferance_ = bs;
               break;
             }
           }
@@ -8271,16 +8351,100 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int NONCE_FIELD_NUMBER = 2;
-    private java.lang.Object nonce_;
+    public static final int DISPLAYNAME_FIELD_NUMBER = 2;
+    private java.lang.Object displayName_;
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>optional string displayName = 2;</code>
      */
-    public boolean hasNonce() {
+    public boolean hasDisplayName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>optional string displayName = 2;</code>
+     */
+    public java.lang.String getDisplayName() {
+      java.lang.Object ref = displayName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          displayName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string displayName = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDisplayNameBytes() {
+      java.lang.Object ref = displayName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        displayName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int RPNAME_FIELD_NUMBER = 3;
+    private java.lang.Object rpName_;
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    public boolean hasRpName() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    public java.lang.String getRpName() {
+      java.lang.Object ref = rpName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          rpName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string rpName = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRpNameBytes() {
+      java.lang.Object ref = rpName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        rpName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NONCE_FIELD_NUMBER = 4;
+    private java.lang.Object nonce_;
+    /**
+     * <code>required string nonce = 4;</code>
+     */
+    public boolean hasNonce() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required string nonce = 4;</code>
      */
     public java.lang.String getNonce() {
       java.lang.Object ref = nonce_;
@@ -8297,7 +8461,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string nonce = 2;</code>
+     * <code>required string nonce = 4;</code>
      */
     public com.google.protobuf.ByteString
         getNonceBytes() {
@@ -8313,16 +8477,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int APPID_FIELD_NUMBER = 3;
+    public static final int APPID_FIELD_NUMBER = 5;
     private java.lang.Object appid_;
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     public boolean hasAppid() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     public java.lang.String getAppid() {
       java.lang.Object ref = appid_;
@@ -8339,7 +8503,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string appid = 3;</code>
+     * <code>required string appid = 5;</code>
      */
     public com.google.protobuf.ByteString
         getAppidBytes() {
@@ -8355,16 +8519,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int SESSIONTYPE_FIELD_NUMBER = 4;
+    public static final int SESSIONTYPE_FIELD_NUMBER = 6;
     private java.lang.Object sessiontype_;
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     public boolean hasSessiontype() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     public java.lang.String getSessiontype() {
       java.lang.Object ref = sessiontype_;
@@ -8381,7 +8545,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string sessiontype = 4;</code>
+     * <code>required string sessiontype = 6;</code>
      */
     public com.google.protobuf.ByteString
         getSessiontypeBytes() {
@@ -8397,31 +8561,31 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int CREATIONDATE_FIELD_NUMBER = 5;
+    public static final int CREATIONDATE_FIELD_NUMBER = 7;
     private long creationdate_;
     /**
-     * <code>required int64 creationdate = 5;</code>
+     * <code>required int64 creationdate = 7;</code>
      */
     public boolean hasCreationdate() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>required int64 creationdate = 5;</code>
+     * <code>required int64 creationdate = 7;</code>
      */
     public long getCreationdate() {
       return creationdate_;
     }
 
-    public static final int USER_PUBLIC_KEY_FIELD_NUMBER = 6;
+    public static final int USER_PUBLIC_KEY_FIELD_NUMBER = 8;
     private java.lang.Object userPublicKey_;
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     public boolean hasUserPublicKey() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     public java.lang.String getUserPublicKey() {
       java.lang.Object ref = userPublicKey_;
@@ -8438,7 +8602,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string user_public_key = 6;</code>
+     * <code>required string user_public_key = 8;</code>
      */
     public com.google.protobuf.ByteString
         getUserPublicKeyBytes() {
@@ -8454,61 +8618,61 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int FKID_FIELD_NUMBER = 7;
+    public static final int FKID_FIELD_NUMBER = 9;
     private long fkid_;
     /**
-     * <code>optional int64 fkid = 7;</code>
+     * <code>optional int64 fkid = 9;</code>
      */
     public boolean hasFkid() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional int64 fkid = 7;</code>
+     * <code>optional int64 fkid = 9;</code>
      */
     public long getFkid() {
       return fkid_;
     }
 
-    public static final int SKID_FIELD_NUMBER = 8;
+    public static final int SKID_FIELD_NUMBER = 10;
     private long skid_;
     /**
-     * <code>optional int64 skid = 8;</code>
+     * <code>optional int64 skid = 10;</code>
      */
     public boolean hasSkid() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>optional int64 skid = 8;</code>
+     * <code>optional int64 skid = 10;</code>
      */
     public long getSkid() {
       return skid_;
     }
 
-    public static final int SID_FIELD_NUMBER = 9;
+    public static final int SID_FIELD_NUMBER = 11;
     private long sid_;
     /**
-     * <code>optional int64 sid = 9;</code>
+     * <code>optional int64 sid = 11;</code>
      */
     public boolean hasSid() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional int64 sid = 9;</code>
+     * <code>optional int64 sid = 11;</code>
      */
     public long getSid() {
       return sid_;
     }
 
-    public static final int SESSIONID_FIELD_NUMBER = 10;
+    public static final int SESSIONID_FIELD_NUMBER = 12;
     private java.lang.Object sessionid_;
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     public boolean hasSessionid() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     public java.lang.String getSessionid() {
       java.lang.Object ref = sessionid_;
@@ -8525,7 +8689,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string sessionid = 10;</code>
+     * <code>optional string sessionid = 12;</code>
      */
     public com.google.protobuf.ByteString
         getSessionidBytes() {
@@ -8541,16 +8705,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int MAPKEY_FIELD_NUMBER = 11;
+    public static final int MAPKEY_FIELD_NUMBER = 13;
     private java.lang.Object mapkey_;
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     public boolean hasMapkey() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     public java.lang.String getMapkey() {
       java.lang.Object ref = mapkey_;
@@ -8567,7 +8731,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string mapkey = 11;</code>
+     * <code>required string mapkey = 13;</code>
      */
     public com.google.protobuf.ByteString
         getMapkeyBytes() {
@@ -8583,16 +8747,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int USERID_FIELD_NUMBER = 12;
+    public static final int USERID_FIELD_NUMBER = 14;
     private java.lang.Object userid_;
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     public boolean hasUserid() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     public java.lang.String getUserid() {
       java.lang.Object ref = userid_;
@@ -8609,7 +8773,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string userid = 12;</code>
+     * <code>optional string userid = 14;</code>
      */
     public com.google.protobuf.ByteString
         getUseridBytes() {
@@ -8625,16 +8789,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int USERICON_FIELD_NUMBER = 13;
+    public static final int USERICON_FIELD_NUMBER = 15;
     private java.lang.Object usericon_;
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     public boolean hasUsericon() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     public java.lang.String getUsericon() {
       java.lang.Object ref = usericon_;
@@ -8651,7 +8815,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string usericon = 13;</code>
+     * <code>optional string usericon = 15;</code>
      */
     public com.google.protobuf.ByteString
         getUsericonBytes() {
@@ -8667,16 +8831,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int FIDOPOLICYMAPKEY_FIELD_NUMBER = 14;
+    public static final int FIDOPOLICYMAPKEY_FIELD_NUMBER = 16;
     private java.lang.Object fidopolicymapkey_;
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     public boolean hasFidopolicymapkey() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     public java.lang.String getFidopolicymapkey() {
       java.lang.Object ref = fidopolicymapkey_;
@@ -8693,7 +8857,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string fidopolicymapkey = 14;</code>
+     * <code>optional string fidopolicymapkey = 16;</code>
      */
     public com.google.protobuf.ByteString
         getFidopolicymapkeyBytes() {
@@ -8709,8 +8873,94 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
+    public static final int USERVERIFICATIONREQ_FIELD_NUMBER = 17;
+    private java.lang.Object userVerificationReq_;
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    public boolean hasUserVerificationReq() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    public java.lang.String getUserVerificationReq() {
+      java.lang.Object ref = userVerificationReq_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          userVerificationReq_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string userVerificationReq = 17;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserVerificationReqBytes() {
+      java.lang.Object ref = userVerificationReq_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        userVerificationReq_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ATTESTATIONPREFERANCE_FIELD_NUMBER = 18;
+    private java.lang.Object attestationPreferance_;
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    public boolean hasAttestationPreferance() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    public java.lang.String getAttestationPreferance() {
+      java.lang.Object ref = attestationPreferance_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          attestationPreferance_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string attestationPreferance = 18;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAttestationPreferanceBytes() {
+      java.lang.Object ref = attestationPreferance_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        attestationPreferance_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       username_ = "";
+      displayName_ = "";
+      rpName_ = "";
       nonce_ = "";
       appid_ = "";
       sessiontype_ = "";
@@ -8724,6 +8974,8 @@ public final class ZMQSKCEReplicationProtos {
       userid_ = "";
       usericon_ = "";
       fidopolicymapkey_ = "";
+      userVerificationReq_ = "";
+      attestationPreferance_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -8770,43 +9022,55 @@ public final class ZMQSKCEReplicationProtos {
         output.writeBytes(1, getUsernameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getNonceBytes());
+        output.writeBytes(2, getDisplayNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getAppidBytes());
+        output.writeBytes(3, getRpNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getSessiontypeBytes());
+        output.writeBytes(4, getNonceBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt64(5, creationdate_);
+        output.writeBytes(5, getAppidBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, getUserPublicKeyBytes());
+        output.writeBytes(6, getSessiontypeBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt64(7, fkid_);
+        output.writeInt64(7, creationdate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt64(8, skid_);
+        output.writeBytes(8, getUserPublicKeyBytes());
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeInt64(9, sid_);
+        output.writeInt64(9, fkid_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeBytes(10, getSessionidBytes());
+        output.writeInt64(10, skid_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeBytes(11, getMapkeyBytes());
+        output.writeInt64(11, sid_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeBytes(12, getUseridBytes());
+        output.writeBytes(12, getSessionidBytes());
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBytes(13, getUsericonBytes());
+        output.writeBytes(13, getMapkeyBytes());
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(14, getFidopolicymapkeyBytes());
+        output.writeBytes(14, getUseridBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeBytes(15, getUsericonBytes());
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBytes(16, getFidopolicymapkeyBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeBytes(17, getUserVerificationReqBytes());
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeBytes(18, getAttestationPreferanceBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -8823,55 +9087,71 @@ public final class ZMQSKCEReplicationProtos {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getNonceBytes());
+          .computeBytesSize(2, getDisplayNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getAppidBytes());
+          .computeBytesSize(3, getRpNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getSessiontypeBytes());
+          .computeBytesSize(4, getNonceBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(5, creationdate_);
+          .computeBytesSize(5, getAppidBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, getUserPublicKeyBytes());
+          .computeBytesSize(6, getSessiontypeBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(7, fkid_);
+          .computeInt64Size(7, creationdate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(8, skid_);
+          .computeBytesSize(8, getUserPublicKeyBytes());
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(9, sid_);
+          .computeInt64Size(9, fkid_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(10, getSessionidBytes());
+          .computeInt64Size(10, skid_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(11, getMapkeyBytes());
+          .computeInt64Size(11, sid_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(12, getUseridBytes());
+          .computeBytesSize(12, getSessionidBytes());
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(13, getUsericonBytes());
+          .computeBytesSize(13, getMapkeyBytes());
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(14, getFidopolicymapkeyBytes());
+          .computeBytesSize(14, getUseridBytes());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(15, getUsericonBytes());
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(16, getFidopolicymapkeyBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(17, getUserVerificationReqBytes());
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(18, getAttestationPreferanceBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -8992,32 +9272,40 @@ public final class ZMQSKCEReplicationProtos {
         super.clear();
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        nonce_ = "";
+        displayName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        appid_ = "";
+        rpName_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        sessiontype_ = "";
+        nonce_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        creationdate_ = 0L;
+        appid_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        userPublicKey_ = "";
+        sessiontype_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        fkid_ = 0L;
+        creationdate_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000040);
-        skid_ = 0L;
+        userPublicKey_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
-        sid_ = 0L;
+        fkid_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000100);
-        sessionid_ = "";
+        skid_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000200);
-        mapkey_ = "";
+        sid_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000400);
-        userid_ = "";
+        sessionid_ = "";
         bitField0_ = (bitField0_ & ~0x00000800);
-        usericon_ = "";
+        mapkey_ = "";
         bitField0_ = (bitField0_ & ~0x00001000);
-        fidopolicymapkey_ = "";
+        userid_ = "";
         bitField0_ = (bitField0_ & ~0x00002000);
+        usericon_ = "";
+        bitField0_ = (bitField0_ & ~0x00004000);
+        fidopolicymapkey_ = "";
+        bitField0_ = (bitField0_ & ~0x00008000);
+        userVerificationReq_ = "";
+        bitField0_ = (bitField0_ & ~0x00010000);
+        attestationPreferance_ = "";
+        bitField0_ = (bitField0_ & ~0x00020000);
         return this;
       }
 
@@ -9053,55 +9341,71 @@ public final class ZMQSKCEReplicationProtos {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.nonce_ = nonce_;
+        result.displayName_ = displayName_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.appid_ = appid_;
+        result.rpName_ = rpName_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.sessiontype_ = sessiontype_;
+        result.nonce_ = nonce_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.creationdate_ = creationdate_;
+        result.appid_ = appid_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.userPublicKey_ = userPublicKey_;
+        result.sessiontype_ = sessiontype_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.fkid_ = fkid_;
+        result.creationdate_ = creationdate_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.skid_ = skid_;
+        result.userPublicKey_ = userPublicKey_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
         }
-        result.sid_ = sid_;
+        result.fkid_ = fkid_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.sessionid_ = sessionid_;
+        result.skid_ = skid_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000400;
         }
-        result.mapkey_ = mapkey_;
+        result.sid_ = sid_;
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.userid_ = userid_;
+        result.sessionid_ = sessionid_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00001000;
         }
-        result.usericon_ = usericon_;
+        result.mapkey_ = mapkey_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00002000;
         }
+        result.userid_ = userid_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.usericon_ = usericon_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
+        }
         result.fidopolicymapkey_ = fidopolicymapkey_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        result.userVerificationReq_ = userVerificationReq_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        result.attestationPreferance_ = attestationPreferance_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -9123,18 +9427,28 @@ public final class ZMQSKCEReplicationProtos {
           username_ = other.username_;
           onChanged();
         }
-        if (other.hasNonce()) {
+        if (other.hasDisplayName()) {
           bitField0_ |= 0x00000002;
+          displayName_ = other.displayName_;
+          onChanged();
+        }
+        if (other.hasRpName()) {
+          bitField0_ |= 0x00000004;
+          rpName_ = other.rpName_;
+          onChanged();
+        }
+        if (other.hasNonce()) {
+          bitField0_ |= 0x00000008;
           nonce_ = other.nonce_;
           onChanged();
         }
         if (other.hasAppid()) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000010;
           appid_ = other.appid_;
           onChanged();
         }
         if (other.hasSessiontype()) {
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000020;
           sessiontype_ = other.sessiontype_;
           onChanged();
         }
@@ -9142,7 +9456,7 @@ public final class ZMQSKCEReplicationProtos {
           setCreationdate(other.getCreationdate());
         }
         if (other.hasUserPublicKey()) {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000080;
           userPublicKey_ = other.userPublicKey_;
           onChanged();
         }
@@ -9156,28 +9470,38 @@ public final class ZMQSKCEReplicationProtos {
           setSid(other.getSid());
         }
         if (other.hasSessionid()) {
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000800;
           sessionid_ = other.sessionid_;
           onChanged();
         }
         if (other.hasMapkey()) {
-          bitField0_ |= 0x00000400;
+          bitField0_ |= 0x00001000;
           mapkey_ = other.mapkey_;
           onChanged();
         }
         if (other.hasUserid()) {
-          bitField0_ |= 0x00000800;
+          bitField0_ |= 0x00002000;
           userid_ = other.userid_;
           onChanged();
         }
         if (other.hasUsericon()) {
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00004000;
           usericon_ = other.usericon_;
           onChanged();
         }
         if (other.hasFidopolicymapkey()) {
-          bitField0_ |= 0x00002000;
+          bitField0_ |= 0x00008000;
           fidopolicymapkey_ = other.fidopolicymapkey_;
+          onChanged();
+        }
+        if (other.hasUserVerificationReq()) {
+          bitField0_ |= 0x00010000;
+          userVerificationReq_ = other.userVerificationReq_;
+          onChanged();
+        }
+        if (other.hasAttestationPreferance()) {
+          bitField0_ |= 0x00020000;
+          attestationPreferance_ = other.attestationPreferance_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -9311,15 +9635,167 @@ public final class ZMQSKCEReplicationProtos {
         return this;
       }
 
-      private java.lang.Object nonce_ = "";
+      private java.lang.Object displayName_ = "";
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>optional string displayName = 2;</code>
        */
-      public boolean hasNonce() {
+      public boolean hasDisplayName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>optional string displayName = 2;</code>
+       */
+      public java.lang.String getDisplayName() {
+        java.lang.Object ref = displayName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            displayName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string displayName = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDisplayNameBytes() {
+        java.lang.Object ref = displayName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          displayName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string displayName = 2;</code>
+       */
+      public Builder setDisplayName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        displayName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string displayName = 2;</code>
+       */
+      public Builder clearDisplayName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        displayName_ = getDefaultInstance().getDisplayName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string displayName = 2;</code>
+       */
+      public Builder setDisplayNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        displayName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object rpName_ = "";
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public boolean hasRpName() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public java.lang.String getRpName() {
+        java.lang.Object ref = rpName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            rpName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRpNameBytes() {
+        java.lang.Object ref = rpName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          rpName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public Builder setRpName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        rpName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public Builder clearRpName() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        rpName_ = getDefaultInstance().getRpName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string rpName = 3;</code>
+       */
+      public Builder setRpNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        rpName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object nonce_ = "";
+      /**
+       * <code>required string nonce = 4;</code>
+       */
+      public boolean hasNonce() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required string nonce = 4;</code>
        */
       public java.lang.String getNonce() {
         java.lang.Object ref = nonce_;
@@ -9336,7 +9812,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>required string nonce = 4;</code>
        */
       public com.google.protobuf.ByteString
           getNonceBytes() {
@@ -9352,36 +9828,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>required string nonce = 4;</code>
        */
       public Builder setNonce(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000008;
         nonce_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>required string nonce = 4;</code>
        */
       public Builder clearNonce() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000008);
         nonce_ = getDefaultInstance().getNonce();
         onChanged();
         return this;
       }
       /**
-       * <code>required string nonce = 2;</code>
+       * <code>required string nonce = 4;</code>
        */
       public Builder setNonceBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000008;
         nonce_ = value;
         onChanged();
         return this;
@@ -9389,13 +9865,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object appid_ = "";
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public boolean hasAppid() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public java.lang.String getAppid() {
         java.lang.Object ref = appid_;
@@ -9412,7 +9888,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public com.google.protobuf.ByteString
           getAppidBytes() {
@@ -9428,36 +9904,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public Builder setAppid(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000010;
         appid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public Builder clearAppid() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000010);
         appid_ = getDefaultInstance().getAppid();
         onChanged();
         return this;
       }
       /**
-       * <code>required string appid = 3;</code>
+       * <code>required string appid = 5;</code>
        */
       public Builder setAppidBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000010;
         appid_ = value;
         onChanged();
         return this;
@@ -9465,13 +9941,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object sessiontype_ = "";
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public boolean hasSessiontype() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public java.lang.String getSessiontype() {
         java.lang.Object ref = sessiontype_;
@@ -9488,7 +9964,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public com.google.protobuf.ByteString
           getSessiontypeBytes() {
@@ -9504,36 +9980,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public Builder setSessiontype(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000020;
         sessiontype_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public Builder clearSessiontype() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000020);
         sessiontype_ = getDefaultInstance().getSessiontype();
         onChanged();
         return this;
       }
       /**
-       * <code>required string sessiontype = 4;</code>
+       * <code>required string sessiontype = 6;</code>
        */
       public Builder setSessiontypeBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000020;
         sessiontype_ = value;
         onChanged();
         return this;
@@ -9541,31 +10017,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long creationdate_ ;
       /**
-       * <code>required int64 creationdate = 5;</code>
+       * <code>required int64 creationdate = 7;</code>
        */
       public boolean hasCreationdate() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required int64 creationdate = 5;</code>
+       * <code>required int64 creationdate = 7;</code>
        */
       public long getCreationdate() {
         return creationdate_;
       }
       /**
-       * <code>required int64 creationdate = 5;</code>
+       * <code>required int64 creationdate = 7;</code>
        */
       public Builder setCreationdate(long value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000040;
         creationdate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int64 creationdate = 5;</code>
+       * <code>required int64 creationdate = 7;</code>
        */
       public Builder clearCreationdate() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000040);
         creationdate_ = 0L;
         onChanged();
         return this;
@@ -9573,13 +10049,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object userPublicKey_ = "";
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public boolean hasUserPublicKey() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public java.lang.String getUserPublicKey() {
         java.lang.Object ref = userPublicKey_;
@@ -9596,7 +10072,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public com.google.protobuf.ByteString
           getUserPublicKeyBytes() {
@@ -9612,36 +10088,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public Builder setUserPublicKey(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000080;
         userPublicKey_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public Builder clearUserPublicKey() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000080);
         userPublicKey_ = getDefaultInstance().getUserPublicKey();
         onChanged();
         return this;
       }
       /**
-       * <code>required string user_public_key = 6;</code>
+       * <code>required string user_public_key = 8;</code>
        */
       public Builder setUserPublicKeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000080;
         userPublicKey_ = value;
         onChanged();
         return this;
@@ -9649,31 +10125,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long fkid_ ;
       /**
-       * <code>optional int64 fkid = 7;</code>
+       * <code>optional int64 fkid = 9;</code>
        */
       public boolean hasFkid() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional int64 fkid = 7;</code>
+       * <code>optional int64 fkid = 9;</code>
        */
       public long getFkid() {
         return fkid_;
       }
       /**
-       * <code>optional int64 fkid = 7;</code>
+       * <code>optional int64 fkid = 9;</code>
        */
       public Builder setFkid(long value) {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000100;
         fkid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 fkid = 7;</code>
+       * <code>optional int64 fkid = 9;</code>
        */
       public Builder clearFkid() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000100);
         fkid_ = 0L;
         onChanged();
         return this;
@@ -9681,31 +10157,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long skid_ ;
       /**
-       * <code>optional int64 skid = 8;</code>
+       * <code>optional int64 skid = 10;</code>
        */
       public boolean hasSkid() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional int64 skid = 8;</code>
+       * <code>optional int64 skid = 10;</code>
        */
       public long getSkid() {
         return skid_;
       }
       /**
-       * <code>optional int64 skid = 8;</code>
+       * <code>optional int64 skid = 10;</code>
        */
       public Builder setSkid(long value) {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000200;
         skid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 skid = 8;</code>
+       * <code>optional int64 skid = 10;</code>
        */
       public Builder clearSkid() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000200);
         skid_ = 0L;
         onChanged();
         return this;
@@ -9713,31 +10189,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long sid_ ;
       /**
-       * <code>optional int64 sid = 9;</code>
+       * <code>optional int64 sid = 11;</code>
        */
       public boolean hasSid() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional int64 sid = 9;</code>
+       * <code>optional int64 sid = 11;</code>
        */
       public long getSid() {
         return sid_;
       }
       /**
-       * <code>optional int64 sid = 9;</code>
+       * <code>optional int64 sid = 11;</code>
        */
       public Builder setSid(long value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000400;
         sid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 sid = 9;</code>
+       * <code>optional int64 sid = 11;</code>
        */
       public Builder clearSid() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000400);
         sid_ = 0L;
         onChanged();
         return this;
@@ -9745,13 +10221,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object sessionid_ = "";
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public boolean hasSessionid() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public java.lang.String getSessionid() {
         java.lang.Object ref = sessionid_;
@@ -9768,7 +10244,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public com.google.protobuf.ByteString
           getSessionidBytes() {
@@ -9784,36 +10260,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public Builder setSessionid(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000800;
         sessionid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public Builder clearSessionid() {
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000800);
         sessionid_ = getDefaultInstance().getSessionid();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string sessionid = 10;</code>
+       * <code>optional string sessionid = 12;</code>
        */
       public Builder setSessionidBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000800;
         sessionid_ = value;
         onChanged();
         return this;
@@ -9821,13 +10297,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object mapkey_ = "";
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public boolean hasMapkey() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public java.lang.String getMapkey() {
         java.lang.Object ref = mapkey_;
@@ -9844,7 +10320,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public com.google.protobuf.ByteString
           getMapkeyBytes() {
@@ -9860,36 +10336,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public Builder setMapkey(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000400;
+  bitField0_ |= 0x00001000;
         mapkey_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public Builder clearMapkey() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00001000);
         mapkey_ = getDefaultInstance().getMapkey();
         onChanged();
         return this;
       }
       /**
-       * <code>required string mapkey = 11;</code>
+       * <code>required string mapkey = 13;</code>
        */
       public Builder setMapkeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000400;
+  bitField0_ |= 0x00001000;
         mapkey_ = value;
         onChanged();
         return this;
@@ -9897,13 +10373,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object userid_ = "";
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public boolean hasUserid() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public java.lang.String getUserid() {
         java.lang.Object ref = userid_;
@@ -9920,7 +10396,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public com.google.protobuf.ByteString
           getUseridBytes() {
@@ -9936,36 +10412,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public Builder setUserid(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000800;
+  bitField0_ |= 0x00002000;
         userid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public Builder clearUserid() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00002000);
         userid_ = getDefaultInstance().getUserid();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string userid = 12;</code>
+       * <code>optional string userid = 14;</code>
        */
       public Builder setUseridBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000800;
+  bitField0_ |= 0x00002000;
         userid_ = value;
         onChanged();
         return this;
@@ -9973,13 +10449,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object usericon_ = "";
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public boolean hasUsericon() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public java.lang.String getUsericon() {
         java.lang.Object ref = usericon_;
@@ -9996,7 +10472,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public com.google.protobuf.ByteString
           getUsericonBytes() {
@@ -10012,36 +10488,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public Builder setUsericon(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00004000;
         usericon_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public Builder clearUsericon() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         usericon_ = getDefaultInstance().getUsericon();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string usericon = 13;</code>
+       * <code>optional string usericon = 15;</code>
        */
       public Builder setUsericonBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00004000;
         usericon_ = value;
         onChanged();
         return this;
@@ -10049,13 +10525,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object fidopolicymapkey_ = "";
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public boolean hasFidopolicymapkey() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public java.lang.String getFidopolicymapkey() {
         java.lang.Object ref = fidopolicymapkey_;
@@ -10072,7 +10548,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public com.google.protobuf.ByteString
           getFidopolicymapkeyBytes() {
@@ -10088,37 +10564,189 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public Builder setFidopolicymapkey(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00002000;
+  bitField0_ |= 0x00008000;
         fidopolicymapkey_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public Builder clearFidopolicymapkey() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         fidopolicymapkey_ = getDefaultInstance().getFidopolicymapkey();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fidopolicymapkey = 14;</code>
+       * <code>optional string fidopolicymapkey = 16;</code>
        */
       public Builder setFidopolicymapkeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00002000;
+  bitField0_ |= 0x00008000;
         fidopolicymapkey_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object userVerificationReq_ = "";
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public boolean hasUserVerificationReq() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public java.lang.String getUserVerificationReq() {
+        java.lang.Object ref = userVerificationReq_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            userVerificationReq_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUserVerificationReqBytes() {
+        java.lang.Object ref = userVerificationReq_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          userVerificationReq_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public Builder setUserVerificationReq(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        userVerificationReq_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public Builder clearUserVerificationReq() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        userVerificationReq_ = getDefaultInstance().getUserVerificationReq();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string userVerificationReq = 17;</code>
+       */
+      public Builder setUserVerificationReqBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        userVerificationReq_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object attestationPreferance_ = "";
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public boolean hasAttestationPreferance() {
+        return ((bitField0_ & 0x00020000) == 0x00020000);
+      }
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public java.lang.String getAttestationPreferance() {
+        java.lang.Object ref = attestationPreferance_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            attestationPreferance_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAttestationPreferanceBytes() {
+        java.lang.Object ref = attestationPreferance_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          attestationPreferance_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public Builder setAttestationPreferance(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        attestationPreferance_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public Builder clearAttestationPreferance() {
+        bitField0_ = (bitField0_ & ~0x00020000);
+        attestationPreferance_ = getDefaultInstance().getAttestationPreferance();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string attestationPreferance = 18;</code>
+       */
+      public Builder setAttestationPreferanceBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        attestationPreferance_ = value;
         onChanged();
         return this;
       }
@@ -16563,35 +17191,37 @@ public final class ZMQSKCEReplicationProtos {
       "egistered_emails\030\010 \001(\t\022\034\n\024primary_phone_" +
       "number\030\t \001(\t\022 \n\030registered_phone_numbers" +
       "\030\n \001(\t\022\027\n\017two_step_target\030\013 \001(\t\022\021\n\tsigna" +
-      "ture\030\014 \001(\t\022\016\n\006status\030\r \002(\t\"\215\002\n\017UserSessi" +
-      "onInfo\022\020\n\010username\030\001 \002(\t\022\r\n\005nonce\030\002 \002(\t\022",
-      "\r\n\005appid\030\003 \002(\t\022\023\n\013sessiontype\030\004 \002(\t\022\024\n\014c" +
-      "reationdate\030\005 \002(\003\022\027\n\017user_public_key\030\006 \002" +
-      "(\t\022\014\n\004fkid\030\007 \001(\003\022\014\n\004skid\030\010 \001(\003\022\013\n\003sid\030\t " +
-      "\001(\003\022\021\n\tsessionid\030\n \001(\t\022\016\n\006mapkey\030\013 \002(\t\022\016" +
-      "\n\006userid\030\014 \001(\t\022\020\n\010usericon\030\r \001(\t\022\030\n\020fido" +
-      "policymapkey\030\016 \001(\t\"\032\n\tKeepAlive\022\r\n\005dummy" +
-      "\030\001 \002(\003\"\207\001\n\007Servers\022\013\n\003sid\030\001 \002(\003\022\014\n\004fqdn\030" +
-      "\002 \002(\t\022\016\n\006status\030\003 \002(\t\022\030\n\020replication_rol" +
-      "e\030\004 \002(\t\022\032\n\022replication_status\030\005 \002(\t\022\014\n\004m" +
-      "ask\030\006 \001(\t\022\r\n\005notes\030\007 \001(\t\"v\n\rServerDomain",
-      "s\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\025\n\rpseudo_nu" +
-      "mber\030\003 \002(\t\022\016\n\006status\030\004 \002(\t\022\025\n\rmigrating_" +
-      "key\030\005 \001(\t\022\r\n\005notes\030\006 \001(\t\"\350\001\n\027Attestation" +
-      "Certificates\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\016" +
-      "\n\006attcid\030\003 \002(\003\022\022\n\nparent_sid\030\004 \001(\003\022\022\n\npa" +
-      "rent_did\030\005 \001(\003\022\025\n\rparent_attcid\030\006 \001(\003\022\023\n" +
-      "\013certificate\030\007 \002(\t\022\021\n\tissuer_dn\030\010 \002(\t\022\022\n" +
-      "\nsubject_dn\030\t \002(\t\022\025\n\rserial_number\030\n \002(\t" +
-      "\022\021\n\tsignature\030\013 \001(\t\"\372\001\n\014FidoPolicies\022\013\n\003" +
-      "sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\013\n\003pid\030\003 \002(\003\022\022\n\ns",
-      "tart_date\030\004 \002(\003\022\020\n\010end_date\030\005 \001(\003\022 \n\030cer" +
-      "tificate_profile_name\030\006 \002(\t\022\016\n\006policy\030\007 " +
-      "\002(\t\022\017\n\007version\030\010 \002(\003\022\016\n\006status\030\t \002(\t\022\r\n\005" +
-      "notes\030\n \001(\t\022\023\n\013create_date\030\013 \002(\003\022\023\n\013modi" +
-      "fy_date\030\014 \001(\003\022\021\n\tsignature\030\r \001(\tB8\n\034com." +
-      "strongkey.skfs.messagingB\030ZMQSKCEReplica" +
-      "tionProtos"
+      "ture\030\014 \001(\t\022\016\n\006status\030\r \002(\t\"\356\002\n\017UserSessi" +
+      "onInfo\022\020\n\010username\030\001 \002(\t\022\023\n\013displayName\030",
+      "\002 \001(\t\022\016\n\006rpName\030\003 \001(\t\022\r\n\005nonce\030\004 \002(\t\022\r\n\005" +
+      "appid\030\005 \002(\t\022\023\n\013sessiontype\030\006 \002(\t\022\024\n\014crea" +
+      "tiondate\030\007 \002(\003\022\027\n\017user_public_key\030\010 \002(\t\022" +
+      "\014\n\004fkid\030\t \001(\003\022\014\n\004skid\030\n \001(\003\022\013\n\003sid\030\013 \001(\003" +
+      "\022\021\n\tsessionid\030\014 \001(\t\022\016\n\006mapkey\030\r \002(\t\022\016\n\006u" +
+      "serid\030\016 \001(\t\022\020\n\010usericon\030\017 \001(\t\022\030\n\020fidopol" +
+      "icymapkey\030\020 \001(\t\022\033\n\023userVerificationReq\030\021" +
+      " \001(\t\022\035\n\025attestationPreferance\030\022 \001(\t\"\032\n\tK" +
+      "eepAlive\022\r\n\005dummy\030\001 \002(\003\"\207\001\n\007Servers\022\013\n\003s" +
+      "id\030\001 \002(\003\022\014\n\004fqdn\030\002 \002(\t\022\016\n\006status\030\003 \002(\t\022\030",
+      "\n\020replication_role\030\004 \002(\t\022\032\n\022replication_" +
+      "status\030\005 \002(\t\022\014\n\004mask\030\006 \001(\t\022\r\n\005notes\030\007 \001(" +
+      "\t\"v\n\rServerDomains\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002" +
+      " \002(\003\022\025\n\rpseudo_number\030\003 \002(\t\022\016\n\006status\030\004 " +
+      "\002(\t\022\025\n\rmigrating_key\030\005 \001(\t\022\r\n\005notes\030\006 \001(" +
+      "\t\"\350\001\n\027AttestationCertificates\022\013\n\003sid\030\001 \002" +
+      "(\003\022\013\n\003did\030\002 \002(\003\022\016\n\006attcid\030\003 \002(\003\022\022\n\nparen" +
+      "t_sid\030\004 \001(\003\022\022\n\nparent_did\030\005 \001(\003\022\025\n\rparen" +
+      "t_attcid\030\006 \001(\003\022\023\n\013certificate\030\007 \002(\t\022\021\n\ti" +
+      "ssuer_dn\030\010 \002(\t\022\022\n\nsubject_dn\030\t \002(\t\022\025\n\rse",
+      "rial_number\030\n \002(\t\022\021\n\tsignature\030\013 \001(\t\"\372\001\n" +
+      "\014FidoPolicies\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022" +
+      "\013\n\003pid\030\003 \002(\003\022\022\n\nstart_date\030\004 \002(\003\022\020\n\010end_" +
+      "date\030\005 \001(\003\022 \n\030certificate_profile_name\030\006" +
+      " \002(\t\022\016\n\006policy\030\007 \002(\t\022\017\n\007version\030\010 \002(\003\022\016\n" +
+      "\006status\030\t \002(\t\022\r\n\005notes\030\n \001(\t\022\023\n\013create_d" +
+      "ate\030\013 \002(\003\022\023\n\013modify_date\030\014 \001(\003\022\021\n\tsignat" +
+      "ure\030\r \001(\tB8\n\034com.strongkey.skfs.messagin" +
+      "gB\030ZMQSKCEReplicationProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -16628,7 +17258,7 @@ public final class ZMQSKCEReplicationProtos {
     internal_static_com_strongkey_skfs_messaging_UserSessionInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_strongkey_skfs_messaging_UserSessionInfo_descriptor,
-        new java.lang.String[] { "Username", "Nonce", "Appid", "Sessiontype", "Creationdate", "UserPublicKey", "Fkid", "Skid", "Sid", "Sessionid", "Mapkey", "Userid", "Usericon", "Fidopolicymapkey", });
+        new java.lang.String[] { "Username", "DisplayName", "RpName", "Nonce", "Appid", "Sessiontype", "Creationdate", "UserPublicKey", "Fkid", "Skid", "Sid", "Sessionid", "Mapkey", "Userid", "Usericon", "Fidopolicymapkey", "UserVerificationReq", "AttestationPreferance", });
     internal_static_com_strongkey_skfs_messaging_KeepAlive_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_com_strongkey_skfs_messaging_KeepAlive_fieldAccessorTable = new

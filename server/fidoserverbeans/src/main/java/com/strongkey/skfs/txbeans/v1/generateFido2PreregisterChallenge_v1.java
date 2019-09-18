@@ -115,6 +115,7 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
         if(attestationPref != null){
             optionsBuilder.add(skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION, attestationPref);
         }
+      
         JsonObject options = optionsBuilder.build();
         
         // fetch extension inputs if they exist
@@ -165,8 +166,12 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
         String attestPref = generateAttestationConveyancePreference(regOp, options);
         if(attestPref != null){
             returnObjectBuilder.add(skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION, attestPref);
+        } else {
+            System.out.println("attpref null so adding direct");
+            attestPref = skfsConstants.FIDO2_CONST_ATTESTATION_DIRECT;
+            returnObjectBuilder.add(skfsConstants.FIDO2_PREREG_ATTR_ATTESTATION, attestPref);
         }
-        
+
         JsonObject extensionsJson = generateExtensions(fidoPolicy.getExtensionsOptions(), extensions);
         if (!extensionsJson.isEmpty()) {
             returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_EXTENSIONS, extensionsJson);

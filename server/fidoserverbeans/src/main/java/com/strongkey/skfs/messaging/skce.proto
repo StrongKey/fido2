@@ -73,19 +73,23 @@ message FidoUsers
 message UserSessionInfo
 {
     required string             username = 1;
-    required string             nonce = 2;
-    required string             appid = 3;
-    required string             sessiontype = 4;
-    required int64              creationdate = 5;
-    required string             user_public_key = 6;
-    optional int64              fkid = 7;
-    optional int64              skid = 8;
-    optional int64              sid = 9;
-    optional string             sessionid = 10;
-    required string             mapkey = 11;
-    optional string             userid = 12;
-    optional string             usericon = 13;
-    optional string             fidopolicymapkey = 14;
+    optional string             displayName = 2;
+    optional string             rpName = 3;
+    required string             nonce = 4;
+    required string             appid = 5;
+    required string             sessiontype = 6;
+    required int64              creationdate = 7;
+    required string             user_public_key = 8;
+    optional int64              fkid = 9;
+    optional int64              skid = 10;
+    optional int64              sid = 11;
+    optional string             sessionid = 12;
+    required string             mapkey = 13;
+    optional string             userid = 14;
+    optional string             usericon = 15;
+    optional string             fidopolicymapkey = 16;
+    optional string             userVerificationReq = 17;
+    optional string             attestationPreferance = 18;
 }
 
 /**
