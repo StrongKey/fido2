@@ -23,7 +23,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 ## How To Setup the Cluster
 
-1. Using the installation steps [here](../docs/Installation_Guide_Linux.md), install and configure the two FIDO2 Server VMs, **as if they were individual FIDO2 Servers**.
+1. Using the installation steps [here](../docs/Installation_Guide_Linux.md), install and configure the two FIDO2 Server VMs, **as if they were individual FIDO2 Servers, but do NOT install any web-application to test out the FIDO2 Server at this point**; we will do this later in this document.
 2. For each server **determine the FQDN and assign it a unique Server ID**. A _Server id (SID)_ is a numeric value that uniquely identifies a node within the cluster. Conventionally, StrongKey cluster SIDs begin with the numeral #1 and continue monotonically (increment by one) for each node in the cluster.  In the current setup, the following values are used:
 	
 	|  SID  |  FQDN  |
@@ -110,14 +110,14 @@ c. **install HAProxy** using the _Yellowdog Updater, Modified (yum)_ tool:
       
     shell> yum install haproxy
     
-d. **Create a self-signed certificate** to be used by HAProxy, replacing the value in the **-subj** parameter with the value relevant to your site. The most important element within this parameter is the **CN** component - the value **must** match the FQDN of the VM used for this load-balancer; so if you choose to name your VM _haproxy.mydomain.com_ then the **-subj** parameter may simply be "/CN=haproxy.mydomain.com":
+d. **Create a self-signed certificate** to be used by HAProxy, replacing the value in the **-subj** parameter with the value relevant to your site. The most important element within this parameter is the **CN** component - the value **must** match the FQDN of the VM used for this load-balancer; so if you choose to name your VM _fidoserver.mydomain.com_ then the **-subj** parameter may simply be "/CN=fidoserver.mydomain.com":
  
-    shell> openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/haproxy-selfsigned.key -out /etc/pki/tls/certs/haproxy.crt -subj "/C=US/ST=CA/L=Sunnyvale/O=Strongkey/CN=saka02.strongkey.com"
+    shell> openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/fidoserver.key -out /etc/pki/tls/certs/fidoserver.crt -subj "/CN=saka02.strongkey.com"
 
     
 e. **Concatenate the generated key and certificate files** into a single file, preserving the names of the files as shown below:
  
-    shell> cat /etc/pki/tls/certs/haproxy.crt /etc/pki/tls/private/haproxy-selfsigned.key > /etc/pki/tls/certs/haproxy.pem
+    shell> cat /etc/pki/tls/certs/fidoserver.crt /etc/pki/tls/private/fidoserver.key > /etc/pki/tls/certs/fidoserver.pem
 
 f. Using a text editor such as _vi_, **edit the HAProxy configuration file** to make the following changes:
     
@@ -138,7 +138,7 @@ f. Using a text editor such as _vi_, **edit the HAProxy configuration file** to 
         timeout queue   1000s
 
     listen  https_web
-        bind *:443 ssl crt /etc/pki/tls/certs/haproxy.pem
+        bind *:443 ssl crt /etc/pki/tls/certs/fidoserver.pem
         option tcplog
         mode http
         balance roundrobin
@@ -156,7 +156,7 @@ h. **Restart HAProxy**:
     
 i. Verify that HAProxy is functioning as expected by accessing the url in the browser. You should get redirected to one of the fido servers configured.
 
-    https://<_haproxy.mydomain.com_>
+    https://<fidoserver.mydomain.com_>
     
 
 ### Troubleshooting
@@ -178,7 +178,7 @@ In order to test the cluster with a sample web application, provision the fourth
 
 The StrongKey PoC Java Application is a self-contained web-application that demonstrates the use of StrongKey's FIDO2 Server for registering users with FIDO2 and U2F Authenticators, and once registered, authenticating them with those Authenticators. The PoC web-application also showcases a key-management panel where registered users may add manage Authenticator keys to their account.
 
-a. **Login** to the PoC VM as _strongkey_ upon completing its installation.
+a. **Login** to the PoC VM as **_strongkey_** upon completing its installation.
 
 b. Using a text editor such as _vi_, **modify the application's configuration properties** so as to point the application to the HAProxy load-balancer setup in the earlier section of this document:
 

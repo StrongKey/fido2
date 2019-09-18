@@ -18,19 +18,19 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
 - You must have a Java web application server. These instructions assume you are using Payara (GlassFish).
 - The instructions assume the default ports for all the applications installed; Payara runs HTTPS on port 8181 by default, so make sure all firewall rules allow that port to be accessible.
 
-## Installation Instructions without FIDO server
+## Installation Instructions on a server with a FIDO2 Server on a SEPARATE server
 
-1. If installing the sample application **on the separate server**, StrongKey's software stack must be installed. Follow these steps for a separate server install:
-    * Complete Steps 1-5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) 
-    * Edit the *install-skfs.sh* script in a text editor; on the line **"INSTALL_FIDO=Y"** change the value of **"Y"** to **"N"**
+1. If installing this sample application **on a separate server**, StrongKey's software stack must be installed to make it work. Follow these steps to do so:
+    * Complete Steps 1-5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) but come back here after complexting step #5
+    * Edit the *install-skfs.sh* script in a text editor; on the line where you see **"INSTALL_FIDO=Y"** change the value of **"Y"** to **"N"**
     * Run the script *install-skfs.sh*
     ```sh
      sudo ./install-skfs.sh
     ```
     
-2.  Continue the installation by following the steps under [Installation Instructions with FIDO server](#Installation Instructions with FIDO server)
+2.  Continue the installation as shown below, in the _Installation Instructions on a server with a FIDO2 Server on the SAME server_ section. Note that this assumes that the FIDO2 Server was previously installed on the server **without** modifying the _install-skfs.sh_ script.
    
-## Installation Instructions with FIDO server
+## Installation Instructions on a server with a FIDO2 Server on the SAME server
 
 1. Create the following directories to configure the WebAuthn servlet home folder.
 
@@ -111,10 +111,10 @@ At this point, the PoC server is installed. Continue to install the front end An
     cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
     cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
     ```
-13. The application is deployed in _docroot_ and can be accessed.
+13. The application is deployed in _docroot_ on the PoC server and can be accessed as follows in a browser:
 
     ```
-    https://<FQDN>:8181/
+    https://<FQDN-of-PoC-server>:8181/
     ```
 
 ## Removal
