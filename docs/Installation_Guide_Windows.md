@@ -17,7 +17,7 @@
         - *Set JAVA_HOME variable*
         - *JavaSoft (Oracle) registry*
 
-- **StrongKey's FIDO2 Server must be installed** before the sample Relying Party web application and sample WebAuthn Java client.
+- **StrongKey's FIDO2 Server must be installed** before the sample service provider web application and sample WebAuthn Java client.
 
 ----------------
 
@@ -71,7 +71,7 @@
 
 8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
 
-__NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the trustore are located under "/usr/local/strongkey/skfs/keystores" directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
+__NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the trustore are located under the _/usr/local/strongkey/skfs/keystores_ directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
     
     ```java -jar keymanager.jar```
 
@@ -84,4 +84,4 @@ To uninstall StrongKey FIDO2 Server, run the following command from the folder w
     sudo ./cleanup.sh
     ```
 
-This removes all StrongKey files plus the installed dependency packages. If you've installed the sample Relying Party web application and the StrongKey WebAuthn client, they will be removed as well.
+This removes all StrongKey files plus the installed dependency packages. If you've installed the sample service provider web application and the StrongKey WebAuthn client, they will be removed as well.
