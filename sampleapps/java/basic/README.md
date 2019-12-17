@@ -16,10 +16,10 @@ Follow the instructions below to install this sample.
 
 ## Prerequisites
 
-- This service provider web application example must have a means of connecting with a StrongKey FIDO2 Server. You can install a FIDO2 Server either on the same machine as your service provider web application or a different one.
-- You must have a Java web application server. These instructions assume you are using Payara (GlassFish).
-- The instructions assume the default ports for all the applications installed; Payara runs HTTPS on port 8181 by default, so make sure all firewall rules allow that port to be accessible.
-- **The sample commands below assume you are installing this service provider web application on the same machine where StrongKey FIDO2 Server has been installed.** If you are installing on a separate machine, you may have to adjust the commands accordingly.
+- This service provider web application example must have a means of connecting with a StrongKey FIDO2 Server; you can install a FIDO2 Server either on the same machine as your service provider web application or a different one
+- You must have a Java web application server; these instructions assume you are using Payara (GlassFish)
+- The instructions assume the default ports for all the applications installed; Payara runs HTTPS on port 8181 by default, so make sure all firewall rules allow that port to be accessible
+- **The sample commands below assume you are installing this service provider web application on the same machine where StrongKey FIDO2 Server has been installed;** if you are installing on a separate machine, you may have to adjust the commands accordingly
 
 ## Installation Instructions
 
@@ -53,7 +53,7 @@ Follow the instructions below to install this sample.
     payara41/glassfish/bin/asadmin deploy basicserver.war
     ```
 
-6. Test that the servlet is running by executing the following Curl command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
+6. Test that the servlet is running by executing the following cURL command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
     ```sh
     curl -k https://localhost:8181/basicserver/fido2/application.wadl
