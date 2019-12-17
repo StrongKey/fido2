@@ -1,14 +1,14 @@
 # Proof of Concept (PoC) Java Application
 This project is a service provider web application written in JavaScript and Java to work with StrongKey's [FIDO Certified FIDO2 Server, Community Edition](https://github.com/StrongKey/fido2).
 
-Web application developers worldwide are face multiple challenges in the near future: learning about FIDO2, coding in FIDO2, demonstrating to decision makers what FIDO2 can do for their company, and acquiring budgets and resources to transition to FIDO2 strong authentication. Unless you spend many weeks (or months) understanding how FIDO2 works, addressing all these challenges remains daunting.
+Web application developers worldwide face multiple challenges in the near future: learning about FIDO2, coding in FIDO2, demonstrating to decision makers what FIDO2 can do for their company, and acquiring budgets and resources to transition to FIDO2 strong authentication. Unless you spend many weeks (or months) understanding how FIDO2 works, addressing all these challenges remains daunting.
 
 StrongKey has released this project to the open-source community to address these challenges. The FIDO2 Server allows developers to do the following:
 
-- Setup a FIDO2-enabled single-page web application that can run unmodified and demonstrate FIDO2 registration, authentication, and some simple FIDO2 key management on the client side.
-- Substitute the stock graphics and logo with your own company's graphics and logo without additional programming&mdash;just replace the graphic image files and reload the application. This allows you to demonstrate to peers and management what FIDO2 can do for the company, and how the user experience (UX) might look in its most basic form.  
-- Learn how FIDO2 works; all the code is available here in a web application framework.
-- Use the FIDO-certified, open-source FIDO2 server with your web application without having to anticipate deployment issues&mdash;you will have already deployed this FIDO2 Server proof of concept.
+- Setup a FIDO2-enabled single-page web application that can run unmodified and demonstrate FIDO2 registration, authentication, and some simple FIDO2 key management on the client side
+- Substitute the stock graphics and logo with your own company's graphics and logo without additional programming&mdash;just replace the graphic image files and reload the application; this allows you to demonstrate to peers and management what FIDO2 can do for the company, and how the user experience (UX) might look in its most basic form
+- Learn how FIDO2 works; all the code is available here in a web application framework
+- Use the FIDO-certified, open-source FIDO2 server with your web application without having to anticipate deployment issues&mdash;you will have already deployed this FIDO2 Server proof of concept
 
 While this web application can show you how to use W3C's WebAuthn (a subset of the FIDO2 specification) JavaScript, it is also intended to demonstrate how to use FIDO2 protocols with StrongKey's FIDO2 Server to enable strong authentication. Follow the instructions below to install this sample.
 
@@ -21,14 +21,14 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
 ## Installation Instructions on a server with a FIDO2 Server on a SEPARATE server
 
 1. If installing this sample application **on a separate server**, StrongKey's software stack must be installed to make it work. Follow these steps to do so:
-    * Complete Steps 1-5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) but come back here after complexting step #5
+    * Complete Steps 1&ndash;5 of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) but come back here after completing *Step 5*
     * Edit the *install-skfs.sh* script in a text editor; on the line where you see **"INSTALL_FIDO=Y"** change the value of **"Y"** to **"N"**
     * Run the script *install-skfs.sh*
     ```sh
      sudo ./install-skfs.sh
     ```
     
-2.  Continue the installation as shown below, in the _Installation Instructions on a server with a FIDO2 Server on the SAME server_ section. Note that this assumes that the FIDO2 Server was previously installed on the server **without** modifying the _install-skfs.sh_ script.
+2.  Continue the installation as shown below in the _Installation Instructions on a server with a FIDO2 Server on the SAME server_ section. Note that this assumes that the FIDO2 Server was previously installed on the server **without** modifying the _install-skfs.sh_ script.
    
 ## Installation Instructions on a server with a FIDO2 Server on the SAME server
 
@@ -43,8 +43,8 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
     ```sh
     sudo vi /usr/local/strongkey/poc/etc/poc.properties
     ```
-3. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO Server and an email server. (You can also use GMail as the mail server with your own GMail account to send emails. Just make sure you enable access through the Google account's security settings.)
-   **If the mail server has a selfsigned scertificate, make sure to import it in the glassfish truststore before continuing**
+3. Fill in the appropriate values (listed in []) to configure the sample application with a StrongKey FIDO Server and an email server (you can also use GMail as the mail server with your own GMail account to send emails. Just make sure you enable access through the Google account's security settings).
+   **If the mail server has a self-signed certificate, make sure to import it in the GlassFish TrustStore before continuing**
 
    ```
    poc.cfg.property.apiuri=https://**[hostname of FIDO Server]**:8181/api
@@ -83,7 +83,7 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
     ```sh
     curl -k https://localhost:8181/poc/fido2/application.wadl
     ```
-At this point, the PoC server is installed. Continue to install the front end Angular application.
+At this point, the PoC server is installed. Continue to install the front-end Angular application.
 
 8. Switch to (or login as) the _strongkey_ user. The default password for the _strongkey_ user is _ShaZam123_.
     ```
@@ -124,7 +124,7 @@ If this PoC was installed on top of the FIDO2 Server, the cleanup script will er
 
 ## Contributing to the Sample Service Provider Web Application 
 
-If you would like to contribute to the sample service provider Party web application project, please read [CONTRIBUTING.md](https://github.com/StrongKey/fido2/blob/master/CONTRIBUTING.md), then sign and submit the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
+If you would like to contribute to the sample service provider web application project, please read [CONTRIBUTING.md](https://github.com/StrongKey/fido2/blob/master/CONTRIBUTING.md), then sign and submit the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/FIDO-Server).
 
 ## More Information on FIDO2
 
