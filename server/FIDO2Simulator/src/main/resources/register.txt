@@ -1,0 +1,19 @@
+{
+        "rp": {
+            "name": "rdu.strongkey.com"
+        },
+        "user": {
+            "name": "fidouser06110896",
+            "displayName": "fidouser06110896",
+            "id": "B16lQ8O1ZDTNX0NP0EP8dNRV6ShLlS4cbcWa72r2GyDfleYgFoJe7xZBIvST9PtZB_Jjx8als_XqggjeTQJyFw"
+        },
+        "challenge": "VciUZwhfiPCdElS0RygNEHAxxKtqUBkFN472KakrjsgqfFLKNm8wOkGYQFaqklFYrtNST1QLSOuaOO9r-428GH7LZ6qJ9NYkdH79jonCDptr5Pt4BfFmQDg0bTJXpc1dLAPRYsyrezVDtTWNw2FX3mibjvst9ThxfNe8deWdVsE",
+        "attestation": "direct",
+        "pubKeyCredParams": [{
+            "type": "public-key",
+            "alg": -7
+        }, {
+            "type": "public-key",
+            "alg": -257
+        }]
+}

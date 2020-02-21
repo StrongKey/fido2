@@ -1,35 +1,9 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date: $
- * $Revision: $
- * $Author: $
- * $URL: $
- *
- * *********************************************
- *                    888
- *                    888
- *                    888
- *  88888b.   .d88b.  888888  .d88b.  .d8888b
- *  888 "88b d88""88b 888    d8P  Y8b 88K
- *  888  888 888  888 888    88888888 "Y8888b.
- *  888  888 Y88..88P Y88b.  Y8b.          X88
- *  888  888  "Y88P"   "Y888  "Y8888   88888P'
- *
- * *********************************************
- *
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.repl.utilities;
 
 import com.strongkey.appliance.entitybeans.Servers;
@@ -55,19 +29,19 @@ public class replCommon {
 
     private static final String classname = "replCommon";
     private static final String fs = System.getProperty("file.separator");
-    
+
     // Property files used by this application for configuration info
     private static final ResourceBundle defaultReplConfig = ResourceBundle.getBundle("resources.repl.replication-configuration");
-    
+
         // Property files used by this application for application messages
     private static final ResourceBundle msgrb = ResourceBundle.getBundle("resources.repl.replication-messages");
-    
+
     // Location where Replication is installed on this machine
     private static final String replhome;
 
     // StrongKey Lite home-directory specific property file
     private static ResourceBundle replhrb = null;
-    
+
     /**
      * Collection of Subscriber Servers for replication
      */
@@ -148,7 +122,7 @@ public class replCommon {
                 } else {
                     baos.write(replhrb.getString(key).getBytes());
                 }
-                
+
             }
             baos.close();
 
@@ -165,7 +139,7 @@ public class replCommon {
     public replCommon() {
 
     }
-    
+
     /*************************************************************
                       888
                       888          o
@@ -197,18 +171,18 @@ public class replCommon {
     }
 
     /*************************************************************
-     d8b                       
-     Y8P                o      
-                       d8b     
-     888 .d8888b      d888b    
+     d8b
+     Y8P                o
+                       d8b
+     888 .d8888b      d888b
      888 88K      "Y888888888P"
-     888 "Y8888b.   "Y88888P"  
-     888      X88   d88P"Y88b  
-     888  88888P'  dP"     "Yb 
-     * 
+     888 "Y8888b.   "Y88888P"
+     888      X88   d88P"Y88b
+     888  88888P'  dP"     "Yb
+     *
      *************************************************************/
 
-     /** 
+     /**
      * Check if this server is a replication Publisher
      * @return boolean
      */
@@ -224,8 +198,8 @@ public class replCommon {
     {
         return subscriber;
     }
-    
-    /** 
+
+    /**
      * Gets the location where the Replication software is installed on this server.
      * @return String File-system location where Cryptolib is installed
      */
@@ -233,7 +207,7 @@ public class replCommon {
     {
         return replhome;
     }
-    
+
     /**
      * Make a Collection of Subscribed Servers available to application
      *
@@ -248,7 +222,7 @@ public class replCommon {
             strongkeyLogger.logp(applianceConstants.REPL_LOGGER, Level.INFO, classname, "constructor", "REPL-MSG-4004", s.getFqdn());
         });
     }
-    
+
      /**
      * Get a Collection of Subscribed Servers available to application
      *
@@ -259,11 +233,11 @@ public class replCommon {
     {
         return subscribers;
     }
-    
+
      /**
      * Get the module which this entity type belongs to
      * @param entityname - Constants name of the entity
-     * @return int - Constants representation of the module 
+     * @return int - Constants representation of the module
      */
     public static int getEntityModule(int entityname) {
         if (entityname >= 0 && entityname < applianceConstants.ENTITY_TYPE_SAKA_UPPER_LIMIT) {
@@ -278,20 +252,20 @@ public class replCommon {
             return applianceConstants.MODULE_TYPE_UNKNOWN;
         }
     }
-    
+
     /*
     ************************************************************************
- .d8888b.                     .d888 d8b                                    888    d8b                            
-d88P  Y88b                   d88P"  Y8P                                    888    Y8P                            
-888    888                   888                                           888                                   
-888         .d88b.  88888b.  888888 888  .d88b.  888  888 888d888  8888b.  888888 888  .d88b.  88888b.  .d8888b  
-888        d88""88b 888 "88b 888    888 d88P"88b 888  888 888P"       "88b 888    888 d88""88b 888 "88b 88K      
-888    888 888  888 888  888 888    888 888  888 888  888 888     .d888888 888    888 888  888 888  888 "Y8888b. 
-Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.  888 Y88..88P 888  888      X88 
- "Y8888P"   "Y88P"  888  888 888    888  "Y88888  "Y88888 888     "Y888888  "Y888 888  "Y88P"  888  888  88888P' 
-                                             888                                                                 
-                                        Y8b d88P                                                                 
-                                         "Y88P"  
+ .d8888b.                     .d888 d8b                                    888    d8b
+d88P  Y88b                   d88P"  Y8P                                    888    Y8P
+888    888                   888                                           888
+888         .d88b.  88888b.  888888 888  .d88b.  888  888 888d888  8888b.  888888 888  .d88b.  88888b.  .d8888b
+888        d88""88b 888 "88b 888    888 d88P"88b 888  888 888P"       "88b 888    888 d88""88b 888 "88b 88K
+888    888 888  888 888  888 888    888 888  888 888  888 888     .d888888 888    888 888  888 888  888 "Y8888b.
+Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.  888 Y88..88P 888  888      X88
+ "Y8888P"   "Y88P"  888  888 888    888  "Y88888  "Y88888 888     "Y888888  "Y888 888  "Y88P"  888  888  88888P'
+                                             888
+                                        Y8b d88P
+                                         "Y88P"
     ************************************************************************
     */
     /**
@@ -344,7 +318,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
      * Gets the default configuration for this machine, overlaid with
      * the customized configuration in REPLICATIONHOME to create a
      * machine-specific system configuration to be returned to caller.
-     * 
+     *
      * @return Properties
      */
     public static Properties getSystemConfiguration()
@@ -377,24 +351,24 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         // Return the system-specific properties
         return props;
     }
-    
-    
+
+
         /*
     ************************************************************************
-888b     d888                                                                
-8888b   d8888                                                                
-88888b.d88888                                                                
-888Y88888P888  .d88b.  .d8888b  .d8888b   8888b.   .d88b.   .d88b.  .d8888b  
-888 Y888P 888 d8P  Y8b 88K      88K          "88b d88P"88b d8P  Y8b 88K      
-888  Y8P  888 88888888 "Y8888b. "Y8888b. .d888888 888  888 88888888 "Y8888b. 
-888   "   888 Y8b.          X88      X88 888  888 Y88b 888 Y8b.          X88 
-888       888  "Y8888   88888P'  88888P' "Y888888  "Y88888  "Y8888   88888P' 
-                                                       888                   
-                                                  Y8b d88P                   
-                                                   "Y88P" 
+888b     d888
+8888b   d8888
+88888b.d88888
+888Y88888P888  .d88b.  .d8888b  .d8888b   8888b.   .d88b.   .d88b.  .d8888b
+888 Y888P 888 d8P  Y8b 88K      88K          "88b d88P"88b d8P  Y8b 88K
+888  Y8P  888 88888888 "Y8888b. "Y8888b. .d888888 888  888 88888888 "Y8888b.
+888   "   888 Y8b.          X88      X88 888  888 Y88b 888 Y8b.          X88
+888       888  "Y8888   88888P'  88888P' "Y888888  "Y88888  "Y8888   88888P'
+                                                       888
+                                                  Y8b d88P
+                                                   "Y88P"
     ************************************************************************
     */
-    
+
     /**
      * Gets the value of the message property with the specified key
      * @param key - The key in the message resource file

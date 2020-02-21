@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.messaging;
 
@@ -33,7 +33,7 @@ public class SKCEBacklogProcessor implements BacklogProcessor
     /**
      ** This class's name - used for logging
      **/
-    private final String classname = this.getClass().getName();    
+    private final String classname = this.getClass().getName();
 
     // ZMQ-related objects
     static  int zmqBacklogProcessorState = skceConstants.ZMQ_SERVICE_STOPPED;
@@ -190,9 +190,9 @@ Y8b d88P
 **********************************************************************************************/
     /**
      * Static method to return a running instance - or create it and return a reference
-     * @return 
+     * @return
      */
-    public static BacklogProcessor getInstance() 
+    public static BacklogProcessor getInstance()
     {
         // If we are not replicating - as in a single-machine DEVP appliance - return null
         if (!applianceCommon.replicate()) {
@@ -236,30 +236,30 @@ Y8b d88P
     // Method to close sockets and terminate the context
     @PreDestroy
     @Override
-    public void shutdown() 
+    public void shutdown()
     {
         switch (zmqBacklogProcessorState) {
-            case skceConstants.ZMQ_SERVICE_RUNNING: 
+            case skceConstants.ZMQ_SERVICE_RUNNING:
                 stopservice();
                 zmqBacklogProcessorState = skceConstants.ZMQ_SERVICE_STOPPED;
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6042", null);
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6132", "[ZMQBacklogProcessor]: " + applianceCommon.getZMQState(zmqBacklogProcessorState));
                 break;
-            case skceConstants.ZMQ_SERVICE_STOPPED: 
+            case skceConstants.ZMQ_SERVICE_STOPPED:
                 break;
-            case skceConstants.ZMQ_SERVICE_STARTING: 
+            case skceConstants.ZMQ_SERVICE_STARTING:
                 recoverstate();
                 zmqBacklogProcessorState = skceConstants.ZMQ_SERVICE_STOPPED;
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6042", null);
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6132", "[ZMQBacklogProcessor]: " + applianceCommon.getZMQState(zmqBacklogProcessorState));
                 break;
-            case skceConstants.ZMQ_SERVICE_STOPPING: 
+            case skceConstants.ZMQ_SERVICE_STOPPING:
                 recoverstate();
                 zmqBacklogProcessorState = skceConstants.ZMQ_SERVICE_STOPPED;
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6042", null);
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "shutdown", "SKCE-MSG-6132", "[ZMQBacklogProcessor): " + applianceCommon.getZMQState(zmqBacklogProcessorState));
                 break;
-            default: 
+            default:
         }
     }
 
@@ -336,7 +336,7 @@ Y8b d88P
         zmqblproc = null;
         return true;
     }
-    
+
     /**************************************************************************
                                    d8b
                                    Y8P
@@ -351,8 +351,8 @@ Y8b d88P
                                                  "Y88P"
 ***************************************************************************/
     /**
-     * Method to check if BacklogProcessor thread is running 
-     * @return 
+     * Method to check if BacklogProcessor thread is running
+     * @return
      */
     @Override
     public boolean running() {
@@ -369,8 +369,8 @@ Y8b d88P
 888      "Y8888   88888P'  "Y888 "Y888888 888      "Y888
 ***************************************************************************/
     /**
-     * Method to restart BacklogProcessor thread 
-     * @return 
+     * Method to restart BacklogProcessor thread
+     * @return
      */
     @Override
     public String restart() {
@@ -389,11 +389,11 @@ Y8b d88P
     }
 
 /*****************************************************
-    888d888 888  888 88888b.  
-    888P"   888  888 888 "88b 
-    888     888  888 888  888 
-    888     Y88b 888 888  888 
-    888      "Y88888 888  888 
+    888d888 888  888 88888b.
+    888P"   888  888 888 "88b
+    888     888  888 888  888
+    888     Y88b 888 888  888
+    888      "Y88888 888  888
 ******************************************************/
     @Override
     @SuppressWarnings("SleepWhileInLoop")
@@ -419,7 +419,7 @@ Y8b d88P
                 countquery.setInt(1, TIMEDIFF);
                 countquery.setInt(2, applianceConstants.ENTITY_TYPE_SKCE_LOWER_LIMIT);
                 countquery.setInt(3, applianceConstants.ENTITY_TYPE_SKCE_UPPER_LIMIT);
-                    
+
             } catch (SQLException ex) {
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "constructor", "SKCE-ERR-6000", "Could not configure JDBC");
                 Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
@@ -479,7 +479,7 @@ Y8b d88P
                     Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (InterruptedException ex) { 
+        } catch (InterruptedException ex) {
         } finally {
             // Clean up helpers
             for (Long sid : blphelpers.keySet()) {
@@ -495,21 +495,21 @@ Y8b d88P
                 }
             }
         }
-    } 
+    }
 }
 
 /*****************************************************
-888888b.   888      8888888b.  888    888          888                           
-888  "88b  888      888   Y88b 888    888          888                           
-888  .88P  888      888    888 888    888          888                           
-8888888K.  888      888   d88P 8888888888  .d88b.  888 88888b.   .d88b.  888d888 
-888  "Y88b 888      8888888P"  888    888 d8P  Y8b 888 888 "88b d8P  Y8b 888P"   
-888    888 888      888        888    888 88888888 888 888  888 88888888 888     
-888   d88P 888      888        888    888 Y8b.     888 888 d88P Y8b.     888     
-8888888P"  88888888 888        888    888  "Y8888  888 88888P"   "Y8888  888     
-                                                       888                       
-                                                       888                       
-                                                       888                       
+888888b.   888      8888888b.  888    888          888
+888  "88b  888      888   Y88b 888    888          888
+888  .88P  888      888    888 888    888          888
+8888888K.  888      888   d88P 8888888888  .d88b.  888 88888b.   .d88b.  888d888
+888  "Y88b 888      8888888P"  888    888 d8P  Y8b 888 888 "88b d8P  Y8b 888P"
+888    888 888      888        888    888 88888888 888 888  888 88888888 888
+888   d88P 888      888        888    888 Y8b.     888 888 d88P Y8b.     888
+8888888P"  88888888 888        888    888  "Y8888  888 88888P"   "Y8888  888
+                                                       888
+                                                       888
+                                                       888
 ******************************************************/
 
 class BacklogProcessorHelper extends Thread
@@ -540,7 +540,7 @@ class BacklogProcessorHelper extends Thread
     public void run()
     {
         /**
-        * Bug ID: 
+        * Bug ID:
         * BLP was accumulating heap memory because the JDBC driver was keeping track
         * of objects in its frequent SLQ queries even when they were not needed.  The
         * MySQL "dontTrackOpenResources" parameter when set to true released the memory.
@@ -611,7 +611,7 @@ class BacklogProcessorHelper extends Thread
             {
                 if (Thread.currentThread().isInterrupted()) {
                     return;
-                } 
+                }
 
                 dataquery.setFetchSize(DBFETCHSIZE);
                 dataquery.setInt(1, TIMEDIFF);
@@ -627,7 +627,7 @@ class BacklogProcessorHelper extends Thread
 
                     if (Thread.currentThread().isInterrupted()) {
                         return;
-                    } 
+                    }
 
                     // Local variables
                     Long objdid;
@@ -662,7 +662,7 @@ class BacklogProcessorHelper extends Thread
 
                             String objfkuser = pkarray[2].substring(0, userfkidhyphen);
                             Long objfkid = Long.parseLong(pkarray[2].substring(userfkidhyphen + 1));
-                            
+
                             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.FINE, classname, "run", "SKCE-MSG-6046", "[SID-DID-FIDOUSER-FKID]: " + objsid + "-" + objdid + "-" + objfkuser + "-" + objfkid);
 
                             // SQL statement to get the actual object to be replicated
@@ -684,7 +684,7 @@ class BacklogProcessorHelper extends Thread
                             objectquery.setLong(4, objfkid);
 
 
-                            
+
                             // Get object and create proto if found
                             objrs = objectquery.executeQuery();
                             ZMQSKCEReplicationProtos.FidoKeys.Builder fkbuilder = ZMQSKCEReplicationProtos.FidoKeys.newBuilder();
@@ -770,7 +770,7 @@ class BacklogProcessorHelper extends Thread
                             objsid = Long.parseLong(pkarray[0]);
                             objdid = Long.parseLong(pkarray[1]);
                             String objfuser = pkarray[2];
-                            
+
                             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.FINE, classname, "run", "SKCE-MSG-6046", "[SID-DID-FIDOUSER]: " + objsid + "-" + objdid + "-" + objfuser);
 
                             // SQL statement to get the actual object to be replicated
@@ -824,7 +824,7 @@ class BacklogProcessorHelper extends Thread
                             }
                             objectquery.close();
                             break;
-                            
+
                         case applianceConstants.ENTITY_TYPE_DOMAINS:
                             // Figure out primary key from keystring
                             pkarray = dbobjpk.split("-");
@@ -888,7 +888,7 @@ class BacklogProcessorHelper extends Thread
                             }
                             objectquery.close();
                             break;
-                            
+
                         case applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES:
                             // Figure out primary key from keystring
                             pkarray = dbobjpk.split("-", 3);
@@ -909,7 +909,7 @@ class BacklogProcessorHelper extends Thread
                             objectquery.setLong(1, objsid);
                             objectquery.setLong(2, objdid);
                             objectquery.setLong(3, objattcid);
-                            
+
                             // Get object and create proto if found
                             objrs = objectquery.executeQuery();
                             if (objrs.next()) {
@@ -927,7 +927,7 @@ class BacklogProcessorHelper extends Thread
                                 if (objrs.getString("signature") != null) {
                                     attCertbuilder.setSignature(objrs.getString("signature"));
                                 }
-                                
+
                                 // Now build the proto with all non-null values
                                 ZMQSKCEReplicationProtos.AttestationCertificates proto
                                         = attCertbuilder
@@ -948,7 +948,7 @@ class BacklogProcessorHelper extends Thread
                             }
                             objectquery.close();
                             break;
-                            
+
                         case applianceConstants.ENTITY_TYPE_FIDO_POLICIES:
                             // Figure out primary key from keystring
                             pkarray = dbobjpk.split("-", 3);
@@ -969,7 +969,7 @@ class BacklogProcessorHelper extends Thread
                             objectquery.setLong(1, objsid);
                             objectquery.setLong(2, objdid);
                             objectquery.setLong(3, objpid);
-                            
+
                             // Get object and create proto if found
                             objrs = objectquery.executeQuery();
                             if (objrs.next()) {
@@ -987,7 +987,7 @@ class BacklogProcessorHelper extends Thread
                                 if (objrs.getString("signature") != null) {
                                     fpbuilder.setSignature(objrs.getString("signature"));
                                 }
-                                
+
                                 // Now build the proto with all non-null values
                                 ZMQSKCEReplicationProtos.FidoPolicies proto
                                         = fpbuilder
@@ -1010,7 +1010,7 @@ class BacklogProcessorHelper extends Thread
                             }
                             objectquery.close();
                             break;
-                
+
                         default:
                             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "run", "SKCE-ERR-6015", applianceCommon.getEntityName(dbobjtype) + " [OBJPK=" + dbobjpk + "] [OBJOP=" + applianceCommon.getRepop(dbobjop) + "]");
                             invalidObject = Boolean.TRUE;
@@ -1060,4 +1060,3 @@ class BacklogProcessorHelper extends Thread
         }
     }
 }
-

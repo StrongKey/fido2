@@ -4,13 +4,12 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.0</version>
+        <version>4.3.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.strongkey</groupId>
     <artifactId>fidoserverbeans</artifactId>
-    <version>4.0</version>
     <packaging>ejb</packaging>
     <name>fidoserverbeans</name>
 
@@ -110,13 +109,13 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>common</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>authenticationBeans</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -129,7 +128,7 @@
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>fido2mds</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.strongkey</groupId>

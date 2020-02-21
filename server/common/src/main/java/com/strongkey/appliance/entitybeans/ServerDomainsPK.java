@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.appliance.entitybeans;
 
@@ -63,7 +63,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
      **/
     public ServerDomainsPK(Long sid, Long did)
     {
-        // Check SID 
+        // Check SID
         strongkeyLogger.entering(applianceConstants.APPLIANCE_LOGGER,classname, "ServerDomainsPK");
         tmpLong = sid;
         // NULL argument

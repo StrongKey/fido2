@@ -1,25 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
- *
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * *********************************************
  *                    888
  *                    888
@@ -63,7 +50,7 @@
             </xsd:simpleType>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <!--
     =============================================
     Protocol
@@ -84,7 +71,7 @@
             </xsd:simpleType>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <!--
     =============================================
     SvcUsername
@@ -103,7 +90,7 @@
             </xsd:simpleType>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <!--
     =============================================
     SvcPassword
@@ -122,11 +109,11 @@
             </xsd:simpleType>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <!--
     ==========================================================================================
                                          888                   88888888888
-                                         888                       888                                 
+                                         888                       888
                                          888                       888
  .d8888b  .d88b.  88888b.d88b.  88888b.  888  .d88b.  888  888     888     888  888 88888b.   .d88b.  .d8888b
 d88P"    d88""88b 888 "888 "88b 888 "88b 888 d8P  Y8b `Y8bd8P'     888     888  888 888 "88b d8P  Y8b 88K
@@ -138,7 +125,7 @@ Y88b.    Y88..88P 888  888  888 888 d88P 888 Y8b.     .d8""8b.     888     Y88b 
                                 888                                         "Y88P"  888
     ==========================================================================================
     -->
-    
+
     <!--
     =============================================
     SvcInfoType
@@ -157,7 +144,7 @@ Y88b.    Y88..88P 888  888  888 888 d88P 888 Y8b.     .d8""8b.     888     Y88b 
             <xsd:element name="SvcPassword" type="tns:SvcPassword"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <!--
     ==========================================================================================
              888                                          888

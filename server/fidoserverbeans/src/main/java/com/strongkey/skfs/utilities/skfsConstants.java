@@ -1,17 +1,16 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.utilities;
 
 
 public class skfsConstants {
 
     public static final String SKFE_LOGGER = "SKFE";
-    
+
     //HASH map type constances
     public static final int MAP_USER_SESSION_INFO = 1;
     public static final int MAP_FIDO_SECRET_KEY = 2;
@@ -19,7 +18,7 @@ public class skfsConstants {
     public static final int MAP_FIDO_KEYS = 4;
     public static final int MAP_FIDO_POLICIES = 5;
     public static final int MAP_FIDO_MDS = 6;
-    
+
     /**
      * Constant for transports BT | BLE | USB | NFC
      */
@@ -47,19 +46,26 @@ public class skfsConstants {
     public static final String FIDO_PROTOCOL_UAF = "UAF";
 
     /**
+     * FIDO API Auth type
+     */
+    public static final String FIDO_API_AUTH_TYPE_HMAC = "hmac";
+    public static final String FIDO_API_AUTH_TYPE_PASSWORD = "password";
+
+    /**
      * FIDO protocol versions
      */
     public static final String FIDO_PROTOCOL_VERSION_U2F_V2 = "U2F_V2";
     public static final String FIDO_PROTOCOL_VERSION_2_0 = "FIDO2_0";
     public static final int USER_PRESENT_FLAG = 1;
-    
+
         /**
      * Datatype min max values
      */
     public static final int TINYINT_MAX = 127;
+    public static final int DID_MAX = 65535;
     public static final Long BIGINT_MAX = 9223372036854775807L;
     public static final int INT_MAX = 2147483647;
-    
+
     /**
      * FIDO web-service methods
      */
@@ -130,14 +136,14 @@ public class skfsConstants {
      */
     public static final String REGISTER_CLIENT_DATA_OPTYPE = "navigator.id.finishEnrollment";
     public static final String AUTHENTICATE_CLIENT_DATA_OPTYPE = "navigator.id.getAssertion";
-    
+
     public static final int MAX_RANDOM_NUMBER_SIZE_BITS = 1024;
     public static int P256_PUBLIC_KEY_SIZE = 65;
     public static int COUNTER_VALUE_BYTES = 4;
-    
+
     public static int DEFAULT_NUM_CHALLENGE_BYTES = 16;
     public static int DEFAULT_NUM_USERID_BYTES = 32;
-    
+
         /**
      * FIDO registration and authentication metadata
      */
@@ -146,35 +152,35 @@ public class skfsConstants {
     public static final String FIDO_METADATA_KEY_MODIFY_LOC = "last_used_location";
     public static final String FIDO_METADATA_KEY_USERNAME = "username";
     public static final String FIDO_METADATA_KEY_ORIGIN = "origin";
-    
+
         /**
      * FIDO user session types
      */
     public static final String FIDO_USERSESSION_REG = "register";
     public static final String FIDO_USERSESSION_AUTH = "auth";
     public static final String FIDO_USERSESSION_AUTHORIZE = "authorize";
-    
-    
+
+
         /**
      * FIDO JPA - JSON keys used as part of the response JSON sent back from
      * fido jpa module
      */
     public static final String JSON_KEY_FIDOJPA_RETURN_STATUS = "status";
     public static final String JSON_KEY_FIDOJPA_RETURN_MESSAGE = "message";
-    
-    
+
+
        /**
      * Miscellaneous json keys used
      */
     public static final String FIDO_JSON_KEY_USERNAME = "username";
     public static final String FIDO_JSON_KEY_RANDOMID = "randomid";
-    
+
         // Policy Servlet Constants
     public static final String CREATE_FIDO_POLICY = "createFidoPolicy";
     public static final String READ_FIDO_POLICY = "readFidoPolicy";
     public static final String UPDATE_FIDO_POLICY = "updateFidoPolicy";
     public static final String DELETE_FIDO_POLICY = "deleteFidoPolicy";
-    
+
         /**
      * Various LDAP user roles logically linked to groups in LDAP
      */
@@ -187,7 +193,7 @@ public class skfsConstants {
     public static final String LDAP_ROLE_SIGN = "SIGN";     //  'cn=SignAuthorized'
     public static final String LDAP_ROLE_REMOVEKEY = "RMKY"; //  'cn=RemoveAuthorized'
     public static final String LDAP_ROLE_FIDO = "FIDO"; //  'cn=RemoveAuthorized'
-    
+
      /**
      * LDAP attribute keys to fetch metadata of a user
      */
@@ -204,7 +210,7 @@ public class skfsConstants {
     public static final String LDAP_ATTR_KEY_FIDOENABLED = "FIDOKeysEnabled";
     public static final String LDAP_ATTR_KEY_2STEPVERIFY = "TwoStepVerification";
     public static final String LDAP_ATTR_KEY_DOMAINID = "did";
-    
+
     /**
      * FIDO2 registration setting parameters
      */
@@ -214,7 +220,7 @@ public class skfsConstants {
     public static final String FIDO_REGISTRATION_SETTING_ALG = "ALG";
     public static final String FIDO_REGISTRATION_SETTING_DISPLAYNAME = "DISPLAYNAME";
     public static final String FIDO_REGISTRATION_SETTING_USERICON = "USERICON";
-    
+
     /**
      * FIDO2 Policy attribute Keys
      */
@@ -226,37 +232,37 @@ public class skfsConstants {
     public static final String POLICY_CRYPTO_ATTESTATION_FORMATS = "attestation_formats";
     public static final String POLICY_CRYPTO_ATTESTATION_TYPES = "attestation_types";
     public static final String POLICY_CRYPTO_CHALLENGE_LENGTH = "challenge_length";
-    
+
     //RP
     public static final String POLICY_ATTR_RP = "rp";
     public static final String POLICY_RP_NAME = "name";
     public static final String POLICY_RP_ID = "id";
     public static final String POLICY_RP_ICON = "icon";
-    
+
     //Timeout
     public static final String POLICY_ATTR_TIMEOUT = "timeout";
-    
+
     //MDS
     public static final String POLICY_ATTR_MDS = "mds";
     public static final String POLICY_MDS_ENDPOINTS = "endpoints";
     public static final String POLICY_MDS_ENDPOINT_URL = "url";
     public static final String POLICY_MDS_ENDPOINT_TOKEN = "token";
     public static final String POLICY_MDS_CERTIFICATION = "certification";
-    
+
     //Tokenbinding
     public static final String POLICY_ATTR_TOKENBINDING = "tokenbinding";
-    
+
     //Counter
     public static final String POLICY_ATTR_COUNTER = "counter";
     public static final String POLICY_COUNTER_REQUIRECOUNTER = "requireCounter";
     public static final String POLICY_COUNTER_REQUIRECOUNTERINCREASE = "requireIncrease";
-    
+
     //User Settings
     public static final String POLICY_ATTR_USERSETTINGS = "userSettings";
-    
+
     //Store Signatures
     public static final String POLICY_ATTR_STORESIGNATURES = "storeSignatures";
-    
+
     //Registration
     public static final String POLICY_ATTR_REGISTRATION = "registration";
     public static final String POLICY_REGISTRATION_ICON = "icon";
@@ -268,24 +274,24 @@ public class skfsConstants {
     public static final String POLICY_REGISTRATION_REQUIRERESIDENTKEY = "requireResidentKey";
     public static final String POLICY_REGISTRATION_USERVERIFICATION = "userVerification";
     public static final String POLICY_REGISTRATION_ATTESTATION = "attestation";
-    
+
     //Authentication
     public static final String POLICY_ATTR_AUTHENTICATION = "authentication";
     public static final String POLICY_AUTHENTICATION_ALLOWCREDENTIALS = "allowCredentials";
     public static final String POLICY_AUTHENTICATION_USERVERIFICATION = "userVerification";
-    
+
     //Extensions
     public static final String POLICY_ATTR_EXTENSIONS = "extensions";
     public static final String POLICY_EXTENSIONS_EXAMPLE = "example.extension";
     public static final String POLICY_EXTENSIONS_APPID = "appid";
-    
+
     //Misc constant values defined in FIDO2 policies
     public static final String POLICY_CONST_ENABLED = "enabled";
     public static final String POLICY_CONST_DISABLED = "disabled";
     public static final String POLICY_CONST_REQUIRED = "required";
     public static final String POLICY_CONST_PREFERRED = "preferred";
     public static final String POLICY_CONST_NONE = "none";
-    
+
     //FIDO 2 - Webauthn
     public static final String FIDO2_PREREG_ATTR_RP = "rp";
     public static final String FIDO2_PREREG_ATTR_USER = "user";
@@ -296,14 +302,14 @@ public class skfsConstants {
     public static final String FIDO2_PREREG_ATTR_AUTHENTICATORSELECT = "authenticatorSelection";
     public static final String FIDO2_PREREG_ATTR_ATTESTATION = "attestation";
     public static final String FIDO2_PREREG_ATTR_EXTENSIONS = "extensions";
-    
+
     public static final String FIDO2_PREAUTH_ATTR_CHALLENGE = "challenge";
     public static final String FIDO2_PREAUTH_ATTR_TIMEOUT = "timeout";
     public static final String FIDO2_PREAUTH_ATTR_RPID = "rpId";
     public static final String FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS = "allowCredentials";
     public static final String FIDO2_PREAUTH_ATTR_UV = "userVerification";
     public static final String FIDO2_PREAUTH_ATTR_EXTENSIONS = "extensions";
-    
+
     public static final String FIDO2_ATTR_ID = "id";
     public static final String FIDO2_ATTR_NAME = "name";
     public static final String FIDO2_ATTR_DISPLAYNAME = "displayName";
@@ -314,7 +320,7 @@ public class skfsConstants {
     public static final String FIDO2_ATTR_ATTACHMENT = "authenticatorAttachment";
     public static final String FIDO2_ATTR_RESIDENTKEY = "requireResidentKey";
     public static final String FIDO2_ATTR_USERVERIFICATION = "userVerification";
-    
+
     //Constants defined by Webauhthn spec
     public static final String FIDO2_CONST_PUBLIC_CREDENTIAL_TYPE = "public-key";
     public static final String FIDO2_CONST_TRANSPORT_USB = "usb";
@@ -325,9 +331,9 @@ public class skfsConstants {
     public static final String FIDO2_CONST_ATTACHMENT_CROSS = "cross-platform";
     public static final String FIDO2_CONST_ATTESTATION_NONE = "none";
     public static final String FIDO2_CONST_ATTESTATION_INDIRECT = "indirect";
-    public static final String FIDO2_CONST_ATTESTATION_DIRECT = "direct"; 
-    
-    
+    public static final String FIDO2_CONST_ATTESTATION_DIRECT = "direct";
+
+
         /**
      * *********************************************************************
      */
@@ -355,5 +361,5 @@ public class skfsConstants {
      * Parameter for ZMQ service when its inactive
      */
     public static final int ZMQ_SERVICE_INACTIVE = 4;
-    
+
 }

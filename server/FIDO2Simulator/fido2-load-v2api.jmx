@@ -1,0 +1,2482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1 r1853635">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan - V2 api" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="SKCE Hostnames" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="SKCE01" elementType="Argument">
+            <stringProp name="Argument.name">SKCE01</stringProp>
+            <stringProp name="Argument.value">qatestserver1.strongkey.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="SKCE02" elementType="Argument">
+            <stringProp name="Argument.name">SKCE02</stringProp>
+            <stringProp name="Argument.value">qatestserver2.strongkey.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="SKFE Configuration" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="DID" elementType="Argument">
+            <stringProp name="Argument.name">DID</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="skfe-serviceuser" elementType="Argument">
+            <stringProp name="Argument.name">skfe-serviceuser</stringProp>
+            <stringProp name="Argument.value">svcfidouser</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="skfe-serviceuserpwd" elementType="Argument">
+            <stringProp name="Argument.name">skfe-serviceuserpwd</stringProp>
+            <stringProp name="Argument.value">Abcd1234!</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="skfe-fidoprotocol" elementType="Argument">
+            <stringProp name="Argument.name">skfe-fidoprotocol</stringProp>
+            <stringProp name="Argument.value">FIDO20</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="content-type" elementType="Argument">
+            <stringProp name="Argument.name">content-type</stringProp>
+            <stringProp name="Argument.value">application/json</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="api-version" elementType="Argument">
+            <stringProp name="Argument.name">api-version</stringProp>
+            <stringProp name="Argument.value">2.0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="resource-location" elementType="Argument">
+            <stringProp name="Argument.name">resource-location</stringProp>
+            <stringProp name="Argument.value">/api/domains/1/fidokeys</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="secretkey" elementType="Argument">
+            <stringProp name="Argument.name">secretkey</stringProp>
+            <stringProp name="Argument.value">7edd81de1baab6ebcc76ebe3e38f41f4</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="accesskey" elementType="Argument">
+            <stringProp name="Argument.name">accesskey</stringProp>
+            <stringProp name="Argument.value">162a5684336fa6e7</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="name-toolong" elementType="Argument">
+            <stringProp name="Argument.name">name-toolong</stringProp>
+            <stringProp name="Argument.value">Logs are a critical part of any system, they give you insight into what a system is doing as well what happened. Virtually every process running on a system generates logs in some form or another. Usually, these logs are written to files on local disks. When your system grows to multiple hosts, it grows to multiple hosts.</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="origin" elementType="Argument">
+            <stringProp name="Argument.name">origin</stringProp>
+            <stringProp name="Argument.value">https://qa-saka-01.strongkey.com:8181</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="content-type-patch" elementType="Argument">
+            <stringProp name="Argument.name">content-type-patch</stringProp>
+            <stringProp name="Argument.value">application/merge-patch+json</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="testuser" elementType="Argument">
+            <stringProp name="Argument.name">testuser</stringProp>
+            <stringProp name="Argument.value">testuser_${__Random(1,1000000)}${__Random(1,1000000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="version" elementType="Argument">
+            <stringProp name="Argument.name">version</stringProp>
+            <stringProp name="Argument.value">1.0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="create_location" elementType="Argument">
+            <stringProp name="Argument.name">create_location</stringProp>
+            <stringProp name="Argument.value">Sunnyvale,CA</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="last_used_location" elementType="Argument">
+            <stringProp name="Argument.name">last_used_location</stringProp>
+            <stringProp name="Argument.value">Sunnyvale,CA</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="user" elementType="Argument">
+            <stringProp name="Argument.name">user</stringProp>
+            <stringProp name="Argument.value">user_${__Random(1,1000000)}${__Random(1,1000000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="testuser1" elementType="Argument">
+            <stringProp name="Argument.name">testuser1</stringProp>
+            <stringProp name="Argument.value">testuser1_${__Random(1,1000000)}${__Random(1,1000000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="testuser2" elementType="Argument">
+            <stringProp name="Argument.name">testuser2</stringProp>
+            <stringProp name="Argument.value">testuser-v2-${__Random(1,1000000)}${__Random(1,1000000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="Accesskey" elementType="Argument">
+            <stringProp name="Argument.name">Accesskey</stringProp>
+            <stringProp name="Argument.value">6087b4a1a65e0498</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="Secretkey" elementType="Argument">
+            <stringProp name="Argument.name">Secretkey</stringProp>
+            <stringProp name="Argument.value">398d930768d589fcd12bcbf5d19b38a9</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Test Control Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="threads" elementType="Argument">
+            <stringProp name="Argument.name">threads</stringProp>
+            <stringProp name="Argument.value">30</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="loops" elementType="Argument">
+            <stringProp name="Argument.name">loops</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SKFE - Register and Authenticate - New Users - SKCE01" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${threads}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">36000</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Registration - SKCE01" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Register Challenge - SKCE01" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${testuser-v2}&quot;,&quot;displayname&quot;:&quot;${testuser-v2}_dn&quot;,&quot;options&quot;:&quot;{\&quot;attestation\&quot;:\&quot;direct\&quot;}&quot;,&quot;extensions&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/registration/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="Create users" enabled="true">
+              <collectionProp name="UserParameters.names">
+                <stringProp name="2090534636">testuser-v2</stringProp>
+              </collectionProp>
+              <collectionProp name="UserParameters.thread_values">
+                <collectionProp name="-1890386189">
+                  <stringProp name="-1887010618">testuser-skce01-${user_counter_sk01}</stringProp>
+                </collectionProp>
+              </collectionProp>
+              <boolProp name="UserParameters.per_iteration">true</boolProp>
+            </UserParameters>
+            <hashTree/>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+              <stringProp name="CounterConfig.start">1</stringProp>
+              <stringProp name="CounterConfig.end"></stringProp>
+              <stringProp name="CounterConfig.incr">1</stringProp>
+              <stringProp name="CounterConfig.name">user_counter_sk01</stringProp>
+              <stringProp name="CounterConfig.format"></stringProp>
+              <boolProp name="CounterConfig.per_user">false</boolProp>
+            </CounterConfig>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">response</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preregister" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/registration/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="393520667">&quot;Response&quot;:</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Successful Pre-registration" enabled="true">
+            <stringProp name="IfController.condition">true</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Register - SKCE01" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${challengeresponse_reg}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+              <stringProp name="HTTPSampler.port">8181</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/registration</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="false">
+                <stringProp name="ConstantTimer.delay">200</stringProp>
+              </ConstantTimer>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="FIDO2 Simulator - Registration" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+try{
+String resJsonObj = vars.get(&quot;response&quot;);
+System.out.println(&quot;Response = &quot; + resJsonObj);
+//String SessionID = &quot;${sessionId}&quot;;
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+System.out.println(&quot;Tokenresponse = &quot; +TokenResponse);
+vars.put(&quot;challengeresponse&quot;,TokenResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${testuser-v2}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;create_location\&quot;:\&quot;${create_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String regoutput = job.build().toString();
+System.out.println(&quot;regoutput = &quot; +regoutput);
+vars.put(&quot;challengeresponse_reg&quot;,regoutput);
+}catch(Exception e){
+	e.printStackTrace();
+}
+</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Register" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/registration&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-776702050">&quot;Response&quot;:&quot;Successfully processed registration response&quot;</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Authenticate" enabled="false"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Authenticate Challenge - SKCE01" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${testuser-v2}&quot;,&quot;options&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+              <stringProp name="JSONPostProcessor.referenceNames">response_auth</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preauthenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Key_Handle" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">key_handle</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Challenge" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">auth_challenge</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..challenge</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Authenticate - SKCE01" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${challengeresponse_auth}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="false">
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+
+//String ${__V(result${__threadNum})}= vars.get(&quot;preauth_response-${__threadNum}&quot;);
+//System.out.println(&quot;Auth_Response = &quot; + result${__threadNum});
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+//System.out.println(&quot;id = &quot; + id);
+String origin = &quot;${origin}&quot;;
+//System.out.println(&quot;origin = &quot; + origin);
+//System.out.println(&quot;Auth_counter = &quot; + ${auth_counter});
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter}, true).toString();
+//System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+//System.out.println(&quot;TestUser = &quot; +&quot;${testuser}&quot;);
+vars.put(&quot;challengeauthresponse-${__threadNum}&quot;,TokenAuthResponse);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+              <stringProp name="CounterConfig.start">1</stringProp>
+              <stringProp name="CounterConfig.end"></stringProp>
+              <stringProp name="CounterConfig.incr">1</stringProp>
+              <stringProp name="CounterConfig.name">auth_counter_authenticate_01</stringProp>
+              <stringProp name="CounterConfig.format"></stringProp>
+              <boolProp name="CounterConfig.per_user">true</boolProp>
+            </CounterConfig>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+
+//String resJsonObj_auth = vars.get(&quot;response_auth&quot;);
+//System.out.println(&quot;Response = &quot; + resJsonObj_auth);
+//String SessionID = &quot;${sessionId}&quot;;
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+//String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter_authenticate_01}, true).toString();
+System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+vars.put(&quot;challengeresponseauth&quot;,TokenAuthResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenAuthResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${testuser-v2}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;last_used_location\&quot;:\&quot;${last_used_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String authoutput = job.build().toString();
+System.out.println(&quot;authoutput = &quot; +authoutput);
+vars.put(&quot;challengeresponse_auth&quot;,authoutput);
+//System.out.println(&quot;authoutput = &quot; +authoutput);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;bodyauth = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SKFE - Register and Authenticate - New Users - SKCE02" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${threads}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">36000</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Registration - SKCE02" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Register Challenge - SKCE02" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${testuser-v2}&quot;,&quot;displayname&quot;:&quot;${testuser-v2}_dn&quot;,&quot;options&quot;:&quot;{\&quot;attestation\&quot;:\&quot;direct\&quot;}&quot;,&quot;extensions&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/registration/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="Create users" enabled="true">
+              <collectionProp name="UserParameters.names">
+                <stringProp name="2090534636">testuser-v2</stringProp>
+              </collectionProp>
+              <collectionProp name="UserParameters.thread_values">
+                <collectionProp name="-92192969">
+                  <stringProp name="369900420">testuser-skce02-${user_counter_sk02}</stringProp>
+                </collectionProp>
+              </collectionProp>
+              <boolProp name="UserParameters.per_iteration">true</boolProp>
+            </UserParameters>
+            <hashTree/>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+              <stringProp name="CounterConfig.start">1</stringProp>
+              <stringProp name="CounterConfig.end"></stringProp>
+              <stringProp name="CounterConfig.incr">1</stringProp>
+              <stringProp name="CounterConfig.name">user_counter_sk02</stringProp>
+              <stringProp name="CounterConfig.format"></stringProp>
+              <boolProp name="CounterConfig.per_user">false</boolProp>
+            </CounterConfig>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">response</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Get Hash - Preregister" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/registration/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="393520667">&quot;Response&quot;:</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Successful Pre-registration" enabled="true">
+            <stringProp name="IfController.condition">true</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Register - SKCE02" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${challengeresponse_reg}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+              <stringProp name="HTTPSampler.port">8181</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/registration</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="FIDO2 Simulator - Registration" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+try{
+String resJsonObj = vars.get(&quot;response&quot;);
+System.out.println(&quot;Response = &quot; + resJsonObj);
+//String SessionID = &quot;${sessionId}&quot;;
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+System.out.println(&quot;Tokenresponse = &quot; +TokenResponse);
+vars.put(&quot;challengeresponse&quot;,TokenResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${testuser-v2}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;create_location\&quot;:\&quot;${create_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String regoutput = job.build().toString();
+System.out.println(&quot;regoutput = &quot; +regoutput);
+vars.put(&quot;challengeresponse_reg&quot;,regoutput);
+}catch(Exception e){
+	e.printStackTrace();
+}
+</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Get Hash - Register" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/registration&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-776702050">&quot;Response&quot;:&quot;Successfully processed registration response&quot;</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Authenticate" enabled="false"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Authenticate Challenge - SKCE02" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${testuser-v2}&quot;,&quot;options&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+              <stringProp name="JSONPostProcessor.referenceNames">response_auth</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preauthenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Key_Handle" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">key_handle</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Challenge" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">auth_challenge</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..challenge</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Authenticate - SKCE02" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">${challengeresponse_auth}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="false">
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+
+//String ${__V(result${__threadNum})}= vars.get(&quot;preauth_response-${__threadNum}&quot;);
+//System.out.println(&quot;Auth_Response = &quot; + result${__threadNum});
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+//System.out.println(&quot;id = &quot; + id);
+String origin = &quot;${origin}&quot;;
+//System.out.println(&quot;origin = &quot; + origin);
+//System.out.println(&quot;Auth_counter = &quot; + ${auth_counter});
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter}, true).toString();
+//System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+//System.out.println(&quot;TestUser = &quot; +&quot;${testuser}&quot;);
+vars.put(&quot;challengeauthresponse-${__threadNum}&quot;,TokenAuthResponse);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+              <stringProp name="CounterConfig.start">1</stringProp>
+              <stringProp name="CounterConfig.end"></stringProp>
+              <stringProp name="CounterConfig.incr">1</stringProp>
+              <stringProp name="CounterConfig.name">auth_counter_authenticate_02</stringProp>
+              <stringProp name="CounterConfig.format"></stringProp>
+              <boolProp name="CounterConfig.per_user">true</boolProp>
+            </CounterConfig>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="FIDO2 Simulator - Authentication" enabled="true">
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+
+//String resJsonObj_auth = vars.get(&quot;response_auth&quot;);
+//System.out.println(&quot;Response = &quot; + resJsonObj_auth);
+//String SessionID = &quot;${sessionId}&quot;;
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+//String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter_authenticate_02}, true).toString();
+System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+vars.put(&quot;challengeresponseauth&quot;,TokenAuthResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenAuthResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${testuser-v2}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;last_used_location\&quot;:\&quot;${last_used_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String authoutput = job.build().toString();
+System.out.println(&quot;authoutput = &quot; +authoutput);
+vars.put(&quot;challengeresponse_auth&quot;,authoutput);
+</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Authenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;bodyauth = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SKFE Authenticate - Pregenerated Users - SKCE01" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${threads}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">14400</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Authentication - Pregenerated Users - SKCE01" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Preauth Challenge - Pregenerated Users - SKCE01" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${auth-testuser}&quot;,&quot;options&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
+              <collectionProp name="UserParameters.names">
+                <stringProp name="1695095266">auth-testuser</stringProp>
+              </collectionProp>
+              <collectionProp name="UserParameters.thread_values">
+                <collectionProp name="1472622386">
+                  <stringProp name="-957380834">testuser-fs01-${__jexl2(${__threadNum}*10000)}</stringProp>
+                </collectionProp>
+              </collectionProp>
+              <boolProp name="UserParameters.per_iteration">false</boolProp>
+            </UserParameters>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+              <stringProp name="JSONPostProcessor.referenceNames">response_auth</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preauthenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Key_Handle" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">key_handle</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Challenge" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">auth_challenge</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..challenge</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Successful Pre-authentication - Pregenerated users" enabled="true">
+            <stringProp name="IfController.condition">true</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Authenticate - Pregenerated users - SKCE01" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${challengeresponse_auth}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${SKCE01}</stringProp>
+              <stringProp name="HTTPSampler.port"></stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="false">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+
+//String ${__V(result${__threadNum})}= vars.get(&quot;preauth_response-${__threadNum}&quot;);
+//System.out.println(&quot;Auth_Response = &quot; + result${__threadNum});
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+//System.out.println(&quot;id = &quot; + id);
+String origin = &quot;${origin}&quot;;
+//System.out.println(&quot;origin = &quot; + origin);
+//System.out.println(&quot;Auth_counter = &quot; + ${auth_counter});
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter}, true).toString();
+//System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+//System.out.println(&quot;TestUser = &quot; +&quot;${testuser}&quot;);
+vars.put(&quot;challengeauthresponse-${__threadNum}&quot;,TokenAuthResponse);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+                <stringProp name="CounterConfig.start">10</stringProp>
+                <stringProp name="CounterConfig.end"></stringProp>
+                <stringProp name="CounterConfig.incr">1</stringProp>
+                <stringProp name="CounterConfig.name">auth_counter_authenticate_01</stringProp>
+                <stringProp name="CounterConfig.format"></stringProp>
+                <boolProp name="CounterConfig.per_user">false</boolProp>
+              </CounterConfig>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+
+//String resJsonObj_auth = vars.get(&quot;response_auth&quot;);
+//System.out.println(&quot;Response = &quot; + resJsonObj_auth);
+//String SessionID = &quot;${sessionId}&quot;;
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+//String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter_authenticate_01}, true).toString();
+System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+vars.put(&quot;challengeresponseauth&quot;,TokenAuthResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenAuthResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${auth-testuser}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;last_used_location\&quot;:\&quot;${last_used_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String authoutput = job.build().toString();
+System.out.println(&quot;authoutput = &quot; +authoutput);
+vars.put(&quot;challengeresponse_auth&quot;,authoutput);
+</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Authenticate" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;bodyauth = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SKFE Authenticate - Pregenerated Users - SKCE02" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${threads}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">43200</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Authentication - Pregenerated Users - SKCE02" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Preauth Challenge - Pregenerated Users - SKCE02" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${auth-testuser}&quot;,&quot;options&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
+              <collectionProp name="UserParameters.names">
+                <stringProp name="1695095266">auth-testuser</stringProp>
+              </collectionProp>
+              <collectionProp name="UserParameters.thread_values">
+                <collectionProp name="1567765993">
+                  <stringProp name="1866004468">testuser-sk02-${__jexl2(${__threadNum}*63000)}</stringProp>
+                </collectionProp>
+              </collectionProp>
+              <boolProp name="UserParameters.per_iteration">false</boolProp>
+            </UserParameters>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+              <stringProp name="JSONPostProcessor.referenceNames">response_auth</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preauthenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Key_Handle" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">key_handle</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Challenge" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">auth_challenge</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..challenge</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Successful Pre-authentication - Pregenerated users" enabled="true">
+            <stringProp name="IfController.condition">true</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Authenticate - Pregenerated users - SKCE02" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${challengeresponse_auth}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+              <stringProp name="HTTPSampler.port">8181</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="false">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+
+//String ${__V(result${__threadNum})}= vars.get(&quot;preauth_response-${__threadNum}&quot;);
+//System.out.println(&quot;Auth_Response = &quot; + result${__threadNum});
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+//System.out.println(&quot;id = &quot; + id);
+String origin = &quot;${origin}&quot;;
+//System.out.println(&quot;origin = &quot; + origin);
+//System.out.println(&quot;Auth_counter = &quot; + ${auth_counter});
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter}, true).toString();
+//System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+//System.out.println(&quot;TestUser = &quot; +&quot;${testuser}&quot;);
+vars.put(&quot;challengeauthresponse-${__threadNum}&quot;,TokenAuthResponse);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+                <stringProp name="CounterConfig.start">1</stringProp>
+                <stringProp name="CounterConfig.end"></stringProp>
+                <stringProp name="CounterConfig.incr">1</stringProp>
+                <stringProp name="CounterConfig.name">auth_counter_authenticate_02</stringProp>
+                <stringProp name="CounterConfig.format"></stringProp>
+                <boolProp name="CounterConfig.per_user">false</boolProp>
+              </CounterConfig>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+
+//String resJsonObj_auth = vars.get(&quot;response_auth&quot;);
+//System.out.println(&quot;Response = &quot; + resJsonObj_auth);
+//String SessionID = &quot;${sessionId}&quot;;
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+//String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter_authenticate_02}, true).toString();
+System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+vars.put(&quot;challengeresponseauth&quot;,TokenAuthResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenAuthResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${auth-testuser}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;last_used_location\&quot;:\&quot;${last_used_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String authoutput = job.build().toString();
+System.out.println(&quot;authoutput = &quot; +authoutput);
+vars.put(&quot;challengeresponse_auth&quot;,authoutput);
+</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Authenticate" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;bodyauth = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SKFE Authenticate - Pregenerated Users - SKCE02" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${threads}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">43200</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Authentication - Pregenerated Users - SKCE02" enabled="true"/>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">${content-type}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Date</stringProp>
+                <stringProp name="Header.value">${currentDate}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-api-version</stringProp>
+                <stringProp name="Header.value">${api-version}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">HMAC ${accesskey}:${HMAC}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">strongkey-content-sha256</stringProp>
+                <stringProp name="Header.value">${HASH}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SKFE Preauth Challenge - Pregenerated Users - SKCE02" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;protocol&quot;:&quot;FIDO2_0&quot;,&quot;username&quot;:&quot;${auth-testuser-02}&quot;,&quot;options&quot;:&quot;{}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+            <stringProp name="HTTPSampler.port">8181</stringProp>
+            <stringProp name="HTTPSampler.protocol">https</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication/challenge</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
+              <collectionProp name="UserParameters.names">
+                <stringProp name="-1642352179">auth-testuser-02</stringProp>
+              </collectionProp>
+              <collectionProp name="UserParameters.thread_values">
+                <collectionProp name="527825122">
+                  <stringProp name="1805212529">testuser-skce02-${__jexl2(${__threadNum}*20000)}</stringProp>
+                </collectionProp>
+              </collectionProp>
+              <boolProp name="UserParameters.per_iteration">false</boolProp>
+            </UserParameters>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="false">
+              <stringProp name="JSONPostProcessor.referenceNames">response_auth</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..Response</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Preauthenticate" enabled="true">
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;body = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication/challenge&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Key_Handle" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">key_handle</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..id</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Challenge" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">auth_challenge</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..challenge</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Successful Pre-authentication - Pregenerated users" enabled="true">
+            <stringProp name="IfController.condition">true</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Authenticate - Pregenerated users - SKCE02" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${challengeresponse_auth}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${SKCE02}</stringProp>
+              <stringProp name="HTTPSampler.port">8181</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">api/domains/${DID}/fidokeys/authentication</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="false">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+
+//String ${__V(result${__threadNum})}= vars.get(&quot;preauth_response-${__threadNum}&quot;);
+//System.out.println(&quot;Auth_Response = &quot; + result${__threadNum});
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+//System.out.println(&quot;id = &quot; + id);
+String origin = &quot;${origin}&quot;;
+//System.out.println(&quot;origin = &quot; + origin);
+//System.out.println(&quot;Auth_counter = &quot; + ${auth_counter});
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter}, true).toString();
+//System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+//System.out.println(&quot;TestUser = &quot; +&quot;${testuser}&quot;);
+vars.put(&quot;challengeauthresponse-${__threadNum}&quot;,TokenAuthResponse);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+                <stringProp name="CounterConfig.start">1</stringProp>
+                <stringProp name="CounterConfig.end"></stringProp>
+                <stringProp name="CounterConfig.incr">1</stringProp>
+                <stringProp name="CounterConfig.name">auth_counter_authenticate_03</stringProp>
+                <stringProp name="CounterConfig.format"></stringProp>
+                <boolProp name="CounterConfig.per_user">false</boolProp>
+              </CounterConfig>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Authentication Token Simulation" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">import com.strongauth.skfe.tokensim.FIDOU2FTokenSimulator;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
+
+//String resJsonObj_auth = vars.get(&quot;response_auth&quot;);
+//System.out.println(&quot;Response = &quot; + resJsonObj_auth);
+//String SessionID = &quot;${sessionId}&quot;;
+String id = vars.get(&quot;key_handle&quot;);
+String challenge = vars.get(&quot;auth_challenge&quot;);
+String origin = &quot;${origin}&quot;;
+System.out.println(&quot;origin = &quot; + origin);
+
+//String TokenResponse = FIDOU2FTokenSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, &quot;packed&quot;, &quot;Basic&quot;, true).toString();
+String TokenAuthResponse = new FIDOU2FTokenSimulator().generateFIDO2AuthenticationResponse(id, challenge, origin, &quot;packed&quot;,${auth_counter_authenticate_03}, true).toString();
+System.out.println(&quot;TokenAuthresponse = &quot; +TokenAuthResponse);
+vars.put(&quot;challengeresponseauth&quot;,TokenAuthResponse);
+
+JsonObjectBuilder job = Json.createObjectBuilder();
+	   job.add(&quot;protocol&quot;,&quot;FIDO2_0&quot;);
+        job.add(&quot;response&quot;, TokenAuthResponse);
+	   job.add(&quot;metadata&quot;,&quot;{\&quot;username\&quot;:\&quot;${auth-testuser-02}\&quot;,\&quot;version\&quot;:\&quot;${version}\&quot;,\&quot;last_used_location\&quot;:\&quot;${last_used_location}\&quot;,\&quot;origin\&quot;:\&quot;${origin}\&quot;}&quot;);
+
+String authoutput = job.build().toString();
+System.out.println(&quot;authoutput = &quot; +authoutput);
+vars.put(&quot;challengeresponse_auth&quot;,authoutput);
+</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Generate Hash - Authenticate" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">import org.apache.commons.httpclient.auth.DigestScheme; // necessary imports
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.jmeter.protocol.http.control.Header;
+import javax.xml.bind.DatatypeConverter;
+import java.security.*;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.text.SimpleDateFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+
+      String body = sampler.getArguments().getArgument(0).getValue();
+      System.out.println(&quot;bodyauth = &quot; + body);
+      
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);
+      md.update(body.getBytes());
+     // byte[] hash = digest.digest(body.getBytes(body));
+      String sha256hash = Base64.getEncoder().encodeToString(md.digest());
+      System.out.println(&quot;contenthash = &quot; + sha256hash);
+      vars.put(&quot;HASH&quot;, sha256hash);
+      
+      String http = &quot;POST&quot;;
+      System.out.println(&quot;contentpost = &quot; + http);
+      
+      String contentType = &quot;application/json&quot;;
+      System.out.println(&quot;contenttype = &quot; + contentType);
+      
+      String currentDate = new SimpleDateFormat(&quot;EEE, d MMM yyyy HH:mm:ss z&quot;).format(new Date());
+      System.out.println(&quot;contentDate = &quot; + currentDate);
+      vars.put(&quot;currentDate&quot;, currentDate);
+      
+      String apiVersion = &quot;${api-version}&quot;;
+      System.out.println(&quot;apiversion = &quot; + apiVersion);
+      
+      String resourceLocation = &quot;${resource-location}&quot;+&quot;/authentication&quot;;
+      System.out.println(&quot;resource = &quot; + resourceLocation);
+
+      String combined = http + &quot;\n&quot;
+      + sha256hash + &quot;\n&quot;
+      + contentType + &quot;\n&quot;
+      + currentDate + &quot;\n&quot;
+      + apiVersion + &quot;\n&quot;
+      + resourceLocation;
+      System.out.println(&quot;CombinedData = &quot; + combined);
+
+      String secret = &quot;${secretkey}&quot;;
+      Mac mac = Mac.getInstance(&quot;HmacSHA256&quot;);
+	 SecretKeySpec signingKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secret), &quot;HmacSHA256&quot;);
+	 mac.init(signingKey);
+	 
+	 byte[] rawHmac = mac.doFinal(combined.getBytes());
+	 String hmac = Base64.getEncoder().encodeToString(rawHmac);
+
+	 System.out.println(&quot;Hmac = &quot; + hmac);
+	 vars.put(&quot;HMAC&quot;, hmac);</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree - Positive" enabled="false">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+        <boolProp name="ResultCollector.success_only_logging">true</boolProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree - Negative" enabled="true">
+        <boolProp name="ResultCollector.error_logging">true</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>true</responseData>
+            <samplerData>true</samplerData>
+            <xml>true</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>true</responseHeaders>
+            <requestHeaders>true</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <fileName>true</fileName>
+            <hostname>true</hostname>
+            <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">/root/jmeter/infosys/reg-vm-10hr/test1/error.jtl</stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">/root/jmeter/infosys/reg-vm-10hr/test1/aggreport.jtl</stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <kg.apc.jmeter.vizualizers.CorrectedResultCollector guiclass="kg.apc.jmeter.vizualizers.TransactionsPerSecondGui" testclass="kg.apc.jmeter.vizualizers.CorrectedResultCollector" testname="jp@gc - Transactions per Second" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">/root/jmeter/infosys/reg-vm-10hr/test1/tps.jtl</stringProp>
+        <longProp name="interval_grouping">1000</longProp>
+        <boolProp name="graph_aggregated">false</boolProp>
+        <stringProp name="include_sample_labels"></stringProp>
+        <stringProp name="exclude_sample_labels"></stringProp>
+      </kg.apc.jmeter.vizualizers.CorrectedResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

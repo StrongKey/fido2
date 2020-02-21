@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.messaging;
 
 import com.strongkey.appliance.entitybeans.Domains;
@@ -31,14 +31,14 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
      **/
     private final String classname = this.getClass().getName();
 
-    Collection<Servers> subscribers = null; 
-    
+    Collection<Servers> subscribers = null;
+
     @Override
     @Asynchronous
     public void execute(String repobjpk, int objectype, int objectop, String objectpk, Object obj) {
         strongkeyLogger.entering(skceConstants.SKEE_LOGGER,classname, "execute");
         byte[] objectbytes = null;
-        
+
         //switch between object types and create proto buffer object
         switch (objectype) {
             case applianceConstants.ENTITY_TYPE_FIDO_KEYS:
@@ -223,7 +223,7 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.FINE, classname, "run", "SKCE-MSG-6007", dproto.toString());
                 objectbytes = dproto.toByteArray();
                 break;
- 
+
             case applianceConstants.ENTITY_TYPE_FIDO_POLICIES:
                 FidoPolicies fpbean = (FidoPolicies) obj;
                 ZMQSKCEReplicationProtos.FidoPolicies.Builder fpbuilder = ZMQSKCEReplicationProtos.FidoPolicies.newBuilder();
@@ -240,7 +240,7 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 if (fpbean.getSignature() != null) {
                     fpbuilder.setSignature(fpbean.getSignature());
                 }
-                
+
                 // Now build the proto with all non-null values
                 ZMQSKCEReplicationProtos.FidoPolicies fpproto
                         = fpbuilder
@@ -256,8 +256,8 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                         .build();
                 strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "run", "SKCE-MSG-6007", fpproto.toString());
                 objectbytes = fpproto.toByteArray();
-                break;   
-                
+                break;
+
             case applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES:
                 AttestationCertificates acbean = (AttestationCertificates) obj;
                 ZMQSKCEReplicationProtos.AttestationCertificates.Builder acbuilder = ZMQSKCEReplicationProtos.AttestationCertificates.newBuilder();
@@ -289,7 +289,7 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "run", "SKCE-MSG-6007", acproto.toString());
                 objectbytes = acproto.toByteArray();
                 break;
-                
+
             default:
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "run", "SKCE-ERR-6001", applianceCommon.getEntityName(objectype) + " [OBJPK=" + objectpk + "] [OBJOP=" + applianceCommon.getRepop(objectop) + "]");
 

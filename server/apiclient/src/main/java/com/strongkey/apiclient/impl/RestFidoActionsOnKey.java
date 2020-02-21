@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -28,11 +28,11 @@ import org.apache.http.util.EntityUtils;
 
 public class RestFidoActionsOnKey {
 
-    public static void deregister(String REST_URI, 
-                                String did, 
-                                String accesskey, 
-                                String secretkey, 
-                                String keyid) throws IOException 
+    public static void deregister(String REST_URI,
+                                String did,
+                                String accesskey,
+                                String secretkey,
+                                String keyid) throws IOException
     {
         System.out.println("Deactivate key test");
         System.out.println("******************************************");
@@ -42,7 +42,7 @@ public class RestFidoActionsOnKey {
         //  Make API rest call and get response from the server
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.DEACTIVATE_ENDPOINT + "/" + keyid;
         System.out.println("\nCalling deactivate @ " + resourceLoc);
-            
+
         String contentSHA = "";
         String contentType = "";
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
@@ -87,19 +87,19 @@ public class RestFidoActionsOnKey {
         } finally {
             response.close();
         }
-        
+
         System.out.println(" Response : " + result);
 
         System.out.println("\nDeactivate key test complete.");
         System.out.println("******************************************");
     }
 
-    public static void patch(String REST_URI, 
-                            String did, 
-                            String accesskey, 
-                            String secretkey, 
+    public static void patch(String REST_URI,
+                            String did,
+                            String accesskey,
+                            String secretkey,
                             String keyid,
-                            String status) throws Exception 
+                            String status) throws Exception
     {
         System.out.println("Update key test");
         System.out.println("******************************************");
@@ -165,7 +165,7 @@ public class RestFidoActionsOnKey {
         } finally {
             response.close();
         }
-        
+
         System.out.println(" Response : " + result);
 
         System.out.println("\nActivate key test complete.");

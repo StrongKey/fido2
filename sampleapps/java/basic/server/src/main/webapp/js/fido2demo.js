@@ -1,10 +1,9 @@
 /**
-* Copyright (c) 2019 StrongKey, Inc.
+* Copyright StrongAuth, Inc. All Rights Reserved.
 *
-* Use of this source code is governed by the Gnu Lesser General Public License 2.1.
-* The license can be found at https://github.com/StrongKey/fido2/LICENSE.
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
 */
-
 'use strict';
 
 // ECMAScript 6 class
@@ -121,7 +120,7 @@ class FidoTutorial {
         $('#regSubmit').text(this.loggedIn ? 'Register Additional Key' : 'Register New Key');
         this.setVisible('#regUsernamePanel', !this.loggedIn);
 
-        // show/hide the various link actions 
+        // show/hide the various link actions
         this.setVisible('#logoutLinkPanel', this.loggedIn);
         this.setVisible('#registerLinkPanel', !this.loggedIn && !this.registering);
         this.setVisible('#authLinkPanel', !this.loggedIn && this.registering);
@@ -149,7 +148,7 @@ class FidoTutorial {
 
         // When not logged in, use preregister to check existence of username. The preregister call
         // doesn't require authentication. It returns a challenge, which contains a cryptographic
-        // nonce, i.e. a random number used only once. If username doesn't exist, proceed with registration. 
+        // nonce, i.e. a random number used only once. If username doesn't exist, proceed with registration.
         if (!this.loggedIn) {
             this.post('preregister', {
                 'username': $('#regUsername').val(),
@@ -163,7 +162,7 @@ class FidoTutorial {
                 });
         }
         // When logged in, use preregisterExisting to add additional keys associated with the username.
-        // It requires authentication since we must ensure that the person adding the key is authorized 
+        // It requires authentication since we must ensure that the person adding the key is authorized
         // to do so. It returns the same fields as preregister.
         else {
             this.post('preregisterExisting', {
@@ -182,7 +181,7 @@ class FidoTutorial {
     submitAuthForm() {
         this.fidoData = null;
 
-        // When not logged in, use preauthenticate to check existence of username. Unsurprisingly, the 
+        // When not logged in, use preauthenticate to check existence of username. Unsurprisingly, the
         // preauthenticate call doesn't require authentication. It returns a challenge that is supplied
         // to the authenticator and then, assuming it is properly signed, to the authenticate REST endpoint.
         // If the username doesn't exist, the preauthenticate call will fail.
@@ -203,7 +202,7 @@ class FidoTutorial {
 
         // try/catch this so nothing breaks on a failed decode
         try {
-            // display fido data if decode functions are available 
+            // display fido data if decode functions are available
             if (typeof TextDecoder !== "undefined") {
                 let clientData = base64url.decode(credResponse.response.clientDataJSON);
                 let textDecoder = new TextDecoder('utf-8');
@@ -265,12 +264,12 @@ class FidoTutorial {
         // Convert base64url fields to ArrayBuffer format [verify].
         let challengeBuffer = this.preregToBuffer(preregResponse);
 
-        // Browser passes challenge fields to WebAuthn API, which tells relevant FIDO2 authenticators 
+        // Browser passes challenge fields to WebAuthn API, which tells relevant FIDO2 authenticators
         // to generate a new set of public key credentials.
         let credentialsContainer = window.navigator;
         credentialsContainer.credentials.create({ publicKey: challengeBuffer.Response })
             .then(credResp => {
-                // convert response to base64url 
+                // convert response to base64url
                 let credResponse = this.preregResponseToBase64(credResp);
 
                 // update debugging panel
@@ -287,7 +286,7 @@ class FidoTutorial {
                         });
                 }
                 else {
-                    // Use registerExisting when logged in. The server ensures that the user is still 
+                    // Use registerExisting when logged in. The server ensures that the user is still
                     // authenticated when registering the key.
                     this.post('registerExisting', credResponse)
                         .done(regResponse => that.onRegResult(regResponse))
@@ -313,13 +312,13 @@ class FidoTutorial {
             // Convert base64url fields to ArrayBuffer format.
             let challengeBuffer = this.preauthToBuffer(preauthResponse);
 
-            // Browser passes challenge fields to WebAuthn API, which asks FIDO2 authenticators 
+            // Browser passes challenge fields to WebAuthn API, which asks FIDO2 authenticators
             // to sign the challenge if they own a key pair associated with that user's account.
             let credentialsContainer;
             credentialsContainer = window.navigator;
             credentialsContainer.credentials.get({ publicKey: challengeBuffer.Response })
                 .then(credResp => {
-                    // convert response to base64url 
+                    // convert response to base64url
                     let credResponse = that.preauthResponseToBase64(credResp);
 
                     // update debugging panel
@@ -497,7 +496,7 @@ if (supportedBrowser) {
     $(setTimeout(() => {
         $('.loading-spinner').hide();
         $('#main').show();
-        
+
         app.initComponents();
     }, 1));
 }

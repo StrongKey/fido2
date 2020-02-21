@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
@@ -166,7 +165,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                     //  Do cert validation
                     //  If everything is found valid,
                     //  8.  Persist key info to the database
-                    addkeybean.execute(did, null, session_username, keyhandle, publickey, appid, 
+                    addkeybean.execute(did, null, session_username, keyhandle, publickey, appid,
                             (short) skfsConstants.FIDO_TRANSPORT_USB, null, null, null, 0,
                             skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2, skfsConstants.FIDO_PROTOCOL_U2F,
                             null, null, null, createloc);

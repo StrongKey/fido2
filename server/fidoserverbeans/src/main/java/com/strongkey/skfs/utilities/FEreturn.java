@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.utilities;
 
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class FEreturn implements Serializable {
     private String jsonResponse = null;
     private Object response = null;
     private String logmsg = "";
-    
+
     public void setJsonResponse(String jsonResponse) {
         this.jsonResponse = jsonResponse;
     }
@@ -58,23 +57,23 @@ public class FEreturn implements Serializable {
         this.jsonResponse = null;
         this.response = null;
     }
-    
+
     /**
      * Returns a pretty Json
      * @param Input
-     * @return 
+     * @return
      */
     public String returnJSON(String Input) {
-        String JSON_FORMAT_STRING = "%-10s"; 
+        String JSON_FORMAT_STRING = "%-10s";
         JsonParserFactory factory = Json.createParserFactory(null);
-        
+
         StringBuilder sb;
         try (JsonParser parser = factory.createParser(new StringReader(Input))) {
             sb = new StringBuilder();
             sb.append("\n\t{\n");
             while (parser.hasNext()) {
                 JsonParser.Event event = parser.next();
-                
+
                 switch (event) {
                     case KEY_NAME: {
                         sb.append("\t\t\"");

@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Domains;
@@ -21,7 +20,7 @@ import javax.persistence.PersistenceContext;
 /**
  * This ejb is meant to retrieve domain entries from the database.
  * There are multiple methods with different types of lookup.
- * 
+ *
  */
 @Stateless
 public class getDomainsBean implements getDomainsBeanLocal {
@@ -35,7 +34,7 @@ public class getDomainsBean implements getDomainsBeanLocal {
      ** Resources used by this bean
      **/
     @PersistenceContext private EntityManager   em;         // For JPA management
-    
+
     /************************************************************************
              888 888
              888 888
@@ -54,7 +53,7 @@ public class getDomainsBean implements getDomainsBeanLocal {
     @Override
     public Collection<Domains> getAll() {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "getAll");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "getAll", skfsCommon.getMessageProperty("SKCE-MSG-1023"), 
+        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "getAll", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.getAll)");
         try {
             return (Collection<Domains>) em.createNamedQuery("Domains.findAll").getResultList();
@@ -63,7 +62,7 @@ public class getDomainsBean implements getDomainsBeanLocal {
             return null;
         }
     }
-    
+
     /************************************************************************
      *
      *  888               8888888b.  d8b      888
@@ -89,7 +88,7 @@ public class getDomainsBean implements getDomainsBeanLocal {
     @Override
     public Domains byDid(final Long did) {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byDid");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"), 
+        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.findByDid)");
         try {
             return (Domains) em.createNamedQuery("Domains.findByDid")
@@ -102,14 +101,14 @@ public class getDomainsBean implements getDomainsBeanLocal {
 
     /**
      * Checks if a domain entry with the did exists in the database.
-     * 
+     *
      * @param did   Short containing the domain id to be looked up
      * @return boolean containing the search result
      */
     @Override
     public boolean domainExists(final Long did) {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byDid");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"), 
+        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.findByDid)");
         try {
             if(em.createNamedQuery("Domains.findByDid")

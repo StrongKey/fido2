@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.fido.policyobjects;
 
 import com.strongkey.skfs.utilities.skfsConstants;
@@ -20,7 +19,7 @@ public class CryptographyPolicyOptions {
     private final ArrayList<String> allowedAttestationFormats;
     private final ArrayList<String> allowedAttestationTypes;
     private final Integer challengeLength;
-    
+
     private CryptographyPolicyOptions(
             ArrayList<String> supportedEllipticCurves, ArrayList<String> allowedECSignatures,
             ArrayList<String> allowedRSASignatures, ArrayList<String> allowedAttestationFormats,
@@ -52,13 +51,13 @@ public class CryptographyPolicyOptions {
     public ArrayList<String> getAllowedAttestationTypes() {
         return allowedAttestationTypes;
     }
-    
+
     public Integer getChallengeLength(){
         return challengeLength;
     }
-    
+
     public static CryptographyPolicyOptions parse(JsonObject cryptoJson) {
-        CryptographyPolicyOptionsBuilder cryptoPolicyBuilder = 
+        CryptographyPolicyOptionsBuilder cryptoPolicyBuilder =
                 new CryptographyPolicyOptions.CryptographyPolicyOptionsBuilder(
                 new ArrayList<>(cryptoJson.getJsonArray(skfsConstants.POLICY_CRYPTO_ATTESTATION_FORMATS).stream().map(x -> ((JsonString) x).getString()).collect(Collectors.toList())),
                 new ArrayList<>(cryptoJson.getJsonArray(skfsConstants.POLICY_CRYPTO_ATTESTATION_TYPES).stream().map(x -> ((JsonString) x).getString()).collect(Collectors.toList())));
@@ -73,7 +72,7 @@ public class CryptographyPolicyOptions {
         }
         return cryptoPolicyBuilder.build();
     }
-    
+
     public static class CryptographyPolicyOptionsBuilder{
         private ArrayList<String> builderSupportedEllipticCurves;
         private ArrayList<String> builderAllowedECSignatures;
@@ -81,34 +80,34 @@ public class CryptographyPolicyOptions {
         private final ArrayList<String> builderAllowedAttestationFormats;
         private final ArrayList<String> builderAllowedAttestationTypes;
         private Integer builderChallengeLength;
-        
+
         public CryptographyPolicyOptionsBuilder(
                 ArrayList<String> allowedAttestationFormats,
                 ArrayList<String> allowedAttestationTypes){
             this.builderAllowedAttestationFormats = allowedAttestationFormats;
             this.builderAllowedAttestationTypes = allowedAttestationTypes;
         }
-        
+
         public CryptographyPolicyOptionsBuilder setSupportedEllipticCurves(ArrayList<String> supportedEllipticCurves) {
             this.builderSupportedEllipticCurves = supportedEllipticCurves;
             return this;
         }
-        
+
         public CryptographyPolicyOptionsBuilder setAllowedECSignatures(ArrayList<String> allowedECSignatures) {
             this.builderAllowedECSignatures = allowedECSignatures;
             return this;
         }
-        
+
         public CryptographyPolicyOptionsBuilder setAllowedRSASignatures(ArrayList<String> allowedRSASignatures) {
             this.builderAllowedRSASignatures = allowedRSASignatures;
             return this;
         }
-        
+
         public CryptographyPolicyOptionsBuilder setChallengeLength(Integer challengeLength){
             this.builderChallengeLength = challengeLength;
             return this;
         }
-        
+
         public CryptographyPolicyOptions build(){
             return new CryptographyPolicyOptions(builderSupportedEllipticCurves,
                 builderAllowedECSignatures, builderAllowedRSASignatures,

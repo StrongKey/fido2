@@ -1,22 +1,9 @@
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
- *
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * **********************************************
  *
  *  888b    888          888
@@ -199,7 +186,7 @@ public class clientUtil {
         String keyDigest = getDigestRawInput(key.getEncoded(), "SHA1");
         byte[] keydigestbytes = DatatypeConverter.parseBase64Binary(keyDigest);
 
-        //print originHash        
+        //print originHash
         byte[] originhashbytes = Base64.decodeBase64(originHash);
 
         String khunwrapped = keyHandleEncode(DatatypeConverter.printBase64Binary(key.getEncoded()), originHash, keyDigest);
@@ -244,7 +231,7 @@ public class clientUtil {
 
         byte[] receivedkeyHandle = DatatypeConverter.parseBase64Binary(keyHandleWithIV);
 
-        //get IV 
+        //get IV
         byte[] receivedIV = new byte[16];
         System.arraycopy(receivedkeyHandle, 0, receivedIV, 0, 16);
 
@@ -387,7 +374,7 @@ public class clientUtil {
         System.arraycopy(upk, 0, obj2send, tot, pukL);
         tot += pukL;
 
-        //KH length restriction        
+        //KH length restriction
         if (khL >= 256) {
             System.out.println("Fatal error , Key handle length > = 256, one byte cannot hold that");
             return null;

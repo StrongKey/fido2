@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
@@ -33,6 +33,7 @@ import com.strongkey.skfs.requests.RegistrationRequest;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.skfsLogger;
@@ -256,7 +257,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             } catch (SKFEException ex) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage()).build();
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
@@ -336,7 +337,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             String response;
             try {
                 response = fido2preregbean.execute(did, preregistration.getUsername(), preregistration.getDisplayname(), jsonOptions, jsonExtensions);
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
             out = new Date();
@@ -411,7 +412,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             } else {
                 responseJSON = FIDO2Regejb.execute(did, registration.getResponse(), registration.getMetadata());
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         } catch (Exception ex) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
@@ -428,17 +429,17 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
 
     /*
      *************************************************************************
-     *                                                888    888      
-     *                                                888    888      
-     *                                                888    888      
-     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.  
-     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b 
-     *    888  888 888     88888888 .d888888 888  888 888    888  888 
-     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888 
-     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888 
-     *    888                                                         
-     *    888                                                         
-     *    888                                                      
+     *                                                888    888
+     *                                                888    888
+     *                                                888    888
+     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.
+     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b
+     *    888  888 888     88888888 .d888888 888  888 888    888  888
+     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888
+     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888
+     *    888
+     *    888
+     *    888
      ************************************************************************
      */
     /**
@@ -652,7 +653,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         } else {
             try {
                 responseJSON = fido2preauthbean.execute(did, preauthentication.getUsername(), jsonOptions, jsonExtensions);
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
         }
@@ -670,14 +671,14 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
 
     /*
      ************************************************************************
-     *                        888    888                        888    d8b                   888             
-     *                        888    888                        888    Y8P                   888             
-     *                        888    888                        888                          888             
-     *       8888b.  888  888 888888 88888b.   .d88b.  88888b.  888888 888  .d8888b  8888b.  888888  .d88b.  
-     *          "88b 888  888 888    888 "88b d8P  Y8b 888 "88b 888    888 d88P"        "88b 888    d8P  Y8b 
-     *      .d888888 888  888 888    888  888 88888888 888  888 888    888 888      .d888888 888    88888888 
-     *      888  888 Y88b 888 Y88b.  888  888 Y8b.     888  888 Y88b.  888 Y88b.    888  888 Y88b.  Y8b.     
-     *      "Y888888  "Y88888  "Y888 888  888  "Y8888  888  888  "Y888 888  "Y8888P "Y888888  "Y888  "Y8888  
+     *                        888    888                        888    d8b                   888
+     *                        888    888                        888    Y8P                   888
+     *                        888    888                        888                          888
+     *       8888b.  888  888 888888 88888b.   .d88b.  88888b.  888888 888  .d8888b  8888b.  888888  .d88b.
+     *          "88b 888  888 888    888 "88b d8P  Y8b 888 "88b 888    888 d88P"        "88b 888    d8P  Y8b
+     *      .d888888 888  888 888    888  888 88888888 888  888 888    888 888      .d888888 888    88888888
+     *      888  888 Y88b 888 Y88b.  888  888 Y8b.     888  888 Y88b.  888 Y88b.    888  888 Y88b.  Y8b.
+     *      "Y888888  "Y88888  "Y888 888  888  "Y8888  888  888  "Y888 888  "Y8888P "Y888888  "Y888  "Y8888
      *
      ************************************************************************
      */
@@ -947,7 +948,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             } else {
                 try {
                     responseJSON = FIDO2Authejb.execute(did, authentication.getResponse(), authentication.getMetadata(), "authenticate");
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
                 }
             }
@@ -968,17 +969,17 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
 
     /*
      ************************************************************************
-     *        888                                    d8b          888                     
-     *        888                                    Y8P          888                     
-     *        888                                                 888                     
-     *    .d88888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888 
-     *   d88" 888 d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"   
-     *   888  888 88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888     
-     *   Y88b 888 Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888     
-     *    "Y88888  "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888     
-     *                                           888                                      
-     *                                      Y8b d88P                                      
-     *                                      "Y88P"                                       
+     *        888                                    d8b          888
+     *        888                                    Y8P          888
+     *        888                                                 888
+     *    .d88888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888
+     *   d88" 888 d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"
+     *   888  888 88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888
+     *   Y88b 888 Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888
+     *    "Y88888  "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888
+     *                                           888
+     *                                      Y8b d88P
+     *                                      "Y88P"
      *
      ************************************************************************
      */

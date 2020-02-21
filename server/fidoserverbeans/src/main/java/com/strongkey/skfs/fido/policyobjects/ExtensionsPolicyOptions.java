@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido.policyobjects;
 
@@ -22,25 +22,25 @@ public class ExtensionsPolicyOptions {
                 skfsConstants.POLICY_EXTENSIONS_APPID
             })
     );
-    
+
     private final Set<Fido2Extension> extensions;
-    
+
     public ExtensionsPolicyOptions(Set<Fido2Extension> extensions){
         this.extensions = extensions;
     }
-    
+
     public static ExtensionsPolicyOptions parse(JsonObject extensionsJson){
         Set<Fido2Extension> extensions = new HashSet<>();
-        
+
         if(extensionsJson == null){
             return new ExtensionsPolicyOptions(extensions);
         }
-        
+
         for(String extensionIdentifier: extensionsJson.keySet()){
             if(!KNOWNEXTENSIONS.contains(extensionIdentifier)){
                 throw new IllegalArgumentException("Unknown extension defined in policy");
             }
-            
+
             Fido2Extension ext;
             switch(extensionIdentifier){
                 case skfsConstants.POLICY_EXTENSIONS_EXAMPLE:
@@ -56,7 +56,7 @@ public class ExtensionsPolicyOptions {
         }
         return new ExtensionsPolicyOptions(extensions);
     }
-    
+
     //TODO ensure all Extensions are immutable to prevent issues with
     //shallow copying
     public Set<Fido2Extension> getExtensions(){

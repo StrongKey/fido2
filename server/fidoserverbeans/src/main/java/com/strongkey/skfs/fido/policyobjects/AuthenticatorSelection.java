@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido.policyobjects;
 
@@ -13,7 +13,7 @@ public class AuthenticatorSelection {
     private final List<String> authenticatorAttachment;
     private final List<Boolean> requireResidentKey;
     private final List<String> userVerification;
-    
+
     private AuthenticatorSelection(List<String> authenticatorAttachment,
             List<Boolean> requireResidentKey,
             List<String> userVerification){
@@ -33,14 +33,14 @@ public class AuthenticatorSelection {
     public List<String> getUserVerification() {
         return userVerification;
     }
-    
-    
-    
+
+
+
     public static class AuthenticatorSelectionBuilder{
         private final List<String> builderAuthenticatorAttachment;
         private final List<Boolean> builderRequireResidentKey;
         private final List<String> builderUserVerification;
-        
+
         public AuthenticatorSelectionBuilder(List<String> authenticatorAttachment,
             List<Boolean> requireResidentKey,
             List<String> userVerification){
@@ -48,7 +48,7 @@ public class AuthenticatorSelection {
             this.builderRequireResidentKey = requireResidentKey;
             this.builderUserVerification = userVerification;
         }
-        
+
         public AuthenticatorSelection build(){
             return new AuthenticatorSelection(builderAuthenticatorAttachment,
                     builderRequireResidentKey,

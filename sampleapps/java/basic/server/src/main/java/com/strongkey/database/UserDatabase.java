@@ -1,8 +1,8 @@
 /**
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
  */
 
 package com.strongkey.database;
@@ -32,7 +32,7 @@ public class UserDatabase {
     private static final String CLASSNAME = UserDatabase.class.getName();
     private Set<String> users = new HashSet();
     private final String BACKUPFILENAME = Configurations.getConfigurationProperty("webauthntutorial.cfg.property.backupfilelocation");
-    
+
     @PostConstruct
     public synchronized void loadDatabase(){
         File backupFile = new File(BACKUPFILENAME);
@@ -45,24 +45,24 @@ public class UserDatabase {
             }
         }
     }
-    
+
     // Checks if a user exists in the "database"
     public synchronized boolean doesUserExist(String username){
         return users.contains(username);
     }
-    
+
     // Adds a user to the "database"
     public synchronized void addUser(String username){
         users.add(username);
         storeDatabase();
     }
-    
+
     // Removes a user from the "database"
     public synchronized void deleteUser(String username) {
         users.remove(username);
         storeDatabase();
     }
-    
+
     private synchronized void storeDatabase(){
         createDatabase();
         try (ObjectOutputStream backup = new ObjectOutputStream(new FileOutputStream(BACKUPFILENAME))) {
@@ -74,7 +74,7 @@ public class UserDatabase {
                     "WEBAUTHN-MSG-1002", ex.getLocalizedMessage());
         }
     }
-    
+
     private synchronized void createDatabase(){
         try {
             File backupFile = new File(BACKUPFILENAME);
@@ -89,4 +89,3 @@ public class UserDatabase {
         }
     }
 }
-

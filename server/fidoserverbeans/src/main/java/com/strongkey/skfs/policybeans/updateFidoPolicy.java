@@ -1,9 +1,10 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
+
 
 package com.strongkey.skfs.policybeans;
 
@@ -39,12 +40,12 @@ import org.codehaus.jettison.json.JSONObject;
 public class updateFidoPolicy implements updateFidoPolicyLocal {
 
     private final String classname = this.getClass().getName();
-    
+
     @EJB
     getFidoPolicyLocal getpolicybean;
     @EJB
     replicateSKFEObjectBeanLocal replObj;
-    
+
     /**
      * Persistence context for derby
      */
@@ -52,12 +53,12 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
     private SessionContext sc;
     @PersistenceContext
     private EntityManager em;
-    
+
     @Override
     public Response execute(Long did,
                              String sidpid,
                              PatchFidoPolicyRequest request) {
-        
+
         //get policy
         Long sid;
         Long pid;
@@ -68,7 +69,7 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         FidoPolicies fidopolicy = getpolicybean.getbyPK(did, sid, pid);
-        
+
         if(fidopolicy == null){
             skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2005", "");
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -94,11 +95,11 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
             String policyBase64 = Base64.getEncoder().encodeToString(policy.toString().getBytes());
             fidopolicy.setPolicy(policyBase64);
         }
-        
+
         //TODO sign object
         em.merge(fidopolicy);
         em.flush();
-        
+
         //Replicate
         String primarykey = sid + "-" + did + "-" + pid;
         if (applianceCommon.replicate()) {
@@ -107,7 +108,7 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
             }
         }
-        
+
         //Update local map
         String fpMapkey = sid + "-" + did + "-" + pid;
         FidoPolicyObject fidoPolicyObject;

@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.policybeans;
 
@@ -27,8 +27,8 @@ public class getFidoPolicy implements getFidoPolicyLocal {
      * Persistence context for derby
      */
     @PersistenceContext
-    private EntityManager em; 
-    
+    private EntityManager em;
+
     @Override
     public Response getPolicies(Long did, String sidpid, Boolean metadataonly) {
         JsonArrayBuilder jarrbldr = Json.createArrayBuilder();
@@ -62,7 +62,7 @@ public class getFidoPolicy implements getFidoPolicyLocal {
             .build().toString();
         return Response.ok().entity(response).build();
     }
-    
+
     @Override
     public FidoPolicies getbyPK(Long did, Long sid, Long pid) {
         try {
@@ -80,7 +80,7 @@ public class getFidoPolicy implements getFidoPolicyLocal {
             return null;
         }
     }
-    
+
     @Override
     public Collection<FidoPolicies> getAllActive() {
         try {
@@ -105,7 +105,7 @@ public class getFidoPolicy implements getFidoPolicyLocal {
             return null;
         }
     }
-    
+
     @Override
     public Collection<FidoPolicies> getbyDid(Long did) {
         try {

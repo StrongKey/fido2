@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.messaging;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -28,6 +28,7 @@ import com.strongkey.skfs.entitybeans.FidoUsersPK;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKIllegalArgumentException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,7 +123,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                         if(fkproto.hasRegistrationSettings()) fidokeys.setRegistrationSettings(fkproto.getRegistrationSettings());
                         if(fkproto.hasRegistrationSettingsVersion()) fidokeys.setRegistrationSettingsVersion((int) fkproto.getRegistrationSettingsVersion());
                     }
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_FIDOKEYS [" + pkey  + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     isValid = false;
@@ -203,14 +204,14 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                         if(fuproto.hasTwoStepTarget()) fidousers.setTwoStepTarget(fuproto.getTwoStepTarget());
                         if(fuproto.hasUserdn()) fidousers.setUserdn(fuproto.getUserdn());
                     }
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_FIDOUSERS [" + pkey  + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     isValid = false;
                     // Break from switch since we have an error in the proto message
                     break;
-                } 
-                
+                }
+
                 // Search for object in local DB if it exists
                 furesult = em.find(FidoUsers.class, fidousers.getFidoUsersPK());
                 // If not found, what operation are we performing?
@@ -271,7 +272,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     if(usiproto.hasFidopolicymapkey()) usersessioninfo.setPolicyMapKey(usiproto.getFidopolicymapkey());
                     if(usiproto.hasAttestationPreferance()) usersessioninfo.setAttestationPreferance(usiproto.getAttestationPreferance());
                     if(usiproto.hasUserVerificationReq()) usersessioninfo.setuserVerificationReq(usiproto.getUserVerificationReq());
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_MAP_USER_SESSION_INFO [" + objectpk  + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     // Break from switch since we have an error in the proto message
@@ -286,7 +287,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     }
                 }
                 break;
-                
+
                 /*
              * Only ADD and UPDATE allowed for Domains
              */
@@ -314,7 +315,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     if (dproto.hasSigningCertificateUuid()) domains.setSigningCertificateUuid(dproto.getSigningCertificateUuid());
                     if (dproto.hasSkceSigningdn()) domains.setSkceSigningdn(dproto.getSkceSigningdn());
                     if (dproto.hasSkfeAppid()) domains.setSkfeAppid(dproto.getSkfeAppid());
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_DOMAINS [" + pkey  + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     isValid = false;
@@ -389,7 +390,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                             fidopolicies.setSignature(policyproto.getSignature());
                         }
                     }
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_FIDOPOLICY [" + pkey + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     isValid = false;
@@ -461,7 +462,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "FIDO-ERR-0038", ex.getLocalizedMessage());
                 }
                 break;
-                
+
             /*
              * All operations allowed for Fido Policies
              */
@@ -503,7 +504,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                             attestationcertificates.setSignature(attestationproto.getSignature());
                         }
                     }
-                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                } catch (IllegalArgumentException | SKIllegalArgumentException | InvalidProtocolBufferException ex) {
                     strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_ATTESTATION_CERTIFICATES [" + pkey + "]");
                     Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
                     isValid = false;
@@ -542,7 +543,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     }
                 }
                 break;
-                
+
             default:
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.SEVERE, classname, "execute", "SKCE-ERR-6008", objectype);
                 return false;
@@ -550,7 +551,7 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
         }
         return isValid;
     }
-    
+
         @Override
     public boolean remoteExecute(String repobjpk, int objectype, int objectop, String objectpk, byte[] object) {
         return execute(repobjpk, objectype, objectop, objectpk, object);

@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Domains;
@@ -127,7 +126,7 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
         }
 
         if (!deletion) {
-            //  Checks on the new value for the key. 
+            //  Checks on the new value for the key.
             if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
                 if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
                     throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; "
@@ -220,7 +219,7 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
 
         if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
                 .equalsIgnoreCase("true")) {
-            
+
             String standalone = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
             String signingKeystorePassword = "";
             if (standalone.equalsIgnoreCase("true")) {
@@ -246,7 +245,7 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
                 retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
                 return retObj.toString();
             }
-            //  get signature for the xml    
+            //  get signature for the xml
             Domains d = getdomain.byDid(did);
 
             String signedxml = null;

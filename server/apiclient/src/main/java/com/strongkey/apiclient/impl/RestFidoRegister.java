@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -51,12 +51,12 @@ import org.apache.http.util.EntityUtils;
 
 public class RestFidoRegister {
 
-    public static void register(String REST_URI, 
-                            String did, 
-                            String accesskey, 
-                            String secretkey, 
-                            String fidoprotocol, 
-                            String accountname, 
+    public static void register(String REST_URI,
+                            String did,
+                            String accesskey,
+                            String secretkey,
+                            String fidoprotocol,
+                            String accountname,
                             String origin) throws Exception
     {
         System.out.println("Registration test");
@@ -80,7 +80,7 @@ public class RestFidoRegister {
         String contentSHA = common.calculateSha256(json);
 
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.PRE_REGISTER_ENDPOINT;
-        
+
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(resourceLoc);
         httpPost.setEntity(body);
@@ -127,25 +127,25 @@ public class RestFidoRegister {
         } finally {
             response.close();
         }
-        
+
         //  Build a json object out of response
         StringReader s = new StringReader(result);
         JsonReader jsonReader = Json.createReader(s);
         JsonObject responseJSON = jsonReader.readObject();
         jsonReader.close();
-        
+
         JsonObject resJsonObj = responseJSON.getJsonObject("Response");
-        
+
         System.out.println("\n Pre-Registration Complete.");
 
         System.out.println("\n Generating Registration response...\n");
-        
+
         JsonObject input = null;
         JsonParserFactory factory = Json.createParserFactory(null);
         JsonParser parser;
-        
+
         if ("U2F_V2".compareTo(fidoprotocol) == 0) {
-            
+
             System.out.println("\n Registration Parameters:\n");
             JsonArray jarray = resJsonObj.getJsonArray("registerRequests");
             String s2 = jarray.getJsonObject(0).toString();
@@ -164,9 +164,9 @@ public class RestFidoRegister {
                     }
                 }
             }
-            
+
             String appidfromserver = resJsonObj.getString("appId");
-            
+
             try {
                     input = FIDOU2FTokenSimulator.generateRegistrationResponse(appidfromserver, s2, origin, true);
                 } catch (NoSuchAlgorithmException
@@ -187,25 +187,25 @@ public class RestFidoRegister {
                         | InvalidKeySpecException ex) {
                 System.out.println("\n Exception : " + ex.getLocalizedMessage());
             }
-        
+
         } else if ("FIDO20".compareTo(fidoprotocol) == 0) {
-            
+
 //            JsonObject rpInfo = resJsonObj.getJsonObject("rp");
 //            String rpName = rpInfo.getString("name");
 //            String challenge = resJsonObj.getString("challenge");
-//            
+//
 //            Fido2TokenSim sim = new Fido2TokenSim(origin);
 //            JsonObjectBuilder in = Json.createObjectBuilder();
-//            
+//
 //            JsonObjectBuilder rp = Json.createObjectBuilder();
 //            rp.add(Constants.WebAuthn.RELYING_PARTY_NAME, rpName);
 //            in.add(Constants.WebAuthn.RELYING_PARTY, rp);
-//            
+//
 //            JsonObjectBuilder user = Json.createObjectBuilder();
 //            user.add(Constants.WebAuthn.USER_NAME,accountname);
 //            user.add(Constants.WebAuthn.USER_ID,accountname);
 //            in.add(Constants.WebAuthn.USER,user);
-//            
+//
 //            JsonArrayBuilder pubKeyParams = Json.createArrayBuilder();
 //            JsonObjectBuilder alg1 = Json.createObjectBuilder();
 //            alg1.add(Constants.WebAuthn.PUBKEYCREDPARAMS_ALG, -7);
@@ -218,10 +218,10 @@ public class RestFidoRegister {
 //            pubKeyParams.add(alg2);
 //
 //            in.add(Constants.WebAuthn.PUBKEYCREDPARAMS, pubKeyParams);
-//            
+//
 //            in.add(Constants.WebAuthn.CHALLENGE,challenge);
 //            in.add(Constants.WebAuthn.ATTESTATION_PREFERENCE,"direct");
-            
+
             /*
             {
                 "rp": {
@@ -261,10 +261,10 @@ public class RestFidoRegister {
                 }
             }
         }
-            
+
         System.out.println("\n Finished Generating Registration Response.");
         System.out.println("\n Registering ...");
-        
+
         //  Build payload
         JsonObject reg_metadata = javax.json.Json.createObjectBuilder()
                 .add("version", "1.0") // ALWAYS since this is just the first revision of the code
@@ -273,7 +273,7 @@ public class RestFidoRegister {
                 .build();
 
         //  Make API rest call and get response from the server
-        System.out.println("\nCalling register @ " 
+        System.out.println("\nCalling register @ "
                 + REST_URI + Constants.REGISTER_ENDPOINT);
 
         ow = new ObjectMapper().writer();
@@ -334,7 +334,7 @@ public class RestFidoRegister {
         } finally {
             response.close();
         }
-        
+
         System.out.println("\n Registration Complete.");
         System.out.println("*******************************");
     }

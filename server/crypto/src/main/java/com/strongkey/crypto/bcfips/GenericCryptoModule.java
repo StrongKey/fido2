@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.crypto.bcfips;
 
@@ -121,7 +121,7 @@ public class GenericCryptoModule {
         }
         return signedData;
     }
-    
+
     public Boolean verifyDBRow(String did, String input, String signingdn, Boolean standalone, String password, String currentSignature)
             throws CryptoException {
         Signature signature;
@@ -152,7 +152,7 @@ public class GenericCryptoModule {
     private PrivateKey getXMLSignatureSigningKey(String signingdn) throws CryptoException {
         return cryptomodule.getXMLSignatureSigningKey("", signingdn);
     }
-     
+
     private PrivateKey getXMLSignatureSigningKeyLocal(String password, String signingdn) throws CryptoException {
         return getXMLSignatureSigningKey(password, signingdn);
     }
@@ -164,13 +164,13 @@ public class GenericCryptoModule {
 
         // Keystore location
         try {
-            if ((keystoreurl = cryptoCommon.getConfigurationProperty("crypto.cfg.property.signing.keystorelocation")) == null) {
-                cryptoCommon.logp(Level.SEVERE, classname, "getHmacSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.keystorelocation");
-                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+            if ((keystoreurl = cryptoCommon.getConfigurationProperty("crypto.cfg.property.hmac.keystorelocation")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getHmacSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.hmac.keystorelocation");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.hmac.truststorelocation"));
             }
         } catch (java.util.MissingResourceException e) {
-            cryptoCommon.logp(Level.SEVERE, classname, "getHmacSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.keystorelocation");
-            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+            cryptoCommon.logp(Level.SEVERE, classname, "getHmacSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.hmac.keystorelocation");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.hmac.truststorelocation"));
         }
 
         try {
@@ -243,7 +243,7 @@ public class GenericCryptoModule {
                     }
                     cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2517", sw.toString());
 
-                    // Now match for the signing bit    
+                    // Now match for the signing bit
                     if (keyusage[0]) {
                         // If true, this is the certificate we want
                         String pvkalias = alias.substring(0, alias.indexOf(".")); // Get rid of the .cert in alias
@@ -317,7 +317,7 @@ public class GenericCryptoModule {
                     }
                     cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2517", sw.toString());
 
-                    // Now match for the signing bit    
+                    // Now match for the signing bit
                     if (keyusage[0]) {
                         // If true, this is the certificate we want
                         pbk = cert.getPublicKey();

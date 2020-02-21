@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skce.pojos;
 
@@ -29,12 +29,12 @@ public class UserSessionInfo implements Serializable {
     //server id where the prereg/preauth has been originated
     private Short sid = 0;
     private String sessionid = null;
-    
+
     private String userIcon = null;
     private String userVerificationReq = null;
     private String attestationPreferance = null;
     private String policyMapKey = null;
-    
+
     private String mapkey;
 
     /**
@@ -56,7 +56,7 @@ public class UserSessionInfo implements Serializable {
         this.userPublicKey = userPublicKey;
         this.sessionid = sessionID;
     }
-    
+
     //Empty Constructor
     public UserSessionInfo(){
         this.creationdate = new Date();
@@ -155,7 +155,7 @@ public class UserSessionInfo implements Serializable {
     public void setMapkey(String mapkey) {
         this.mapkey = mapkey;
     }
-    
+
     public String getRpName() {
         return rpName;
     }
@@ -187,11 +187,11 @@ public class UserSessionInfo implements Serializable {
     public void setUserIcon(String userIcon) {
         this.userIcon = userIcon;
     }
-    
+
     public String getUserVerificationReq(){
         return userVerificationReq;
     }
-    
+
     public void setuserVerificationReq(String userVerificationReq){
         this.userVerificationReq = userVerificationReq;
     }
@@ -203,7 +203,7 @@ public class UserSessionInfo implements Serializable {
     public void setAttestationPreferance(String attestationPreferance) {
         this.attestationPreferance = attestationPreferance;
     }
-    
+
     public String getPolicyMapKey() {
         return policyMapKey;
     }

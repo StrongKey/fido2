@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.fido2.tpm;
 
 import com.strongkey.skce.utilities.TPMConstants;
@@ -19,7 +18,7 @@ public class TPMAttest implements TPMMarshallable {
     private final long firmwareVersion;
     private final TPMCertifyInfo attested; //TODO fix hardcoded type (implementation is more restrictive
                              //than the specification).
-    
+
     public TPMAttest(int magic, short type, TPM2B qualifiedSigner,
             TPM2B extraData, TPMClockInfo clockInfo, long firmwareVersion,
             TPMCertifyInfo attested){
@@ -31,7 +30,7 @@ public class TPMAttest implements TPMMarshallable {
         this.firmwareVersion = firmwareVersion;
         this.attested = attested;
     }
-    
+
     public static TPMAttest unmarshal(byte[] bytes){
         int pos = 0;
         int magic = Marshal.stream32ToInt(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFINT));
@@ -82,7 +81,7 @@ public class TPMAttest implements TPMMarshallable {
                 firmwareVersion,
                 attested);
     }
-    
+
     private static String bytesToHexString(byte[] rawBytes, int num) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < num; i++) {
@@ -93,5 +92,5 @@ public class TPMAttest implements TPMMarshallable {
         }
         return sb.toString();
     }
-    
+
 }

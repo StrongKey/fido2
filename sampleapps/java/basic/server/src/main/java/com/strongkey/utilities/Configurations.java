@@ -1,9 +1,9 @@
 /**
-* Copyright StrongAuth, Inc. All Rights Reserved.
-*
-* Use of this source code is governed by the Gnu Lesser General Public License 2.3.
-* The license can be found at https://github.com/StrongKey/fido2/LICENSE
-*/
+ * Copyright StrongAuth, Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+ */
 
 package com.strongkey.utilities;
 
@@ -17,11 +17,11 @@ import java.util.logging.Level;
 
 // Load configurations from property files
 public class Configurations {
-    
+
     private static final ResourceBundle DEFAULTCONFIGS = ResourceBundle.getBundle("resources.webauthntutorial-configuration");
     private static ResourceBundle customConfigs = null;
     private static final String CLASSNAME = Configurations.class.getName();
-    
+
     // Load customizedConfigs from the filesystem if they exist
     static{
         try {
@@ -35,7 +35,7 @@ public class Configurations {
             ex.printStackTrace();
         }
     }
-    
+
     public static String getConfigurationProperty(String configName){
         try{
             if (customConfigs != null && customConfigs.containsKey(configName)) {
@@ -47,13 +47,13 @@ public class Configurations {
             return null;
         }
     }
-    
+
     // Debug function (prints set configurations to log)
     private static void logConfigurations(ResourceBundle configs){
         if(configs == null){
             return;
         }
-        
+
         StringBuilder configString = new StringBuilder();
         for(String key: configs.keySet()){
             if(!key.contains("secretkey")){
@@ -63,7 +63,7 @@ public class Configurations {
                         .append(configs.getString(key));
             }
         }
-        
+
         WebauthnTutorialLogger.logp(Level.FINE, CLASSNAME, "logConfigurations", "WEBAUTHN-MSG-1000", configString.toString());
     }
 }

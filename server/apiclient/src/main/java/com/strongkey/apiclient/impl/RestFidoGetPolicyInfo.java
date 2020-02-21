@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -30,12 +30,12 @@ import org.apache.http.util.EntityUtils;
 
 public class RestFidoGetPolicyInfo {
 
-    public static void getPolicyInfo(String REST_URI, 
-                                String did, 
-                                String accesskey, 
-                                String secretkey, 
+    public static void getPolicyInfo(String REST_URI,
+                                String did,
+                                String accesskey,
+                                String secretkey,
                                 String metadataonly,
-                                String sidpid) 
+                                String sidpid)
     {
         String gkresponse = null;
         String version = "2.0";
@@ -52,7 +52,7 @@ public class RestFidoGetPolicyInfo {
             String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.GET_POLICY_ENDPOINT + "?metadataonly=" + metadataonly + pid;
 
             System.out.println("\nCalling getpolicyinfo @ " + resourceLoc);
-            
+
             String contentMD5 = "";
             String contentType = "";
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
@@ -113,7 +113,7 @@ public class RestFidoGetPolicyInfo {
 
             System.out.println("\nGet policy information test complete.");
             System.out.println("******************************************");
-            
+
         } catch (MalformedURLException ex) {
             Logger.getLogger(RestFidoGetPolicyInfo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ProtocolException ex) {

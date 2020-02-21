@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -47,12 +47,12 @@ import org.apache.http.util.EntityUtils;
 
 public class RestFidoAuthenticate {
 
-    public static void authenticate(String REST_URI, 
-            String did, 
-            String accesskey, 
-            String secretkey, 
-            String fidoprotocol, 
-            String accountname, 
+    public static void authenticate(String REST_URI,
+            String did,
+            String accesskey,
+            String secretkey,
+            String fidoprotocol,
+            String accountname,
             String origin,
             String auth_counter) throws Exception
     {
@@ -137,7 +137,7 @@ public class RestFidoAuthenticate {
         jsonReader = Json.createReader(s);
         JsonObject resJsonObj = jsonReader.readObject();
         jsonReader.close();
-        
+
         String appid ;
         try{
             appid = resJsonObj.getString("appId");
@@ -192,14 +192,14 @@ public class RestFidoAuthenticate {
                         | InvalidKeySpecException
                         ex) {
                 System.out.println("\n Exception : " + ex.getLocalizedMessage());
-            } 
+            }
         } else if ("FIDO20".compareTo(fidoprotocol) == 0) {
 //            Fido2TokenSim sim = new Fido2TokenSim(origin);
 //            JsonObjectBuilder in = Json.createObjectBuilder();
 //
 //            in.add(Constants.WebAuthn.RELYING_PARTY_RPID, "");
 //            in.add(Constants.WebAuthn.CHALLENGE,nonce);
-//            
+//
 //            /*
 //                {
 //                    "challenge": "asdfasdfasdfasdf",
@@ -227,7 +227,7 @@ public class RestFidoAuthenticate {
 
         System.out.println("\n Finished Generating Authentication Response.");
         System.out.println("\n Authenticating ...");
-        
+
         //  Build payload
         JsonObject auth_metadata = javax.json.Json.createObjectBuilder()
                 .add("version", "1.0") // ALWAYS since this is just the first revision of the code

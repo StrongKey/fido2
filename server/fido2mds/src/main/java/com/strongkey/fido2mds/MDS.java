@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.fido2mds;
 
@@ -37,7 +37,7 @@ public class MDS implements MDSClient {
     private List<MDSService> mdsList;
     private ObjectMapper objectMapper;
     private Storage storage;
-    
+
     public MDS(List<MDSEndpoint> endpoints){
         storage = new MemoryStorage();
         objectMapper = new ObjectMapper();
@@ -79,7 +79,7 @@ public class MDS implements MDSClient {
     @Lock(LockType.WRITE)
     private void refresh() {
         List<MDSService> newList = new ArrayList<>();
-        
+
         for (MDSService service : mdsList) {
             try {
                 service.refresh();
@@ -99,16 +99,16 @@ public class MDS implements MDSClient {
         JsonObjectBuilder error = Json.createObjectBuilder();
         MetadataTOCPayloadEntry entry = null;
         MetadataStatement st = null;
-        
+
         for (MDSService service : mdsList) {
             entry = service.getTOCEntry(aaguid);
             if (entry!=null) {
                 for (StatusReport status : entry.getStatusReports()) {
-                    if (status.getStatus()==AuthenticatorStatus.ATTESTATION_KEY_COMPROMISE || 
-                            status.getStatus()==AuthenticatorStatus.REVOKED || 
+                    if (status.getStatus()==AuthenticatorStatus.ATTESTATION_KEY_COMPROMISE ||
+                            status.getStatus()==AuthenticatorStatus.REVOKED ||
                             status.getStatus()==AuthenticatorStatus.USER_KEY_PHYSICAL_COMPROMISE ||
-                            status.getStatus()==AuthenticatorStatus.USER_KEY_REMOTE_COMPROMISE || 
-                            status.getStatus()==AuthenticatorStatus.USER_VERIFICATION_BYPASS 
+                            status.getStatus()==AuthenticatorStatus.USER_KEY_REMOTE_COMPROMISE ||
+                            status.getStatus()==AuthenticatorStatus.USER_VERIFICATION_BYPASS
                             ) {
                         error.add("message", "Authenticator status = "+status.getStatus().name());
                         errors.add(error);
@@ -159,48 +159,48 @@ public class MDS implements MDSClient {
 
 /*
 
-If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or ECDAA-Issuer public keys) 
-for that attestation type and attestation statement format fmt, from a trusted source or from policy. For example, the FIDO Metadata 
+If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or ECDAA-Issuer public keys)
+for that attestation type and attestation statement format fmt, from a trusted source or from policy. For example, the FIDO Metadata
 Service [FIDOMetadataService] provides one way to obtain such information, using the aaguid in the attestedCredentialData in authData.
 
-The FIDO Server looks up the metadata statement for the particular authenticator model. 
-If the metadata statement lists an attestation certificate(s), it verifies that an 
-attestation signature is present, and made with the private key corresponding to either 
-    (a) one of the certificates listed in this metadata statement or 
+The FIDO Server looks up the metadata statement for the particular authenticator model.
+If the metadata statement lists an attestation certificate(s), it verifies that an
+attestation signature is present, and made with the private key corresponding to either
+    (a) one of the certificates listed in this metadata statement or
     (b) corrsponding to the public key in a certificate that chains to one of the issuer certificates listed in the authenticator's metadata statement.
 
 
 The FIDO Server MUST follow these processing rules:
 
-    The FIDO Server MUST be able to download the latest metadata TOC object from the well-known URL, when appropriate. 
+    The FIDO Server MUST be able to download the latest metadata TOC object from the well-known URL, when appropriate.
     The nextUpdate field of the Metadata TOC specifies a date when the download SHOULD occur at latest.
     If the x5u attribute is present in the JWT Header, then:
-        The FIDO Server MUST verify that the URL specified by the x5u attribute has the same web-origin as the URL used 
-            to download the metadata TOC from. The FIDO Server SHOULD ignore the file if the web-origin differs (in order to prevent 
+        The FIDO Server MUST verify that the URL specified by the x5u attribute has the same web-origin as the URL used
+            to download the metadata TOC from. The FIDO Server SHOULD ignore the file if the web-origin differs (in order to prevent
             loading objects from arbitrary sites).
-        The FIDO Server MUST download the certificate (chain) from the URL specified by the x5u attribute [JWS]. The certificate 
-            chain MUST be verified to properly chain to the metadata TOC signing trust anchor according to [RFC5280]. 
+        The FIDO Server MUST download the certificate (chain) from the URL specified by the x5u attribute [JWS]. The certificate
+            chain MUST be verified to properly chain to the metadata TOC signing trust anchor according to [RFC5280].
             All certificates in the chain MUST be checked for revocation according to [RFC5280].
         The FIDO Server SHOULD ignore the file if the chain cannot be verified or if one of the chain certificates is revoked.
-    If the x5u attribute is missing, the chain should be retrieved from the x5c attribute. If that attribute is missing as well, 
+    If the x5u attribute is missing, the chain should be retrieved from the x5c attribute. If that attribute is missing as well,
         Metadata TOC signing trust anchor is considered the TOC signing certificate chain.
-    Verify the signature of the Metadata TOC object using the TOC signing certificate chain (as determined by the steps above). 
-        The FIDO Server SHOULD ignore the file if the signature is invalid. It SHOULD also ignore the file if its 
+    Verify the signature of the Metadata TOC object using the TOC signing certificate chain (as determined by the steps above).
+        The FIDO Server SHOULD ignore the file if the signature is invalid. It SHOULD also ignore the file if its
             number (no) is less or equal to the number of the last Metadata TOC object cached locally.
     Write the verified object to a local cache as required.
     Iterate through the individual entries (of type MetadataTOCPayloadEntry). For each entry:
         Ignore the entry if the AAID, AAGUID or attestationCertificateKeyIdentifiers is not relevant to the relying party (e.g. not acceptable by any policy)
-        Download the metadata statement from the URL specified by the field url. Some authenticator vendors 
-            might require authentication in order to provide access to the data. Conforming FIDO Servers SHOULD support the 
+        Download the metadata statement from the URL specified by the field url. Some authenticator vendors
+            might require authentication in order to provide access to the data. Conforming FIDO Servers SHOULD support the
             HTTP Basic, and HTTP Digest authentication schemes, as defined in [RFC2617].
         Check whether the status report of the authenticator model has changed compared to the cached entry by looking at the fields timeOfLastStatusChange and statusReport. Update the status of the cached entry. It is up to the relying party to specify behavior for authenticators with status reports that indicate a lack of certification, or known security issues. However, the status REVOKED indicates significant security issues related to such authenticators.
 
         Note
-        Authenticators with an unacceptable status should be marked accordingly. This information is required for building registration 
+        Authenticators with an unacceptable status should be marked accordingly. This information is required for building registration
             and authentication policies included in the registration request and the authentication request [UAFProtocol].
 
-        Compute the hash value of the (base64url encoding without padding of the UTF-8 encoded) metadata statement downloaded from the 
-            URL and verify the hash value to the hash specified in the field hash of the metadata TOC object. Ignore the downloaded 
+        Compute the hash value of the (base64url encoding without padding of the UTF-8 encoded) metadata statement downloaded from the
+            URL and verify the hash value to the hash specified in the field hash of the metadata TOC object. Ignore the downloaded
             metadata statement if the hash value doesn't match.
         Update the cached metadata statement according to the dowloaded one.
 

@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
@@ -34,8 +33,8 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
      **/
     @SuppressWarnings("FieldMayBeFinal")
     private String classname = this.getClass().getName();
-    
-    
+
+
     /**
      * EJB's used by the Bean
      */
@@ -43,36 +42,36 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
     getFidoKeysLocal getregkeysejb;
     @EJB
     replicateSKFEObjectBeanLocal replObj;
-    
+
     /**
      * Persistence context for derby
      */
     @Resource private SessionContext            sc;
-    @PersistenceContext private EntityManager   em;  
-    
+    @PersistenceContext private EntityManager   em;
+
     /**
-     * 
+     *
      * @param sid
      * @param did
      * @param fkid  - The key identifier for the registered key to be deleted
      *                from the derby DB
-     * @return      - Returns a JSON string containing the status and the 
+     * @return      - Returns a JSON string containing the status and the
      *                error/success message
      */
     @Override
     public String execute(Short sid, Long did, String username,  Long fkid) {
         skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
-        
+
         //Declating variables
         Boolean status = true;
         String errmsg ;
         JsonObject retObj;
-        
+
         //Input Validation
 
         //fkid
         //NULL Argument
-        
+
         if(sid == null){
             status = false;
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "sid");
@@ -80,7 +79,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
-        
+
         if(did == null){
             status = false;
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "did");
@@ -88,7 +87,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
-        
+
         if(fkid == null){
             status = false;
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "fkid");
@@ -96,7 +95,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
-        
+
         // fkid is negative, zero or larger than max value (becomes negative)
         if(fkid < 1){
             status = false;
@@ -106,7 +105,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
             return retObj.toString();
         }
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "fkid=" + fkid);
-        
+
         //  Verify if the fkid exists.
         FidoKeys rk = null;
         try {

@@ -1,21 +1,14 @@
-/*
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU Lesser General Public 
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2019 StrongAuth, Inc.  
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  *
  * FIDO_USERS table for MariaDB
  *
  * Contains encrypted symmetric keys used with the ANSI X9.24-1
- * Derived Unique Key Per Transaction (DUKPT) protocol.  Keys are 
+ * Derived Unique Key Per Transaction (DUKPT) protocol.  Keys are
  * encrypted and stored in the SYMMETRIC_KEYS table and assigned
  * a unique token (stored here as keytoken).  To use this key, it
  * must first be decrypted using the decrypt webservice operation

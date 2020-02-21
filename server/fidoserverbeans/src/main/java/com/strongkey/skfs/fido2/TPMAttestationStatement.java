@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -169,7 +169,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
             }
 
             //Verify that attested contains a TPMS_CERTIFY_INFO structure as specified in [TPMv2-Part2] section 10.12.3,
-            //whose name field contains a valid Name for pubArea, as computed using the algorithm in the nameAlg field 
+            //whose name field contains a valid Name for pubArea, as computed using the algorithm in the nameAlg field
             //of pubArea using the procedure specified in [TPMv2-Part1] section 16.
             byte[] attestedName = certInfo.getAttested().getName().getData();
             short nameAlg = Marshal.stream16ToShort(attestedName);   //https://github.com/fido-alliance/conformance-tools-issues/issues/396
@@ -188,7 +188,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
             //If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
             if (x5c != null) {
                 //Verify the sig is a valid signature over certInfo using the attestation public key in x5c with the algorithm specified in alg.
-                
+
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         x5c.size());
                 Iterator x5cItr = x5c.iterator();
@@ -207,7 +207,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     certificate = (X509Certificate) certFactory.generateCertificate(instr);
                     certchain.add(certificate);
                 }
-                
+
                 PublicKey certPublicKey = attCert.getPublicKey();
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         certPublicKey.getAlgorithm());
@@ -331,7 +331,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
 
         return Boolean.FALSE;
     }
-    
+
     @Override
     public ArrayList getX5c() {
         return x5c;
@@ -341,7 +341,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
         Because of the awkward case in which the RSA exponent is stored
         as a byte of array of length 3, premade solutions for byte arrays to
         integer broke. This is a temporary solution to that problem.
-    
+
         TODO figure out a different solution.
      */
     private static int getIntFromByteArray(byte[] bytes) {

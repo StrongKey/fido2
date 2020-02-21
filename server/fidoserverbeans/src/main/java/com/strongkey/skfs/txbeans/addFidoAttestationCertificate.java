@@ -1,21 +1,20 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.entitybeans.AttestationCertificates;
 import com.strongkey.skfs.entitybeans.AttestationCertificatesPK;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
+import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -40,14 +39,25 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
     @EJB
     replicateSKFEObjectBeanLocal replObj;
     @EJB
+    getFidoAttestationCertificateLocal getAttCertbean;
+    @EJB
     SequenceGeneratorBeanLocal seqgenejb;
-    
+
     @Override
-    public AttestationCertificatesPK execute(Long did, X509Certificate attCert, 
+    public AttestationCertificatesPK execute(Long did, X509Certificate attCert,
             AttestationCertificatesPK parentPK) throws CertificateEncodingException, SKFEException{
         skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
 
         Long sid = applianceCommon.getServerId();
+
+        AttestationCertificates dbcert = getAttCertbean.getByIssuerDnSerialNumber(
+                        attCert.getIssuerDN().getName(), attCert.getSerialNumber().toString());
+        if(dbcert != null){
+            //already exists
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "SKCE-ERR-8059", "");
+            return dbcert.getAttestationCertificatesPK();
+        }
+
         Integer attcid = seqgenejb.nextAttestationCertificateID();
         AttestationCertificatesPK attestationCertificatePK = new AttestationCertificatesPK();
         AttestationCertificates attestationCertificate = new AttestationCertificates();
@@ -65,9 +75,9 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
 //        }else{
             attestationCertificate.setSubjectDn(attCert.getSubjectDN().getName());
 //        }
-        
+
         attestationCertificate.setSerialNumber(attCert.getSerialNumber().toString());
-        
+
 
         //TODO add signing code(?)
         try {

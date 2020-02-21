@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.pojos;
 
 import com.strongkey.skfs.utilities.skfsConstants;
@@ -13,9 +12,9 @@ import javax.json.JsonObject;
 
 /**
  *
- * A POJO to hold the metadata of an LDAP user present in an LDAP based 
+ * A POJO to hold the metadata of an LDAP user present in an LDAP based
  * authentication & authorization system.
- * 
+ *
  */
 public class FIDOUserMetadata implements Serializable {
 
@@ -35,22 +34,22 @@ public class FIDOUserMetadata implements Serializable {
 
     /**
      * Constructor of this class.
-     * 
+     *
      * @param username          - name of the user
      * @param userdn            - user full dn in the ldap schema
      * @param firstname         - first name of the user
      * @param lastname          - last name of the user
      * @param emailaddresses    - list of comma separated email addresses
      * @param primaryemail      - one email address that is used as primary
-     * @param phonenumbers      - list of comma separated phone numbers 
-     * @param primaryphone      - one phone number that is used as primary 
+     * @param phonenumbers      - list of comma separated phone numbers
+     * @param primaryphone      - one phone number that is used as primary
      * @param defaultcomm       - default communication channel for 2 step
      *                      verification. Possible values are 'phone' or 'email'
-     * @param twostepverification - Attribute with name 'twostepverification' that 
-     *                      signifies whether the user has enabled fido (2 factor) 
+     * @param twostepverification - Attribute with name 'twostepverification' that
+     *                      signifies whether the user has enabled fido (2 factor)
      *                      based authentication on his/her account. Possible answers
      *                      are 'yes' or 'no'.
-     * @param fidokeysenabled   - Attribute with name 'fidokeysenabled' that 
+     * @param fidokeysenabled   - Attribute with name 'fidokeysenabled' that
      *                      signifies whether there are any fido based authenticators
      *                      already registered for the account. Possible answers
      *                      are 'yes' or 'no'.
@@ -75,7 +74,7 @@ public class FIDOUserMetadata implements Serializable {
         this.fidokeysenabled = fidokeysenabled;
         this.twostepverification = twostepverification;
         this.did = did;
-    } 
+    }
 
     /**
      * Converts this POJO into a JsonObject and returns the same.
@@ -99,7 +98,7 @@ public class FIDOUserMetadata implements Serializable {
 
         return metadataJSON;
     }
-    
+
     /**
      * Converts this POJO into a JsonObject and returns the String form of it.
      * @return String containing the Json representation of this POJO.
@@ -110,7 +109,7 @@ public class FIDOUserMetadata implements Serializable {
 
     /**
     * Get-Set methods to access the challenge parameters
-     * @return 
+     * @return
     */
     public String getUsername() {
         return username;
@@ -191,9 +190,9 @@ public class FIDOUserMetadata implements Serializable {
     public void setDid(Long did) {
         this.did = did;
     }
-    
+
     /**
-     * Over-ridden toString method to print the object content in a readable 
+     * Over-ridden toString method to print the object content in a readable
      * manner
      * @return  String with object content laid in a readable manner.
      */

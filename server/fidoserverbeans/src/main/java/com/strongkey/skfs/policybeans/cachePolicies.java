@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.policybeans;
 
@@ -27,8 +27,8 @@ import javax.ejb.Startup;
 @Singleton
 @Startup
 public class cachePolicies {
-    
-    @EJB 
+
+    @EJB
     getFidoPolicyLocal getFidoPolicies;
 
     @PostConstruct
@@ -45,12 +45,12 @@ public class cachePolicies {
                         (long) fpPK.getPid(),
                         fp.getStartDate(),
                         fp.getEndDate());
-                
+
                 MDSClient mds = null;
                 if(fidoPolicyObject.getMdsOptions() != null){
                     mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
                 }
-                 
+
                 String mapkey = fpPK.getSid() + "-" + fpPK.getDid() + "-" + fpPK.getPid();
                 skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_POLICIES, mapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
             }
@@ -58,6 +58,6 @@ public class cachePolicies {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "SKCE-ERR-1000", "Unable to cache policy: " + ex);
             }
         }
-        
+
     }
 }

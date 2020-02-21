@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
@@ -108,7 +108,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
             return skcero;
         }
 
-        //  With the username, fetch all the keys registered for the account.   
+        //  With the username, fetch all the keys registered for the account.
         JsonArrayBuilder keysArrayBuilder = Json.createArrayBuilder();
         try {
             Collection<FidoKeys> kh_coll = getkeybean.getByUsername(did, username);
@@ -167,7 +167,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                         keysArrayBuilder.add(keyJsonBuilder.build());
                     }
 
-                    //  Create a UserKeyPointers object that will bind the map 
+                    //  Create a UserKeyPointers object that will bind the map
                     //  and also track the creation time so that it can be flushed
                     //  on a periodic basis by an independent job.
 //                    UserKeyPointers ukp = new UserKeyPointers(userkeypointerMap);
@@ -175,7 +175,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
 //                    skceMaps.getMapObj().put(skfsConstants.MAP_USER_KEY_POINTERS,username, ukp);
 //                    skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-0030"), "");
                 }
-            } 
+            }
 //            else {
 //                return skcero;
 //            }

@@ -1,16 +1,9 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  *
  * $Date$
  * $Revision$
@@ -28,7 +21,7 @@
  *  888  888  "Y88P"   "Y888  "Y8888   88888P'
  *
  * *********************************************
- * 
+ *
  */
 
 package com.strongauth.skfews.u2f.soap.stubs;
@@ -40,9 +33,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for register complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="register">
  *   &lt;complexContent>
@@ -55,8 +48,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "register", propOrder = {
@@ -70,11 +63,11 @@ public class Register {
 
     /**
      * Gets the value of the did property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDid() {
         return did;
@@ -82,11 +75,11 @@ public class Register {
 
     /**
      * Sets the value of the did property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDid(String value) {
         this.did = value;
@@ -94,11 +87,11 @@ public class Register {
 
     /**
      * Gets the value of the payload property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPayload() {
         return payload;
@@ -106,11 +99,11 @@ public class Register {
 
     /**
      * Sets the value of the payload property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPayload(String value) {
         this.payload = value;

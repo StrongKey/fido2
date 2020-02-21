@@ -1,17 +1,16 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.skfs.requests.PatchFidoKeyRequest;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKCEReturnObject;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.SKCEReturnObject;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.StringReader;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -39,6 +38,8 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
     getFidoKeysLocal getkeybean;
     @EJB
     updateFidoKeysStatusLocal updatekeystatusbean;
+    @EJB
+    updateFIDO2DisplayNameLocal updateFIDO2dnejb;
 
     /**
      * This method is responsible for activating the user registered key from
@@ -104,7 +105,7 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
-        
+
         String modifyloc = fidokey.getModify_location();
         if (modifyloc == null || modifyloc.isEmpty()) {
             skcero.setErrorkey("FIDO-ERR-0002");
@@ -157,6 +158,17 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
                     jo = jr.readObject();
                 }
 
+                Boolean updatestatus = jo.getBoolean(skfsConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
+                if (!updatestatus) {
+                    //  error deleting user key
+                    //  throw an error and return.
+                    skcero.setErrorkey("FIDO-ERR-0040");
+                    skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0040") + " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
+                    skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0040"), " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
+                    skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+                    return skcero;
+                }
+
             } catch (Exception ex) {
                 //  error activating user key
                 //  throw an error and return.
@@ -168,7 +180,25 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
             }
         }
 
-        skcero.setReturnval("Successfully activated the key");
+        if(fidokey.getDisplayname() != null && !fidokey.getDisplayname().trim().isEmpty()){
+            //update displayname for key
+            String updatednres = updateFIDO2dnejb.execute(sid_to_be_activated, did, fidouser, fkid_to_be_activated, modifyloc, fidokey.getDisplayname());
+            JsonObject jo;
+                try (JsonReader jr = Json.createReader(new StringReader(updatednres))) {
+                    jo = jr.readObject();
+                }
+
+            Boolean updatename = jo.getBoolean("status");
+            if(!updatename){
+                skcero.setErrorkey("FIDO-ERR-0039");
+                skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0039") + " username= " + fidouser + "   keyid= " + keyid);
+                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0039"), " username= " + fidouser + "   keyid= " + keyid);
+                skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+                return skcero;
+            }
+        }
+
+        skcero.setReturnval("Successfully updated the key");
 
         //  log the exit and return
         skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);

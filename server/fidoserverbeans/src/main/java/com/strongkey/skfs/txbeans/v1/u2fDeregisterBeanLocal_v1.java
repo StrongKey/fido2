@@ -1,22 +1,9 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
- *
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * *********************************************
  *                    888
  *                    888
@@ -30,7 +17,7 @@
  * *********************************************
  *
  * Local interface for u2fDeregisterBean
- * 
+ *
  */
 package com.strongkey.skfs.txbeans.v1;
 
@@ -39,20 +26,20 @@ import javax.ejb.Local;
 
 /**
  * Local interface for u2fDeregisterBean
- * 
+ *
  */
 @Local
 public interface u2fDeregisterBeanLocal_v1 {
-    
+
     /**
-     * This method is responsible for deleting the user registered key from the 
+     * This method is responsible for deleting the user registered key from the
      * persistent storage. This method first checks if the given ramdom id is
      * mapped in memory to the specified user and if found yes, gets the registration
      * key id and deletes that entry from the database.
-     * 
+     *
      * Additionally, if the key being deleted is the last one for the user, the
      * ldap attribute of the user called 'FIDOKeysEnabled' is set to 'no'.
-     * 
+     *
      * @param did       - FIDO domain id
      * @param protocol  - U2F protocol version to comply with.
      * @param username  - username
@@ -63,8 +50,8 @@ public interface u2fDeregisterBeanLocal_v1 {
      *                  In success case, a simple msg saying that the process was
      *                  successful would be populated.
      */
-    SKCEReturnObject execute(String did, 
+    SKCEReturnObject execute(String did,
                             String protocol,
-                            String username, 
+                            String username,
                             String randomid);
 }

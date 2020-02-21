@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.crypto.utility;
 
@@ -104,9 +104,9 @@ public final class cryptoCommon {
      * property-key from the defaultProperties object.
      *
      */
-    
+
     private static SortedMap<Long, Map<String, String>> configmap = new ConcurrentSkipListMap<>();
-    
+
     public static final int EC_POINTSIZE               = 32;
 
     private static BouncyCastleFipsProvider BC_FIPS_PROVIDER = new BouncyCastleFipsProvider();
@@ -267,7 +267,7 @@ public final class cryptoCommon {
         // Print SKLES version
         log(Level.INFO, "CRYPTO-MSG-1053", "CRYPTO VERSION is: " + vrb.getString("version"));
 
-        // Add BouncyCastleFIPS Provider 
+        // Add BouncyCastleFIPS Provider
         Security.addProvider(BC_FIPS_PROVIDER);
     }
 
@@ -384,12 +384,12 @@ public final class cryptoCommon {
         SubjectPublicKeyInfo spki = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(attPublicKey));
         spki.getAlgorithm();
 
-        //  get algorithm from the AlgorithmIdentifier refer to RFC 5480 
+        //  get algorithm from the AlgorithmIdentifier refer to RFC 5480
         AlgorithmIdentifier sigAlgId = spki.getAlgorithm();
         ASN1ObjectIdentifier asoi = sigAlgId.getAlgorithm();
 
         if (!(asoi.getId().equals("1.2.840.10045.2.1"))) {
-            //not an EC Public Key 
+            //not an EC Public Key
             logp(Level.SEVERE, classname, "verifyAttestationCertificate", "FIDO-ERR-5008", "Only Elliptic-Curve (EC) keys are allowed, the public key in this certificate not an EC public key");
             return false;
         }

@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.fido2mds.jws;
 
@@ -28,11 +28,11 @@ import javax.json.JsonArray;
 
 public class MDSJwtVerifier {
     private final X509Certificate rootCert;
-    
+
     public MDSJwtVerifier(X509Certificate rootCert){
         this.rootCert = rootCert;
     }
-    
+
     public void verify(JWT jwt) throws CertificateException, NoSuchProviderException, UnsupportedEncodingException {
         Set<TrustAnchor> trustAnchor = new HashSet<>();
         trustAnchor.add(new TrustAnchor(rootCert, null));
@@ -43,7 +43,7 @@ public class MDSJwtVerifier {
         }
 
         CertPath certPath = CertificateFactory.getInstance("X.509", "BCFIPS").generateCertPath(certchain);
-        
+
         if (certchain.isEmpty()) {
             throw new IllegalArgumentException("MDS JWT certificate chain missing");
         }
@@ -57,7 +57,7 @@ public class MDSJwtVerifier {
             throw new IllegalArgumentException("MDS JWT signature cannot be verified");
         }
     }
-    
+
     private List<Certificate> getCertificatesFromJsonArray(JsonArray x5c) throws CertificateException, NoSuchProviderException{
         List<Certificate> result = new ArrayList<>();
         if(x5c == null){

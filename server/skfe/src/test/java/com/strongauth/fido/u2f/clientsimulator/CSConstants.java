@@ -1,22 +1,9 @@
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
- *
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * *********************************************
  *                    888
  *                    888
@@ -50,7 +37,7 @@ public class CSConstants {
     public static final int MAX_RANDOM_NUMBER_SIZE_BITS = 1024;
 
     //registration
-    // CSConstants for the secure element    
+    // CSConstants for the secure element
     public static final String SECURE_ELEMENT_SECRET_KEY = "0123456789ABCDEF0123456789ABCDEF";
     public static final String ATTESTATION_KEYSTORE = "test/resources/attestation.jceks";
     public static final String ATTESTATION_PRIVATE_KEYALIAS = "mykey";
@@ -71,16 +58,16 @@ public class CSConstants {
     //control
     public static int EC_P256_PUBLICKKEYSIZE = 65;
 
-//authentication  
+//authentication
     public static final int CHALLENGE_PARAMETER_LENGTH = 32;
     public static final int APPLICATION_PARAMETER_LENGTH = 32;
 
-    //control     
+    //control
     public static final byte CONTROL_BYTE = 0x03;
     public static final byte AUTHENTICATOR_USERPRESENCE_BYTE = 0X01;
 
     //Keys
-    
+
 
     //values
     public static final String AUTHENTICATE_CLIENT_DATA_OPTYPE = "navigator.id.getAssertion";

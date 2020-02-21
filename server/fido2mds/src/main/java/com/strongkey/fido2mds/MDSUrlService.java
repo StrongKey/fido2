@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.fido2mds;
 
@@ -59,10 +59,10 @@ class MDSUrlService extends MDSService {
     private static final String TOC_FILE = "mds_toc.ser";
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH = "classpath:metadata/certs/FAKERootFAKE.crt";
     private static final String PRODUCTION_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH = "classpath:metadata/certs/FIDOMetadataService.cer";
-    
+
     public MDSUrlService(String url, String token, ObjectMapper objectMapper, Storage storage) {
         super();
-        
+
         this.url = url;
         this.token = token;
         this.storage = storage;
@@ -79,7 +79,7 @@ class MDSUrlService extends MDSService {
 
         HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
-        
+
         //TODO remove hardcoded solution to use right cert for production MDS
         if(token != null){
             jwtVerifier = new MDSJwtVerifier(retriveRootX509Certificate(PRODUCTION_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH));
@@ -93,7 +93,7 @@ class MDSUrlService extends MDSService {
     public void refresh() {
         try{
             MetadataTOC toc = retrieveMetadataTOC(false);
-            LocalDate update = LocalDate.parse(toc.getPayload().getNextUpdate(), 
+            LocalDate update = LocalDate.parse(toc.getPayload().getNextUpdate(),
                     DateTimeFormatter.ofPattern("y-M-d").withResolverStyle(ResolverStyle.LENIENT));
             // TODO: Could make this happen sooner or more frequent
             if (update.isEqual(LocalDate.now())||update.isBefore(LocalDate.now()))
@@ -143,7 +143,7 @@ class MDSUrlService extends MDSService {
             tocEntryMap = new HashMap<>();
         }
     }
-    
+
     private X509Certificate retriveRootX509Certificate(String rootCertificateClassPath){
         try{
             ResourceLoader resourceLoader = new DefaultResourceLoader();
@@ -206,7 +206,7 @@ class MDSUrlService extends MDSService {
             URI realURI = URI.create(url);
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(realURI, String.class);
             data = responseEntity.getBody();
-            
+
             if(data == null){
                 logger.severe("Null hash.");
                 throw new Exception("Null hash");

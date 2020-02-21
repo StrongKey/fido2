@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.core;
 
@@ -42,7 +42,7 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 
 /**
- * Derived class for U2F Registration response that comes back to the FIDO server 
+ * Derived class for U2F Registration response that comes back to the FIDO server
  * from the RP application.
  */
 public class U2FRegistrationResponse extends U2FResponse implements Serializable {
@@ -51,7 +51,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
      * This class' name - used for logging
      */
     private String classname = this.getClass().getName();
-    
+
     private String registrationdata;
     private String keyhandle = null;
     private String userpublickey = null;
@@ -59,29 +59,29 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     /**
      * The constructor of this class takes the U2F registration response parameters
      * in the form of stringified Json. The method parses the Json to extract needed
-     * fileds compliant with the u2fversion specified. 
-     * @param u2fversion        - Version of the U2F protocol being communicated in; 
-     *                            example : "U2F_V2"     
+     * fileds compliant with the u2fversion specified.
+     * @param u2fversion        - Version of the U2F protocol being communicated in;
+     *                            example : "U2F_V2"
      * @param regresponseJson   - U2F Reg Response params in stringified Json form
-     * @throws SKFEException 
+     * @throws SKFEException
      *                          - In case of any error
      */
     public U2FRegistrationResponse(String u2fversion, String regresponseJson) throws SKFEException {
-        
+
         //  Input checks
         if ( u2fversion==null || u2fversion.trim().isEmpty() ) {
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FRegistrationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " u2f version");
             throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " username");
         }
-        
+
         if ( regresponseJson==null || regresponseJson.trim().isEmpty() ) {
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FRegistrationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " regresponseJson");
             throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " regresponseJson");
         }
-        
+
         //  u2f protocol version specific processing.
         if ( u2fversion.equalsIgnoreCase(U2F_VERSION_V2) ) {
-            
+
             //  Parse the reg response json string
             try (JsonReader jsonReader = Json.createReader(new StringReader(regresponseJson))) {
                 JsonObject jsonObject = jsonReader.readObject();
@@ -94,7 +94,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
 
             //  Generate new browser data
             bd = new BrowserData(this.browserdata, BrowserData.REGISTRATION_RESPONSE);
-            
+
         } else {
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FRegistrationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5002"), " version passed=" + u2fversion);
             throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5002") + " version passed=" + u2fversion);
@@ -103,7 +103,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
 
     /**
      * Get methods to access the response parameters
-     * @return 
+     * @return
      */
     public String getBrowserdata() {
         return browserdata;
@@ -120,7 +120,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     public String getUserpublickey() {
         return userpublickey;
     }
-    
+
     /**
      * Converts this POJO into a JsonObject and returns the same.
      * @return JsonObject
@@ -133,7 +133,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
                         .build();
         return jsonObj;
     }
-    
+
     /**
      * Converts this POJO into a JsonObject and returns the String form of it.
      * @return String containing the Json representation of this POJO.
@@ -145,7 +145,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     /**
      * Once this class object is successfully constructed, calling verify method
      * will actually process the registration response params.
-     * 
+     *
      * The first step in verification is sessionid validation, which if found
      * valid goes ahead and processes the registration data.
      * @param appid
@@ -155,7 +155,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     public final boolean verify(String appid) throws SKFEException {
 
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "verify", skfsCommon.getMessageProperty("FIDO-MSG-5009"), "");
-        
+
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "verify", skfsCommon.getMessageProperty("FIDO-MSG-5011"), "");
 
         try {
@@ -178,7 +178,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     private boolean processRegistrationData(String registrationdata, String browserdata, String appid) throws SKFEException, SignatureException {
 
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5012"), "");
-        
+
         try {
             byte[] regDataReceived = Base64.decodeBase64(registrationdata);
 
@@ -216,12 +216,12 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
             X509Certificate attestationcertificate = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(acertBytes));
             int certificateLength = attestationcertificate.getEncoded().length;
             total += certificateLength;
-            
+
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5018"), attestationcertificate);
             if (!cryptoCommon.verifyU2FAttestationCertificate(attestationcertificate)) {
                 skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-ERR-5010"), "");
                 throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5010"));
-            }           
+            }
 
             //  getSignatureBytes
             int signedBytesLength = regDataReceived.length - total;
@@ -233,7 +233,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
             //  send all parameters required to build the plaintext message
             skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5020"), "");
             String appIDHash = skfsCommon.getDigest(appid, "SHA-256");
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5021"), 
+            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5021"),
                     Hex.encodeHexString(Base64.decodeBase64(appIDHash)));
 
             //  get browserdata Hash
@@ -241,12 +241,12 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
             String brData = new String(Base64.decodeBase64(browserdata), "UTF-8");
 
             String bdHash = skfsCommon.getDigest(brData, "SHA-256");
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5022"), 
+            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5022"),
                     Hex.encodeHexString(Base64.decodeBase64(bdHash)));
 
-            //  get object signed        
+            //  get object signed
             String objectSigned = objectTBS(appIDHash, bdHash, this.keyhandle, this.userpublickey);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5023"), 
+            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processRegistrationData", skfsCommon.getMessageProperty("FIDO-MSG-5023"),
                     Hex.encodeHexString(Base64.decodeBase64(objectSigned)));
 
             if (cryptoCommon.verifySignature(signedBytes, attestationcertificate.getPublicKey(), objectSigned)) {
@@ -266,7 +266,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
     }
 
     /**
-     * 
+     *
      * @param ApplicationParam
      * @param ChallengeParam
      * @param kh
@@ -274,11 +274,11 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
      * @return
      * @throws NoSuchAlgorithmException
      * @throws NoSuchProviderException
-     * @throws InvalidKeySpecException 
+     * @throws InvalidKeySpecException
      */
-    private String objectTBS(String ApplicationParam, String ChallengeParam, String kh, String PublicKey) 
+    private String objectTBS(String ApplicationParam, String ChallengeParam, String kh, String PublicKey)
             throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, DecoderException {
-        
+
         byte constant = (byte) 0x00;
         byte[] Challenge = Base64.decodeBase64(ChallengeParam);
         int ChanllengeL = Challenge.length;
@@ -310,7 +310,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
             }
         }
 
-        int pukL = skfsConstants.P256_PUBLIC_KEY_SIZE; //ECDSA secp256r1 publickey length        
+        int pukL = skfsConstants.P256_PUBLIC_KEY_SIZE; //ECDSA secp256r1 publickey length
         byte[] ob2Sign = new byte[1 + ChanllengeL + ApplicationL + keyHandleL + pukL];
 
         int tot = 1;
@@ -323,7 +323,7 @@ public class U2FRegistrationResponse extends U2FResponse implements Serializable
         tot += keyHandleL;
         System.arraycopy(q, 0, ob2Sign, tot, pukL);
         tot += pukL;
-        
+
         return Base64.encodeBase64String(ob2Sign);
     }
 }

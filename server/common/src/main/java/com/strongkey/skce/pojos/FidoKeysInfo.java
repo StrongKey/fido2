@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skce.pojos;
 
 import com.strongkey.skfe.entitybeans.FidoKeys;
@@ -16,14 +15,14 @@ public class FidoKeysInfo {
     private FidoKeys fk;
 
     public FidoKeysInfo(){
-        
+
     }
-    
+
     public FidoKeysInfo(FidoKeys fk) {
         this.fk = fk;
         this.creationdate = new Date();
     }
-    
+
     public Date getCreationdate() {
         return creationdate;
     }

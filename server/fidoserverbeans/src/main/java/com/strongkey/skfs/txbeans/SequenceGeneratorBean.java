@@ -1,16 +1,16 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.skfs.utilities.skfsCommon;
 import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.skfsLogger;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,10 +36,10 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
      * query the database.
      *
      */
-    private static ConcurrentMap<Short, FIDOKeyID> idmap = new ConcurrentSkipListMap<>();
-    
+    private static ConcurrentMap<Long, FIDOKeyID> idmap = new ConcurrentSkipListMap<>();
+
     private static ConcurrentMap<Short, PolicyID> pidmap = new ConcurrentSkipListMap<>();
-    
+
     private static ConcurrentMap<Short, AttestationCertificateID> attcidmap = new ConcurrentSkipListMap<>();
 
     /**
@@ -54,19 +54,19 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
      *
      */
     @Override
-    synchronized public Long nextFIDOKeyID() {
+    synchronized public Long nextFIDOKeyID(Long did) {
         // Check if rqid is in the idmap; if so return it
-        if (idmap.containsKey(ssid)) {
-            return idmap.get(ssid).nextFKid();
+        if (idmap.containsKey(did)) {
+            return idmap.get(did).nextFKid();
         } else {
             // Populate the map and return rqid
-            if (populateFIDOKeyIDMap() == null) {
+            if (populateFIDOKeyIDMap(did) == null) {
                 return null;
             }
-            return idmap.get(ssid).nextFKid();
+            return idmap.get(did).nextFKid();
         }
     }
-    
+
     @Override
     synchronized public Integer nextPolicyID() {
         // Check if pid is in the idmap; if so return it
@@ -80,7 +80,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
             return pidmap.get(ssid).nextPid();
         }
     }
-    
+
     @Override
     synchronized public Integer nextAttestationCertificateID() {
         // Check if pid is in the idmap; if so return it
@@ -104,7 +104,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
      * database.
      *
      */
-    synchronized private FIDOKeyID populateFIDOKeyIDMap() {
+    synchronized private FIDOKeyID populateFIDOKeyIDMap(Long did) {
         // Initialize local variables
         Long fkid;
         FIDOKeyID Keyid = new FIDOKeyID();
@@ -112,6 +112,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         try {
             fkid = (Long) em.createNamedQuery("FidoKeys.maxpk")
                     .setParameter("sid", ssid)
+                    .setParameter("did", did)
                     .setHint("javax.persistence.cache.storeMode", "REFRESH")
                     .getSingleResult() + 1;
         } catch (NullPointerException ex) { // First request for the server
@@ -121,11 +122,11 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         Keyid.setFKid(fkid);
         skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, skfsCommon.getMessageProperty("SKCE-MSG-1085"), "SID-FKID=" + ssid + "-" + fkid);
 
-        idmap.put(ssid, Keyid);
-        return idmap.get(ssid);
+        idmap.put(did, Keyid);
+        return idmap.get(did);
 
     }
-    
+
     /**
      ** A method to initialize the RequestID maps in memory so that * requests
      * after the first one will get their ID value quickly. * Since access to
@@ -155,7 +156,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         pidmap.put(ssid, Keyid);
         return pidmap.get(ssid);
     }
-    
+
     /**
      ** A method to initialize the RequestID maps in memory so that * requests
      * after the first one will get their ID value quickly. * Since access to

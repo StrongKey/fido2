@@ -1,9 +1,10 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
+
 
 package com.strongkey.skfs.policybeans;
 
@@ -25,30 +26,30 @@ import javax.json.JsonObject;
 
 @Stateless
 public class verifyFido2AuthenticationPolicy implements verifyFido2AuthenticationPolicyLocal {
-    
+
     @EJB
     getCachedFidoPolicyMDSLocal getpolicybean;
     @EJB
     getFidoKeysLocal getfidokeysbean;
-    
+
     @Override
     public void execute(UserSessionInfo userInfo, long did, JsonObject clientJson,
             FIDO2AuthenticatorData authData, FidoKeys signingKey) throws SKFEException {
         //Get policy from userInfo
         FidoPolicyObject fidoPolicy = getpolicybean.getByMapKey(userInfo.getPolicyMapKey()).getFp();
         FidoKeys fk = getfidokeysbean.getByfkid(userInfo.getSkid(), did, userInfo.getUsername(), userInfo.getFkid());
-        
+
         //Verify Counter
         verifyCounter(fidoPolicy.getCounterOptions(), clientJson, authData, signingKey, fidoPolicy.getVersion());
-        
+
         //Verify userVerification was given if required
         verifyUserVerification(fidoPolicy.getAuthenticationOptions(), authData, userInfo.getUserVerificationReq(), fidoPolicy.getVersion());
-        
+
         //TODO add additional checks to ensure the the authentication data meets the standard of the policy
-        
+
         //TODO add checks to ensure the stored information about the key (attestation certificates, MDS, etc) still meets the standard
     }
-    
+
     private void verifyCounter(CounterPolicyOptions counterOp, JsonObject clientJson,
             FIDO2AuthenticatorData authData, FidoKeys signingKey, Integer version) throws SKFEException {
         int oldCounter = signingKey.getCounter();
@@ -66,12 +67,12 @@ public class verifyFido2AuthenticationPolicy implements verifyFido2Authenticatio
             }
         }
     }
-    
-    private void verifyUserVerification(AuthenticationPolicyOptions authOp, 
+
+    private void verifyUserVerification(AuthenticationPolicyOptions authOp,
             FIDO2AuthenticatorData authData, String userVerificationReq, Integer version){
         //Default blank to Webauthn defined defaults
         userVerificationReq = (userVerificationReq == null) ? skfsConstants.POLICY_CONST_PREFERRED : userVerificationReq;
-        
+
         //Double check that what was stored in UserSessionInfo is valid for the policy
         if (!authOp.getUserVerification().contains(userVerificationReq)) {
             throw new SKIllegalArgumentException("Policy Exception: Preauth userVerificationRequirement does not meet policy");

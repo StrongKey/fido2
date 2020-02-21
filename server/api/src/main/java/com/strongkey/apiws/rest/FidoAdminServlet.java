@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiws.rest;
 
@@ -31,27 +31,27 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/domains/{did}/fidopolicies")
 public class FidoAdminServlet {
-    
+
     @javax.ws.rs.core.Context private HttpServletRequest request;
     @EJB authenticateRestRequestBeanLocal authRest;
     @EJB addFidoPolicyLocal addpolicybean;
     @EJB getFidoPolicyLocal getpolicybean;
     @EJB updateFidoPolicyLocal updatepolicybean;
     @EJB deleteFidoPolicyLocal deletepolicybean;
-    
+
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response createFidoPolicy(CreateFidoPolicyRequest createfidopolicy,
                                      @PathParam("did") Long did) {
-        
+
         if (!authRest.execute(did, request, createfidopolicy)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         return addpolicybean.execute(did, createfidopolicy);
     }
-    
+
     @GET
     @Produces({"application/json"})
     public Response getFidoPolicy(@PathParam("did") Long did,
@@ -64,7 +64,7 @@ public class FidoAdminServlet {
 
         return getpolicybean.getPolicies(did, sidpid, metadataonly);
     }
-    
+
     @PATCH
     @Path("/{pid}")
     @Consumes({"application/merge-patch+json"})
@@ -79,7 +79,7 @@ public class FidoAdminServlet {
 
         return updatepolicybean.execute(did, pid, patchfidopolicy);
     }
-    
+
     @DELETE
     @Path("/{pid}")
     @Produces({"application/json"})

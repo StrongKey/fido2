@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -18,13 +18,13 @@ import java.util.Map;
 
 public class FIDO2Extensions {
     Map<String, Object> extensionMap;
-    
+
     public int decodeExtensions(byte[] extensionBytes) throws IOException {
         CBORFactory f = new CBORFactory();
         ObjectMapper mapper = new ObjectMapper(f);
         CBORParser parser = f.createParser(extensionBytes);
         extensionMap = mapper.readValue(parser, new TypeReference<Map<String, Object>>() {});
-        
+
         //Return size of AttestedCredentialData
         int numRemainingBytes = 0;
         JsonToken leftoverCBORToken;
@@ -33,9 +33,9 @@ public class FIDO2Extensions {
         }
         return extensionBytes.length - numRemainingBytes;
     }
-    
+
     public Object getExtension(String extensionName){
         return extensionMap.get(extensionName);
     }
-    
+
 }

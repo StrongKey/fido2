@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -47,16 +47,16 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
     private byte[] signature;
     private ArrayList x5c = null;
     private final String attestationType = "basic";
-    
+
     static {
         Security.addProvider(new BouncyCastleFipsProvider());
     }
-    
+
     @Override
     public void decodeAttestationStatement(Object attStmt) {
         Map<String, Object> attStmtObjectMap = (Map<String, Object>) attStmt;
         for (String key : attStmtObjectMap.keySet()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Key attstmt Packed: " + key);
             switch (key) {
                 case "sig":
@@ -81,48 +81,48 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
             byte[] certByte = (byte[]) x5cItr.next();
             InputStream instr = new ByteArrayInputStream(certByte);
             X509Certificate attCert = (X509Certificate) certFactory.generateCertificate(instr);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Android-Key certificate: " + attCert);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Base64: " + Base64.getEncoder().encodeToString(attCert.getEncoded()));
-            
+
             //Verify that sig is a valid signature over the concatenation of authenticatorData
-            //and clientDataHash using the public key in the first certificate in x5c with the 
+            //and clientDataHash using the public key in the first certificate in x5c with the
             //algorithm specified in alg.
             PublicKey certPublicKey = attCert.getPublicKey();
             byte[] clientDataHash = skfsCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256");
-            byte[] signedBytes = concatenateArrays(authData.getAuthDataDecoded(), clientDataHash); 
+            byte[] signedBytes = concatenateArrays(authData.getAuthDataDecoded(), clientDataHash);
             Signature verifySignature = Signature.getInstance(skfsCommon.getAlgFromIANACOSEAlg(alg), "BCFIPS");
             verifySignature.initVerify(certPublicKey);
             verifySignature.update(signedBytes);
             if(!verifySignature.verify(signature)){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Android-key signature failed to validate");
                 return false;
             }
-            
-            //Verify that the public key in the first certificate in in x5c matches the 
+
+            //Verify that the public key in the first certificate in in x5c matches the
             //credentialPublicKey in the attestedCredentialData in authenticatorData.
             //(Implementation) The tests imply that these keys might not be formatted the same.
             //The keys should just be functionally the same. Conditionals check for functional
             //equivalence.
             PublicKey credentialPublicKey = authData.getAttCredData().getPublicKey();
             if(!certPublicKey.getAlgorithm().equals(credentialPublicKey.getAlgorithm())){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Android-key provided public keys' algorithms do not match");
                 return false;
             }
-            
+
             if(certPublicKey.getAlgorithm().equals("RSA")){
                 RSAPublicKey rsaCertPublicKey = (RSAPublicKey) certPublicKey;
                 RSAPublicKey rsacredentialPublicKey = (RSAPublicKey) credentialPublicKey;
                 if(!rsaCertPublicKey.getModulus().equals(rsacredentialPublicKey.getModulus())){
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' moduli do not match");
                     return false;
                 }
                 if(!rsaCertPublicKey.getPublicExponent().equals(rsacredentialPublicKey.getPublicExponent())){
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' exponents do not match");
                     return false;
                 }
@@ -131,27 +131,27 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
                 ECPublicKey ecCertPublicKey = (ECPublicKey) certPublicKey;
                 ECPublicKey eccredentialPublicKey = (ECPublicKey) credentialPublicKey;
                 if (ecCertPublicKey.getParams().getCofactor() != eccredentialPublicKey.getParams().getCofactor()) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' cofactors do not match");
                     return false;
                 }
                 if (!ecCertPublicKey.getParams().getCurve().equals(eccredentialPublicKey.getParams().getCurve()) ) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' curves do not match");
                     return false;
                 }
                 if (!ecCertPublicKey.getParams().getGenerator().equals(eccredentialPublicKey.getParams().getGenerator())) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' generators do not match");
                     return false;
                 }
                 if (!ecCertPublicKey.getParams().getOrder().equals(eccredentialPublicKey.getParams().getOrder())) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' orders do not match");
                     return false;
                 }
                 if (!ecCertPublicKey.getW().equals(eccredentialPublicKey.getW())) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key provided public keys' points do not match");
                     return false;
                 }
@@ -159,26 +159,26 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
             else{
                 throw new UnsupportedOperationException("Android-key attestation contains unknown key type");
             }
-            
+
             //Verify that in the attestation certificate extension data:
             String attestationOID = "1.3.6.1.4.1.11129.2.1.17";
             byte[] attestationBytes = attCert.getExtensionValue(attestationOID);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Android-key attestation bytes: " + bytesToHexString(attestationBytes, attestationBytes.length));
-            
+
             //Format found here: https://source.android.com/security/keystore/attestation
             //  The value of the attestationChallenge field is identical to clientDataHash.
             //
-            //  The AuthorizationList.allApplications field is not present, since 
+            //  The AuthorizationList.allApplications field is not present, since
             //  PublicKeyCredential must be bound to the RP ID.
             //
-            //  The AuthorizationList.allApplications field is not present, since 
+            //  The AuthorizationList.allApplications field is not present, since
             //  PublicKeyCredential must be bound to the RP ID.
             //
             //  The value in the AuthorizationList.origin field is equal to KM_TAG_GENERATED.
             //
             //  The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
-            //  
+            //
             //Constants found here: https://source.android.com/security/keystore/tags
             try{
                 ASN1OctetString attestationDERString = (ASN1OctetString) ASN1OctetString.fromByteArray(attestationBytes);
@@ -241,25 +241,25 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
                     }
                 }
                 if(!Arrays.equals(attestationChallenge, clientDataHash)){
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key attestationChallenge does not match clientDataHash");
                     return false;
                 }
 
                 if (!isAllApplicationsNotPresent) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key attestation contains allApplications");
                     return false;
                 }
-                
+
                 if (!isOriginEqualToKM_TAG_GENERATED) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key attestation origin is not GENERATED");
                     return false;
                 }
-                
+
                 if (!isPurposeEqualToKM_PURPOSE_SIGN) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Android-key attestation purpose does not include SIGNING");
                     return false;
                 }
@@ -269,27 +269,27 @@ public class AndroidKeyAttestationStatement implements FIDO2AttestationStatement
             } catch (IOException ex) {
                 throw new IllegalArgumentException("Invalid android-key attestation");
             }
-            
-            
+
+
         } catch (CertificateException | NoSuchProviderException | NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException | SignatureException ex) {
             Logger.getLogger(AndroidKeyAttestationStatement.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return true;
     }
-    
+
     @Override
     public ArrayList getX5c(){
         return x5c;
     }
-    
+
     private byte[] concatenateArrays(byte[] array1, byte[] array2) {
         byte[] result = new byte[array1.length + array2.length];
         System.arraycopy(array1, 0, result, 0, array1.length);
         System.arraycopy(array2, 0, result, array1.length, array2.length);
         return result;
     }
-    
+
     private static String bytesToHexString(byte[] rawBytes, int num) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < num; i++) {

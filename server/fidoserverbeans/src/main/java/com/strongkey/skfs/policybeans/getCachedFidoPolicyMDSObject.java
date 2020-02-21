@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.policybeans;
 
@@ -26,13 +26,13 @@ import javax.ejb.Stateless;
 
 @Stateless
 public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal {
-    
+
     @EJB
     getFidoKeysLocal getFidoKeysBean;
 
     //TODO fix logic to return the FidoPolicyMDSObject rather than the policy
     @Override
-    public FidoPolicyObject getPolicyByDidUsername(Long did, String username){       
+    public FidoPolicyObject getPolicyByDidUsername(Long did, String username){
         FidoKeys fk = null;
         try {
             fk = getFidoKeysBean.getNewestKeyByUsernameStatus(did, username, "Active");
@@ -41,13 +41,13 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
         }
         return lookupPolicyFromNewestKey(did, fk);
     }
-    
+
     @Override
     public FidoPolicyMDSObject getByMapKey(String policyMapKey) {
         return (FidoPolicyMDSObject) skceMaps.getMapObj().get(skfsConstants.MAP_FIDO_POLICIES, policyMapKey);
     }
-    
-    
+
+
     //TODO optimize. Current thought is that inefficiently performing a look up on less than
     //10 Active policies is cheaper than efficiently looking up the correct policy
     //from the DB and parsing from the DB into an object.
@@ -63,7 +63,7 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
                 .filter(fp -> fp.getStartDate().before(currentDate))
                 .filter(fp -> fp.getEndDate() == null || fp.getEndDate().after(currentDate))
                 .collect(Collectors.toList());
-        
+
         //If the user has no registered keys, return policy with the latest start_date
         if(fk == null){
             return findNewestPolicy(fpCol);
@@ -78,7 +78,7 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
             return result;
         }
     }
-    
+
     //Find the newest Active Policy
     private FidoPolicyObject findNewestPolicy(Collection<FidoPolicyObject> fpCol) {
         try {
@@ -89,7 +89,7 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
             return null;
         }
     }
-    
+
     //Find the Active policy whose start_date is before the key's creation date
     //and whose end_date is after the key's creation date. If multiple policies
     //are found, use returns the policy with the later start_date. If no policies
@@ -105,7 +105,7 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
             return null;
         }
     }
-    
+
     //Return the first Active policy whose start_date is after the key's creation date
     private FidoPolicyObject findOldestPolicySinceKeyCreation(Collection<FidoPolicyObject> fpCol, FidoKeys fk){
         try {

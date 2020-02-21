@@ -1,22 +1,9 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
- *
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * *********************************************
  *                    888
  *                    888
@@ -30,9 +17,9 @@
  * *********************************************
  *
  * This EJB is responsible for executing the de-activation process of a specific
- * user registered key. FIDO U2F protocol does not provide any specification for 
+ * user registered key. FIDO U2F protocol does not provide any specification for
  * user key de-activation.
- * 
+ *
  * This bean will just mark the specific key in the database to be INACTIVE.
  * Such an inactive key can later be activated using 'activate' methods.
  *
@@ -70,34 +57,34 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
      * This class' name - used for logging
      */
     private final String classname = this.getClass().getName();
-    
+
     /*
      * Enterprise Java Beans used in this EJB.
      */
     @EJB getFidoKeysLocal             getkeybean;
     @EJB updateFidoKeysStatusLocal    updatekeystatusbean;
     @EJB updateFidoUserBeanLocal             updateldapbean;
-    
+
     /*************************************************************************
-                                                 888             
-                                                 888             
-                                                 888             
-     .d88b.  888  888  .d88b.   .d8888b 888  888 888888  .d88b.  
-    d8P  Y8b `Y8bd8P' d8P  Y8b d88P"    888  888 888    d8P  Y8b 
-    88888888   X88K   88888888 888      888  888 888    88888888 
-    Y8b.     .d8""8b. Y8b.     Y88b.    Y88b 888 Y88b.  Y8b.     
-     "Y8888  888  888  "Y8888   "Y8888P  "Y88888  "Y888  "Y8888  
+                                                 888
+                                                 888
+                                                 888
+     .d88b.  888  888  .d88b.   .d8888b 888  888 888888  .d88b.
+    d8P  Y8b `Y8bd8P' d8P  Y8b d88P"    888  888 888    d8P  Y8b
+    88888888   X88K   88888888 888      888  888 888    88888888
+    Y8b.     .d8""8b. Y8b.     Y88b.    Y88b 888 Y88b.  Y8b.
+     "Y8888  888  888  "Y8888   "Y8888P  "Y88888  "Y888  "Y8888
 
      *************************************************************************/
     /**
-     * This method is responsible for deactivating the user registered key from the 
+     * This method is responsible for deactivating the user registered key from the
      * persistent storage. This method first checks if the given ramdom id is
      * mapped in memory to the specified user and if found yes, gets the registration
      * key id and then changes the key status to INACTIVE in the database.
-     * 
+     *
      * Additionally, if the key being deactivated is the last one for the user, the
      * ldap attribute of the user called 'FIDOKeysEnabled' is set to 'no'.
-     * 
+     *
      * @param did       - FIDO domain id
      * @param protocol  - U2F protocol version to comply with.
      * @param username  - username
@@ -110,24 +97,24 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
      *                  successful would be populated.
      */
     @Override
-    public SKCEReturnObject execute(String did, 
+    public SKCEReturnObject execute(String did,
                                     String protocol,
-                                    String username, 
+                                    String username,
                                     String randomid,
                                     String modifyloc) {
-        
+
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute"); 
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"), 
-                        " EJB name=" + classname + 
-                        " did=" + did + 
-                        " protocol=" + protocol + 
+        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
+        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+                        " EJB name=" + classname +
+                        " did=" + did +
+                        " protocol=" + protocol +
                         " username=" + username +
                         " randomid=" + randomid +
                         " modifyloc=" + modifyloc);
-        
+
         SKCEReturnObject skcero = new SKCEReturnObject();
-        
+
         //  input checks
                 if (did == null || Long.parseLong(did) < 1) {
             skcero.setErrorkey("FIDO-ERR-0002");
@@ -143,7 +130,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             return skcero;
         }
-        
+
         if (username.trim().length() > Integer.parseInt(applianceCommon.getApplianceConfigurationProperty("appliance.cfg.maxlen.256charstring"))) {
             skcero.setErrorkey("FIDO-ERR-0027");
             skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0027") + " username should be limited to 256 characters");
@@ -151,7 +138,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             return skcero;
         }
-        
+
         if (randomid == null || randomid.isEmpty() ) {
             skcero.setErrorkey("FIDO-ERR-0002");
             skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " randomid=" + randomid);
@@ -159,7 +146,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             return skcero;
         }
-        
+
         if (protocol == null || protocol.isEmpty() ) {
             skcero.setErrorkey("FIDO-ERR-0002");
             skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol=" + protocol);
@@ -167,7 +154,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             return skcero;
         }
-        
+
         if (!protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2) && !protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_2_0)) {
             skcero.setErrorkey("FIDO-ERR-5002");
             skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-5002") + " protocol version passed =" + protocol);
@@ -175,7 +162,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             return skcero;
         }
-        
+
             Short sid_to_be_deactivated = null;
             String did_to_be_deactivated =null;
             int userfkidhyphen ;
@@ -208,8 +195,8 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
             }
             if ( fkid_to_be_deactivated != null ) {
                 if (fkid_to_be_deactivated >= 0) {
-                    
-                    skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", 
+
+                    skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute",
                             skfsCommon.getMessageProperty("FIDO-MSG-5005"), "");
                     try {
                         //  if the fkid_to_be_deactivated is valid, delete the entry from the database
@@ -218,7 +205,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();
                         }
-                        
+
                         Boolean status = jo.getBoolean(skfsConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
                         if ( !status ) {
                             //  error deactivating user key
@@ -232,7 +219,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
                             //  Successfully deactivated key from the database
                             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0049"), "key id = " + fkid_to_be_deactivated);
                         }
-                        
+
                         Collection<FidoKeys> keys = getkeybean.getByUsernameStatus(Long.parseLong(did),username, applianceConstants.ACTIVE_STATUS);
                         if ( keys == null || keys.isEmpty() ) {
                             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-5006"), "");
@@ -265,7 +252,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
                         skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
                         return skcero;
                     }
-                }                
+                }
             } else {
                 //  user key information does not exist or has been timed out (flushed away).
                 //  throw an error and return.
@@ -276,19 +263,19 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
                 return skcero;
             }
 //        }
-        
+
         skcero.setReturnval("Successfully de-activated the key");
-        
+
         //  log the exit and return
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);
         skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
         return skcero;
     }
-    
+
     @Override
-    public SKCEReturnObject remoteExecute(String did, 
+    public SKCEReturnObject remoteExecute(String did,
                                     String protocol,
-                                    String username, 
+                                    String username,
                                     String randomid,
                                     String modifyloc) {
         return execute(did, protocol, username, randomid, modifyloc);

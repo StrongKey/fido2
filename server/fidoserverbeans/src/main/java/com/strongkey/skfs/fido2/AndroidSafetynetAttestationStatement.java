@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.fido2;
 
 import com.strongkey.appliance.objects.JWT;
@@ -41,9 +40,9 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
     private byte[] response = null;
     private com.strongkey.appliance.objects.JWT jwt = null;
     private final String attestationType = "basic";
-    
-    
-    
+
+
+
     static{
         Security.addProvider(new BouncyCastleFipsProvider());
     }
@@ -75,13 +74,13 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
             JsonNumber timestampMs = jwt.getBody().getJsonNumber("timestampMs");
             Date now = new Date();
             if (timestampMs == null //timestampMS is missing
-                    || timestampMs.longValue() > now.getTime() + (30 * 1000)        //timestampMS is in the future (some hardcoded buffer)  (TODO fix hardcode) 
+                    || timestampMs.longValue() > now.getTime() + (30 * 1000)        //timestampMS is in the future (some hardcoded buffer)  (TODO fix hardcode)
                     || timestampMs.longValue() < now.getTime() - (60 * 1000)) {     //timestampMS is older than 1 minute
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT time stamp = " + timestampMs.longValue() + ", current time = " + now.getTime());
                 throw new IllegalArgumentException("JWT has invalid timestampMs");
             }
-            
+
             //Verify JWT certificate chain
             JsonArray x5c = jwt.getHeader().getJsonArray("x5c");
             if (x5c == null || x5c.isEmpty()) {
@@ -98,7 +97,7 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
                 byte[] certBytes = decoder.decode(x5c.getString(i, null));
                 ByteArrayInputStream instr = new ByteArrayInputStream(certBytes);
                 X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(instr);
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "certificate number " + i + " = " + certificate);
                 if(i == x5c.size() - 1){
                     rootCert = certificate;
@@ -116,30 +115,30 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
             if(!PKIXChainValidation.pkixvalidate(certPath, trustAnchor, false, false)){     //TODO check CRLs if they exist, otherwise don't
                 throw new IllegalArgumentException("JWT failed PKIX validation");
             }
-            
+
             //Verify JWT signature
             if (!jwt.verifySignature(certchain.get(0).getPublicKey())) {
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT Signature verification failed!");
                 return false;
             }
-            
+
             //Verify that response is a valid SafetyNet response of version ver.
             if(version == null || version.isEmpty()){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "AndroidSafetynet missing version information");
                 return false;
             }
-            
+
             //Verify that the nonce in the response is identical to the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
             String nonce = jwt.getBody().getString("nonce", null);
-            if(nonce == null || !Arrays.equals(decoder.decode(nonce), skfsCommon.getDigestBytes(concatenateArrays(authData.getAuthDataDecoded(), 
+            if(nonce == null || !Arrays.equals(decoder.decode(nonce), skfsCommon.getDigestBytes(concatenateArrays(authData.getAuthDataDecoded(),
                     skfsCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256")), "SHA256"))){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT has incorrect nonce");
                 return false;
             }
-            
+
             //Verify that the attestation certificate is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
             String cn = getFirstCN(certchain.get(0).getSubjectDN().getName());
             if(cn == null || !cn.equals("attest.android.com")){
@@ -147,22 +146,22 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
                         "JWT attestation certificate does not match the specification");
                 return false;
             }
-            
+
             //Verify that the ctsProfileMatch attribute in the payload of response is true.
             if(!jwt.getBody().getBoolean("ctsProfileMatch", false)){
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT attestation ctsProfileMatch does not match the specification");
                 return false;
             }
-            
+
             return true;
         } catch (UnsupportedEncodingException | CertificateException | NoSuchAlgorithmException | NoSuchProviderException ex) {
             Logger.getLogger(AndroidSafetynetAttestationStatement.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return Boolean.FALSE;
     }
-    
+
     @Override
     public ArrayList getX5c(){
         ArrayList<byte[]> result = new ArrayList();
@@ -174,10 +173,10 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
         } catch (UnsupportedEncodingException ex) {
             return null;
         }
-        
+
         return result;
     }
-    
+
     private String getFirstCN(String principal){
         String[] attributes = principal.split(",");
         for(String attribute: attributes){
@@ -185,10 +184,10 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
                 return attribute.substring("CN=".length());
             }
         }
-        
+
         return null;
     }
-    
+
     private byte[] concatenateArrays(byte[] array1, byte[] array2){
         byte[] result = new byte[array1.length + array2.length];
         System.arraycopy(array1, 0, result, 0, array1.length);
