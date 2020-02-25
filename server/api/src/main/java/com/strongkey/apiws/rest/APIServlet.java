@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.apiws.rest;
 
 import com.strongkey.apiws.utility.PATCH;
@@ -42,7 +41,7 @@ public class APIServlet {
 
     public APIServlet() {
     }
-    
+
     /**
      * Step-1 for fido authenticator registration. This methods generates a
      * challenge and returns the same to the caller, which typically is a
@@ -66,7 +65,7 @@ public class APIServlet {
         if (!authRest.execute(did, request, preregistration)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         return u2fHelperBean.preregister(did, preregistration);
     }
 
@@ -98,7 +97,7 @@ public class APIServlet {
         if (!authRest.execute(did, request, registration)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         return u2fHelperBean.register(did, registration);
     }
 
@@ -140,7 +139,7 @@ public class APIServlet {
      *
      * @param authentication - String The full body for auth purposes
      * @param did - Long value of the domain to service this request
-     * 
+     *
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : String, with a simple message telling if the process was
      * successful or not. 2. 'Message' : String, with a list of messages that
@@ -195,7 +194,7 @@ public class APIServlet {
      * the random id to point to a unique registered key for that user. This
      * random id can be obtained by calling getkeysinfo method.
      *
-     * @param patchkey - 
+     * @param patchkey -
      * @param did - Long value of the domain to service this request
      * @param kid - String value of the key to deregister
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -243,7 +242,7 @@ public class APIServlet {
         if (!authRest.execute(did, request, null)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         return u2fHelperBean.getkeysinfo(did, username);
     }
 }

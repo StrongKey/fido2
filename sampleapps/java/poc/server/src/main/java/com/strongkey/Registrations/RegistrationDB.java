@@ -1,9 +1,9 @@
-/*
- * Copyright StrongAuth, Inc. All Rights Reserved.
- * 
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.Registrations;
 
 import javax.ejb.Stateless;
@@ -17,7 +17,7 @@ public class RegistrationDB implements RegistrationDBLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @Override
     public boolean doesRegistrationForNonceExist(String nonce) {
         try {
@@ -26,7 +26,7 @@ public class RegistrationDB implements RegistrationDBLocal {
             return false;
         }
     }
-    
+
     @Override
     public boolean doesRegistrationForEmailExist(String email) {
         try {
@@ -35,7 +35,7 @@ public class RegistrationDB implements RegistrationDBLocal {
             return false;
         }
     }
-    
+
     @Override
     public String getEmailFromNonce(String nonce){
         try {
@@ -61,8 +61,8 @@ public class RegistrationDB implements RegistrationDBLocal {
         em.flush();
         em.clear();
     }
-    
-    
+
+
     private Registrations getRegistrationFromNonce(String nonce) {
         TypedQuery<Registrations> q = em.createNamedQuery("Registrations.findByNonce", Registrations.class);
         q.setParameter("nonce", nonce);

@@ -1,8 +1,8 @@
 /**
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
  */
 
 package com.strongkey.webauthntutorial;
@@ -28,6 +28,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.strongkey.Filters.CrossOriginResourceSharingFilter.class);
         resources.add(com.strongkey.webauthntutorial.WebauthnService.class);
     }
 

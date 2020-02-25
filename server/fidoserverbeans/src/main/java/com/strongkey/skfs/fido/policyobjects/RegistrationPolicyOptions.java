@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido.policyobjects;
 
@@ -23,8 +23,8 @@ public class RegistrationPolicyOptions {
     private final String excludeCredentials;
     private final AuthenticatorSelection authenticatorSelection;
     private final List<String> attestation;
-    
-    private RegistrationPolicyOptions(String icon, String displayName, 
+
+    private RegistrationPolicyOptions(String icon, String displayName,
             Integer useridLength, String excludeCredentials,
             AuthenticatorSelection authenticatorSelection, List<String> attestation){
         this.icon = icon;
@@ -42,7 +42,7 @@ public class RegistrationPolicyOptions {
     public String getDisplayName() {
         return displayName;
     }
-    
+
     public Integer getUseridLength(){
         return useridLength;
     }
@@ -58,7 +58,7 @@ public class RegistrationPolicyOptions {
     public List<String> getAttestation() {
         return attestation;
     }
-    
+
     public static RegistrationPolicyOptions parse(JsonObject registrationJson) {
         JsonObject authenticatorSelectionJson = registrationJson.getJsonObject(skfsConstants.POLICY_REGISTRATION_AUTHENTICATORSELECTION);
         AuthenticatorSelection authenticatorSelection = new AuthenticatorSelectionBuilder(
@@ -85,7 +85,7 @@ public class RegistrationPolicyOptions {
                 .setAuthenticatorSelection(authenticatorSelection)
                 .build();
     }
-    
+
     public static class RegistrationPolicyOptionsBuilder{
         private String builderIcon;
         private final String builderDisplayName;
@@ -93,31 +93,31 @@ public class RegistrationPolicyOptions {
         private final String builderExcludeCredentials;
         private AuthenticatorSelection builderAuthenticatorSelection;
         private final List<String> builderAttestation;
-        
+
         public RegistrationPolicyOptionsBuilder(String displayName, String excludeCredentials, List<String> attestation){
             this.builderDisplayName = displayName;
             this.builderExcludeCredentials = excludeCredentials;
             this.builderAttestation = attestation;
         }
-        
+
         public RegistrationPolicyOptionsBuilder setIcon(String icon){
             this.builderIcon = icon;
             return this;
         }
-        
+
         public RegistrationPolicyOptionsBuilder setUseridLength(Integer useridLength){
             this.builderUseridLength = useridLength;
             return this;
         }
-        
+
         public RegistrationPolicyOptionsBuilder setAuthenticatorSelection(AuthenticatorSelection authenticatorSelection){
             this.builderAuthenticatorSelection = authenticatorSelection;
             return this;
         }
-        
+
         public RegistrationPolicyOptions build(){
             return new RegistrationPolicyOptions(builderIcon, builderDisplayName,
-                    builderUseridLength, builderExcludeCredentials, 
+                    builderUseridLength, builderExcludeCredentials,
                     builderAuthenticatorSelection, builderAttestation);
         }
     }

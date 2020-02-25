@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -47,12 +47,12 @@ public class FIDO2AttestationObject {
         CBORParser parser = f.createParser(org.apache.commons.codec.binary.Base64.decodeBase64(attestationObject));
         Map<String, Object> attObjectMap = mapper.readValue(parser, new TypeReference<Map<String, Object>>() {
         });
-        
+
         //Verify cbor is properly formatted cbor (no extra bytes)
         if(parser.nextToken() != null){
             throw new IllegalArgumentException("FIDO2AttestationObject contains invalid CBOR");
         }
-        
+
         for (String key : attObjectMap.keySet()) {
             if (key.equalsIgnoreCase("fmt")) {
                 attFormat = attObjectMap.get(key).toString();
@@ -65,7 +65,7 @@ public class FIDO2AttestationObject {
         authData = new FIDO2AuthenticatorData();
         authData.decodeAuthData(authenticatorData);
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "ATTFORMAT = "  +attFormat);
         switch (attFormat) {
             case "fido-u2f":
@@ -77,27 +77,27 @@ public class FIDO2AttestationObject {
                 attStmt = new PackedAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
-            
+
             case "tpm":
                 attStmt = new TPMAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
-                
+
             case "android-key":
                 attStmt = new AndroidKeyAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
-                
+
             case "android-safetynet":
                 attStmt = new AndroidSafetynetAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
-                
+
             case "none":
                 attStmt = new NoneAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
-                
+
             default:
                 throw new IllegalArgumentException("Invalid attestation format");
         }

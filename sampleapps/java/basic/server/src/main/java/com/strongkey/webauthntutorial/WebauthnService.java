@@ -1,8 +1,8 @@
 /**
  * Copyright StrongAuth, Inc. All Rights Reserved.
  *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
  */
 
 package com.strongkey.webauthntutorial;
@@ -35,14 +35,14 @@ import javax.ws.rs.core.Response.Status;
 @Path("")
 @Stateless
 public class WebauthnService {
-    
+
     private final String CLASSNAME = WebauthnService.class.getName();
     @Context
     private HttpServletRequest request;
-    
+
     @EJB
     private UserDatabase userdatabase;
-    
+
     // Endpoint to request a registration challenge (for a new account).
     @POST
     @Path("/" + Constants.RP_PREGISTER_PATH)
@@ -66,18 +66,18 @@ public class WebauthnService {
             else{
                 //If the user already exists, throw an error
                 WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "preregister", "WEBAUTHN-WS-ERR-1001", username);
-                return generateResponse(Response.Status.CONFLICT, 
+                return generateResponse(Response.Status.CONFLICT,
                         WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1001"));
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
             WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "preregister", "WEBAUTHN-WS-ERR-1000", ex.getLocalizedMessage());
-            return generateResponse(Response.Status.INTERNAL_SERVER_ERROR, 
+            return generateResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint to send a signed registration challenge (for a new account). On
     // successful verification of the signed challenge, create the user's account
     // and logs the user in.
@@ -91,13 +91,13 @@ public class WebauthnService {
             if(session == null){
                 return generateResponse(Response.Status.FORBIDDEN, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1003"));
             }
-            
+
             String username = (String) session.getAttribute(Constants.SESSION_USERNAME);
             if (!doesAccountExists(username)) {
                 String regresponse = SKFSClient.register(username, getOrigin(), input);
                 //On success, add user to database
                 userdatabase.addUser(username);
-                
+
                 session.setAttribute(Constants.SESSION_USERNAME, username);
                 session.setAttribute(Constants.SESSION_ISAUTHENTICATED, true);
                 session.setMaxInactiveInterval(Constants.SESSION_TIMEOUT_VALUE);
@@ -115,7 +115,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows a signed in user to register additional FIDO2 keys to
     // their account. The endpoint will return a registration challenge that can
     // signed by a FIDO2 key that is not already associated with the user to
@@ -131,7 +131,7 @@ public class WebauthnService {
                 WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "preregisterExisting", "WEBAUTHN-WS-ERR-1003", "");
                 return generateResponse(Response.Status.FORBIDDEN, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1003"));
             }
-            
+
             String username = (String) session.getAttribute(Constants.SESSION_USERNAME);
             String displayName = getValueFromInput(Constants.RP_JSON_KEY_DISPLAYNAME, input);
             Boolean isAuthenticated = (Boolean) session.getAttribute(Constants.SESSION_ISAUTHENTICATED);
@@ -152,7 +152,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint for a logged in user to send a signed registration challenge. On
     // successful verification of the signed challenge, the user will be able to
     // authenticate themselves using the FIDO2 key that signed the challenge.
@@ -183,7 +183,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows a user to request a challenge to authenicate
     // themselves
     @POST
@@ -194,7 +194,7 @@ public class WebauthnService {
         try {
             // Get user input + basic input checking
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
-            
+
             // Verify user exists
             if(!userdatabase.doesUserExist(username)){
                 WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "preauthenticate", "WEBAUTHN-WS-ERR-1002", username);
@@ -213,7 +213,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint to send a signed authentication challenge. On successful
     // verification of the signed challenge, the user will be logged in
     @POST
@@ -245,7 +245,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows the frontend to check whether the user is logged in.
     @POST
     @Path("/" + Constants.RP_ISLOGGEDIN_PATH)
@@ -269,7 +269,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows a logged in user to logout
     @POST
     @Path("/" + Constants.RP_LOGOUT_PATH)
@@ -289,7 +289,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows a logged in user delete their account. This endpoint
     // will delete their account and delete all keys associated with their account
     // on the SKFS
@@ -324,8 +324,8 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
-    // Endpoint that allows a logged in user to request all keys that they  
+
+    // Endpoint that allows a logged in user to request all keys that they
     // registered on their account
     @POST
     @Path("/" + Constants.RP_PATH_GETKEYS)
@@ -354,7 +354,7 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Endpoint that allows a logged in user to delete FIDO2 keys they have registered
     // on their account
     @POST
@@ -373,7 +373,7 @@ public class WebauthnService {
             Boolean isAuthenticated = (Boolean) session.getAttribute(Constants.SESSION_ISAUTHENTICATED);
             if (isAuthenticated) {
                 JsonArray keyIds = getKeyIdsFromInput(input);
-                
+
                 // Verify those keys are actually registered to that user.
                 String keys = SKFSClient.getKeys(username);
                 JsonArray userKeyIds = getKeyIdsFromSKFSResponse(keys);
@@ -381,14 +381,14 @@ public class WebauthnService {
                 for(int keyIndex = 0; keyIndex < userKeyIds.size(); keyIndex++){
                     userKeyIdSet.add(userKeyIds.getString(keyIndex));
                 }
-                
+
                 for(int keyIndex = 0; keyIndex < keyIds.size(); keyIndex++){
                     if(!userKeyIdSet.contains(keyIds.getString(keyIndex))){
                         WebauthnTutorialLogger.logp(Level.SEVERE, CLASSNAME, "removeKeys", "WEBAUTHN-WS-ERR-1004", "");
                         return generateResponse(Response.Status.BAD_REQUEST, WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1004"));
                     }
                 }
-                
+
                 removeKeys(keyIds);
                 return generateResponse(Response.Status.OK, "Success");
             } else {
@@ -402,19 +402,19 @@ public class WebauthnService {
                     WebauthnTutorialLogger.getMessageProperty("WEBAUTHN-WS-ERR-1000"));
         }
     }
-    
+
     // Retrieves the protocol + domain + port (eg. https://localhost:8181) that
     // the enduser send the request to
     private String getOrigin() throws URISyntaxException{
         URI requestURL = new URI(request.getRequestURL().toString());
         return requestURL.getScheme() + "://" + requestURL.getAuthority();
     }
-    
+
     // Return whether an account with this username already exists
     private boolean doesAccountExists(String username){
         return userdatabase.doesUserExist(username);
     }
-    
+
     // Parse user input
     private String getValueFromInput(String key, JsonObject input) {
         String username = input.getString(key, null);
@@ -423,7 +423,7 @@ public class WebauthnService {
         }
         return username;
     }
-    
+
     // Parse array of user keys from user input
     private JsonArray getKeyIdsFromInput(JsonObject input){
         JsonArray keyIds = input.getJsonArray(Constants.RP_JSON_KEY_KEYIDS);
@@ -432,14 +432,14 @@ public class WebauthnService {
         }
         return keyIds;
     }
-    
+
     // Parse array of user keys from SKFS response
     private JsonArray getKeyIdsFromSKFSResponse(String SKFSResponse) {
         JsonObject SKFSResponseObject = Json.createReader(new StringReader(SKFSResponse)).readObject();
         return SKFSResponseObject.getJsonObject(Constants.SKFS_RESPONSE_JSON_KEY_RESPONSE)
                 .getJsonArray(Constants.SKFS_RESPONSE_JSON_KEY_KEYS);
     }
-    
+
     // Parse response string from SKFS
     private String getResponseFromSKFSResponse(String SKFSResponse) {
         JsonObject SKFSResponseObject = Json.createReader(new StringReader(SKFSResponse)).readObject();
@@ -449,7 +449,7 @@ public class WebauthnService {
         }
         return response;
     }
-    
+
     // Remove all keys
     private void removeKeys(JsonArray keyIds){
         for(int keyIndex = 0; keyIndex < keyIds.size(); keyIndex++){
@@ -461,8 +461,8 @@ public class WebauthnService {
             }
         }
     }
-    
-    
+
+
     // A standard method of communicating with the frontend code. This can be
     // modified as needed to fit the needs of the site being build.
     private Response generateResponse(Status status, String responsetext) {

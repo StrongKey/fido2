@@ -1,9 +1,9 @@
-/*
- * Copyright StrongAuth, Inc. All Rights Reserved.
- * 
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.Users;
 
 import java.io.Serializable;
@@ -31,33 +31,33 @@ import javax.persistence.Temporal;
 })
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Basic(optional = false)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    
+
     @Basic(optional = false)
     @Column(name = "email", nullable = false, length = 64)
     private String email;
-    
+
     @Basic(optional = false)
     @Column(name = "username", nullable = false, length = 64)
     private String username;
-    
+
     @Basic(optional = false)
     @Column(name = "firstname", nullable = false, length = 32)
     private String firstName;
-    
+
     @Basic(optional = false)
     @Column(name = "lastname", nullable = false, length = 32)
     private String lastName;
-    
+
     @Basic(optional = false)
     @Column(name = "create_date", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date createDate;
-    
+
     public Long getId() {
         return id;
     }
@@ -132,7 +132,7 @@ public class Users implements Serializable {
                 "   email: " + email + '\n' +
                 "   username: " + username + '\n' +
                 "   firstName: " + firstName + '\n' +
-                "   lastName: " + lastName + '\n'; 
+                "   lastName: " + lastName + '\n';
     }
-    
+
 }

@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skce.hashmaps;
 
@@ -250,7 +250,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
                 }
             }
 
-        } 
+        }
 //        else if (type == Constants.MAP_USER_KEY_POINTERS) {
 //            Set<String> usernames = null;
 //            if (Common.userkeysMap != null) {
@@ -289,7 +289,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
 //                    }
 //                }
 //            }
-//        } 
+//        }
         else if (type == skceConstants.MAP_FIDO_KEYS) {
             //clean based on time
             Set<String> fkids = null;
@@ -317,7 +317,7 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
                     sessionagelimit = 30L;
                 }
             }
-            
+
             if (fkids != null) {
                 for (String k : fkids) {
                     FidoKeysInfo fkinfo = skceMaps.FIDOkeysmap.get(k);

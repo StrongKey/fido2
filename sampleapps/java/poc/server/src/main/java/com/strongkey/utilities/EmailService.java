@@ -1,9 +1,9 @@
-/*
- * Copyright StrongAuth, Inc. All Rights Reserved.
- * 
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.utilities;
 
 import java.io.File;
@@ -23,29 +23,29 @@ import javax.mail.internet.MimeMessage;
 
 @Singleton
 public class EmailService {
-    
+
     private Session session;
-    
+
     private final String CLASSNAME = EmailService.class.getName();
-    
+
     @PostConstruct
     private void init(){
         String mailhostType = Configurations.getConfigurationProperty("poc.cfg.property.mailhost.type");
-        
+
         //Set mail configurations
         Properties properties = System.getProperties();
         properties.setProperty("mail.transport.protocol", "smtp");
-        properties.setProperty("mail.smtp.host", 
+        properties.setProperty("mail.smtp.host",
                 Configurations.getConfigurationProperty("poc.cfg.property.mailhost"));
-        properties.setProperty("mail.smtp.port", 
+        properties.setProperty("mail.smtp.port",
                 Configurations.getConfigurationProperty("poc.cfg.property.mail.smtp.port"));
-        properties.setProperty("mail.smtp.from", 
+        properties.setProperty("mail.smtp.from",
                 Configurations.getConfigurationProperty("poc.cfg.property.smtp.from"));
         properties.setProperty("mail.smtp.auth",  String.valueOf(!mailhostType.equalsIgnoreCase("SendMail")));
         Authenticator auth = new PasswordAuthenticator(
                 Configurations.getConfigurationProperty("poc.cfg.property.smtp.auth.user"),
                 Configurations.getConfigurationProperty("poc.cfg.property.smtp.auth.password"));
-        
+
         //TLS
         if(mailhostType.equalsIgnoreCase("StartTLS")){
             properties.setProperty("mail.smtp.starttls.enable", "true");
@@ -60,7 +60,7 @@ public class EmailService {
             session = Session.getInstance(properties);
         }
     }
-    
+
     public void sendEmail(String email, String subjectline, String content) throws UnsupportedEncodingException{
         try{
             MimeMessage message = new MimeMessage(session);
@@ -69,25 +69,25 @@ public class EmailService {
                     Configurations.getConfigurationProperty("poc.cfg.property.smtp.fromName")));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(subjectline);
-            
+
             if(Configurations.getConfigurationProperty("poc.cfg.property.email.type").equalsIgnoreCase("HTML")){
                 message.setContent(content, "text/html; charset=utf-8");
             }
             else{
                 message.setText(content);
             }
-            
+
             Transport.send(message);
         } catch (MessagingException ex) {
             ex.printStackTrace();
             POCLogger.logp(Level.SEVERE, CLASSNAME, "callSKFSRestApi", "POC-ERR-5001", ex.getLocalizedMessage());
         }
     }
-    
+
     private class PasswordAuthenticator extends Authenticator{
         private final String username;
         private final String password;
-        
+
         public PasswordAuthenticator(String username, String password){
             this.username = username;
             this.password = password;

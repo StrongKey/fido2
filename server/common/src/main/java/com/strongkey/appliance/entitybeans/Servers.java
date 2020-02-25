@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.appliance.entitybeans;
 
@@ -100,7 +100,7 @@ d88P     888  "Y888  "Y888 888     888 88888P"   "Y88888  "Y888  "Y8888   88888P
     @Basic(optional = false)
     @Column(name = "fqdn", nullable = false, length = 512)
     private String fqdn;
-    
+
     /**
      ** Current status
      **/
@@ -339,7 +339,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
         this.replicationStatus = tmpStr;
         strongkeyLogger.exiting(applianceConstants.APPLIANCE_LOGGER, classname, "setReplicationStatus");
     }
-    
+
     /*********************************************************************/
     public String getNotes() {
         strongkeyLogger.entering(applianceConstants.APPLIANCE_LOGGER, classname, "getNotes");

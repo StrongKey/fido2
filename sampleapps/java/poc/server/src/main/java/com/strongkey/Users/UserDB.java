@@ -1,9 +1,9 @@
-/*
- * Copyright StrongAuth, Inc. All Rights Reserved.
- * 
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.Users;
 
 import com.strongkey.utilities.Constants;
@@ -21,7 +21,7 @@ public class UserDB implements UserDBLocal {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @Override
     public boolean doesUserExist(String username) {
         try {
@@ -30,7 +30,7 @@ public class UserDB implements UserDBLocal {
             return false;
         }
     }
-    
+
     @Override
     public boolean doesEmailExist(String email){
         try {
@@ -39,7 +39,7 @@ public class UserDB implements UserDBLocal {
             return false;
         }
     }
-    
+
     @Override
     public JsonObject getUserInfoFromUsername(String username){
         Users user = getUserFromUsername(username);
@@ -49,7 +49,7 @@ public class UserDB implements UserDBLocal {
                 .add(Constants.RP_JSON_KEY_LASTNAME, user.getLastName())
                 .build();
     }
-    
+
     private Users getUserFromUsername(String username) {
         TypedQuery<Users> q = em.createNamedQuery("Users.findByUsername", Users.class);
         q.setParameter("username", username);
@@ -72,7 +72,7 @@ public class UserDB implements UserDBLocal {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setCreateDate(new Date());
-        
+
         em.persist(user);
         em.flush();
         em.clear();
@@ -81,10 +81,10 @@ public class UserDB implements UserDBLocal {
     @Override
     public void deleteUser(String username) {
         Users user = getUserFromUsername(username);
-        
+
         em.remove(user);
         em.flush();
         em.clear();
     }
-    
+
 }

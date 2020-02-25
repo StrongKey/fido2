@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -26,12 +26,12 @@ import org.apache.http.util.EntityUtils;
 
 public class RestCreateFidoPolicy {
 
-    public static void create(String REST_URI, 
-                            String did, 
-                            String accesskey, 
-                            String secretkey, 
-                            Long startdate, 
-                            Long enddate, 
+    public static void create(String REST_URI,
+                            String did,
+                            String accesskey,
+                            String secretkey,
+                            Long startdate,
+                            Long enddate,
                             String certificateProfileName,
                             Integer version,
                             String status,
@@ -60,7 +60,7 @@ public class RestCreateFidoPolicy {
         String contentSHA = common.calculateSha256(json);
 
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.CREATE_POLICY_ENDPOINT;
-        
+
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(resourceLoc);
         httpPost.setEntity(body);

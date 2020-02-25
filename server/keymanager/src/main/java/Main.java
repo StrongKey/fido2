@@ -30,11 +30,11 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 public class Main {
 
     private static final String usage = "\nUsage: java -jar keymanager.jar listaccesskeys <keystore location> <keystore password>\n"
@@ -148,7 +148,7 @@ public class Main {
         chain[0] = x509cert;
 
         keystore.deleteEntry("1-zenc-signing-key");
-        keystore.setKeyEntry("1-zenc-signing-key", keypair.getPrivate(), password.toCharArray(), chain); 
+        keystore.setKeyEntry("1-zenc-signing-key", keypair.getPrivate(), password.toCharArray(), chain);
 
         keystore.deleteEntry("1-zenc-signing-key.cert");
         keystore.setCertificateEntry("1-zenc-signing-key.cert", x509cert);

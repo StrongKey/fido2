@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Domains;
@@ -41,29 +40,29 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
      * This class' name - used for logging
      */
     private final String classname = this.getClass().getName();
-    
+
     @Resource private SessionContext            sc;
-    @PersistenceContext private EntityManager   em;  
-    
+    @PersistenceContext private EntityManager   em;
+
     @EJB
     getFidoUserLocal getfidoUserbean;
     @EJB
     replicateSKFEObjectBeanLocal replObj;
     @EJB
     getDomainsBeanLocal getdomain;
-    
+
     @Override
     public String execute(Long did, String username) throws SKFEException {
-        
+
         skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
-        
+
         //Json return object
         JsonObject retObj;
-        
+
         //Declaring variables
         Boolean status = true;
         String errmsg;
-        
+
         //Input Validation
          if(did == null){
             status = false;
@@ -77,9 +76,9 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
             errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " did";
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
-        } 
+        }
          skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "did=" + did);
-         
+
         //USERNAME
         if (username == null) {
             status = false;
@@ -101,7 +100,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
             return retObj.toString();
         }
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "USERNAME=" + username);
-        
+
         FidoUsers fidoUser = null;
         try {
             fidoUser = getfidoUserbean.GetByUsername(did,username);
@@ -115,7 +114,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
-        
+
         Long sid = applianceCommon.getServerId();
         String primarykey = sid+"-"+did+"-"+username;
         fidoUser = new FidoUsers();
@@ -131,10 +130,10 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
         fidoUser.setUserdn("");
         fidoUser.setStatus("Active");
         fidoUser.setId(primarykey);
-        
+
         if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
                 .equalsIgnoreCase("true")) {
-            
+
             String standalone = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
             String signingKeystorePassword = "";
             if (standalone.equalsIgnoreCase("true")) {
@@ -150,7 +149,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 marshaller.marshal(fidoUser, writer);
             } catch (javax.xml.bind.JAXBException ex) {
-                
+
             }
             String efsXml = writer.toString();
             if (efsXml == null) {
@@ -161,7 +160,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
                 return retObj.toString();
             }
             Domains d = getdomain.byDid(did);
-            //  get signature for the xml    
+            //  get signature for the xml
             String signedxml = null;
             try {
                 signedxml = initCryptoModule.getCryptoModule().signDBRow(did.toString(), d.getSkceSigningdn(), efsXml, Boolean.valueOf(standalone), signingKeystorePassword);
@@ -179,11 +178,11 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
                 fidoUser.setSignature(signedxml);
             }
         }
-        
+
         em.persist(fidoUser);
         em.flush();
         em.clear();
-        
+
         try {
             if(applianceCommon.replicate()){
                 String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_USERS, applianceConstants.REPLICATION_OPERATION_ADD, primarykey, fidoUser);
@@ -196,7 +195,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
             skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
             throw new RuntimeException(e.getLocalizedMessage());
         }
-        
+
         //return a successful json string
         skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.INFO, classname, "execute", "FIDOJPA-MSG-2008","");
         retObj = Json.createObjectBuilder().add("status", status).add("message", skfsCommon.getMessageProperty("FIDOJPA-MSG-2008")).build();

@@ -1,9 +1,11 @@
 #!/bin/bash
 ###################################################################################
-# Copyright StrongAuth, Inc. All Rights Reserved.
-#
-# Use of this source code is governed by the Gnu Lesser General Public License 2.3.
-# The license can be found at https://github.com/StrongKey/fido2/LICENSE
+# /**
+# * Copyright StrongAuth, Inc. All Rights Reserved.
+# *
+# * Use of this source code is governed by the GNU Lesser General Public License v2.1
+# * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+# */
 ###################################################################################
 
 PORT=8181
@@ -13,7 +15,7 @@ JAVA_KEYPATH="/certs/cacerts"
 PASSWORD="changeit"
 USAGE="Usage: certimport.sh hostname -p<port> -k<JAVA | GLASSFISH | keystore path> -w<keystore password>
 ----------------------------------------------------------------------
-       certimport.sh saka201 (defaults to JAVA_HOME keystore) 
+       certimport.sh saka201 (defaults to JAVA_HOME keystore)
        certimport.sh expo1.strongauth.com -p8282 -kGLASSFISH (uses GLASSFISH_HOME to find keystore)
        certimport.sh deicda02 -k../config/cacerts.jks -wAbcd1234!"
 KEY_PATH="$STRONGAUTH_HOME$JAVA_KEYPATH"
@@ -38,19 +40,19 @@ for i in $2 $3 $4; do
 		case `echo $i | cut -c3-` in
 			JAVA)
 				KEY_PATH=$STRONGAUTH_HOME$JAVA_KEYPATH
-			;;	
+			;;
 			java)
 				KEY_PATH=$STRONGAUTH_HOME$JAVA_KEYPATH
-			;;	
+			;;
 			GLASSFISH)
 				KEY_PATH=$GLASSFISH_HOME$GLASSFISH_KEYPATH
-			;;	
+			;;
 			glassfish)
 				KEY_PATH=$GLASSFISH_HOME$GLASSFISH_KEYPATH
-			;;	
+			;;
 			*)
 				KEY_PATH=`echo $i | cut -c3-`
-			;;	
+			;;
 		esac
 		;;
 	-w)
@@ -82,7 +84,7 @@ fi
 
 keytool -list -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME >/dev/null
 if [ $? -eq 0 ]; then
-	keytool -delete -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME 
+	keytool -delete -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME
 fi
 
 RESULT=`keytool -importcert -noprompt -keystore $KEY_PATH -storepass $PASSWORD -alias $HOSTNAME -file $HOSTNAME.pem 2>&1`

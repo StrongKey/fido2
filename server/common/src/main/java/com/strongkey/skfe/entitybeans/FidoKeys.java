@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfe.entitybeans;
 
@@ -67,7 +67,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FidoKeys.findBySignature", query = "SELECT f FROM FidoKeys f WHERE f.signature = :signature"),
     @NamedQuery(name = "FidoKeys.findByUsernameStatus", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.status = :status"),
 //    @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid and f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username"),
-    @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid"),
+//    @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid "),
+    @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid and f.fidoKeysPK.did = :did"),
     @NamedQuery(name = "FidoKeys.findNewestKeyByUsernameStatus", query = "SELECT f FROM FidoKeys f where f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.status = :status ORDER BY f.createDate DESC"),
     @NamedQuery(name = "FidoKeys.findByUsernameKH", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.keyhandle = :keyhandle")})
 public class FidoKeys implements Serializable {
@@ -149,7 +150,7 @@ public class FidoKeys implements Serializable {
 
     @Transient
     private String id;
-    
+
     public FidoKeys() {
     }
 
@@ -177,7 +178,7 @@ public class FidoKeys implements Serializable {
     public void setFidoKeysPK(FidoKeysPK fidoKeysPK) {
         this.fidoKeysPK = fidoKeysPK;
     }
-    
+
     public String getUserid() {
         return userid;
     }
@@ -318,7 +319,7 @@ public class FidoKeys implements Serializable {
     public void setFidoProtocol(String fidoProtocol) {
         this.fidoProtocol = fidoProtocol;
     }
-    
+
     public String getAaguid() {
         return aaguid;
     }

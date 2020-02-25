@@ -1,16 +1,9 @@
-/*
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License, as published by the Free
- * Software Foundation and available at
- * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * $Date$ $Revision$
  * $Author$ $URL:
  * https://svn.strongauth.com/repos/jade/trunk/skce/skfe/src/main/java/com/strongauth/skfews/u2f/rest/SKFEServlet.java
@@ -83,7 +76,7 @@ public class SKFEServlet {
     private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
         try {
             Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.0/u2fServletHelperBean_v1!com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1");
+            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.3.0/u2fServletHelperBean_v1!com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -92,7 +85,7 @@ public class SKFEServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.2.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.3.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -101,12 +94,12 @@ public class SKFEServlet {
     // CTOR
     public SKFEServlet() {
     }
-    
+
     /**
      * Basic null checks before the compound input objects are accessed.
-     * 
+     *
      * @param svcinfo String; Json string with service credentials information
-     * 
+     *
      * @return SKCEServiceInfoType; if all checks passed
      * @throws SKFEException; in case any check fails
      */
@@ -154,17 +147,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                                                        d8b          888                     
-     *                                                        Y8P          888                     
-     *                                                                     888                     
-     *    88888b.  888d888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888 
-     *    888 "88b 888P"   d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"   
-     *    888  888 888     88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888     
-     *    888 d88P 888     Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888     
-     *    88888P"  888      "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888     
-     *    888                                             888                                      
-     *    888                                        Y8b d88P                                      
-     *    888                                         "Y88P"                                      
+     *                                                        d8b          888
+     *                                                        Y8P          888
+     *                                                                     888
+     *    88888b.  888d888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888
+     *    888 "88b 888P"   d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"
+     *    888  888 888     88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888
+     *    888 d88P 888     Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888
+     *    88888P"  888      "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888
+     *    888                                             888
+     *    888                                        Y8b d88P
+     *    888                                         "Y88P"
      ************************************************************************
      */
     /**
@@ -174,14 +167,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Challenge' : 'U2F Reg Challenge parameters; a json again' 2.
@@ -195,17 +188,17 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String preregister(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("preregister", svcinfo);
-            
+
             did = Integer.toString(si.getDid());
             svcusername = si.getSvcusername();
             svcpassword = si.getSvcpassword();
@@ -215,7 +208,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildPreRegisterResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  Service credentials input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -225,7 +218,7 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcpassword");
             return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcpassword");
         }
-        
+
         // Service credentials' authentication and authorization
         boolean isAuthorized;
         try {
@@ -243,17 +236,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                                d8b          888                     
-     *                                Y8P          888                     
-     *                                             888                     
-     *      888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888 
-     *      888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"   
-     *      888     88888888 888  888 888 "Y8888b. 888    88888888 888     
-     *      888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888     
-     *      888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888     
-     *                            888                                      
-     *                       Y8b d88P                                      
-     *                        "Y88P"                                
+     *                                d8b          888
+     *                                Y8P          888
+     *                                             888
+     *      888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888
+     *      888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"
+     *      888     88888888 888  888 888 "Y8888b. 888    88888888 888
+     *      888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888
+     *      888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888
+     *                            888
+     *                       Y8b d88P
+     *                        "Y88P"
      *************************************************************************
      */
     /**
@@ -267,14 +260,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above
-     * 
+     *
      * @param payload - U2F Registration Response parameters in Json form.
      * Should contain sessionid, browserData and enrollData.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -289,13 +282,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String register(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("register", svcinfo);
@@ -303,12 +296,12 @@ public class SKFEServlet {
             svcusername = si.getSvcusername();
             svcpassword = si.getSvcpassword();
             protocol = si.getProtocol();
-            
+
             skfsCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
             return skfsCommon.buildRegisterResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
             return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " svcusername");
@@ -329,23 +322,23 @@ public class SKFEServlet {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
             return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        
+
         return u2fHelperBean.register(did, protocol, payload);
     }
 
     /*
      *************************************************************************
-     *                                                888    888      
-     *                                                888    888      
-     *                                                888    888      
-     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.  
-     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b 
-     *    888  888 888     88888888 .d888888 888  888 888    888  888 
-     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888 
-     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888 
-     *    888                                                         
-     *    888                                                         
-     *    888                                                      
+     *                                                888    888
+     *                                                888    888
+     *                                                888    888
+     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.
+     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b
+     *    888  888 888     88888888 .d888888 888  888 888    888  888
+     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888
+     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888
+     *    888
+     *    888
+     *    888
      ************************************************************************
      */
     /**
@@ -354,14 +347,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - username
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Challenge' : 'U2F Auth Challenge parameters; a json again' 2.
@@ -375,13 +368,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String preauthenticate(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("preauthenticate", svcinfo);
@@ -394,7 +387,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -421,14 +414,14 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                        888    888                        888    d8b                   888             
-     *                        888    888                        888    Y8P                   888             
-     *                        888    888                        888                          888             
-     *       8888b.  888  888 888888 88888b.   .d88b.  88888b.  888888 888  .d8888b  8888b.  888888  .d88b.  
-     *          "88b 888  888 888    888 "88b d8P  Y8b 888 "88b 888    888 d88P"        "88b 888    d8P  Y8b 
-     *      .d888888 888  888 888    888  888 88888888 888  888 888    888 888      .d888888 888    88888888 
-     *      888  888 Y88b 888 Y88b.  888  888 Y8b.     888  888 Y88b.  888 Y88b.    888  888 Y88b.  Y8b.     
-     *      "Y888888  "Y88888  "Y888 888  888  "Y8888  888  888  "Y888 888  "Y8888P "Y888888  "Y888  "Y8888  
+     *                        888    888                        888    d8b                   888
+     *                        888    888                        888    Y8P                   888
+     *                        888    888                        888                          888
+     *       8888b.  888  888 888888 88888b.   .d88b.  88888b.  888888 888  .d8888b  8888b.  888888  .d88b.
+     *          "88b 888  888 888    888 "88b d8P  Y8b 888 "88b 888    888 d88P"        "88b 888    d8P  Y8b
+     *      .d888888 888  888 888    888  888 88888888 888  888 888    888 888      .d888888 888    88888888
+     *      888  888 Y88b 888 Y88b.  888  888 Y8b.     888  888 Y88b.  888 Y88b.    888  888 Y88b.  Y8b.
+     *      "Y888888  "Y88888  "Y888 888  888  "Y8888  888  888  "Y888 888  "Y8888P "Y888888  "Y888  "Y8888
      *
      ************************************************************************
      */
@@ -444,14 +437,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above
-     * 
+     *
      * @param payload
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : String, with a simple message telling if the process was
@@ -465,13 +458,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String authenticate(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("authenticate", svcinfo);
@@ -484,7 +477,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -511,17 +504,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                                                888    888                       d8b                   
-     *                                                888    888                       Y8P                   
-     *                                               888    888                                             
-     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.   .d88b.  888d888 888 88888888  .d88b.  
-     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b d88""88b 888P"   888    d88P  d8P  Y8b 
-     *    888  888 888     88888888 .d888888 888  888 888    888  888 888  888 888     888   d88P   88888888 
-     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888 Y88..88P 888     888  d88P    Y8b.     
-     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888  "Y88P"  888     888 88888888  "Y8888  
-     *    888                                                                                                
-     *    888                                                                                                
-     *    888                                                                                                
+     *                                                888    888                       d8b
+     *                                                888    888                       Y8P
+     *                                               888    888
+     *    88888b.  888d888  .d88b.   8888b.  888  888 888888 88888b.   .d88b.  888d888 888 88888888  .d88b.
+     *    888 "88b 888P"   d8P  Y8b     "88b 888  888 888    888 "88b d88""88b 888P"   888    d88P  d8P  Y8b
+     *    888  888 888     88888888 .d888888 888  888 888    888  888 888  888 888     888   d88P   88888888
+     *    888 d88P 888     Y8b.     888  888 Y88b 888 Y88b.  888  888 Y88..88P 888     888  d88P    Y8b.
+     *    88888P"  888      "Y8888  "Y888888  "Y88888  "Y888 888  888  "Y88P"  888     888 88888888  "Y8888
+     *    888
+     *    888
+     *    888
      ************************************************************************
      */
     /**
@@ -530,14 +523,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - String indicating transaction reference.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Challenge' : 'U2F Auth Challenge parameters; a json again' 2.
@@ -551,13 +544,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String preauthorize(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("preauthorize", svcinfo);
@@ -570,7 +563,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -597,14 +590,14 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                      888    888                       d8b                   
-     *                      888    888                       Y8P                   
-     *                      888    888                                             
-     *     8888b.  888  888 888888 88888b.   .d88b.  888d888 888 88888888  .d88b.  
-     *        "88b 888  888 888    888 "88b d88""88b 888P"   888    d88P  d8P  Y8b 
-     *    .d888888 888  888 888    888  888 888  888 888     888   d88P   88888888 
-     *    888  888 Y88b 888 Y88b.  888  888 Y88..88P 888     888  d88P    Y8b.     
-     *    "Y888888  "Y88888  "Y888 888  888  "Y88P"  888     888 88888888  "Y8888  
+     *                      888    888                       d8b
+     *                      888    888                       Y8P
+     *                      888    888
+     *     8888b.  888  888 888888 88888b.   .d88b.  888d888 888 88888888  .d88b.
+     *        "88b 888  888 888    888 "88b d88""88b 888P"   888    d88P  d8P  Y8b
+     *    .d888888 888  888 888    888  888 888  888 888     888   d88P   88888888
+     *    888  888 Y88b 888 Y88b.  888  888 Y88..88P 888     888  d88P    Y8b.
+     *    "Y888888  "Y88888  "Y888 888  888  "Y88P"  888     888 88888888  "Y8888
      *
      ************************************************************************
      */
@@ -621,7 +614,7 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
@@ -634,7 +627,7 @@ public class SKFEServlet {
      * the process was successful or not. 2. 'Message' : String, with a list of
      * messages that explain the process. 3. 'Error' : String, with error
      * message incase something went wrong. Will be empty if successful.
-     * @return 
+     * @return
      */
     @POST
     @Path("/" + skfsConstants.FIDO_METHOD_AUTHORIZE)
@@ -642,17 +635,17 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String authorize(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("authorize", svcinfo);
-            
+
             did = Integer.toString(si.getDid());
             svcusername = si.getSvcusername();
             svcpassword = si.getSvcpassword();
@@ -662,7 +655,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -689,17 +682,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *        888                                    d8b          888                     
-     *        888                                    Y8P          888                     
-     *        888                                                 888                     
-     *    .d88888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888 
-     *   d88" 888 d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"   
-     *   888  888 88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888     
-     *   Y88b 888 Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888     
-     *    "Y88888  "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888     
-     *                                           888                                      
-     *                                      Y8b d88P                                      
-     *                                      "Y88P"                                       
+     *        888                                    d8b          888
+     *        888                                    Y8P          888
+     *        888                                                 888
+     *    .d88888  .d88b.  888d888  .d88b.   .d88b.  888 .d8888b  888888  .d88b.  888d888
+     *   d88" 888 d8P  Y8b 888P"   d8P  Y8b d88P"88b 888 88K      888    d8P  Y8b 888P"
+     *   888  888 88888888 888     88888888 888  888 888 "Y8888b. 888    88888888 888
+     *   Y88b 888 Y8b.     888     Y8b.     Y88b 888 888      X88 Y88b.  Y8b.     888
+     *    "Y88888  "Y8888  888      "Y8888   "Y88888 888  88888P'  "Y888  "Y8888  888
+     *                                           888
+     *                                      Y8b d88P
+     *                                      "Y88P"
      *
      ************************************************************************
      */
@@ -711,14 +704,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - U2F de-registration parameters in Json form. Should
      * contain username and randomid.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -733,13 +726,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String deregister(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("deregister", svcinfo);
@@ -752,7 +745,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildDeregisterResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -779,14 +772,14 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *        888                            888    d8b                   888             
-     *        888                            888    Y8P                   888             
-     *        888                            888                          888             
-     *    .d88888  .d88b.   8888b.   .d8888b 888888 888 888  888  8888b.  888888  .d88b.  
-     *   d88" 888 d8P  Y8b     "88b d88P"    888    888 888  888     "88b 888    d8P  Y8b 
-     *   888  888 88888888 .d888888 888      888    888 Y88  88P .d888888 888    88888888 
-     *   Y88b 888 Y8b.     888  888 Y88b.    Y88b.  888  Y8bd8P  888  888 Y88b.  Y8b.     
-     *    "Y88888  "Y8888  "Y888888  "Y8888P  "Y888 888   Y88P   "Y888888  "Y888  "Y8888    
+     *        888                            888    d8b                   888
+     *        888                            888    Y8P                   888
+     *        888                            888                          888
+     *    .d88888  .d88b.   8888b.   .d8888b 888888 888 888  888  8888b.  888888  .d88b.
+     *   d88" 888 d8P  Y8b     "88b d88P"    888    888 888  888     "88b 888    d8P  Y8b
+     *   888  888 88888888 .d888888 888      888    888 Y88  88P .d888888 888    88888888
+     *   Y88b 888 Y8b.     888  888 Y88b.    Y88b.  888  Y8bd8P  888  888 Y88b.  Y8b.
+     *    "Y88888  "Y8888  "Y888888  "Y8888P  "Y888 888   Y88P   "Y888888  "Y888  "Y8888
      ************************************************************************
      */
     /**
@@ -798,14 +791,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - U2F de-activation parameters in Json form. Should
      * contain username and randomid.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -820,13 +813,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String deactivate(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("deactivate", svcinfo);
@@ -839,7 +832,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -866,14 +859,14 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                        888    d8b                   888             
-     *                        888    Y8P                   888             
-     *                        888                          888             
-     *       8888b.   .d8888b 888888 888 888  888  8888b.  888888  .d88b.  
-     *          "88b d88P"    888    888 888  888     "88b 888    d8P  Y8b 
-     *      .d888888 888      888    888 Y88  88P .d888888 888    88888888 
-     *      888  888 Y88b.    Y88b.  888  Y8bd8P  888  888 Y88b.  Y8b.     
-     *      "Y888888  "Y8888P  "Y888 888   Y88P   "Y888888  "Y888  "Y8888 
+     *                        888    d8b                   888
+     *                        888    Y8P                   888
+     *                        888                          888
+     *       8888b.   .d8888b 888888 888 888  888  8888b.  888888  .d88b.
+     *          "88b d88P"    888    888 888  888     "88b 888    d8P  Y8b
+     *      .d888888 888      888    888 Y88  88P .d888888 888    88888888
+     *      888  888 Y88b.    Y88b.  888  Y8bd8P  888  888 Y88b.  Y8b.
+     *      "Y888888  "Y8888P  "Y888 888   Y88P   "Y888888  "Y888  "Y8888
      ************************************************************************
      */
     /**
@@ -885,14 +878,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - U2F activation parameters in Json form. Should contain
      * username and randomid.
      * @return - A Json in String format. The Json will have 3 key-value pairs;
@@ -907,13 +900,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String activate(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("activate", svcinfo);
@@ -926,7 +919,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -953,17 +946,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                        888    888                        d8b           .d888          
-     *                        888    888                        Y8P          d88P"           
-     *                        888    888                                     888             
-     *       .d88b.   .d88b.  888888 888  888  .d88b.  888  888 888 88888b.  888888  .d88b.  
-     *      d88P"88b d8P  Y8b 888    888 .88P d8P  Y8b 888  888 888 888 "88b 888    d88""88b 
-     *      888  888 88888888 888    888888K  88888888 888  888 888 888  888 888    888  888 
-     *      Y88b 888 Y8b.     Y88b.  888 "88b Y8b.     Y88b 888 888 888  888 888    Y88..88P 
-     *       "Y88888  "Y8888   "Y888 888  888  "Y8888   "Y88888 888 888  888 888     "Y88P"  
-     *           888                                        888                              
-     *      Y8b d88P                                   Y8b d88P                              
-     *       "Y88P"                                     "Y88P"                               
+     *                        888    888                        d8b           .d888
+     *                        888    888                        Y8P          d88P"
+     *                        888    888                                     888
+     *       .d88b.   .d88b.  888888 888  888  .d88b.  888  888 888 88888b.  888888  .d88b.
+     *      d88P"88b d8P  Y8b 888    888 .88P d8P  Y8b 888  888 888 888 "88b 888    d88""88b
+     *      888  888 88888888 888    888888K  88888888 888  888 888 888  888 888    888  888
+     *      Y88b 888 Y8b.     Y88b.  888 "88b Y8b.     Y88b 888 888 888  888 888    Y88..88P
+     *       "Y88888  "Y8888   "Y888 888  888  "Y8888   "Y88888 888 888  888 888     "Y88P"
+     *           888                                        888
+     *      Y8b d88P                                   Y8b d88P
+     *       "Y88P"                                     "Y88P"
      ************************************************************************
      */
     /**
@@ -975,14 +968,14 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
      * based on LDAP / AD. The user should be authorized to encrypt. (3)
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
-     * 
+     *
      * @param payload - Json input containing required data
      * @return - A Json in String format. The Json will have 3 key-value pairs;
      * 1. 'Response' : A Json array, each entry signifying metadata of a key
@@ -998,13 +991,13 @@ public class SKFEServlet {
     @Produces({"application/json"})
     public String getkeysinfo(@FormParam("svcinfo") String svcinfo,
             @FormParam("payload") String payload) {
-        //  Local variables       
+        //  Local variables
         //  Service credentials
         String did;
         String svcusername;
         String svcpassword;
         String protocol;
-        
+
         //  SKCE domain id validation
         try {
             SKCEServiceInfoType si = basicInputChecks("getkeysinfo", svcinfo);
@@ -1017,7 +1010,7 @@ public class SKFEServlet {
         } catch (Exception ex) {
             return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
-        
+
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " svcusername");
@@ -1044,17 +1037,17 @@ public class SKFEServlet {
 
     /*
      ************************************************************************
-     *                        888                                                        d8b           .d888          
-     *                        888                                                        Y8P          d88P"           
-     *                        888                                                                     888             
-     *       .d88b.   .d88b.  888888 .d8888b   .d88b.  888d888 888  888  .d88b.  888d888 888 88888b.  888888  .d88b.  
-     *      d88P"88b d8P  Y8b 888    88K      d8P  Y8b 888P"   888  888 d8P  Y8b 888P"   888 888 "88b 888    d88""88b 
-     *      888  888 88888888 888    "Y8888b. 88888888 888     Y88  88P 88888888 888     888 888  888 888    888  888 
-     *      Y88b 888 Y8b.     Y88b.       X88 Y8b.     888      Y8bd8P  Y8b.     888     888 888  888 888    Y88..88P 
-     *       "Y88888  "Y8888   "Y888  88888P'  "Y8888  888       Y88P    "Y8888  888     888 888  888 888     "Y88P"  
-     *           888                                                                                                  
-     *      Y8b d88P                                                                                                  
-     *       "Y88P"                                                                                                                          
+     *                        888                                                        d8b           .d888
+     *                        888                                                        Y8P          d88P"
+     *                        888                                                                     888
+     *       .d88b.   .d88b.  888888 .d8888b   .d88b.  888d888 888  888  .d88b.  888d888 888 88888b.  888888  .d88b.
+     *      d88P"88b d8P  Y8b 888    88K      d8P  Y8b 888P"   888  888 d8P  Y8b 888P"   888 888 "88b 888    d88""88b
+     *      888  888 88888888 888    "Y8888b. 88888888 888     Y88  88P 88888888 888     888 888  888 888    888  888
+     *      Y88b 888 Y8b.     Y88b.       X88 Y8b.     888      Y8bd8P  Y8b.     888     888 888  888 888    Y88..88P
+     *       "Y88888  "Y8888   "Y888  88888P'  "Y8888  888       Y88P    "Y8888  888     888 888  888 888     "Y88P"
+     *           888
+     *      Y8b d88P
+     *       "Y88P"
      ************************************************************************
      */
     /**
@@ -1065,7 +1058,7 @@ public class SKFEServlet {
      *
      * @param svcinfo - Object that carries SKCE service information.
      * Information bundled is :
-     * 
+     *
      * (1) did - Unique identifier for a SKCE encryption domain (2) svcusername
      * - SKCE service credentials : username requesting the service. The service
      * credentials are looked up in the 'service' setup of authentication system
@@ -1073,7 +1066,7 @@ public class SKFEServlet {
      * svcpassword - SKCE service credentials : password of the service username
      * specified above (4) protocol - U2F protocol version to comply with.
      * @param payload
-     * 
+     *
      * @return
      */
     @POST

@@ -5,12 +5,11 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.0</version>
+        <version>4.3.0</version>
     </parent>
     
     <groupId>com.strongkey</groupId>
     <artifactId>common</artifactId>
-    <version>4.0</version>
     <packaging>jar</packaging>
     
     <name>common</name>
@@ -24,7 +23,7 @@
         <dependency>
             <groupId>org.zeromq</groupId>
             <artifactId>jeromq</artifactId>
-            <version>0.4.3</version>
+            <version>0.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
@@ -52,7 +51,7 @@
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>crypto</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>

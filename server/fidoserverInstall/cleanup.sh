@@ -1,9 +1,11 @@
 #!/bin/bash
 ###################################################################################
-# Copyright StrongAuth, Inc. All Rights Reserved.
-#
-# Use of this source code is governed by the Gnu Lesser General Public License 2.3.
-# The license can be found at https://github.com/StrongKey/fido2/LICENSE
+# /**
+# * Copyright StrongAuth, Inc. All Rights Reserved.
+# *
+# * Use of this source code is governed by the GNU Lesser General Public License v2.1
+# * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+# */
 ###################################################################################
 
 LOGNAME=/root/strongkey_logs/cleanup-saka-$(date +%s)
@@ -15,9 +17,9 @@ if ! [ -d /root/strongkey_logs ]; then
 fi
 
 echo "Stopping SKFS services..." | tee -a $LOGNAME
-service mysqld restart 
-service mysqld stop 
-service glassfishd stop 
+service mysqld restart
+service mysqld stop
+service glassfishd stop
 
 if [ -f /etc/rc.d/init.d/opendjd ]; then
         echo "Uninstalling OpenDJ..." | tee -a $LOGNAME

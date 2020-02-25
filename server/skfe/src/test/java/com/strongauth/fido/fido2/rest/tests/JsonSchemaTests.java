@@ -1,21 +1,12 @@
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date: 
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  * $Revision:
  * $Author: mishimoto $
- * $URL: 
+ * $URL:
  *
  * *********************************************
  *                    888
@@ -28,7 +19,7 @@
  *  888  888  "Y88P"   "Y888  "Y8888   88888P'
  *
  * *********************************************
- * 
+ *
  *
  *
  */
@@ -42,7 +33,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class JsonSchemaTests {
-    
+
     private final String minimalPolicy = "{\n" +
         "	\"cryptography\": {\n" +
         "		\"ec_enabled\": true,\n" +
@@ -73,7 +64,7 @@ public class JsonSchemaTests {
         "		\"userVerification\": \"preferred\"\n" +
         "	}\n" +
         "}";
-    
+
     private final String fullerPolicy = "{\n" +
         "	\"cryptography\": {\n" +
         "		\"ec_enabled\": true,\n" +
@@ -104,42 +95,42 @@ public class JsonSchemaTests {
         "		\"userVerification\": \"preferred\"\n" +
         "	}\n" +
         "}";
-    
+
     /*
      *********************************************************************
-     *                                      888    d8b                   
-     *                                      888    Y8P                   
-     *                                      888                          
-     *  88888b.   .d88b.   .d88b.   8888b.  888888 888 888  888  .d88b.  
-     *  888 "88b d8P  Y8b d88P"88b     "88b 888    888 888  888 d8P  Y8b 
-     *  888  888 88888888 888  888 .d888888 888    888 Y88  88P 88888888 
-     *  888  888 Y8b.     Y88b 888 888  888 Y88b.  888  Y8bd8P  Y8b.     
-     *  888  888  "Y8888   "Y88888 "Y888888  "Y888 888   Y88P    "Y8888  
-     *                         888                                       
-     *                    Y8b d88P                                       
-     *                     "Y88P"    
+     *                                      888    d8b
+     *                                      888    Y8P
+     *                                      888
+     *  88888b.   .d88b.   .d88b.   8888b.  888888 888 888  888  .d88b.
+     *  888 "88b d8P  Y8b d88P"88b     "88b 888    888 888  888 d8P  Y8b
+     *  888  888 88888888 888  888 .d888888 888    888 Y88  88P 88888888
+     *  888  888 Y8b.     Y88b 888 888  888 Y88b.  888  Y8bd8P  Y8b.
+     *  888  888  "Y8888   "Y88888 "Y888888  "Y888 888   Y88P    "Y8888
+     *                         888
+     *                    Y8b d88P
+     *                     "Y88P"
      *********************************************************************/
     @Test
     public void voidargs () {
-    
+
     }
-    
+
     /*
      *********************************************************************
-     *                              d8b 888    d8b                   
-     *                              Y8P 888    Y8P                   
-     *                                  888                          
-     *   88888b.   .d88b.  .d8888b  888 888888 888 888  888  .d88b.  
-     *   888 "88b d88""88b 88K      888 888    888 888  888 d8P  Y8b 
-     *   888  888 888  888 "Y8888b. 888 888    888 Y88  88P 88888888 
-     *   888 d88P Y88..88P      X88 888 Y88b.  888  Y8bd8P  Y8b.     
-     *   88888P"   "Y88P"   88888P' 888  "Y888 888   Y88P    "Y8888  
-     *   888                                                         
-     *   888                                                         
-     *   888                                                         
+     *                              d8b 888    d8b
+     *                              Y8P 888    Y8P
+     *                                  888
+     *   88888b.   .d88b.  .d8888b  888 888888 888 888  888  .d88b.
+     *   888 "88b d88""88b 88K      888 888    888 888  888 d8P  Y8b
+     *   888  888 888  888 "Y8888b. 888 888    888 Y88  88P 88888888
+     *   888 d88P Y88..88P      X88 888 Y88b.  888  Y8bd8P  Y8b.
+     *   88888P"   "Y88P"   88888P' 888  "Y888 888   Y88P    "Y8888
+     *   888
+     *   888
+     *   888
      *********************************************************************/
     @Test
     public void minimalFidoPolicyShouldVerify() {
-        
+
     }
 }

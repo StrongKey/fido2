@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.fido2.tpm;
 
 import com.strongkey.skce.utilities.TPMConstants;
@@ -15,14 +14,14 @@ public class TPMClockInfo implements TPMMarshallable {
     private final int resetCount;
     private final int restartCount;
     private final byte safe;
-    
+
     public TPMClockInfo(long clock, int resetCount, int restartCount, byte safe){
         this.clock = clock;
         this.resetCount = resetCount;
         this.restartCount = restartCount;
         this.safe = safe;
     }
-    
+
     public static TPMClockInfo unmarshal(byte[] bytes){
         int pos = 0;
         long clock = Marshal.stream64ToLong(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFLONG));

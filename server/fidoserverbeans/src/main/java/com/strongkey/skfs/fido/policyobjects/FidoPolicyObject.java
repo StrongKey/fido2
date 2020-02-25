@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido.policyobjects;
 
@@ -33,7 +33,7 @@ public class FidoPolicyObject {
     private final RegistrationPolicyOptions registrationOptions;
     private final AuthenticationPolicyOptions authenticationOptions;
     private final ExtensionsPolicyOptions extensionsOptions;
-    
+
     private FidoPolicyObject(
             Long did,
             Long sid,
@@ -82,15 +82,15 @@ public class FidoPolicyObject {
     public Long getPid() {
         return pid;
     }
-    
+
     public String getPolicyMapKey(){
         return sid+"-"+did+"-"+pid;
     }
-    
+
     public Integer getVersion(){
         return version;
     }
-    
+
     public Date getStartDate() {
         return startDate;
     }
@@ -98,7 +98,7 @@ public class FidoPolicyObject {
     public Date getEndDate() {
         return endDate;
     }
-    
+
     public CryptographyPolicyOptions getCryptographyOptions() {
         return cryptographyOptions;
     }
@@ -142,7 +142,7 @@ public class FidoPolicyObject {
     public ExtensionsPolicyOptions getExtensionsOptions() {
         return extensionsOptions;
     }
-    
+
     public static FidoPolicyObject parse(String base64Policy, Integer version,
             Long did, Long sid, Long pid, Date startDate, Date endDate) throws SKFEException {
         try {
@@ -169,7 +169,7 @@ public class FidoPolicyObject {
             RegistrationPolicyOptions registration = RegistrationPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_REGISTRATION));
 
             AuthenticationPolicyOptions authentication = AuthenticationPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_AUTHENTICATION));
-            
+
             ExtensionsPolicyOptions extensions = ExtensionsPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_EXTENSIONS));
 
             return new FidoPolicyObject.FidoPolicyObjectBuilder(did, sid, pid, version,
@@ -185,7 +185,7 @@ public class FidoPolicyObject {
             throw new SKFEException(ex.getLocalizedMessage());      //TODO replace with standard parsing error message
         }
     }
-    
+
     public static class FidoPolicyObjectBuilder{
         private final Long builderDid;
         private final Long builderSid;
@@ -204,9 +204,9 @@ public class FidoPolicyObject {
         private final RegistrationPolicyOptions builderRegistrationOptions;
         private final AuthenticationPolicyOptions builderAuthenticationOptions;
         private ExtensionsPolicyOptions builderExtensionsOptions;
-        
+
         public FidoPolicyObjectBuilder(
-                Long did, Long sid, Long pid, Integer version, Date startDate, 
+                Long did, Long sid, Long pid, Integer version, Date startDate,
                 Date endDate, CryptographyPolicyOptions cryptographyOptions,
                 RpPolicyOptions rpOptions, MdsPolicyOptions mdsOptions,
                 CounterPolicyOptions counterOptions,
@@ -225,22 +225,22 @@ public class FidoPolicyObject {
             this.builderRegistrationOptions = registrationOptions;
             this.builderAuthenticationOptions = authenticationOptions;
         }
-        
+
         public FidoPolicyObjectBuilder setTimeout(Integer timeout) {
             this.builderTimeout = timeout;
             return this;
         }
-        
+
         public FidoPolicyObjectBuilder setTokenBindingOption(String tokenBindingOption) {
             this.builderTokenBindingOption = tokenBindingOption;
             return this;
         }
-        
+
         public FidoPolicyObjectBuilder setIsUserSettingsRequired(Boolean isUserSettingsRequired) {
             this.builderIsUserSettingsRequired = isUserSettingsRequired;
             return this;
         }
-        
+
         public FidoPolicyObjectBuilder setIsStoreSignatureRequired(Boolean isStoreSignaturesRequired) {
             this.builderIsStoreSignaturesRequired = isStoreSignaturesRequired;
             return this;
@@ -250,10 +250,10 @@ public class FidoPolicyObject {
             this.builderExtensionsOptions = builderExtensionsOptions;
             return this;
         }
-        
+
         public FidoPolicyObject build(){
             return new FidoPolicyObject(
-                    builderDid, builderSid, builderPid, builderVersion, builderStartDate, 
+                    builderDid, builderSid, builderPid, builderVersion, builderStartDate,
                     builderEndDate, builderCryptographyOptions, builderRpOptions,
                     builderTimeout, builderMdsOptions, builderTokenBindingOption,
                     builderCounterOptions, builderIsUserSettingsRequired,

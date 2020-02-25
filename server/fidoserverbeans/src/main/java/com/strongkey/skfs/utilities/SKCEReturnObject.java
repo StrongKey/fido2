@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.utilities;
 
@@ -38,7 +38,7 @@ public class SKCEReturnObject implements Serializable {
     // Holds value of property messagekey.
     private String messagekey;
 
-    // The actual content being returned.  Client applicatin must cast 
+    // The actual content being returned.  Client applicatin must cast
     // the object to the specified type and then process it
     private String hash;
 

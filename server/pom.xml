@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fidoserver</artifactId>
     <groupId>com.strongkey</groupId>
-    <version>4.0</version>
+    <version>4.3.0</version>
     <packaging>pom</packaging>
     <name>fidoserver</name>
     <properties>
@@ -31,7 +31,6 @@
     <modules>
         <module>crypto</module>
         <module>authenticationBeans</module>
-        <module>fidoserverEAR</module>
         <module>api</module>
         <module>skfe</module>
         <module>apiclient</module>
@@ -39,5 +38,10 @@
         <module>fidoserverbeans</module>
         <module>common</module>
         <module>keymanager</module>
+        <module>skfs</module>
+        <module>skfsclient</module>
+        <module>FIDO2Simulator</module>
+        <module>fidoserverEAR</module>
+        <module>FIDO2SimulatorClient</module>
     </modules>
 </project>

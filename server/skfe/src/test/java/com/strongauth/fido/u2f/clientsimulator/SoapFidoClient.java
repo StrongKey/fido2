@@ -1,21 +1,9 @@
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
+/**
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  *
  * **********************************************
  *
@@ -30,10 +18,10 @@
  *
  * **********************************************
  * This program implements a sample fido client and an authenticator_reg
- * interation. Currently the client can only call preRegister (enroll) and 
- * register (bind) on the Fido Server. 
+ * interation. Currently the client can only call preRegister (enroll) and
+ * register (bind) on the Fido Server.
  * All calls are implemented as SOAP calls.
- * 
+ *
  */
 package com.strongauth.fido.u2f.clientsimulator;
 
@@ -88,7 +76,7 @@ public class SoapFidoClient {
         if (!goodSignature) {
             appid = appidforbadsignature;
             System.out.println("    ");
-                            
+
         } else {
             appid = ca.decodePreauth(preAuthresponse, 4);
         }
@@ -111,7 +99,7 @@ public class SoapFidoClient {
 
         String authenticationRequest = ca.makeAuthenticationRequest(CSConstants.CONTROL_BYTE, chalparam, appParam, keyHandle);
 
-        //send authentication Request to authenticator_reg        
+        //send authentication Request to authenticator_reg
         String authenticationResponse = ca.authenticatorProcess(authenticationRequest);
 
         if (authenticationResponse == null) {
@@ -197,7 +185,7 @@ public class SoapFidoClient {
             System.exit(1);
         }
         System.out.println("\nFido Client");
-        //registration data object 
+        //registration data object
         System.out.println("\tRegistration Data : " + reg_resp);
 
         System.out.println("\tCreating Registration Response...");
@@ -252,7 +240,7 @@ public class SoapFidoClient {
         String kh = cu.makeKeyHandle(genKeys.getPrivate(), originHash);
         System.out.println("\t\tKey Handle wrapped :  " + kh);
 
-        //make object to sign       
+        //make object to sign
         System.out.println("\t\tCreating byte string to sign...");
         String ob2sign = cu.getObjectToSign(ApplicationParam, ChallengeParam, kh, Base64.encodeBase64String(genKeys.getPublic().getEncoded()));
         System.out.println("\t\tByte String to sign : " + ob2sign);

@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.google.common.primitives.Longs;
@@ -53,7 +52,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
      * This class' name - used for logging
      */
     private final String classname = this.getClass().getName();
-    
+
     private final Integer RSV = Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.fido2.user.settings.version"));
 
     @EJB
@@ -64,8 +63,8 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
     addFidoAttestationCertificateLocal addAttCertBean;
     @EJB
     verifyFido2RegistrationPolicyLocal verifyRegistrationPolicyBean;
-    
-//    @EJB 
+
+//    @EJB
 //    verifyMDSCertificateChainBeanLocal verifyMDSCertificateChainBean;
 
     @Override
@@ -75,35 +74,35 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             verifyRegistrationResponse(registrationresponse);
             JsonObject response = retrieveResponseFromRegistrationResponse(registrationresponse);
             verifyFIDOResponseObject(response);
-            
+
             //Verify fields in clientDataJson are valid
             String browserdataBase64 = response.getString(skfsConstants.JSON_KEY_CLIENTDATAJSON);
             JsonObject clientDataJson = retrieveBrowserdataJsonFromFIDOResponseObject(response);
             verifyClientDataJsonObject(clientDataJson);
-            
+
             //Verify fields in registrationmetatdata are valid
             JsonObject metadataJson = retrieveMetadataJsonFromRegistrationMetadata(registrationmetadata);
             verifyRegistrationMetadata(metadataJson);
             String origin = metadataJson.getString(skfsConstants.FIDO_METADATA_KEY_ORIGIN, "");
-            
+
             //Additional input checks
             String challengeDigest = calculateChallengeDigest(clientDataJson.getString(skfsConstants.JSON_KEY_NONCE));
             UserSessionInfo userInfo = (UserSessionInfo) skceMaps.getMapObj().get(skfsConstants.MAP_USER_SESSION_INFO, challengeDigest);
             String sessionUsername = retrieveUsernameFromSessionMap(userInfo, challengeDigest);
             verifyUsernameMatch(metadataJson.getString(skfsConstants.FIDO_METADATA_KEY_USERNAME), sessionUsername);
             verifyOrigin(clientDataJson.getString(skfsConstants.JSON_KEY_SERVERORIGIN), origin);
-            
+
             //TODO rpid hash matches.
-            
+
             //Get AttestationObject
             FIDO2AttestationObject attObject = retrieveAttestationObjectFromFIDOResponseObject(response);
-            
+
             //Retrieve AAGUID
             String aaguid = getAAGUID(attObject);
 
             //Perform Policy Verification
             verifyRegistrationPolicyBean.execute(userInfo, clientDataJson, attObject);
-            
+
             //Verify Signature
             Boolean isSignatureValid = attObject.getAttStmt().verifySignature(browserdataBase64, attObject.getAuthData());
             if (!isSignatureValid) {
@@ -111,16 +110,16 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
                 throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-2001")
                         + "Registration Signature verification : " + isSignatureValid));
             }
-            
+
             AttestationCertificatesPK attCertPK = storeAttestationStatement(did, attObject.getAttStmt());
-            
+
             //Save userId
             String userId = userInfo.getUserId();
-            
+
             //Remove challenge from map
             skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, challengeDigest);
-            
-            //Store FIDO key in database 
+
+            //Store FIDO key in database
             addkeybean.execute(did,
                     userId,
                     sessionUsername,
@@ -150,12 +149,12 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
                     + ex.getLocalizedMessage()));
         }
     }
-    
+
     private void verifyRegistrationResponse(String registrationResponse){
         try{
             JsonObject registrationObject = skfsCommon.getJsonObjectFromString(registrationResponse);
             String[] requiredFields = { skfsConstants.JSON_KEY_ID, skfsConstants.JSON_KEY_RAW_ID,
-                skfsConstants.JSON_KEY_REQUEST_TYPE, skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE}; 
+                skfsConstants.JSON_KEY_REQUEST_TYPE, skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE};
             String[] requiredBase64UrlFields = { skfsConstants.JSON_KEY_ID, skfsConstants.JSON_KEY_RAW_ID };
             verifyRequiredFieldsExist(registrationObject, requiredFields);
             verifyFieldsBase64Url(registrationObject, requiredBase64UrlFields);
@@ -170,7 +169,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Json improperly formatted");
         }
     }
-    
+
     private void verifyRequiredFieldsExist(JsonObject jsonObject, String[] requiredFields){
         for(String field: requiredFields){
             JsonValue jsonValue = jsonObject.get(field);
@@ -180,7 +179,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             }
         }
     }
-    
+
     private void verifyFieldsBase64Url(JsonObject jsonObject, String[] requiredBase64Fields){
         for(String field: requiredBase64Fields){
             String base64UrlString = jsonObject.getString(field, null);
@@ -192,7 +191,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             }
         }
     }
-    
+
     private void verifyAcceptedValue(JsonObject jsonObject, String field, String[] acceptedValues){
         String returnedValue = jsonObject.getString(field, null);
         ArrayList acceptedList = new ArrayList(Arrays.asList(acceptedValues));
@@ -201,7 +200,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Invalid " + field);
         }
     }
-    
+
     private JsonObject retrieveResponseFromRegistrationResponse(String registrationResponse){
         JsonObject responseObject = skfsCommon.getJsonObjectFromString(registrationResponse);
         JsonObject response = responseObject.getJsonObject(skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE);
@@ -211,14 +210,14 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         }
         return response;
     }
-    
+
     private void verifyFIDOResponseObject(JsonObject response){
         String[] requiredFields = {skfsConstants.JSON_KEY_ATTESTATIONOBJECT, skfsConstants.JSON_KEY_CLIENTDATAJSON};
         String[] requiredBase64UrlFields = {skfsConstants.JSON_KEY_ATTESTATIONOBJECT, skfsConstants.JSON_KEY_CLIENTDATAJSON};
         verifyRequiredFieldsExist(response, requiredFields);
         verifyFieldsBase64Url(response, requiredBase64UrlFields);
     }
-    
+
     private JsonObject retrieveBrowserdataJsonFromFIDOResponseObject(JsonObject response){
         try {
             String browserdataString = response.getString(skfsConstants.JSON_KEY_CLIENTDATAJSON);
@@ -229,7 +228,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Invalid clientDataJSON");
         }
     }
-    
+
     private void verifyClientDataJsonObject(JsonObject clientDataJson){
         String[] requiredFields = {skfsConstants.JSON_KEY_REQUEST_TYPE, skfsConstants.JSON_KEY_NONCE,
             skfsConstants.JSON_KEY_SERVERORIGIN};
@@ -239,7 +238,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         verifyAcceptedValue(clientDataJson, skfsConstants.JSON_KEY_REQUEST_TYPE, new String[]{ "webauthn.create" });
         verifyTokenBinding(clientDataJson.getJsonObject(skfsConstants.JSON_KEY_TOKENBINDING));
     }
-    
+
     private JsonObject retrieveMetadataJsonFromRegistrationMetadata(String registrationmetadata){
         try {
             return skfsCommon.getJsonObjectFromString(registrationmetadata);
@@ -248,16 +247,16 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Metadata Json improperly formatted");
         }
     }
-    
+
     private void verifyRegistrationMetadata(JsonObject metadataJson){
         String[] requiredFields = {
-            skfsConstants.FIDO_METADATA_KEY_CREATE_LOC, 
+            skfsConstants.FIDO_METADATA_KEY_CREATE_LOC,
             skfsConstants.FIDO_METADATA_KEY_USERNAME,
             skfsConstants.FIDO_METADATA_KEY_ORIGIN
         };
         verifyRequiredFieldsExist(metadataJson, requiredFields);
     }
-    
+
     private String calculateChallengeDigest(String challenge){
         try {
             return skfsCommon.getDigest(challenge, "SHA-256");
@@ -266,7 +265,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new IllegalStateException("Error generating challenge hash: " + ex);
         }
     }
-    
+
     private String retrieveUsernameFromSessionMap(UserSessionInfo userInfo, String challengeDigest){
         if (userInfo == null) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0006", "");
@@ -277,13 +276,13 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             return sessionUsername;
         }
     }
-    
+
     private void verifyUsernameMatch(String metadataUsername, String sessionUsername){
         if (!metadataUsername.equalsIgnoreCase(sessionUsername)) {
             throw new SKIllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-0037"));
         }
     }
-    
+
     private void verifyOrigin(String origin, String rporigin) {
         try{
             URI originURI = new URI(origin);
@@ -297,7 +296,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Invalid Origin " + ex.getLocalizedMessage());
         }
     }
-    
+
     private void verifyTokenBinding(JsonObject tokenbinding){
         if(tokenbinding != null){   //token binding is optional, skip if tokenbinding does not exist
             String[] requiredFields = {"status"};
@@ -305,7 +304,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             verifyAcceptedValue(tokenbinding, "status", new String[]{ "present", "supported", "not-supported" });
         }
     }
-    
+
     private FIDO2AttestationObject retrieveAttestationObjectFromFIDOResponseObject(JsonObject response){
         try {
             String attestationObjectString = response.getString(skfsConstants.JSON_KEY_ATTESTATIONOBJECT);
@@ -317,7 +316,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             throw new SKIllegalArgumentException("Invalid attestaionObject");
         }
     }
-    
+
     private String getAAGUID(FIDO2AttestationObject attObject){
         byte[] aaguidbytes = attObject.getAuthData().getAttCredData().getAaguid();
         byte[] aaguidbytes1 = new byte[8];
@@ -327,7 +326,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1), Longs.fromByteArray(aaguidbytes2));
         return uuid.toString();
     }
-    
+
     //TODO rollback added certificates if something goes wrong
     //TODO add root certificate from MDS.
     private AttestationCertificatesPK storeAttestationStatement(Long did, FIDO2AttestationStatement attStmt) throws CertificateException, NoSuchProviderException, CertificateEncodingException, SKFEException{
@@ -338,7 +337,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             for(int i = attestationCerts.size() - 1; i >= 0; i--){
                 byte[] certBytes = (byte[]) attestationCerts.get(i);
                 X509Certificate attCert = cryptoCommon.generateX509FromBytes(certBytes);
-                
+
                 //Add if attestation certificate not already added
                 AttestationCertificates dbcert = getAttCertbean.getByIssuerDnSerialNumber(
                         attCert.getIssuerDN().getName(), attCert.getSerialNumber().toString());
@@ -353,7 +352,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         }
         return parentPk;
     }
-    
+
     private String parseRegistrationSettings(FIDO2AuthenticatorData authData, UserSessionInfo userInfo){
         JsonObjectBuilder registrationSettings = Json.createObjectBuilder()
                 .add(skfsConstants.FIDO_REGISTRATION_SETTING_UP, authData.isUserPresent())
@@ -366,7 +365,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
         if(userIcon != null){
             registrationSettings.add(skfsConstants.FIDO_REGISTRATION_SETTING_USERICON, userIcon);
         }
-        
+
         return Base64.getUrlEncoder().encodeToString(registrationSettings.build().toString().getBytes());
     }
 }

@@ -1,21 +1,8 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
- *
- * $Date$
- * $Revision$
- * $Author$
- * $URL$
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
  *
  * *********************************************
  *                    888
@@ -42,7 +29,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface authorizeLdapUserBeanLocal {
-    
+
     /**
      * This method authenticates a credential - username and password - for a
      * specified operation against the configured LDAP directory.  Only LDAP-based

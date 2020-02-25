@@ -1,9 +1,11 @@
 #!/bin/bash
 ###################################################################################
-# Copyright StrongAuth, Inc. All Rights Reserved.
-#
-# Use of this source code is governed by the Gnu Lesser General Public License 2.3.
-# The license can be found at https://github.com/StrongKey/fido2/LICENSE
+# /**
+# * Copyright StrongAuth, Inc. All Rights Reserved.
+# *
+# * Use of this source code is governed by the GNU Lesser General Public License v2.1
+# * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+# */
 ###################################################################################
 # Uncomment to show detailed installation process
 #SHOWALL=1
@@ -30,8 +32,8 @@ INSTALL_FIDO=Y
 # Start Required Distributables
 GLASSFISH=payara-4.1.2.181.zip
 JEMALLOC=jemalloc-3.6.0-1.el7.x86_64.rpm
-MARIA=mariadb-10.2.13-linux-x86_64.tar.gz
-MARIACONJAR=mariadb-java-client-2.2.2.jar
+MARIA=mariadb-10.2.30-linux-glibc_214-x86_64.tar.gz
+MARIACONJAR=mariadb-java-client-2.2.6.jar
 OPENDJ=OpenDJ-3.0.0.zip
 # End Required Distributables
 
@@ -46,8 +48,8 @@ STRONGKEY_HOME=/usr/local/strongkey
 SKFS_HOME=$STRONGKEY_HOME/skfs
 GLASSFISH_HOME=$STRONGKEY_HOME/payara41/glassfish
 GLASSFISH_CONFIG=$GLASSFISH_HOME/domains/domain1/config
-MARIAVER=mariadb-10.2.13-linux-x86_64
-MARIATGT=mariadb-10.2.13
+MARIAVER=mariadb-10.2.30-linux-glibc_214-x86_64
+MARIATGT=mariadb-10.2.30
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
 OPENDJVER=opendj
 OPENDJTGT=OpenDJ-3.0.0
@@ -94,7 +96,7 @@ if [[ ! -z $YUM_CMD ]]; then
     systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
-    apt install unzip libncurses5 libaio1 openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
+    apt install unzip libncurses5 libaio1 dbus openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
     # modify rng tools to use dev urandom as the vm may not have a harware random number generator
     if ! grep -q "^HRNGDEVICE=/dev/urandom" /etc/default/rng-tools ; then
             echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tools
@@ -118,19 +120,19 @@ fi
 # download required software
 if [ ! -f $SKFS_SOFTWARE/$GLASSFISH ]; then
         echo -n "Downloading Payara ... "
-        wget http://repo1.maven.org/maven2/fish/payara/distributions/payara/4.1.2.181/payara-4.1.2.181.zip -q
+        wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/4.1.2.181/payara-4.1.2.181.zip -q
         echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$MARIA ]; then
         echo -n "Downloading Mariadb Server ... "
-        wget https://downloads.mariadb.org/interstitial/mariadb-10.2.13/bintar-linux-x86_64/mariadb-10.2.13-linux-x86_64.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/ -O mariadb-10.2.13-linux-x86_64.tar.gz -q
+        wget https://downloads.mariadb.com/MariaDB/mariadb-10.2.30/bintar-linux-glibc_214-x86_64/mariadb-10.2.30-linux-glibc_214-x86_64.tar.gz -q
         echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$MARIACONJAR ]; then
         echo -n "Downloading Mariadb JAVA Connector ... "
-        wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.2/mariadb-java-client-2.2.2.jar -q
+        wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.6/mariadb-java-client-2.2.6.jar -q
         echo "Successful"
 fi
 
@@ -229,7 +231,7 @@ mkdir -p $STRONGKEY_HOME/certs $STRONGKEY_HOME/Desktop $STRONGKEY_HOME/dbdumps $
 cp $SKFS_SOFTWARE/certimport.sh $STRONGKEY_HOME/bin
 if [ $INSTALL_FIDO = 'Y' ]; then
 
-        echo -n "Installing StrongKey FIDO2 Server (SKFS) ... " 
+        echo -n "Installing StrongKey FIDO2 Server (SKFS) ... "
 
         cp $STRONGKEY_HOME/bin/* $STRONGKEY_HOME/Desktop/
 
@@ -248,6 +250,7 @@ if [ $INSTALL_FIDO = 'Y' ]; then
         cp $SKFS_SOFTWARE/signingkeystore.bcfks $SKFS_SOFTWARE/signingtruststore.bcfks $SKFS_HOME/keystores
         cp -R $SKFS_SOFTWARE/keymanager $STRONGKEY_HOME/
         cp -R $SKFS_SOFTWARE/apiclient $STRONGKEY_HOME/
+        cp -R $SKFS_SOFTWARE/skfsclient $STRONGKEY_HOME/
         echo "Successful"
 
 fi
@@ -306,18 +309,19 @@ if [ $INSTALL_MARIA = 'Y' ]; then
         echo "Successful"
 fi
 
-MYSQL_CMD=$(which yum  2>/dev/null)
-
+##################
+MYSQL_CMD=$($MARIA_HOME/bin/mysql --version 2>/dev/null)
 if [[ ! -z $MYSQL_CMD ]]; then
-        :
+      :
 else
-        echo "mysql binary does not exist or cannot be executed."
-        exit 1
+      echo "mysql binary does not exist or cannot be executed."
+      exit 1
 fi
+##################
 
 ##### Payara #####
 if [ $INSTALL_GLASSFISH = 'Y' ]; then
-        echo -n "Installing Payara... " 
+        echo -n "Installing Payara... "
         if [ $SHOWALL ]; then
                 unzip $SKFS_SOFTWARE/$GLASSFISH -d $STRONGKEY_HOME
         else
@@ -392,7 +396,7 @@ if [ $INSTALL_OPENDJ = 'Y' ]; then
         chmod 755 /etc/init.d/opendjd
         /lib/systemd/systemd-sysv-install enable opendjd
         echo "Successful"
-fi                
+fi
 
 ##### Change ownership of files #####
 chown -R strongkey:strongkey $STRONGKEY_HOME
@@ -442,11 +446,11 @@ bin/mysqld_safe &>/dev/null &
 READY=`grep "ready for connections" $MARIA_HOME/log/mysqld-error.log | wc -l`
 while [ $READY -ne 1 ]
 do
-        echo -n . 
+        echo -n .
         sleep 3
         READY=`grep "ready for connections" $MARIA_HOME/log/mysqld-error.log | wc -l`
 done
-echo done 
+echo done
 
 $MARIA_HOME/bin/mysql -u root mysql -e "update user set password=password('$MARIA_ROOT_PASSWORD') where user = 'root';
                                                     delete from mysql.db where host = '%';
@@ -546,4 +550,3 @@ EOFAPPJSON
 fi
 
 echo "Done!"
-

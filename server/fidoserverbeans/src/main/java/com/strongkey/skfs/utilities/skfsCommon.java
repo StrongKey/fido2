@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.utilities;
 
 import com.strongkey.appliance.utilities.applianceCommon;
@@ -12,6 +11,7 @@ import com.strongkey.appliance.utilities.applianceMaps;
 import com.strongkey.skce.utilities.TPMConstants;
 import com.strongkey.skfs.pojos.FIDOReturnObject;
 import com.strongkey.skfs.pojos.FIDOReturnObjectV1;
+import com.strongkey.skfs.requests.ServiceInfo;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,6 +41,7 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.stream.JsonParsingException;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -94,12 +95,7 @@ public class skfsCommon {
         try {
             while (it.hasNext()) {
                 String key = (String) it.next();
-                baos.write(("\n\t" + key + ": ").getBytes());
-                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
-                    baos.write(("**********").getBytes());
-                } else {
-                    baos.write((defaultSKFEConfig.getString(key)).getBytes());
-                }
+                baos.write(("\n\t" + key + ": " + defaultSKFEConfig.getString(key)).getBytes());
             }
             baos.close();
         } catch (IOException ex) {
@@ -150,13 +146,7 @@ public class skfsCommon {
 
             while (it.hasNext()) {
                 String key = (String) it.next();
-                baos.write(("\n\t" + key + ": ").getBytes());
-                if (key.contains("password") || key.contains("secretkey") || key.contains("accesskey")) {
-                    baos.write(("**********").getBytes());
-                } else {
-                    baos.write(skcehrb.getString(key).getBytes());
-                }
-                
+                baos.write(("\n\t" + key + ": " + skcehrb.getString(key)).getBytes());
             }
             baos.close();
 
@@ -229,17 +219,17 @@ public class skfsCommon {
 
     /*
     ************************************************************************
- .d8888b.                     .d888 d8b                                    888    d8b                            
-d88P  Y88b                   d88P"  Y8P                                    888    Y8P                            
-888    888                   888                                           888                                   
-888         .d88b.  88888b.  888888 888  .d88b.  888  888 888d888  8888b.  888888 888  .d88b.  88888b.  .d8888b  
-888        d88""88b 888 "88b 888    888 d88P"88b 888  888 888P"       "88b 888    888 d88""88b 888 "88b 88K      
-888    888 888  888 888  888 888    888 888  888 888  888 888     .d888888 888    888 888  888 888  888 "Y8888b. 
-Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.  888 Y88..88P 888  888      X88 
- "Y8888P"   "Y88P"  888  888 888    888  "Y88888  "Y88888 888     "Y888888  "Y888 888  "Y88P"  888  888  88888P' 
-                                             888                                                                 
-                                        Y8b d88P                                                                 
-                                         "Y88P"  
+ .d8888b.                     .d888 d8b                                    888    d8b
+d88P  Y88b                   d88P"  Y8P                                    888    Y8P
+888    888                   888                                           888
+888         .d88b.  88888b.  888888 888  .d88b.  888  888 888d888  8888b.  888888 888  .d88b.  88888b.  .d8888b
+888        d88""88b 888 "88b 888    888 d88P"88b 888  888 888P"       "88b 888    888 d88""88b 888 "88b 88K
+888    888 888  888 888  888 888    888 888  888 888  888 888     .d888888 888    888 888  888 888  888 "Y8888b.
+Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.  888 Y88..88P 888  888      X88
+ "Y8888P"   "Y88P"  888  888 888    888  "Y88888  "Y88888 888     "Y888888  "Y888 888  "Y88P"  888  888  88888P'
+                                             888
+                                        Y8b d88P
+                                         "Y88P"
     ************************************************************************
      */
     /**
@@ -397,17 +387,17 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
     /*
     ************************************************************************
-888b     d888                                                                
-8888b   d8888                                                                
-88888b.d88888                                                                
-888Y88888P888  .d88b.  .d8888b  .d8888b   8888b.   .d88b.   .d88b.  .d8888b  
-888 Y888P 888 d8P  Y8b 88K      88K          "88b d88P"88b d8P  Y8b 88K      
-888  Y8P  888 88888888 "Y8888b. "Y8888b. .d888888 888  888 88888888 "Y8888b. 
-888   "   888 Y8b.          X88      X88 888  888 Y88b 888 Y8b.          X88 
-888       888  "Y8888   88888P'  88888P' "Y888888  "Y88888  "Y8888   88888P' 
-                                                       888                   
-                                                  Y8b d88P                   
-                                                   "Y88P" 
+888b     d888
+8888b   d8888
+88888b.d88888
+888Y88888P888  .d88b.  .d8888b  .d8888b   8888b.   .d88b.   .d88b.  .d8888b
+888 Y888P 888 d8P  Y8b 88K      88K          "88b d88P"88b d8P  Y8b 88K
+888  Y8P  888 88888888 "Y8888b. "Y8888b. .d888888 888  888 88888888 "Y8888b.
+888   "   888 Y8b.          X88      X88 888  888 Y88b 888 Y8b.          X88
+888       888  "Y8888   88888P'  88888P' "Y888888  "Y88888  "Y8888   88888P'
+                                                       888
+                                                  Y8b d88P
+                                                   "Y88P"
     ************************************************************************
      */
     /**
@@ -460,7 +450,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             throw new SKFEException(skfsCommon.getMessageProperty("SKCE-ERR-1003") + " skce did= " + skcedid);
         }
 
-        if (did <= 0 || did > skfsConstants.TINYINT_MAX) {
+        if (did <= 0 || did > skfsConstants.DID_MAX) {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "SKCE-ERR-1003", " skce did= " + did);
             throw new SKFEException(skfsCommon.getMessageProperty("SKCE-ERR-1003") + " skce did= " + did);
         } else if (!applianceMaps.isDomainMapped(did)) {
@@ -537,9 +527,13 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     }
 
     public static JsonObject getJsonObjectFromString(String jsonstr) {
-        StringReader stringreader = new StringReader(jsonstr);
-        JsonReader jsonreader = Json.createReader(stringreader);
-        return jsonreader.readObject();
+        try {
+            StringReader stringreader = new StringReader(jsonstr);
+            JsonReader jsonreader = Json.createReader(stringreader);
+            return jsonreader.readObject();
+        } catch (JsonParsingException ex) {
+            return null;
+        }
     }
 
     public static String getTLdplusone(String domain) {
@@ -559,14 +553,14 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
     /*
     ***********************************************************************
-8888888888 8888888 8888888b.   .d88888b.  
-888          888   888  "Y88b d88P" "Y88b 
-888          888   888    888 888     888 
-8888888      888   888    888 888     888 
-888          888   888    888 888     888 
-888          888   888    888 888     888 
-888          888   888  .d88P Y88b. .d88P 
-888        8888888 8888888P"   "Y88888P"   
+8888888888 8888888 8888888b.   .d88888b.
+888          888   888  "Y88b d88P" "Y88b
+888          888   888    888 888     888
+8888888      888   888    888 888     888
+888          888   888    888 888     888
+888          888   888    888 888     888
+888          888   888  .d88P Y88b. .d88P
+888        8888888 8888888P"   "Y88888P"
     ***********************************************************************
      */
     /**
@@ -623,7 +617,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
         return !(!protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2) && !protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_2_0));
     }
-    
+
     public static String getAlgFromIANACOSEAlg(int alg) {
         switch (alg) {
             case -65535:
@@ -652,12 +646,12 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 return "SHA256withECDSA";
 
             default:
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002", 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
                         "Unsupported Algorithm:" + alg);
                 throw new UnsupportedOperationException("Unsupported Algorithm: " + alg);
         }
     }
-    
+
     public static String getCurveFromFIDOECCCurveID(int curveID) {
         switch (curveID) {
             case 1:
@@ -689,7 +683,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 throw new UnsupportedOperationException("Unsupported Curve");
         }
     }
-    
+
     public static String getHashAlgFromIANACOSEAlg(int alg) {
         if (alg == -65535) {
             return "SHA-1";
@@ -699,11 +693,11 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             return "SHA-256";
         } else {
             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
-                        "Unsupported Algorithm: " + alg);
+                    "Unsupported Algorithm: " + alg);
             throw new UnsupportedOperationException("Unsupported Algorithm");
         }
     }
-    
+
     public static String getHashAlgFromTPMAlg(short nameAlg) {
         switch (nameAlg) {
             case TPMConstants.TPM_ALG_SHA1:
@@ -720,7 +714,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 throw new UnsupportedOperationException("Unsupported TPM Hash Algorithm: " + nameAlg);
         }
     }
-    
+
     public static int getIANACOSEAlgFromPolicyAlg(String alg) {
         switch (alg) {
             case "rsassa-pkcs1-v1_5-sha1":
@@ -754,7 +748,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 throw new UnsupportedOperationException("Unsupported Algorithm: " + alg);
         }
     }
-    
+
     public static String getPolicyAlgFromIANACOSEAlg(int alg) {
         switch (alg) {
             case -65535:
@@ -788,7 +782,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 throw new UnsupportedOperationException("Unsupported Algorithm: " + alg);
         }
     }
-    
+
     public static String getPolicyCurveFromFIDOECCCurveID(int curveID) {
         switch (curveID) {
             case 1:
@@ -805,7 +799,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 throw new UnsupportedOperationException("Unsupported Curve");
         }
     }
-    
+
     public static String getPolicyCurveFromOID(ASN1ObjectIdentifier oid) {
         String curveName = ECNamedCurveTable.getName(oid);
         switch (curveName) {
@@ -849,7 +843,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             case "NONEWITHECDSA":
                 return "eddsa";
 //            case "SHA256withECDSA":
-//                return "ecdsa-p256k-sha256";      //JCE does not differentiate 
+//                return "ecdsa-p256k-sha256";      //JCE does not differentiate
 
             default:
                 skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
@@ -858,19 +852,171 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         }
     }
 
+
+//    // inputstream tojson
+//    public static JsonObject inputstreamToJson(InputStream input){
+//        StringBuilder sb = new StringBuilder();
+//        try {
+//            InputStreamReader isr = new InputStreamReader(input);
+//            BufferedReader in = new BufferedReader(isr);
+//            String line;
+//            while ((line = in.readLine()) != null) {
+//                sb.append(line);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//
+//        String jsonInput = sb.toString();
+//
+//        StringReader s = new StringReader(jsonInput);
+//        JsonReader jsonReader = Json.createReader(s);
+//        JsonObject responseJSON = jsonReader.readObject();
+//        jsonReader.close();
+//
+//        return responseJSON;
+//    }
+    //check svcinfo
+    public static ServiceInfo checkSvcInfo(String wsprotocol, String svcinfo) {
+
+        ServiceInfo svinfo = new ServiceInfo();
+        try {
+            if (svcinfo == null) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "NULL");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "NULL");
+                return svinfo;
+            }
+            JsonObject svcjson = applianceCommon.stringToJSON(svcinfo);
+            if(svcjson == null){
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "NULL");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "NULL");
+                return svinfo;
+            }
+            if (svcjson.getJsonNumber("did") == null || svcjson.getJsonNumber("did").longValue() < 1) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "DID");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "DID");
+                return svinfo;
+            }
+            try {
+                inputValidateSKCEDid(svcjson.getJsonNumber("did").toString());
+            } catch (Exception ex) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006",
+                        "invalid svcinfo = " + ex.getLocalizedMessage());
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-5006").replace("{0}", "") + "invalid svcinfo = " + ex.getLocalizedMessage());
+                return svinfo;
+            }
+            svinfo.setDid(svcjson.getJsonNumber("did").longValue());
+
+            if (!svcjson.containsKey("protocol") || svcjson.getString("protocol").trim().isEmpty()) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "Protocol");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Protocol");
+                return svinfo;
+            }
+            if (!svcjson.getString("protocol").equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2) && !svcjson.getString("protocol").equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_2_0)) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "Protocol");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Protocol");
+                return svinfo;
+            }
+            svinfo.setProtocol(svcjson.getString("protocol"));
+
+            if (!svcjson.containsKey("authtype") || svcjson.getString("authtype").trim().isEmpty()) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "Authtype");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Authtype");
+                return svinfo;
+            }
+            if (!svcjson.getString("authtype").equalsIgnoreCase(skfsConstants.FIDO_API_AUTH_TYPE_HMAC) && !svcjson.getString("authtype").equalsIgnoreCase(skfsConstants.FIDO_API_AUTH_TYPE_PASSWORD)) {
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                        "Authtype");
+                svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Authtype");
+                return svinfo;
+            }
+            svinfo.setAuthtype(svcjson.getString("authtype"));
+
+            if (svcjson.getString("authtype").equalsIgnoreCase(skfsConstants.FIDO_API_AUTH_TYPE_PASSWORD)) {
+                if (!svcjson.containsKey("svcusername") || svcjson.getString("svcusername").trim().isEmpty()) {
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " credential");
+                    svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+                    return svinfo;
+                }
+                svinfo.setSvcusername(svcjson.getString("svcusername"));
+                if (!svcjson.containsKey("svcpassword") || svcjson.getString("svcpassword").trim().isEmpty()) {
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " credential");
+                    svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+                    return svinfo;
+                }
+                svinfo.setSvcpassword(svcjson.getString("svcpassword"));
+            } else {
+
+                if (wsprotocol.equalsIgnoreCase("SOAP")) {
+                    if (svcjson.getJsonNumber("timestamp") == null  || svcjson.getJsonNumber("timestamp").longValue() < 1) {
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                                "timestamp");
+                        svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "timestamp");
+                        return svinfo;
+                    }
+                    svinfo.setTimestamp(svcjson.getJsonNumber("timestamp").longValue());
+
+                    if (!svcjson.containsKey("authorization") || svcjson.getString("authorization").trim().isEmpty()) {
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003", " authorization");
+                        svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "authorization");
+                        return svinfo;
+                    }
+                    svinfo.setAuthorization(svcjson.getString("authorization"));
+                    if (!svcjson.containsKey("strongkey-content-sha256") || svcjson.getString("strongkey-content-sha256").trim().isEmpty()) {
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                                "strongkey-content-sha256");
+                        svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-content-sha256");
+                        return svinfo;
+                    }
+                    svinfo.setContentSHA256(svcjson.getString("strongkey-content-sha256"));
+
+                    if (!svcjson.containsKey("strongkey-api-version") || svcjson.getString("strongkey-api-version").trim().isEmpty()) {
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                                "strongkey-api-version");
+                        svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-api-version");
+                        return svinfo;
+                    }
+                    // only check for SK3_0 as this is only used by
+                    if (!svcjson.getString("strongkey-api-version").equalsIgnoreCase("SK3_0")) {
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
+                                "strongkey-api-version");
+                        svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-api-version");
+                        return svinfo;
+                    }
+                    svinfo.setStrongkeyAPIversion(svcjson.getString("strongkey-api-version"));
+                }
+            }
+        } catch (Exception ex) {
+             skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006",
+                                "invalid svcinfo = " + ex.getLocalizedMessage());
+            svinfo.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-5006").replace("{0}", "") + "invalid svcinfo = " + ex.getLocalizedMessage());
+            return svinfo;
+        }
+
+        svinfo.setErrormsg(null);
+        return svinfo;
+    }
+
     /*
     ***********************************************************************
-8888888b.                                                                          
-888   Y88b                                                                         
-888    888                                                                         
-888   d88P  .d88b.  .d8888b  88888b.   .d88b.  88888b.  .d8888b   .d88b.  .d8888b  
-8888888P"  d8P  Y8b 88K      888 "88b d88""88b 888 "88b 88K      d8P  Y8b 88K      
-888 T88b   88888888 "Y8888b. 888  888 888  888 888  888 "Y8888b. 88888888 "Y8888b. 
-888  T88b  Y8b.          X88 888 d88P Y88..88P 888  888      X88 Y8b.          X88 
-888   T88b  "Y8888   88888P' 88888P"   "Y88P"  888  888  88888P'  "Y8888   88888P' 
-                             888                                                   
-                             888                                                   
-                             888  
+8888888b.
+888   Y88b
+888    888
+888   d88P  .d88b.  .d8888b  88888b.   .d88b.  88888b.  .d8888b   .d88b.  .d8888b
+8888888P"  d8P  Y8b 88K      888 "88b d88""88b 888 "88b 88K      d8P  Y8b 88K
+888 T88b   88888888 "Y8888b. 888  888 888  888 888  888 "Y8888b. 88888888 "Y8888b.
+888  T88b  Y8b.          X88 888 d88P Y88..88P 888  888      X88 Y8b.          X88
+888   T88b  "Y8888   88888P' 88888P"   "Y88P"  888  888  88888P'  "Y8888   88888P'
+                             888
+                             888
+                             888
     ***********************************************************************
      */
  /*
@@ -880,7 +1026,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         FIDOReturnObject fro = new FIDOReturnObject(response);
         return fro.toJsonString();
     }
-    
+
     /*
      * Internal methods to build wsresponse json object
      */

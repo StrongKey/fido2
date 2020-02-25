@@ -1,10 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
-
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Domains;
@@ -92,7 +91,7 @@ public class addFidoKeys implements addFidoKeysLocal {
      * error/success message
      */
     @Override
-    synchronized public String execute(Long did,
+    public String execute(Long did,
             String userid,
             String username,
             String UKH,
@@ -272,7 +271,7 @@ public class addFidoKeys implements addFidoKeysLocal {
         }
         skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "FIDO PROTOCOL=" + fido_protocol);
 
-        /*verify if username kh pair already exists-- this case should never 
+        /*verify if username kh pair already exists-- this case should never
         occur if gnubby has done the job right but just in case adding code here*/
         FidoKeys rk = null;
         try {
@@ -290,7 +289,7 @@ public class addFidoKeys implements addFidoKeysLocal {
 
         Short sid = applianceCommon.getServerId().shortValue();
 //        long fkid = getregkeysejb.nextfkid(sid, did, username);
-        long fkid = seqgenejb.nextFIDOKeyID();
+        long fkid = seqgenejb.nextFIDOKeyID(did);
         //Persist entry after successfully validating all inputs
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -358,9 +357,9 @@ public class addFidoKeys implements addFidoKeysLocal {
                 retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
                 return retObj.toString();
             }
-            //  get signature for the xml    
+            //  get signature for the xml
             Domains d = getdomain.byDid(did);
-            //  get signature for the xml    
+            //  get signature for the xml
             String signedxml = null;
             try {
                 signedxml = initCryptoModule.getCryptoModule().signDBRow(did.toString(), d.getSkceSigningdn(), efsXml, Boolean.valueOf(standalone), signingKeystorePassword);
@@ -378,11 +377,11 @@ public class addFidoKeys implements addFidoKeysLocal {
                 newKey.setSignature(signedxml);
             }
         }
-        
+
         em.persist(newKey);
         em.flush();
         em.clear();
-        
+
         //add fido keys transport - RFE
         try {
             if (applianceCommon.replicate()) {

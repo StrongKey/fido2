@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.appliance.objects;
 
@@ -60,7 +60,7 @@ public class JWT {
             if (alg == null) {
                 throw new NoSuchAlgorithmException("JWT algorithm not found");
             }
-            
+
             byte[] signedBytes = (header + "." + body).getBytes();
             System.out.println(alg);
             switch(alg){

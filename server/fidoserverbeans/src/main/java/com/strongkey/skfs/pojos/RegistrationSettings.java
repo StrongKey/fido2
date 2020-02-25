@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.pojos;
 
@@ -20,7 +20,7 @@ public class RegistrationSettings {
     private final String attestationFormat;
     private final String attestationType;
     //private final String[] extensions;        //TODO
-    
+
     private RegistrationSettings(Integer alg, Integer kty, Integer crv, Boolean up, Boolean uv,
             String attestationFormat, String attestationType){
         this.alg = alg;
@@ -59,7 +59,7 @@ public class RegistrationSettings {
     public String getAttestationType() {
         return attestationType;
     }
-    
+
     public static RegistrationSettings parse(String registrationSettings, Integer registrationVersion){
         String decodedrs = new String(Base64.getUrlDecoder().decode(registrationSettings));
         JsonObject rsJson = skfsCommon.getJsonObjectFromString(decodedrs);
@@ -73,7 +73,7 @@ public class RegistrationSettings {
                 .setAttestationType(rsJson.getString("attestationType", null))
                 .build();
     }
-    
+
     private static class RegistrationSettingsBuilder{
         private Integer builderAlg;
         private Integer builderKty;
@@ -83,49 +83,49 @@ public class RegistrationSettings {
         private String builderAttestationFormat;
         private String builderAttestationType;
         //private String[] builderExtensions;        //TODO
-        
+
         public RegistrationSettingsBuilder setAlg(Integer alg) {
             this.builderAlg = alg;
             return this;
         }
-        
+
         public RegistrationSettingsBuilder setKty(Integer kty) {
             this.builderKty = kty;
             return this;
         }
-        
+
         public RegistrationSettingsBuilder setCrv(Integer crv) {
             this.builderCrv = crv;
             return this;
         }
-        
+
         public RegistrationSettingsBuilder setUp(Boolean up) {
             this.builderUp = up;
             return this;
         }
-        
-        
+
+
         public RegistrationSettingsBuilder setUv(Boolean uv) {
             this.builderUv = uv;
             return this;
         }
-        
+
         public RegistrationSettingsBuilder setAttestationFormat(String attestationFormat) {
             this.builderAttestationFormat = attestationFormat;
             return this;
         }
-        
-        
+
+
         public RegistrationSettingsBuilder setAttestationType(String attestationType) {
             this.builderAttestationType = attestationType;
             return this;
         }
-        
+
         public RegistrationSettings build(){
             return new RegistrationSettings(builderAlg, builderKty, builderCrv,
                     builderUp, builderUv, builderAttestationFormat,
                     builderAttestationType);
         }
     }
-    
+
 }

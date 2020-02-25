@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.policybeans;
 
@@ -31,7 +31,9 @@ import com.strongkey.skfs.utilities.skfsLogger;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Base64;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -41,6 +43,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
+import org.apache.commons.lang3.RandomStringUtils;
 
 @Stateless
 public class generateFido2PreauthenticateChallenge implements generateFido2PreauthenticateChallengeLocal {
@@ -51,18 +54,24 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
     getFidoKeysLocal getkeybean;
     @EJB
     getCachedFidoPolicyMDSLocal getpolicybean;
-    
+
     //TODO refactor method into smaller pieces.
     @Override
     public String execute(Long did, String username, JsonObject options, JsonObject extensions) {
         //If unable to get UserId, there are no Active keys registered under the username
-        String userId;
-        try{
-            userId = getUserId(did, username);
+        String sendfakekeys = skfsCommon.getConfigurationProperty("skfs.cfg.property.fido2.user.sendfakeKH");
+        Boolean sendfakekeyhandles = Boolean.FALSE;
+        try {
+            getUserId(did, username);
         } catch (SKFEException ex) {
-            throw new SKIllegalArgumentException(skfsCommon.buildReturn(ex.getLocalizedMessage()));
+            //here we decide what to do whether to send fake key handles back or not
+            if (sendfakekeys.equalsIgnoreCase("true")) {
+                sendfakekeyhandles = Boolean.TRUE;
+            } else {
+                throw new SKIllegalArgumentException(skfsCommon.buildReturn(ex.getLocalizedMessage()));
+            }
         }
-        
+
         //Gather useful information
         FidoPolicyObject fidoPolicy = getpolicybean.getPolicyByDidUsername(did, username);
         if (fidoPolicy == null) {
@@ -70,15 +79,21 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
             throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + "No policy found"));
         }
         String challenge = generateChallenge(fidoPolicy.getCryptographyOptions());
-        
+
         //Create response object
         JsonObjectBuilder returnObjectBuilder = Json.createObjectBuilder();
+        Collection<FidoKeys> fks = null ;
         try {
-            Collection<FidoKeys> fks = getkeybean.getByUsernameStatus(did, username, "Active");
-            returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
-                    .add(skfsConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,
-                            generateAllowCredentialsList(fidoPolicy.getAuthenticationOptions(), fks));
-        
+            if (sendfakekeyhandles) {
+                returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
+                        .add(skfsConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,generatefakeAllowCredentialsList());
+            } else {
+                fks = getkeybean.getByUsernameStatus(did, username, "Active");
+                returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
+                        .add(skfsConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,
+                                generateAllowCredentialsList(fidoPolicy.getAuthenticationOptions(), fks));
+            }
+
             //Add optionals
             if (fidoPolicy.getTimeout() != null) {
                 returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_TIMEOUT, fidoPolicy.getTimeout());
@@ -93,26 +108,28 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
             }
 
             JsonObject extensionsJson = generateExtensions(fidoPolicy.getExtensionsOptions(), extensions);
-            if(!extensionsJson.isEmpty()){
+            if (!extensionsJson.isEmpty()) {
                 returnObjectBuilder.add(skfsConstants.FIDO2_PREAUTH_ATTR_EXTENSIONS, extensionsJson);
             }
 
-            //Place challenge in map.
-            for(FidoKeys fk : fks){
-                String KHHash = skfsCommon.getDigest(fk.getKeyhandle(), "SHA-256");
-                UserSessionInfo session = new UserSessionInfo(username,
-                        challenge, fk.getAppid(), skfsConstants.FIDO_USERSESSION_AUTH, fk.getPublickey(), "");
-                session.setFkid(fk.getFidoKeysPK().getFkid());
-                session.setSkid(fk.getFidoKeysPK().getSid());
-                session.setSid(applianceCommon.getServerId().shortValue());
-                session.setuserVerificationReq(userVerificationPref);
-                session.setPolicyMapKey(fidoPolicy.getPolicyMapKey());
-                skceMaps.getMapObj().put(skfsConstants.MAP_USER_SESSION_INFO, KHHash, session);
+            if (!sendfakekeyhandles) {
+                //Place challenge in map.
+                for (FidoKeys fk : fks) {
+                    String KHHash = skfsCommon.getDigest(fk.getKeyhandle(), "SHA-256");
+                    UserSessionInfo session = new UserSessionInfo(username,
+                            challenge, fk.getAppid(), skfsConstants.FIDO_USERSESSION_AUTH, fk.getPublickey(), "");
+                    session.setFkid(fk.getFidoKeysPK().getFkid());
+                    session.setSkid(fk.getFidoKeysPK().getSid());
+                    session.setSid(applianceCommon.getServerId().shortValue());
+                    session.setuserVerificationReq(userVerificationPref);
+                    session.setPolicyMapKey(fidoPolicy.getPolicyMapKey());
+                    skceMaps.getMapObj().put(skfsConstants.MAP_USER_SESSION_INFO, KHHash, session);
 
-                //replicate map to other server
-                session.setMapkey(KHHash);
-                if (applianceCommon.replicate()) {
-                    replObj.execute(applianceConstants.ENTITY_TYPE_MAP_USER_SESSION_INFO, applianceConstants.REPLICATION_OPERATION_HASHMAP_ADD, applianceCommon.getServerId().toString(), session);
+                    //replicate map to other server
+                    session.setMapkey(KHHash);
+                    if (applianceCommon.replicate()) {
+                        replObj.execute(applianceConstants.ENTITY_TYPE_MAP_USER_SESSION_INFO, applianceConstants.REPLICATION_OPERATION_HASHMAP_ADD, applianceCommon.getServerId().toString(), session);
+                    }
                 }
             }
 
@@ -130,13 +147,13 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
             throw new SKIllegalArgumentException(skfsCommon.buildReturn(skfsCommon.getMessageProperty("FIDO-ERR-0009") + ex.getLocalizedMessage()));
         }
     }
-    
+
     private String generateChallenge(CryptographyPolicyOptions cryptoOp) {
         Integer challengeLength = cryptoOp.getChallengeLength();
         int numBytes = (challengeLength == null) ? skfsConstants.DEFAULT_NUM_CHALLENGE_BYTES : challengeLength;
         return U2FUtility.getRandom(numBytes);
     }
-    
+
     private String getUserId(Long did, String username) throws SKFEException {
         FidoKeys fk = getkeybean.getNewestKeyByUsernameStatus(did, username, "Active");
         if (fk == null) {
@@ -146,17 +163,17 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
             return fk.getUserid();
         }
     }
-    
+
     private String generateRpId(RpPolicyOptions rpOp){
         return rpOp.getId();
     }
-    
-    
+
+
     private JsonArray generateAllowCredentialsList(AuthenticationPolicyOptions authOp, Collection<FidoKeys> fks) throws SKFEException {
         JsonArrayBuilder allowCredentialsBuilder = Json.createArrayBuilder();
-        
+
         for (FidoKeys fk : fks) {
-            if (authOp.getAllowCredentials() != null && 
+            if (authOp.getAllowCredentials() != null &&
                     authOp.getAllowCredentials().equalsIgnoreCase(skfsConstants.POLICY_CONST_ENABLED)) {
                 if (fk.getFidoProtocol().equals(skfsConstants.FIDO_PROTOCOL_VERSION_2_0)) {
                     JsonObjectBuilder excludedCredential = Json.createObjectBuilder()
@@ -177,7 +194,19 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         }
         return allowCredentialsBuilder.build();
     }
-    
+
+    private JsonArray generatefakeAllowCredentialsList() throws SKFEException {
+        JsonArrayBuilder allowCredentialsBuilder = Json.createArrayBuilder();
+
+        JsonObjectBuilder excludedCredential = Json.createObjectBuilder()
+                .add(skfsConstants.FIDO2_ATTR_TYPE, "public-key") //TODO fix this hardcoded assumption
+                .add(skfsConstants.FIDO2_ATTR_ID, Base64.getUrlEncoder().encodeToString((RandomStringUtils.randomAlphanumeric(162)+new Date().getTime()).getBytes()))
+                .add(skfsConstants.FIDO2_ATTR_ALG, -7);
+        allowCredentialsBuilder.add(excludedCredential);
+
+        return allowCredentialsBuilder.build();
+    }
+
     private String generateUserVerification(AuthenticationPolicyOptions authOp, JsonObject options){
         String userVerificationResponse = null;
         String rpRequestedUserVerification = options.getString(skfsConstants.FIDO2_ATTR_USERVERIFICATION, null);
@@ -195,15 +224,15 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         }
         return userVerificationResponse;
     }
-    
+
     private JsonObject generateExtensions(ExtensionsPolicyOptions extOp, JsonObject extensionsInput){
         JsonObjectBuilder extensionJsonBuilder = Json.createObjectBuilder();
-        
+
         for(Fido2Extension ext: extOp.getExtensions()){
             if(ext instanceof Fido2AuthenticationExtension){
-                JsonValue extensionInput = (extensionsInput == null) ? null 
+                JsonValue extensionInput = (extensionsInput == null) ? null
                         : extensionsInput.get(ext.getExtensionIdentifier());
-                
+
                 Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
                 if(extensionChallangeObject != null){
                     if(extensionChallangeObject instanceof String){
@@ -221,10 +250,10 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
                 }
             }
         }
-        
+
         return extensionJsonBuilder.build();
     }
-    
+
     //TODO actually decrypt keyhandle if it is encrypted
     private String decryptKH(String keyhandle) {
         return keyhandle;

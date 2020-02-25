@@ -4,13 +4,12 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.0</version>
+        <version>4.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.strongkey</groupId>
     <artifactId>skfe</artifactId>
-    <version>4.0</version>
     <packaging>war</packaging>
 
     <name>skfe</name>
@@ -39,7 +38,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>common</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -57,7 +56,7 @@
         <dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>authenticationBeans</artifactId>
-         <version>4.0</version>
+         <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
         <dependency>

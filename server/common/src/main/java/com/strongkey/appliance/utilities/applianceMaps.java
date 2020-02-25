@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.appliance.utilities;
 
@@ -22,7 +22,7 @@ import javax.xml.bind.DatatypeConverter;
 public class applianceMaps {
 
     private static final String classname = "applianceMaps";
-    
+
     private static final String SECRANDOM_ALG;
 
     private static SortedMap<Long, DomainObject> domainmap = new ConcurrentSkipListMap<>();
@@ -48,7 +48,7 @@ public class applianceMaps {
             disabledDomains.add(Long.parseLong(st.nextToken()));
         }
         strongkeyLogger.logp(applianceConstants.KA_LOGGER, Level.WARNING, "common", "init", "APPL-MSG-1000", "Following encryption domains are disabled for network webservices: " + disabledDomains.toString());
-        
+
         SECRANDOM_ALG = applianceCommon.getApplianceConfigurationProperty("appliance.cfg.property.prngalgorithm");
     }
 
@@ -56,7 +56,7 @@ public class applianceMaps {
 
     }
 
-    
+
     /** Put a PublicKey object into the pubkeysmap
      * @param k String key in the map
      * @param v PublicKey value to put in the map
@@ -67,7 +67,7 @@ public class applianceMaps {
         strongkeyLogger.logp(applianceConstants.KA_LOGGER, Level.FINE, classname, "putPublicKey", "SKL-MSG-1063", k);
         return pubkeysmap.put(k, v);
     }
-    
+
     /** Gets a mapped PublicKey object
      * @param key String key in the map; the key is typically of the
      * form "#-SIGN" or "#-ENC" where "#" is the Domain ID
@@ -77,7 +77,7 @@ public class applianceMaps {
     {
         return pubkeysmap.get(key);
     }
-    
+
     /** Check if a PublicKey is mapped
      * @param key String key in the map
      * @return boolean
@@ -86,16 +86,16 @@ public class applianceMaps {
     {
         return pubkeysmap.containsKey(key);
     }
-    
+
     /*
     *******************************************************************
-8888888b.                                  d8b                   
-888  "Y88b                                 Y8P                   
-888    888                                                       
-888    888  .d88b.  88888b.d88b.   8888b.  888 88888b.  .d8888b  
-888    888 d88""88b 888 "888 "88b     "88b 888 888 "88b 88K      
-888    888 888  888 888  888  888 .d888888 888 888  888 "Y8888b. 
-888  .d88P Y88..88P 888  888  888 888  888 888 888  888      X88 
+8888888b.                                  d8b
+888  "Y88b                                 Y8P
+888    888
+888    888  .d88b.  88888b.d88b.   8888b.  888 88888b.  .d8888b
+888    888 d88""88b 888 "888 "88b     "88b 888 888 "88b 88K
+888    888 888  888 888  888  888 .d888888 888 888  888 "Y8888b.
+888  .d88P Y88..88P 888  888  888 888  888 888 888  888      X88
 8888888P"   "Y88P"  888  888  888 "Y888888 888 888  888  88888P'
     *******************************************************************
      */
@@ -150,7 +150,7 @@ public class applianceMaps {
             return null;
         }
     }
-    
+
 
     /**
      * Check if a Domain object (looked up by did as key) is active or not.
@@ -167,7 +167,7 @@ public class applianceMaps {
             return false;
         }
     }
-    
+
     public static void removeDomain(Long did) {
         domainmap.remove(did);
     }
@@ -221,7 +221,7 @@ public class applianceMaps {
     public static boolean isDomainWSDisabled(Long did) {
         return disabledDomains.contains(did);
     }
-    
+
     /**
      * Set SecureRandom for a Domain
      * @param did Long - Domain ID
@@ -239,25 +239,25 @@ public class applianceMaps {
         } else
             return Boolean.FALSE;
     }
-    
+
     public static Set<Long> getDomainKeyset(){
         return domainmap.keySet();
     }
-    
+
     public static DomainObject getDomainObject(Long did){
         return domainmap.get(did);
     }
 
     /*
     *************************************************************************
- .d8888b.                                                      
-d88P  Y88b                                                     
-Y88b.                                                          
- "Y888b.    .d88b.  888d888 888  888  .d88b.  888d888 .d8888b  
-    "Y88b. d8P  Y8b 888P"   888  888 d8P  Y8b 888P"   88K      
-      "888 88888888 888     Y88  88P 88888888 888     "Y8888b. 
-Y88b  d88P Y8b.     888      Y8bd8P  Y8b.     888          X88 
- "Y8888P"   "Y8888  888       Y88P    "Y8888  888      88888P'   
+ .d8888b.
+d88P  Y88b
+Y88b.
+ "Y888b.    .d88b.  888d888 888  888  .d88b.  888d888 .d8888b
+    "Y88b. d8P  Y8b 888P"   888  888 d8P  Y8b 888P"   88K
+      "888 88888888 888     Y88  88P 88888888 888     "Y8888b.
+Y88b  d88P Y8b.     888      Y8bd8P  Y8b.     888          X88
+ "Y8888P"   "Y8888  888       Y88P    "Y8888  888      88888P'
     *************************************************************************
      */
     /**

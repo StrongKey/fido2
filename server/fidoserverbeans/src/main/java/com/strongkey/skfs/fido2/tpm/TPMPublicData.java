@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2.tpm;
 
@@ -18,7 +18,7 @@ public class TPMPublicData implements TPMMarshallable {
     private final TPM2B policyName;
     private final TPMParameters parameters;
     private final TPMUnique unique;
-    
+
     public TPMPublicData(short algType, short nameAlg, int objectAttributes,
             TPM2B policyName, TPMParameters parameters, TPMUnique unique){
         this.algType = algType;
@@ -28,31 +28,31 @@ public class TPMPublicData implements TPMMarshallable {
         this.parameters = parameters;
         this.unique = unique;
     }
-    
+
     public static TPMPublicData unmarshal(byte[] bytes){
         int pos = 0;
 //        int size = Marshal.stream16ToInt(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFSHORT));
 //        pos += TPMConstants.SIZEOFSHORT;
 //        int initPos = pos;
-        
+
         //algType
         short algType = Marshal.stream16ToShort(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFSHORT));
         pos += TPMConstants.SIZEOFSHORT;
-        
+
         //nameAlg
         short nameAlg = Marshal.stream16ToShort(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFSHORT));
         pos += TPMConstants.SIZEOFSHORT;
-        
+
         //objectAttributes
         int objectAttributes = Marshal.stream32ToInt(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFINT));
         pos += TPMConstants.SIZEOFINT;
-        
+
         //policyName
         short policyNameSize = Marshal.stream16ToShort(Arrays.copyOfRange(bytes, pos, pos+TPMConstants.SIZEOFSHORT));
         pos += TPMConstants.SIZEOFSHORT;
         TPM2B policyName = new TPM2B(Arrays.copyOfRange(bytes, pos, pos+policyNameSize));
         pos += policyNameSize;
-        
+
         TPMParameters parameters = null;
         TPMUnique unique = null;
         switch(algType){
@@ -119,11 +119,11 @@ public class TPMPublicData implements TPMMarshallable {
             default:
                 throw new UnsupportedOperationException("Unsupported algorithm");
         }
-        
+
         if(pos != bytes.length){
             throw new InputMismatchException("TPMCertifyInfo failed to unmarshal");
         }
-        
+
         return new TPMPublicData(algType, nameAlg, objectAttributes,
             policyName, parameters, unique);
     }
@@ -131,7 +131,7 @@ public class TPMPublicData implements TPMMarshallable {
     public short getAlgType() {
         return algType;
     }
-    
+
     public TPMParameters getParameters() {
         return parameters;
     }
@@ -139,11 +139,11 @@ public class TPMPublicData implements TPMMarshallable {
     public TPMUnique getUnique() {
         return unique;
     }
-    
+
     public short getNameAlg(){
         return nameAlg;
     }
-    
+
     @Override
     public byte[] marshalData(){
         return Marshal.marshalObjectsWithPrependedSizeShort(
@@ -154,7 +154,7 @@ public class TPMPublicData implements TPMMarshallable {
                 parameters,
                 unique);
     }
-    
+
     public byte[] getData() {
         return Marshal.marshalObjects(
                 algType,

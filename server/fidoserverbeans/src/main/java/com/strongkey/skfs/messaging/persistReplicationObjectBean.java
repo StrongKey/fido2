@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 package com.strongkey.skfs.messaging;
 
 import com.strongkey.appliance.entitybeans.Servers;
@@ -39,15 +39,15 @@ public class persistReplicationObjectBean implements persistReplicationObjectBea
 
     @EJB getServerBeanLocal getserver;
     @EJB getReplicationIDLocal getreplIDejb;
-    
-    Collection<Servers> subscribers = null; 
+
+    Collection<Servers> subscribers = null;
      @TransactionAttribute(value = TransactionAttributeType.REQUIRED)
-     
+
     @Override
     @SuppressWarnings("SleepWhileHoldingLock")
     public String execute(int objectype, int objectop, String objectpk)
     {
-        
+
         //get replication id
         String repobjpk;
         try {
@@ -57,7 +57,7 @@ public class persistReplicationObjectBean implements persistReplicationObjectBea
         }
         strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.FINE, classname, "constructor", "SKCE-MSG-6003", subscribers.size());
 
-                        
+
         if (objectop != applianceConstants.REPLICATION_OPERATION_HASHMAP_ADD && objectop != applianceConstants.REPLICATION_OPERATION_HASHMAP_UPDATE && objectop != applianceConstants.REPLICATION_OPERATION_HASHMAP_DELETE) {
             // Save a REP record for each target SID; need a new object each time
             // because JPA holds onto references for existing objects
@@ -91,7 +91,7 @@ public class persistReplicationObjectBean implements persistReplicationObjectBea
         } else {
             repobjpk = SID.toString();
         }
-        
+
         return repobjpk;
     }
 

@@ -4,13 +4,12 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.0</version>
+        <version>4.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.strongkey</groupId>
     <artifactId>fido2mds</artifactId>
-    <version>4.0</version>
     <packaging>jar</packaging>
 
     <name>fido2mds</name>
@@ -25,13 +24,13 @@
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>common</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>crypto</artifactId>
-            <version>4.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>

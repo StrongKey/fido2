@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -78,7 +78,7 @@ public class FIDO2AuthenticatorData {
     public byte[] getAuthDataDecoded() {
         return authDataDecoded;
     }
-    
+
 
     public void decodeAuthData(byte[] authData) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, InvalidParameterSpecException {
         authDataDecoded = authData;
@@ -88,7 +88,7 @@ public class FIDO2AuthenticatorData {
         index += 32;
         flags = authData[index++];
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "rpidHash : " + Base64.toBase64String(rpIdHash));
 
         isUserPresent = ((flags >> 0) & 1) == 1;
@@ -96,20 +96,20 @@ public class FIDO2AuthenticatorData {
         isAttestedCredentialData = ((flags >> 6) & 1) == 1;
         isExtensionData = ((flags >> 7) & 1) == 1;
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "The user is " + (isUserPresent ? "present" : "not present"));
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "The user is " + (isUserVerified ? "verified" : "not verified"));
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Credential Data is " + (isAttestedCredentialData ? "present" : "not present"));
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "ExtensionData is " + (isExtensionData ? "present" : "not present"));
 
         counterValue = new byte[COUNTER_VALUE_BYTES];
         System.arraycopy(authData, index, counterValue, 0, COUNTER_VALUE_BYTES);
         index += COUNTER_VALUE_BYTES;
         counter = ByteBuffer.wrap(counterValue).getInt();
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001", 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "counter Hex: " + Hex.encodeHexString(counterValue));
 
         int attestedCredentialDataLength;
@@ -120,7 +120,7 @@ public class FIDO2AuthenticatorData {
             attestedCredentialDataLength = attCredData.decodeAttCredData(remainingData);
             index += attestedCredentialDataLength;
         }
-        
+
         //ignore extensions for now
         int extensionsLength;
         if(isExtensionData){
@@ -130,10 +130,10 @@ public class FIDO2AuthenticatorData {
             extensionsLength = ext.decodeExtensions(remainingData);
             index += extensionsLength;
         }
-        
+
         if(authData.length != index){
             int extraData = authData.length - index;
-            throw new IllegalArgumentException("AuthenicatorData contains invalid CBOR: " 
+            throw new IllegalArgumentException("AuthenicatorData contains invalid CBOR: "
                 + extraData + " unknown bytes");
         }
     }

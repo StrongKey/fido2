@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/FIDO-Server/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.apiclient.impl;
 
@@ -28,11 +28,11 @@ import org.apache.http.util.EntityUtils;
 
 public class RestFidoActionsOnPolicy {
 
-    public static void delete(String REST_URI, 
-                                String did, 
-                                String accesskey, 
-                                String secretkey, 
-                                String sidpid) throws IOException 
+    public static void delete(String REST_URI,
+                                String did,
+                                String accesskey,
+                                String secretkey,
+                                String sidpid) throws IOException
     {
         System.out.println("Delete policy test");
         System.out.println("******************************************");
@@ -42,7 +42,7 @@ public class RestFidoActionsOnPolicy {
         //  Make API rest call and get response from the server
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.DELETE_POLICY_ENDPOINT + "/" + sidpid;
         System.out.println("\nCalling delete policy @ " + resourceLoc);
-            
+
         String contentSHA = "";
         String contentType = "";
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
@@ -87,24 +87,24 @@ public class RestFidoActionsOnPolicy {
         } finally {
             response.close();
         }
-        
+
         System.out.println(" Response : " + result);
 
         System.out.println("\nDelete policy test complete.");
         System.out.println("******************************************");
     }
 
-    public static void patch(String REST_URI, 
-                            String did, 
-                            String accesskey, 
-                            String secretkey, 
+    public static void patch(String REST_URI,
+                            String did,
+                            String accesskey,
+                            String secretkey,
                             String sidpid,
                             Long startdate,
                             Long enddate,
                             Integer version,
                             String status,
                             String notes,
-                            String policy) throws Exception 
+                            String policy) throws Exception
     {
         System.out.println("Patch policy test");
         System.out.println("******************************************");
@@ -176,7 +176,7 @@ public class RestFidoActionsOnPolicy {
         } finally {
             response.close();
         }
-        
+
         System.out.println(" Response : " + result);
 
         System.out.println("\nPatch policy test complete.");

@@ -1,16 +1,9 @@
 /**
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License, as published by the Free Software Foundation and
- * available at http://www.fsf.org/licensing/licenses/lgpl.html,
- * version 2.1 or above.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * Copyright (c) 2001-2018 StrongAuth, Inc.
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*
  *
  * $Date$
  * $Revision$
@@ -28,7 +21,7 @@
  *  888  888  "Y88P"   "Y888  "Y8888   88888P'
  *
  * *********************************************
- * 
+ *
  */
 
 package com.strongauth.skfews.u2f.soap.stubs;
@@ -40,18 +33,18 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.strongauth.skfews.u2f.soap.stubs package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.strongauth.skfews.u2f.soap.stubs package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -81,14 +74,14 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.strongauth.skfews.u2f.soap.stubs
-     * 
+     *
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link Authenticate }
-     * 
+     *
      */
     public Authenticate createAuthenticate() {
         return new Authenticate();
@@ -96,7 +89,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getserverinfo }
-     * 
+     *
      */
     public Getserverinfo createGetserverinfo() {
         return new Getserverinfo();
@@ -104,7 +97,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AuthenticateResponse }
-     * 
+     *
      */
     public AuthenticateResponse createAuthenticateResponse() {
         return new AuthenticateResponse();
@@ -112,7 +105,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Deregister }
-     * 
+     *
      */
     public Deregister createDeregister() {
         return new Deregister();
@@ -120,7 +113,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ActivateResponse }
-     * 
+     *
      */
     public ActivateResponse createActivateResponse() {
         return new ActivateResponse();
@@ -128,7 +121,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DeactivateResponse }
-     * 
+     *
      */
     public DeactivateResponse createDeactivateResponse() {
         return new DeactivateResponse();
@@ -136,7 +129,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Getkeysinfo }
-     * 
+     *
      */
     public Getkeysinfo createGetkeysinfo() {
         return new Getkeysinfo();
@@ -144,7 +137,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Deactivate }
-     * 
+     *
      */
     public Deactivate createDeactivate() {
         return new Deactivate();
@@ -152,7 +145,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetserverinfoResponse }
-     * 
+     *
      */
     public GetserverinfoResponse createGetserverinfoResponse() {
         return new GetserverinfoResponse();
@@ -160,7 +153,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Preauthenticate }
-     * 
+     *
      */
     public Preauthenticate createPreauthenticate() {
         return new Preauthenticate();
@@ -168,7 +161,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PreauthenticateResponse }
-     * 
+     *
      */
     public PreauthenticateResponse createPreauthenticateResponse() {
         return new PreauthenticateResponse();
@@ -176,7 +169,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PreauthorizeResponse }
-     * 
+     *
      */
     public PreauthorizeResponse createPreauthorizeResponse() {
         return new PreauthorizeResponse();
@@ -184,7 +177,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DeregisterResponse }
-     * 
+     *
      */
     public DeregisterResponse createDeregisterResponse() {
         return new DeregisterResponse();
@@ -192,7 +185,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetkeysinfoResponse }
-     * 
+     *
      */
     public GetkeysinfoResponse createGetkeysinfoResponse() {
         return new GetkeysinfoResponse();
@@ -200,7 +193,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RegisterResponse }
-     * 
+     *
      */
     public RegisterResponse createRegisterResponse() {
         return new RegisterResponse();
@@ -208,7 +201,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Activate }
-     * 
+     *
      */
     public Activate createActivate() {
         return new Activate();
@@ -216,7 +209,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Preregister }
-     * 
+     *
      */
     public Preregister createPreregister() {
         return new Preregister();
@@ -224,7 +217,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Preauthorize }
-     * 
+     *
      */
     public Preauthorize createPreauthorize() {
         return new Preauthorize();
@@ -232,7 +225,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Authorize }
-     * 
+     *
      */
     public Authorize createAuthorize() {
         return new Authorize();
@@ -240,7 +233,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AuthorizeResponse }
-     * 
+     *
      */
     public AuthorizeResponse createAuthorizeResponse() {
         return new AuthorizeResponse();
@@ -248,7 +241,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PreregisterResponse }
-     * 
+     *
      */
     public PreregisterResponse createPreregisterResponse() {
         return new PreregisterResponse();
@@ -256,7 +249,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Register }
-     * 
+     *
      */
     public Register createRegister() {
         return new Register();
@@ -264,7 +257,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PreregisterResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preregisterResponse")
     public JAXBElement<PreregisterResponse> createPreregisterResponse(PreregisterResponse value) {
@@ -273,7 +266,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Register }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "register")
     public JAXBElement<Register> createRegister(Register value) {
@@ -282,7 +275,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Authorize }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "authorize")
     public JAXBElement<Authorize> createAuthorize(Authorize value) {
@@ -291,7 +284,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AuthorizeResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "authorizeResponse")
     public JAXBElement<AuthorizeResponse> createAuthorizeResponse(AuthorizeResponse value) {
@@ -300,7 +293,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Preauthorize }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preauthorize")
     public JAXBElement<Preauthorize> createPreauthorize(Preauthorize value) {
@@ -309,7 +302,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Activate }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "activate")
     public JAXBElement<Activate> createActivate(Activate value) {
@@ -318,7 +311,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Preregister }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preregister")
     public JAXBElement<Preregister> createPreregister(Preregister value) {
@@ -327,7 +320,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DeregisterResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "deregisterResponse")
     public JAXBElement<DeregisterResponse> createDeregisterResponse(DeregisterResponse value) {
@@ -336,7 +329,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetkeysinfoResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "getkeysinfoResponse")
     public JAXBElement<GetkeysinfoResponse> createGetkeysinfoResponse(GetkeysinfoResponse value) {
@@ -345,7 +338,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RegisterResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "registerResponse")
     public JAXBElement<RegisterResponse> createRegisterResponse(RegisterResponse value) {
@@ -354,7 +347,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PreauthorizeResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preauthorizeResponse")
     public JAXBElement<PreauthorizeResponse> createPreauthorizeResponse(PreauthorizeResponse value) {
@@ -363,7 +356,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PreauthenticateResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preauthenticateResponse")
     public JAXBElement<PreauthenticateResponse> createPreauthenticateResponse(PreauthenticateResponse value) {
@@ -372,7 +365,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetserverinfoResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "getserverinfoResponse")
     public JAXBElement<GetserverinfoResponse> createGetserverinfoResponse(GetserverinfoResponse value) {
@@ -381,7 +374,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Preauthenticate }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "preauthenticate")
     public JAXBElement<Preauthenticate> createPreauthenticate(Preauthenticate value) {
@@ -390,7 +383,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Deactivate }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "deactivate")
     public JAXBElement<Deactivate> createDeactivate(Deactivate value) {
@@ -399,7 +392,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Getkeysinfo }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "getkeysinfo")
     public JAXBElement<Getkeysinfo> createGetkeysinfo(Getkeysinfo value) {
@@ -408,7 +401,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ActivateResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "activateResponse")
     public JAXBElement<ActivateResponse> createActivateResponse(ActivateResponse value) {
@@ -417,7 +410,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DeactivateResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "deactivateResponse")
     public JAXBElement<DeactivateResponse> createDeactivateResponse(DeactivateResponse value) {
@@ -426,7 +419,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Deregister }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "deregister")
     public JAXBElement<Deregister> createDeregister(Deregister value) {
@@ -435,7 +428,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AuthenticateResponse }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "authenticateResponse")
     public JAXBElement<AuthenticateResponse> createAuthenticateResponse(AuthenticateResponse value) {
@@ -444,7 +437,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Getserverinfo }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "getserverinfo")
     public JAXBElement<Getserverinfo> createGetserverinfo(Getserverinfo value) {
@@ -453,7 +446,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Authenticate }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://soap.u2f.skfews.strongauth.com/", name = "authenticate")
     public JAXBElement<Authenticate> createAuthenticate(Authenticate value) {

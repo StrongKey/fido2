@@ -1,15 +1,17 @@
 #!/bin/bash
 ###################################################################################
-# Copyright StrongAuth, Inc. All Rights Reserved.
-#
-# Use of this source code is governed by the Gnu Lesser General Public License 2.3.
-# The license can be found at https://github.com/StrongKey/fido2/LICENSE
+# /**  
+# * Copyright StrongAuth, Inc. All Rights Reserved.
+# *
+# * Use of this source code is governed by the GNU Lesser General Public License v2.1
+# * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+# */
 ###################################################################################
 # Uncomment to show detailed installation process
 #SHOWALL=1
 
 STRONGKEY_HOME=/usr/local/strongkey
-MARIATGT=mariadb-10.2.13
+MARIATGT=mariadb-10.2.30
 GLASSFISH_HOME=$STRONGKEY_HOME/payara41/glassfish
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)

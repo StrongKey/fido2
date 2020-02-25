@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.txbeans;
 
@@ -230,27 +230,6 @@ public class getFidoKeys implements getFidoKeysLocal {
             return rk;
         } catch (NoResultException ex) {
             return null;
-        }
-    }
-
-    @Override
-    synchronized public int nextfkid(Short sid, Long did, String username) {
-        try {
-            Query q = em.createNamedQuery("FidoKeys.maxpk");
-            q.setParameter("sid", sid);
-            q.setParameter("did", did);
-            q.setParameter("username", username);
-            q.setHint("javax.persistence.cache.storeMode", "REFRESH");
-            int fkid = (int) q.getSingleResult();
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "nextfkid : " + fkid);
-            return fkid + 1;
-        } catch (NoResultException | NullPointerException ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "nextfkid exception: " + ex.getLocalizedMessage());
-            return 1;
-        } finally {
-            em.flush();
         }
     }
 

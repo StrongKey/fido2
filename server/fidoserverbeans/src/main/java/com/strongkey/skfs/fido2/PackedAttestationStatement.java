@@ -1,9 +1,9 @@
 /**
- * Copyright StrongAuth, Inc. All Rights Reserved.
- *
- * Use of this source code is governed by the Gnu Lesser General Public License 2.3.
- * The license can be found at https://github.com/StrongKey/fido2/LICENSE
- */
+* Copyright StrongAuth, Inc. All Rights Reserved.
+*
+* Use of this source code is governed by the GNU Lesser General Public License v2.1
+* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+*/
 
 package com.strongkey.skfs.fido2;
 
@@ -45,16 +45,16 @@ public class PackedAttestationStatement implements FIDO2AttestationStatement {
     private String attestationType = "self";
     String validataPkix = skfsCommon.getConfigurationProperty("skfs.cfg.property.pkix.validate");
     String validataPkixMethod = skfsCommon.getConfigurationProperty("skfs.cfg.property.pkix.validate.method");
-    
+
     static {
         Security.addProvider(new BouncyCastleFipsProvider());
     }
-    
+
     @Override
     public void decodeAttestationStatement(Object attestationStmt) {
         Map<String, Object> attStmtObjectMap = (Map<String, Object>) attestationStmt;
         for (String key : attStmtObjectMap.keySet()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "Key attstmt Packed: " + key);
             switch (key) {
                 case "sig":
@@ -77,59 +77,59 @@ public class PackedAttestationStatement implements FIDO2AttestationStatement {
 
     @Override
     public Boolean verifySignature(String browserDataBase64, FIDO2AuthenticatorData authData) {
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "ALG = " + alg);
         if (x5c != null) {
             try {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     x5c.size());
                 Iterator x5cItr = x5c.iterator();
                 CertificateFactory certFactory = CertificateFactory.getInstance("X.509", "BCFIPS");
                 byte[] certByte = (byte[]) x5cItr.next();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "x5c base64 java: " + java.util.Base64.getEncoder().encodeToString(certByte));
                 InputStream instr = new ByteArrayInputStream(certByte);
                 X509Certificate attCert = (X509Certificate) certFactory.generateCertificate(instr);
-                
+
                 PublicKey certPublicKey = attCert.getPublicKey();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "CERT ALGO = " + certPublicKey.getAlgorithm());
 
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "Signed Bytes Input: " + browserDataBase64);
-                
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "authData.getAuthDataDecoded(): " + java.util.Base64.getEncoder().encodeToString(authData.getAuthDataDecoded()));
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "signature: " + java.util.Base64.getEncoder().encodeToString(signature));
-                
+
                 //Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the attestation public key in attestnCert with the algorithm specified in alg.
                 byte[] signedBytes = Bytes.concat(authData.getAuthDataDecoded(), skfsCommon.getDigestBytes(java.util.Base64.getDecoder().decode(browserDataBase64), "SHA256"));
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                     "signedBytes: " + java.util.Base64.getEncoder().encodeToString(signedBytes));
                 boolean isValidSignature = cryptoCommon.verifySignature(signature, certPublicKey, signedBytes, skfsCommon.getAlgFromIANACOSEAlg(alg));
                 if(!isValidSignature){
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "browserDataBase64 = " + browserDataBase64);
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "authData = " + bytesToHexString(authData.getAuthDataDecoded(), authData.getAuthDataDecoded().length));
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "public key = " + certPublicKey);
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "Signature = " + bytesToHexString(signature, signature.length));
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Failed to verify Packed signature");
                     return false;
                 }
-                
+
                 //Verify that attestnCert meets the requirements in §8.2.1 Packed Attestation Statement Certificate Requirements.
                 //  Version MUST be set to 3 (which is indicated by an ASN.1 INTEGER with value 2).
                 if(attCert.getVersion() != 3){
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Attestation Certificate (Packed) Failure: Version");
                     return false;
                 }
-                
+
                 //  Subject field MUST be set to:
                 String subjectDN = attCert.getSubjectDN().getName();
                 Map<String, String> subjectFieldMap = new HashMap<>();
@@ -144,59 +144,59 @@ public class PackedAttestationStatement implements FIDO2AttestationStatement {
                             "Unable to parse subjectDN");
                     return false;
                 }
-                
-                
+
+
                 //      Subject-C ISO 3166 code specifying the country where the Authenticator vendor is incorporated (PrintableString)
                 //TODO ensure string is an ISO 3166 country code
                 if (!subjectFieldMap.containsKey("C")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Attestation Certificate (Packed) Failure: Missing Country ");
                     return false;
                 }
-                
+
                 //      Subject-O Legal name of the Authenticator vendor (UTF8String)
                 if (!subjectFieldMap.containsKey("O")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Attestation Certificate (Packed) Failure: Missing Organization");
                     return false;
                 }
-                
+
                 //      Subject-OU Literal string “Authenticator Attestation” (UTF8String)
                 if (!subjectFieldMap.containsKey("OU") || !subjectFieldMap.get("OU").equals("Authenticator Attestation")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Attestation Certificate (Packed) Failure: Missing OU");
                     return false;
                 }
-                
+
                 //      Subject-CN A UTF8String of the vendor’s choosing
                 if (!subjectFieldMap.containsKey("CN")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Attestation Certificate (Packed) Failure: Invalid CN");
                     return false;
                 }
-                
+
                 //The Basic Constraints extension MUST have the CA component set to false.
                 if (attCert.getBasicConstraints() != -1) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Packed attestation statement cetificate: Invalid Basic Constraints");
                     return false;
                 }
-                
+
                 //If attestnCert contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
                 byte[] certAaguidExtension = attCert.getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
                 if (certAaguidExtension != null) {
                     //Note that an X.509 Extension encodes the DER-encoding of the value in an OCTET STRING. Thus, the AAGUID MUST be wrapped in two OCTET STRINGS to be valid.
                     //Remove 2 OCTET String wrappers
                     byte[] certAaguid = Arrays.copyOfRange(certAaguidExtension, 4, certAaguidExtension.length);
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "Certificate contains aaguid = " + bytesToHexString(certAaguid, certAaguid.length));
                     if (!Arrays.equals(certAaguid, authData.getAttCredData().getAaguid())) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Packed x5c's aaguid does not match");
                         return false;
                     }
                 }
-                
+
                 return true;
             } catch (CertificateException | NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
                 Logger.getLogger(U2FAttestationStatment.class.getName()).log(Level.SEVERE, null, ex);
@@ -211,11 +211,11 @@ public class PackedAttestationStatement implements FIDO2AttestationStatement {
 
                 //Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
                 if (alg != authData.getAttCredData().getFko().getAlg()) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", 
+                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "Attestation Statement algorithm does not match Authenticator Data algorithm");
                     return false;
                 }
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"), 
+                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-2001"),
                         "CERT ALGO = " + authData.getAttCredData().getPublicKey().getAlgorithm());
                 //Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
                 byte[] signedBytes = Bytes.concat(authData.getAuthDataDecoded(), skfsCommon.getDigestBytes(java.util.Base64.getDecoder().decode(browserDataBase64), "SHA256"));
@@ -241,7 +241,7 @@ public class PackedAttestationStatement implements FIDO2AttestationStatement {
     public String getAttestationType() {
         return attestationType;
     }
-    
+
     private static String bytesToHexString(byte[] rawBytes, int num) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < num; i++) {
