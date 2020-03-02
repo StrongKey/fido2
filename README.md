@@ -13,11 +13,11 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * [The FIDO2 Project](https://fidoalliance.org/fido2/)
 
 ## Installation
-1) Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download the FIDO2 Server and get it running as a stand-alone server.
-2) Follow [the clustering instructions](docs/Clustering_Guide_Linux.md) to download the FIDO2 Server and get it running as a cluster.
+* Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download the FIDO2 Server and get it running as a stand-alone server.
+* Follow [the clustering instructions](docs/Clustering_Guide_Linux.md) to download the FIDO2 Server and get it running as a cluster.
 
 ## Upgrade
-1) Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of fido server to the latest.
+Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of fido server to the latest.
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
