@@ -35,7 +35,7 @@ Use skfsclient to test registering a key, authenticating a key, associating keys
 	|  username  |  Username for registration, authentication, or getting keys info.  |
 	|  origin  |  Origin to be used by the FIDO client simulator.  |
 	|  authcounter  |  Authorization counter to be used by the FIDO client simulator  |
-	|  random-id  |  String associated to a specific FIDO key registered to a specific user. This is needed to perform actions on the key, like de-activate, activate and deregister. Random ID can be obtained by calling 'G' option.  |
+	|  random-id  |  String associated to a specific FIDO key registered to a specific user. This is needed to perform actions on the key, like de-activate, activate, and deregister. Random IDs can be obtained by calling the 'G' option.  |
 	|  Active/Inactive  |  Status to which to set the FIDO key.  |
 
 	The current defaults for HMAC and PASSWORD based authentication are as follows:
