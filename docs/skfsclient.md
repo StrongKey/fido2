@@ -149,3 +149,22 @@ Use skfsclient to test registering a key, authenticating a key, associating keys
         > java -jar skfsclient.jar P https://[FQDN]:8181 1 REST PASSWORD svcfidouser Abcd1234!
 
 ## 1.6— Example Results
+Following are examples of successful outputs; this example uses REST and HMAC.
+
+### 1.6.1— Registration
+![StrongKey FIDO2 Registration](https://github.com/StrongKey/fido2/raw/master/docs/images/02_REST+HMAC_Register_Results.png)
+
+### 1.6.2— Authentication
+![StrongKey FIDO2 Authentication](https://github.com/StrongKey/fido2/raw/master/docs/images/03_REST+HMAC_Authenticate_Results.png)
+
+### 1.6.3— List FIDO2 Keys
+![StrongKey FIDO2 List](https://github.com/StrongKey/fido2/raw/master/docs/images/04_REST+HMAC_List_Results.png)
+
+### 1.6.4— Update Information of Keys
+![StrongKey FIDO2 Update](https://github.com/StrongKey/fido2/raw/master/docs/images/05_REST+HMAC_Update_Results.png)
+
+### 1.6.5— De-register/Delete a Key
+![StrongKey FIDO2 Delete](https://github.com/StrongKey/fido2/raw/master/docs/images/06_REST+HMAC_Delete_Results.png)
+
+### 1.6.6— Ping StrongKey FIDO2 Server
+![StrongKey FIDO2 Ping](https://github.com/StrongKey/fido2/raw/master/docs/images/07_REST+HMAC_Ping_Results.png)
