@@ -3,7 +3,7 @@ This document provides information about the sample client application called sk
 
 Use skfsclient to test registering a key, authenticating a key, associating keys to a user, updating a key, and de-registering (deleting) a key.
 
-**NOTE: A full JDK installation (JDK 8 or above) is needed and just the *Java Runtime Environment (JRE)* is not sufficient.**
+**NOTE: *skfsclient* relies on Java, so make sure it is installed.**
 
 ## 1.1—Usage
 1. **Open a terminal** window.
