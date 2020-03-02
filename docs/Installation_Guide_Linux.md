@@ -7,14 +7,14 @@
     - Ubuntu 18.04
     - Debian 9
     - Amazon Linux 2
-    
-----------------
+ 
+-  **A VM with a minimum of 10GB space and 4GB memory assigned to it.** Some default VMs do not allocate sufficient space and memory, so please verify before getting started.
 
--  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work
+-  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
 
 -  The installation script instlls Payara running HTTPS on port 8181, so make sure all firewall rules allow that port to be accessed.
 
-- StrongKey's FIDO2 Server must be installed before the sample service provider web application and sample WebAuthn Java client
+- StrongKey's FIDO2 Server must be installed before the sample service provider web application and sample WebAuthn Java client.
 
 ----------------
 
