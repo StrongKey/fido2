@@ -31,7 +31,7 @@ Sample code is provided with a brief explanation of what each sample does:
 StrongKey FIDO2 Server client offers examples of the various API calls using different available methods. After installing the [source code](https://github.com/StrongKey/fido2/tree/master/server/skfsclient), read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/update_documents/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
 
 ## FIDO2 Simulator
-Test out the StrongKey FIDO2 Server using our [simulator](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator).
+To see StrongKey FIDO2 Server in action without going through an installation, test out our [simulator](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator).
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
