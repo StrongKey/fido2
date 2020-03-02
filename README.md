@@ -27,6 +27,12 @@ Sample code is provided with a brief explanation of what each sample does:
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
 
+## Sample Client
+StrongKey FIDO2 Server client offers examples of the various API calls using different available methods. Use the [skfsclient](https://github.com/StrongKey/fido2/blob/update_documents/server/skfsclient/skfsclient.md) to test FIDO2 functionality against your sandbox.
+
+## FIDO2 Simulator
+Test out the StrongKey FIDO2 Server using our simulators.
+
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)
 
