@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
 import { LayoutModule } from '../../../layouts/layout.module';
 import { DefaultComponent } from '../default.component';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 
 const routes: Routes = [
     {
@@ -22,7 +21,6 @@ const routes: Routes = [
 @NgModule({
     imports: [
         CommonModule, RouterModule.forChild(routes), LayoutModule,
-        SweetAlert2Module,
         FormsModule
     ], exports: [
         RouterModule,

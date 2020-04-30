@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, NgZone } from '@angular/core';
 import { Router } from "@angular/router";
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: '.m-wrapper',
@@ -14,8 +14,8 @@ export class NotFoundComponent implements OnInit {
 
     ngOnInit() {
         let that = this;
-        swal({
-            type: 'error',
+        Swal.fire({
+            icon: 'error',
             title: 'Oops...',
             text: 'The requested page does not exist.',
             confirmButtonText: 'Go To Homepage',

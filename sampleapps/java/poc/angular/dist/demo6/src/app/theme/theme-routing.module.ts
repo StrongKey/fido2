@@ -10,17 +10,17 @@ const routes: Routes = [
         "children": [
             {
                 "path": "profile",
-                "loadChildren": ".\/pages\/default\/profile\/profile.module#ProfileModule",
+                "loadChildren": () => import('./pages/default/profile/profile.module').then(m => m.ProfileModule),
                 "canActivate": [AuthGuard],
             },
             {
                 "path": "dashboard",
-                "loadChildren": ".\/pages\/default\/dashboard\/dashboard.module#DashboardModule",
+                "loadChildren": () => import('./pages/default/dashboard/dashboard.module').then(m => m.DashboardModule),
                 "canActivate": [AuthGuard],
             },
             {
                 "path": "404",
-                "loadChildren": ".\/pages\/default\/not-found\/not-found.module#NotFoundModule",
+                "loadChildren": () => import('./pages/default/not-found/not-found.module').then(m => m.NotFoundModule),
             },
             {
                 "path": "",

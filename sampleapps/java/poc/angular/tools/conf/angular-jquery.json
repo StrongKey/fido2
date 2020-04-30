@@ -183,7 +183,15 @@
                                 "{$config.path.node_modules}/nouislider/distribute/nouislider.js"
                             ]
                         },
-
+                        "owl.carousel": {
+                            "styles": [
+                                "{$config.path.node_modules}/owl.carousel/dist/assets/owl.carousel.css",
+                                "{$config.path.node_modules}/owl.carousel/dist/assets/owl.theme.default.css"
+                            ],
+                            "scripts": [
+                                "{$config.path.node_modules}/owl.carousel/dist/owl.carousel.js"
+                            ]
+                        },
                         "autosize": {
                             "scripts": [
                                 "{$config.path.node_modules}/autosize/dist/autosize.js"
@@ -204,6 +212,14 @@
                             ],
                             "images": [
                                 "{$config.path.node_modules}/ion-rangeslider/img/sprite-skin-flat.png"
+                            ]
+                        },
+                        "dropzone": {
+                            "styles": [
+                                "{$config.path.node_modules}/dropzone/dist/dropzone.css"
+                            ],
+                            "scripts": [
+                                "{$config.path.node_modules}/dropzone/dist/dropzone.js"
                             ]
                         },
                         "summernote": {
@@ -273,6 +289,20 @@
                             "scripts": [
                                 "{$config.path.node_modules}/raphael/raphael.js",
                                 "{$config.path.node_modules}/morris.js/morris.js"
+                            ]
+                        },
+                        "chartist": {
+                            "styles": [
+                                "{$config.path.node_modules}/chartist/dist/chartist.min.css"
+                            ],
+                            "scripts": [
+                                "{$config.path.node_modules}/chartist/dist/chartist.js"
+                            ]
+                        },
+                        "chart.js": {
+                            "scripts": [
+                                "{$config.path.node_modules}/chart.js/dist/Chart.bundle.js",
+                                "{$config.path.src}/js/framework/components/plugins/charts/chart.init.js"
                             ]
                         },
                         "bootstrap-session-timeout": {
@@ -389,6 +419,31 @@
                         "images": "{$config.output}/vendors/custom/jquery-ui/images"
                     }
                 },
+                "fullcalendar": {
+                    "src": {
+                        "styles": [
+                            "{$config.path.node_modules}/fullcalendar/dist/fullcalendar.css"
+                        ],
+                        "scripts": [
+                            "{$config.path.node_modules}/fullcalendar/dist/fullcalendar.js",
+                            "{$config.path.node_modules}/fullcalendar/dist/gcal.js"
+                        ]
+                    },
+                    "bundle": {
+                        "styles": "{$config.output}/vendors/custom/fullcalendar/fullcalendar.bundle.css",
+                        "scripts": "{$config.output}/vendors/custom/fullcalendar/fullcalendar.bundle.js"
+                    }
+                },
+                "gmaps": {
+                    "src": {
+                        "scripts": [
+                            "{$config.path.node_modules}/gmaps/gmaps.js"
+                        ]
+                    },
+                    "bundle": {
+                        "scripts": "{$config.output}/vendors/custom/gmaps/gmaps.js"
+                    }
+                },
                 "jqvmap": {
                     "src": {
                         "styles": [
@@ -423,6 +478,65 @@
                     "bundle": {
                         "scripts": "{$config.output}/vendors/custom/flot/flot.bundle.js"
                     }
+                },
+                "datatables.net": {
+                    "src": {
+                        "styles": [
+                            "{$config.path.node_modules}/datatables.net-bs4/css/dataTables.bootstrap4.css",
+                            "{$config.path.node_modules}/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-autofill-bs4/css/autoFill.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-colreorder-bs4/css/colReorder.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-fixedcolumns-bs4/css/fixedColumns.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-rowgroup-bs4/css/rowGroup.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-scroller-bs4/css/scroller.bootstrap4.min.css",
+                            "{$config.path.node_modules}/datatables.net-select-bs4/css/select.bootstrap4.min.css"
+                        ],
+                        "scripts": [
+                            "{$config.path.node_modules}/datatables.net/js/jquery.dataTables.js",
+                            "{$config.path.node_modules}/datatables.net-bs4/js/dataTables.bootstrap4.js",
+                            "{$config.path.src}/js/framework/components/plugins/misc/datatables.init.js",
+
+                            "{$config.path.node_modules}/datatables.net-autofill/js/dataTables.autoFill.min.js",
+                            "{$config.path.node_modules}/datatables.net-autofill-bs4/js/autoFill.bootstrap4.min.js",
+
+                            "{$config.path.node_modules}/jszip/dist/jszip.min.js",
+                            "{$config.path.node_modules}/pdfmake/build/pdfmake.min.js",
+                            "{$config.path.node_modules}/pdfmake/build/vfs_fonts.js",
+                            "{$config.path.node_modules}/datatables.net-buttons/js/dataTables.buttons.min.js",
+                            "{$config.path.node_modules}/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js",
+                            "{$config.path.node_modules}/datatables.net-buttons/js/buttons.colVis.js",
+                            "{$config.path.node_modules}/datatables.net-buttons/js/buttons.flash.js",
+                            "{$config.path.node_modules}/datatables.net-buttons/js/buttons.html5.js",
+                            "{$config.path.node_modules}/datatables.net-buttons/js/buttons.print.js",
+
+                            "{$config.path.node_modules}/datatables.net-colreorder/js/dataTables.colReorder.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-fixedcolumns/js/dataTables.fixedColumns.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-keytable/js/dataTables.keyTable.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-responsive/js/dataTables.responsive.min.js",
+                            "{$config.path.node_modules}/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-rowgroup/js/dataTables.rowGroup.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-rowreorder/js/dataTables.rowReorder.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-scroller/js/dataTables.scroller.min.js",
+
+                            "{$config.path.node_modules}/datatables.net-select/js/dataTables.select.min.js"
+                        ]
+                    },
+                    "bundle": {
+                        "styles": "{$config.output}/vendors/custom/datatables/datatables.bundle.css",
+                        "scripts": "{$config.output}/vendors/custom/datatables/datatables.bundle.js"
+                    }
                 }
             }
         },
@@ -456,11 +570,15 @@
                         ],
                         "media": [
                             "{$config.path.src}/media/demo/demo6/**/*.*"
+                        ],
+                        "documents": [
+                            "{$config.path.src}/documents/demo/demo6/**/**/*.*"
                         ]
                     },
                     "output": {
                         "scripts": "{$config.output}/demo/demo6/custom/",
-                        "media": "{$config.output}/demo/demo6/media/"
+                        "media": "{$config.output}/demo/demo6/media/",
+                        "documents": "{$config.output}/documents/"
                     }
                 }
             }
@@ -493,7 +611,7 @@
                     "{$config.path.src}/js/app/custom/**/*.js"
                 ],
                 "media": [
-                    "{$config.path.src}/media/**/*.*"
+                    "{$config.path.src}/media/app/**/*.*"
                 ]
             },
             "output": {

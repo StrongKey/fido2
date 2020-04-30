@@ -4,7 +4,7 @@ import { Helpers } from "../../helpers";
 import { RestService } from '../../_services/rest.service';
 import { SharedService } from '../../_services/shared.service';
 import { ScriptLoaderService } from '../../_services/script-loader.service';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { User } from '../_models/user';
 declare var base64url: any;
 
@@ -44,9 +44,11 @@ export class FIDOComponent implements OnInit, AfterViewInit {
     errorMessage = "";
     hasError: boolean;
     isRegister: boolean;
-    swalWithBootstrapButtons = swal.mixin({
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
+    swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger',
+        },
         buttonsStyling: false,
     });
 
@@ -100,9 +102,9 @@ export class FIDOComponent implements OnInit, AfterViewInit {
         this.errorMessage = error;
 
         // this._sharedService.setError(this.errorMessage);
-        swal({
+        Swal.fire({
             position: 'top',
-            type: 'error',
+            icon: 'error',
             title: 'Oops...',
             html: '<br/>' + this.errorMessage + '<br/>',
             showCancelButton: true,
@@ -116,7 +118,7 @@ export class FIDOComponent implements OnInit, AfterViewInit {
                 this.onRetry();
             } else if (
                 // Read more about handling dismissals
-                result.dismiss === swal.DismissReason.cancel
+                result.dismiss === Swal.DismissReason.cancel
             ) {
                 console.log("else retry");
                 // this._router.navigate(["/login"]);

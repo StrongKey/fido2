@@ -1,15 +1,31 @@
-var gutil = require('gulp-util');
+var yargs = require('yargs');
+var fs = require('fs');
+var colors = require('colors');
+var gulp = require('gulp');
+var replace = require('gulp-replace');
+var rename = require('gulp-rename');
+var concat = require('gulp-concat');
+global.atob = require('atob');
 
 // merge with default parameters
-var args = Object.assign({'prod': false, default: true, 'angular-jquery': false, 'angular-native': false}, gutil.env);
+var args = Object.assign({
+    prod: false,
+    rtl: '',
+    exclude: '',
+    theme: '',
+    demo: '',
+    path: '',
+    angular: false,
+    react: false,
+    vue: false,
+}, yargs.argv);
 
-var configs = {default: './../conf/default.json', 'angular-jquery': './../conf/angular-jquery.json', 'angular-native': './../conf/angular-native.json'};
-var config = configs.default;
-// angular flag true or path name has angular
-if (args['angular'] || process.cwd().indexOf('angular') !== -1) {
-  config = configs['angular-jquery'];
+var confPath = './../gulp.config.json';
+
+module.exports = {};
+if (fs.existsSync(__dirname + '/' + confPath)) {
+    var d = new Date();
+    var t = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    console.log('[' + t.grey + ']' + ' ' + 'Using config ' + confPath.green);
+    module.exports = require(confPath);
 }
-if (args['angular-native'] || process.cwd().indexOf('angular-native') !== -1) {
-  config = configs['angular-native'];
-}
-module.exports = require(config);

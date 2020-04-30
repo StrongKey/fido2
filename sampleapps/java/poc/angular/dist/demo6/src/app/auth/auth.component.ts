@@ -6,7 +6,7 @@ import { RestService } from '../_services/rest.service';
 import { SharedService } from '../_services/shared.service';
 import { ConstantsService } from '../_services/constants.service';
 import { User } from './_models/user';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 declare let $: any;
 declare let mUtil: any;
 
@@ -43,10 +43,8 @@ export class AuthComponent implements OnInit {
     email: string;
     remember: boolean = false;
 
-    @ViewChild('alertSignin',
-        { read: ViewContainerRef }) alertSignin: ViewContainerRef;
-    @ViewChild('alertSignup',
-        { read: ViewContainerRef }) alertSignup: ViewContainerRef;
+    @ViewChild('alertSignin', { read: ViewContainerRef, static: true }) alertSignin: ViewContainerRef;
+    @ViewChild('alertSignup', { read: ViewContainerRef, static: true }) alertSignup: ViewContainerRef;
 
 
     constructor(
@@ -59,9 +57,9 @@ export class AuthComponent implements OnInit {
         private cfr: ComponentFactoryResolver) {
         console.log("auth compoennt");
         if (!this._sharedService.getIsWebauthnSupported()) {
-            swal({
+            Swal.fire({
                 position: 'top',
-                type: 'error',
+                icon: 'error',
                 title: '<strong>WebAuthn Support</strong>',
                 html:
                 'Your browser does not appear to support WebAuthn.' + 'For a list of the browsers that currently support WebAuthn, please' +
