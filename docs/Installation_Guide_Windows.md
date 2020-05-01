@@ -1,6 +1,8 @@
-#### StrongKey FIDO2 Server, Community Edition for Windows
+# StrongKey FIDO2 Server, Community Edition for Windows
 
-## Prerequisites
+## Installation Instructions
+
+### Prerequisites
 
 -  **One of the following Windows servers:** The installation script is untested on other flavors of Windows but may work with slight modifications.
     - Windows Server 2016
@@ -21,7 +23,7 @@
 
 ----------------
 
-## Installation
+### Installation
 
 **NOTE:** If the install fails for any reason, follow the instructions for [Removal](#removal), below, and restart from the beginning.
 
@@ -76,7 +78,7 @@ __NOTE__: Both the signing and secret keys in the keystore use default values an
     ```java -jar keymanager.jar```
 
 
-## Removal
+### Removal
 
 To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
 
