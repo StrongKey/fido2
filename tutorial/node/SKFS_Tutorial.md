@@ -771,7 +771,7 @@ Install nodejs using the instructions from the following link:
 	            
 	        pm2 start main.js
 	            
-	        sudo pm2 startup systemd
+	        [OPTIONAL] sudo pm2 startup systemd
 	            
 	        pm2 save
 	            
