@@ -1,14 +1,14 @@
-# StrongKey FIDO2 Tutorial
+# StrongKey FIDO2, Community Edition Tutorial
 
 ## Requirements
 -   Node.js 10.x.x+
 -   SQLite 3.7.17
 
-**NOTE:** If you are planning to test the client and the server component of this web application on the same computer—designated COMBINED in this document—then make sure you have a version of the browser that supports FIDO2.
+**NOTE:** If you are planning to test the client and the server component of this web application on the same computer—designated **COMBINED** in this document—then make sure you have a version of the browser that supports FIDO2.
 
-If you plan to use multiple computers to test this web application, the computer on which the server part of this web application is running is designated as APPSERVER while the computer running the browser(s) is designated APPCLIENT.
+If you plan to use multiple computers to test this web application, the computer on which the server part of this web application is running is designated as **APPSERVER** while the computer running the browser(s) is designated **APPCLIENT**.
 
-The computer running the FIDO2 server is designated FIDO2SERVER.
+The computer running the StrongKey FIDO2 Server is designated **FIDO2SERVER**.
 
 ### Installing Required Software Components
 **CentOS 8**
@@ -62,9 +62,9 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
          make install
 
 ### Installing and Deploying the PREFIDO2 Web Application
-1.  **If using a single computer for testing the client and server portions of this tutorial on COMBINED, modify** */etc/hosts* or *C:\Windows\System32\drivers\etc\hosts* file (depending on whether you are using Linux/OS-X or Windows) to include *fido2tutorial.strongkey.com* as an alias for _localhost_ (the entry with 127.0.0.1).
+1.  **If using a single computer for testing the client and server portions of this tutorial on COMBINED, modify** _/etc/hosts_ or _C:\Windows\System32\drivers\etc\hosts_ file (depending on whether you are using Linux/OS-X or Windows) to include _fido2tutorial.strongkey.com_ as an alias for _localhost_ (the entry with 127.0.0.1).
 		
-	If you plan to test the tutorial web application with a browser from a different client computer (APPCLIENT) while running the server component of the tutorial web application on APPSERVER, then identify the IP address of your APPSERVER and add the *fido2tutorial.strongkey.com* alias to APPSERVER’s IP address within the _hosts_ file _on the APPCLIENT_:
+	If you plan to test the tutorial web application with a browser from a different client computer (APPCLIENT) while running the server component of the tutorial web application on APPSERVER, then identify the IP address of your APPSERVER and add the _fido2tutorial.strongkey.com_ alias to APPSERVER’s IP address within the _hosts_ file _on the APPCLIENT_:
 
 	- **CentOS/Ubuntu/Mac**
     
@@ -73,7 +73,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 	- **Windows**
     
 	    1.  **Run Notepad as** _**administrator**_.
-	    2.  In _Notepad_ click **File→Open...** and **edit** *c:\Windows\System32\Drivers\etc\hosts*.
+	    2.  In _Notepad_ click **File→Open...** and **edit** _c:\Windows\System32\Drivers\etc\hosts_.
 	    3.  **Add** _fido2tutorial.strongkey.com_ after localhost (uncomment the localhost line if necessary).
 	    4.  **Save** the file.
 	    5.  **Close Notepad**.
@@ -82,7 +82,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 	
 	**NOTE: If you have a firewall on the APPSERVER/COMBINED, add a rule to open port 3001 so network connections can reach the web application**.
     
-    - **CentOS** (*If you are using Ubuntu use* apt *instead of* yum.)
+    - **CentOS** (*If you are using Ubuntu, use _apt_ instead of _yum_.)
     
            sudo yum install firewalld
            sudo firewall-cmd --zone=public --add-port=3001/tcp --permanent
@@ -103,7 +103,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
         
         tar zxvf prefido2.tgz
             
-    c. **Change directory** into prefido2:
+    c. **Change directory** into _prefido2_:
         
         cd prefido2/
             
@@ -154,11 +154,11 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 		delete from users;
 		.exit
 
-3.  **Open** *postfido2/templates/register.html* in your preferred text editor.
+3.  **Open** _postfido2/templates/register.html_ in your preferred text editor.
     
     -  **Copy** this snippet of code (between the AAAAA... lines, but NOT including the AAAAA…. lines) and **paste** it between the AAAAA lines in _register.html_, replacing the existing content in the HTML file.
         
-		Here we are removing the _action_ and _method_ attributes of the form to remove the old registration post request. This will be replaced by a call to a function in *functions.js*.
+		Here we are removing the _action_ and _method_ attributes of the form to remove the old registration post request. This will be replaced by a call to a function in _functions.js_.
 
 		   <!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 		   <form  id="regform" >
@@ -412,7 +412,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 
 7. **Create the file** _postfido2/constants.js_.
     
-	-  **Copy** this snippet of code (between the KKKK... lines) and **paste** between the KKKK lines in postfido2/constants.js. **The current values of SKFS_HOSTNAME, SVCUSERNAME, and SVCPASSWORD default to pointing to a FIDO2SERVER hosted by StrongKey.** If you are using your own SKFS, **replace** the example values for _skfs_ with the _hostname_ of the FIDO2SERVER and the _svcusername_ and _svcpassword_ with the _username_  and  _password_  used to access the FIDO2SERVER.
+	-  **Copy** this snippet of code (between the KKKK... lines) and **paste** between the KKKK lines in postfido2/constants.js. **The current values of _SKFS_HOSTNAME_, _SVCUSERNAME_, and _SVCPASSWORD_ default to pointing to a FIDO2SERVER hosted by StrongKey.** If you are using your own SKFS, **replace** the example values for _skfs_ with the _hostname_ of the FIDO2SERVER and the _svcusername_ and _svcpassword_ with the _username_ and _password_ used to access the FIDO2SERVER.
         
 			//KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
 			const DID = 1;
