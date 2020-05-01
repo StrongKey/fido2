@@ -18,8 +18,12 @@ The computer running the StrongKey FIDO2 Server is designated **FIDO2SERVER**.
     sudo yum install sqlite
 
 **CentOS 7**
-Install any version 10.x.x or higher of _Node.js_ from the following link:
+
+Download any version 10.x.x or higher of _Node.js_ from the following link:
 [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+
+Install nodejs using the instructions from the following link:
+[https://github.com/nodejs/help/wiki/Installation](https://github.com/nodejs/help/wiki/Installation)
 
     sudo yum install sqlite
 
