@@ -21,7 +21,6 @@ The computer running the StrongKey FIDO2 Server is designated **FIDO2SERVER**.
 Install any version 10.x.x or higher of _Node.js_ from the following link:
 [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-    sudo yum install npm
     sudo yum install sqlite
 
 **Ubuntu**
@@ -113,7 +112,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
             
     e. **Install pm2**. This is the process manager we will use to run the application:
         
-        sudo npm install pm2@latest -g
+        npm install pm2@latest -g
             
     f. **For Windows only:** install _node-gyp_ and _sqlite3_ manually.
         
@@ -124,7 +123,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
         
         pm2 start main.js
             
-    h. **Take a snapshot** of your currently running _Node_ applications; this allows _pm2_ to restart your application automatically upon restart of _pm2_. **Ignore this step on Windows/Mac OS**.
+    h. [OPTIONAL] **Take a snapshot** of your currently running _Node_ applications; this allows _pm2_ to restart your application automatically upon restart of _pm2_. **Ignore this step on Windows/Mac OS**.
         
         sudo pm2 startup systemd
             
