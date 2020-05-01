@@ -121,7 +121,7 @@ f. Using a text editor, **edit the HAProxy configuration file** to make the foll
     
     shell> vi /etc/haproxy/haproxy.cfg
     
-   Replace the content with the following and replace the _\<ip-fidoserver1\>_ and _\<ip-fidoserver2\>_ parameters with the IP addresses for the FIDO2 Servers:
+   Replace the contents with the following and replace the _\<ip-fidoserver1\>_ and _\<ip-fidoserver2\>_ parameters with the IP addresses for the FIDO2 Servers:
     
     global
         log 127.0.0.1   local0
