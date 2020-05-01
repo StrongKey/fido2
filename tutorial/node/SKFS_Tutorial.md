@@ -233,7 +233,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 			  if(intent=="registration"){
 			  $.post('/getChallenge', {
 			      'intent' : intent,
-			      'username': $('#username').val(),
+			      'username': $('#regusername').val(),
 			      'displayname': $('#displayname').val(),
 			      'firstname': $('#firstname').val(),
 			      'lastname': $('#lastname').val()
