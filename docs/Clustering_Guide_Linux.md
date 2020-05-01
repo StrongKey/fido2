@@ -8,11 +8,11 @@ StrongKey's FIDO2 Server can be clustered with multiple nodes to deliver high av
 
 While it is possible to add more than two nodes to the cluster, IT architects will recognize that there is a trade-off with N-way replication designs&mdash;the more nodes in such a configuration, the higher the resource requirements on each node to manage fail-safe replication, which can reduce the overall throughput after a certain point. Each site will have to do its own testing to determine where the throughput curve flattens out. However, if you have truly large-scale deployments in mind, please contact us to see how we can help.
 
-## Sample Cluster Configuration
+### Sample Cluster Configuration
 
 ![StrongKey FIDO2 Server Clustering](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2cluster.png)
 
-## Prerequisites
+### Prerequisites
 
 1. **Two (2)** virtual machines (VMs) for the FIDO2 Servers, running the current version of CentOS Linux 7.x, with fully qualified domain names (FQDN) and internet protocol (IP) addresses
 2. **One (1)** virtual machine for the load-balancer, running HAProxy version 1.5.18 software on the current version of CentOS Linux 7.x with an FQDN and an IP address
@@ -21,7 +21,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 **NOTE:** This document assumes you are setting up this cluster with all nodes connected to a single ethernet switch. If your intent is to do a more realistic test, you should plan on using VMs with multiple network interfaces connected to different switches to isolate traffic to the appropriate segments as you might except in a more real-world environment.
 
 
-## How To Setup the Cluster
+### How To Setup the Cluster
 
 1. Using the installation steps [here](../docs/Installation_Guide_Linux.md), install and configure the two FIDO2 Server VMs **as if they were individual FIDO2 Servers, but do NOT install any web applications to test out the FIDO2 Server at this point**; we will do this later.
 2. For each server **determine the FQDN and assign it a unique Server ID**. A _Server id (SID)_ is a numeric value that uniquely identifies a node within the cluster. Conventionally, StrongKey cluster SIDs begin with the numeral **1** and continue incrementally for each node in the cluster. In the current setup, the following values are used:
@@ -94,7 +94,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 	i. **Repeat *Steps 3 and 4*** on the remaining StrongKey FIDO2 Server nodes of this cluster.
 	
 
-## Install HAProxy Load Balancer
+### Install HAProxy Load Balancer
 
 High availability (HA) is enabled for applications by inserting a _load balancer_ between components of the infrastructure, such as between the web application and the two FIDO2 Servers of this configuration. The load balancer determines which target server is available to receive application connections, and distributes application requests to the appropriate target server.
 
@@ -172,7 +172,7 @@ If it is set to _enforcing_, change it to _permissive_ by running the following 
     shell> setenforce 0
 
 
-## Testing the FIDO2 Server Cluster with a Sample Web Application
+### Testing the FIDO2 Server Cluster with a Sample Web Application
 
 To test the cluster with a sample web application, provision the fourth VM to install the sample application and follow the steps [here](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc) to install the **StrongKey Proof of Concept (PoC) Java Application**. When installing the PoC application, make sure that you **follow the steps to NOT install it with a FIDO2 Server on the VM**; because you already have a FIDO2 Server cluster setup following this document, there is no need for an additional FIDO2 Server.
 
@@ -200,7 +200,7 @@ e. Open a browser to the appropriate URL to **access the PoC application** on th
 
     https://<PoC-VM-FQDN>:8181
 
-## Simulating Node Failures in the FIDO2 Server Cluster
+### Simulating Node Failures in the FIDO2 Server Cluster
 
 Following are several methods to simulate failures of a FIDO2 Server node within the cluster for verification purposes:
 
@@ -213,11 +213,10 @@ __NOTE:__ Because of the complexity of the FIDO2 protocols as well as its implem
 
 StrongKey definitely appreciates feedback on how it might improve the FIDO2 Server to better serve this community's needs. Please feel free to provide feedback through the forum on Github. Thank you.
 
-## Removal
+### Removal
 
 To uninstall StrongKey FIDO2 Server, run the following command (on every server in the cluster) from the folder where the distribution was extracted:
-
     
     shell> sudo ./cleanup.sh
 
-This removes all StrongKey files plus the installed dependency packages. If the sample service provider web application and the StrongKey WebAuthn client are installed, they will be removed as well.
+This removes all StrongKey files plus the installed dependency packages. If the sample service provider web application and the StrongKey WebAuthn Java client are installed, they will be removed as well.
