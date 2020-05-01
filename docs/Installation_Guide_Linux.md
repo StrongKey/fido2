@@ -85,9 +85,7 @@
 
 **NOTE**: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the TrustStore are located in _/usr/local/strongkey/skfs/keystores_. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both (The default password for the files is _Abcd1234!_):
     
-    ```
     shell> java -jar keymanager.jar
-    ```
 
 ### Removal
 
