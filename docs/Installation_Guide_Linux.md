@@ -1,6 +1,8 @@
-#### StrongKey FIDO2 Server, Community Edition for Linux
+# StrongKey FIDO2 Server, Community Edition for Linux
 
-## Prerequisites
+## Installation Instructions
+
+### Prerequisites
 
 -  **One of the following Linux distributions.** The installation script is untested on other flavors of Linux but may work with slight modifications.
     - RedHat/CentOS/Oracle 7
@@ -18,7 +20,7 @@
 
 ----------------
 
-## Installation
+### Installation
 
 **NOTE:** If the install fails for any reason, follow the instructions for [Removal](#removal), below, and restart from the beginning.
 
@@ -87,7 +89,7 @@ __NOTE__: Both the signing and secret keys in the keystore use default values an
     shell> java -jar keymanager.jar
     ```
 
-## Removal
+### Removal
 
 To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
 
