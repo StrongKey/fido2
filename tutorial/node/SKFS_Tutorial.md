@@ -96,11 +96,11 @@ Install nodejs using the instructions from the following link:
     a.  **Download** the _prefido2_ source code. **If you are using Ubuntu use _apt_ instead of _yum_**.
     
         sudo yum install wget
-        wget https://github.com/StrongKey/fido2/tree/master/tutorial/node/prefido2.tgz
+        wget https://github.com/StrongKey/fido2/raw/master/tutorial/node/prefido2.tgz
 
        **If using Windows, download to the following file:**
 
-        https://github.com/StrongKey/fido2/tree/master/tutorial/node/prefido2.tgz
+        https://github.com/StrongKey/fido2/raw/master/tutorial/node/prefido2.tgz
             
     b.  **Unzip** the _StrongKey FIDO2 Tutorial_:
         
