@@ -45,8 +45,7 @@ export class RegisterComponent implements OnInit {
     company: string;
     hash: string;
 
-    @ViewChild('alertSignup',
-        { read: ViewContainerRef }) alertSignup: ViewContainerRef;
+    @ViewChild('alertSignup', { read: ViewContainerRef, static: true }) alertSignup: ViewContainerRef;
 
     constructor(private _router: Router,
         private _script: ScriptLoaderService,

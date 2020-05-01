@@ -1,17 +1,15 @@
 import { Injectable } from "@angular/core";
-import { Headers, Http, Response, URLSearchParams } from "@angular/http";
+import { HttpHeaders, HttpClient, HttpParams, HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../auth/_models/user';
 import { SharedService } from './shared.service';
 import { ConstantsService } from './constants.service';
-import "rxjs/add/operator/map";
-import { DefaultUrlHandlingStrategy } from "@angular/router/src/url_handling_strategy";
 
 @Injectable()
 export class RestService {
     private pocURL = ConstantsService.baseURL + ":8181/poc/fido2";
-    private fidoHeaders = new Headers({ 'Content-Type': 'application/json' });
-    constructor(private http: Http, private _router: Router, private sharedService: SharedService) {
+    private fidoHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    constructor(private http: HttpClient, private _router: Router, private sharedService: SharedService) {
         this.fidoHeaders.append('Cache-Control', 'no-cache, no-store, must-revalidate');
         this.fidoHeaders.append('Pragma', 'no-cache');
         this.fidoHeaders.append('Expires', '-1');
@@ -27,7 +25,7 @@ export class RestService {
 
     registerEmail(email: string) {
         let restURL = this.pocURL + "/registerEmail";
-        let body = new URLSearchParams();
+        let body = new HttpParams();
         return this.http.post(restURL, { "email": email }, { headers: this.fidoHeaders })
             .toPromise()
             .then(resp => this.extractData(resp))
@@ -126,9 +124,9 @@ export class RestService {
     }
 
 
-    private extractDataAndHeaders(res: Response) {
+    private extractDataAndHeaders(res) {
         let header = res.headers;
-        let body = res.json();
+        let body = JSON.parse(JSON.stringify(res));
         let responseJSON = JSON.parse(JSON.stringify(body));
         if (responseJSON.Error == "True") {
             this.sharedService.setError("Error has occured. Check the logs.");
@@ -137,8 +135,8 @@ export class RestService {
     }
 
 
-    private extractData(res: Response) {
-        let body = res.json();
+    private extractData(res) {
+        let body = JSON.parse(JSON.stringify(res));
         let responseJSON = JSON.parse(JSON.stringify(body));
         if (responseJSON.Error == "true") {
             if (responseJSON.Message.includes("Invalid JWT received")) this._router.navigateByUrl('');
@@ -158,8 +156,8 @@ export class RestService {
         if (error instanceof XMLHttpRequest) {
             errMsg = error.statusText;
         }
-        if (error instanceof Response) {
-            let body = error.json() || '';
+        if (error instanceof HttpErrorResponse) {
+            let body = JSON.parse(JSON.stringify(error)) || '';
             let err = body.error || JSON.stringify(body);
             errMsg = error.status + error.statusText || err;
         }

@@ -14,7 +14,6 @@ import { AuthGuard } from "./auth/_guards";
 import { ThemeRoutingModule } from "./theme/theme-routing.module";
 import { AuthModule } from "./auth/auth.module";
 import { CookieService } from 'ngx-cookie-service';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslationService } from './translation';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -27,7 +26,6 @@ import { EditorModule } from '@tinymce/tinymce-angular';
         TranslatePipe,
     ],
     imports: [
-        SweetAlert2Module.forRoot(),
         LayoutModule,
         BrowserModule,
         BrowserAnimationsModule,

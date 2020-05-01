@@ -1,6 +1,6 @@
-#### StrongKey FIDO2 Server, Community Edition for Linux
+# StrongKey FIDO2 Server, Community Edition for Linux
 
-## Upgrade
+## Upgrade Instructions
 
 1. Open a terminal and **change directory** to the target download folder.
 

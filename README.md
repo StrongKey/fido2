@@ -17,20 +17,24 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * Follow [the clustering instructions](docs/Clustering_Guide_Linux.md) to download the FIDO2 Server and get it running as a cluster.
 
 ## Upgrade
-Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of fido server to the latest.
+Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current FIDO Server version to the latest.
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
 
 * Java Samples
-  * [DEMO](https://fido2.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
+  * [Demo](https://demo4.strongkey.com/fido2poc): A basic Java application demonstrating FIDO2 registration and authentication
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
+
+## Tutorial
+A step-by-step guide to FIDO-enable your application is provided:
+*  [Node.js](https://github.com/StrongKey/fido2/tree/master/tutorial/node/): Node.js and SQLite tutorial
 
 ## Sample Client
 StrongKey FIDO2 Server client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/master/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
 
-The skfsclient uses a FIDO2 simulator instead of an actual authenticator to demonstrate the web services on the command line. Feel free to download the [simulator source code](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator) for your own use.
+The skfsclient uses a FIDO2 simulator instead of an actual Authenticator to demonstrate the web services on the command line. Feel free to download the [simulator source code](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator) for your own use.
 
 ## API docs
 [Interactive OpenAPI documentation for FIDO2 Server](https://strongkey.github.io/fido2/)

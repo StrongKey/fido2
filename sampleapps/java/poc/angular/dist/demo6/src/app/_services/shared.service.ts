@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  BehaviorSubject } from 'rxjs';
 import { User } from '../auth/_models/user';
-import "rxjs/add/operator/map";
 import { CookieService } from 'ngx-cookie-service';
-import { Headers, Http, URLSearchParams } from '@angular/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { ConstantsService } from './../_services/constants.service';
 
 @Injectable()
@@ -35,17 +33,17 @@ export class SharedService {
 
 
     constructor(private _cookieService: CookieService,
-        private http: Http) {
+        private http: HttpClient) {
         this.getIsLoggedInFromServer();
     }
 
     getIsLoggedInFromServer() {
         let restURL = ConstantsService.baseURL + ":8181/poc/fido2/isLoggedIn";
-        let _headers = new Headers({ 'Content-Type': 'application/json' });
+        let _headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         this.http.post(restURL, { headers: _headers })
             .toPromise()
             .then(resp => {
-                let responseJSON = resp.json();
+                let responseJSON = JSON.parse(JSON.stringify(resp));
                 if (responseJSON.Response.length > 0 && responseJSON.Response != "") {
                     this._username.next(responseJSON.Response);
                     this._isLoggedIn.next(true);

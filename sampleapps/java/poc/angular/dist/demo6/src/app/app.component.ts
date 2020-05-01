@@ -3,7 +3,7 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { SharedService } from './_services/shared.service';
 import { ConstantsService } from './_services/constants.service';
 import { Helpers } from "./helpers";
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 declare let Modernizr: any;
 
 @Component({
@@ -58,9 +58,9 @@ export class AppComponent implements OnInit {
                 this.error = resp;
             }
             if (resp != null && resp.length !== 0 && resp.trim()) {
-                swal({
+                Swal.fire({
                     position: 'top',
-                    type: 'error',
+                    icon: 'error',
                     title: 'Oops...',
                     html: '<br/>' + this.error + '<br/>',
                     confirmButtonText: 'OK'
@@ -78,9 +78,9 @@ export class AppComponent implements OnInit {
             }
 
             if (resp != null && resp.length !== 0 && resp.trim()) {
-                swal({
+                Swal.fire({
                     position: 'top',
-                    type: 'success',
+                    icon: 'success',
                     title: 'All done!',
                     html: '<br/>' + this.message + '<br/>',
                     confirmButtonText: 'OK'

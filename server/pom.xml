@@ -42,6 +42,5 @@
         <module>skfsclient</module>
         <module>FIDO2Simulator</module>
         <module>fidoserverEAR</module>
-        <module>FIDO2SimulatorClient</module>
     </modules>
 </project>

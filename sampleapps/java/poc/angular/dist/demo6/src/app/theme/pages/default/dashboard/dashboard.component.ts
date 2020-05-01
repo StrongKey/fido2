@@ -6,7 +6,7 @@ import { RestService } from '../../../../_services/rest.service';
 import { SharedService } from '../../../../_services/shared.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ConstantsService } from "../../../../_services/constants.service";
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 
 @Component({

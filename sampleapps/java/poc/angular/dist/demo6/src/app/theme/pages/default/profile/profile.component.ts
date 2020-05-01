@@ -6,7 +6,7 @@ import { User } from '../../../../auth/_models/user';
 import { RestService } from '../../../../_services/rest.service';
 import { SharedService } from '../../../../_services/shared.service';
 import { ConstantsService } from "../../../../_services/constants.service";
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -131,9 +131,9 @@ export class ProfileComponent implements OnInit {
     }
 
     deleteUser() {
-        swal.queue([{
+        Swal.queue([{
             title: 'Are you sure you would like to delete the account?',
-            type: 'warning',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'No, cancel!',
