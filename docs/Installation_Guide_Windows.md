@@ -10,16 +10,16 @@
     
 ----------------
 
--  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
+-  A **fully qualified public domain name (FQDN)**; It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc)&emdash;otherwise FIDO2 functionality may not work
 
 -  **Install and configure OpenJDK with the steps below**:
-    - Download AdoptOpenJDK from https://adoptopenjdk.net.
-    - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options then download the latest release.
+    - Download AdoptOpenJDK from https://adoptopenjdk.net
+    - Select the OpenJDK 8 (LTS) version and the HotSpot JVM options then download the latest release
     - Run the installer and ensure the following options are selected for installation:
         - *Set JAVA_HOME variable*
         - *JavaSoft (Oracle) registry*
 
-- **StrongKey's FIDO2 Server must be installed** before the sample service provider web application and sample WebAuthn Java client.
+- **StrongKey's FIDO2 Server must be installed** before the sample service provider web application and sample WebAuthn Java client
 
 ----------------
 
@@ -73,7 +73,7 @@
 
 8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
 
-__NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the trustore are located under the _/usr/local/strongkey/skfs/keystores_ directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
+__NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the Truststore are located under the _/usr/local/strongkey/skfs/keystores_ directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
     
     ```java -jar keymanager.jar```
 
@@ -86,4 +86,4 @@ To uninstall StrongKey FIDO2 Server, run the following command from the folder w
     sudo ./cleanup.sh
     ```
 
-This removes all StrongKey files plus the installed dependency packages. If you've installed the sample service provider web application and the StrongKey WebAuthn client, they will be removed as well.
+This removes all StrongKey files plus the installed dependency packages. If you've installed the sample service provider web application and the StrongKey WebAuthn Java client, they will be removed as well.
