@@ -4,7 +4,7 @@
 -   Node.js 10.x.x+
 -   SQLite 3.7.17
 
-**NOTE:** If you are planning to test the client and the server component of this web application on the same computer—designated **COMBINED** in this document—then make sure you have a version of the browser that supports FIDO2.
+**NOTE:** If you are planning to test the client and the server component of this web application on the same computer—designated **COMBINED** in this document—then make sure you have a browser version that supports FIDO2.
 
 If you plan to use multiple computers to test this web application, the computer on which the server part of this web application is running is designated as **APPSERVER** while the computer running the browser(s) is designated **APPCLIENT**.
 
@@ -34,7 +34,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 **Windows 10**
 
 1.  To install _Node.js_, **browse** to [https://nodejs.org/en/download/](https://nodejs.org/en/download/).
-2.  **Download** the latest Windows Installer.
+2.  **Download** the latest _Windows Installer_.
 3.  **Run the installer** and follow the prompts.  
 4.  To install _SQLite_, **browse** to [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html).
 5.  Under _Precompiled Binaries for Windows_, **download** the .zip that starts with “[sqlite-tools-win32-x86](https://www.sqlite.org/2020/sqlite-tools-win32-x86-3310100.zip)...”
