@@ -23,7 +23,7 @@ Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your c
 Sample code is provided with a brief explanation of what each sample does:
 
 * Java Samples
-  * [DEMO](https://fido2.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
+  * [Demo](https://fido2.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
 
