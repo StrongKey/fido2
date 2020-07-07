@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.upokecenter</groupId>
             <artifactId>cbor</artifactId>
-            <version>4.0.0-beta1</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
            <groupId>co.nstant.in</groupId>
