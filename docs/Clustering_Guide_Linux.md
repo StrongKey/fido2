@@ -6,7 +6,7 @@ StrongKey's FIDO2 Server (SKFS) can be clustered with multiple nodes to deliver 
 
 **The clustering capability in SKFS only applies to the FIDO2 capability**. Web applications that use SKFS must make their own arrangements to deliver HA and/or DR independent of the SKFS. The sample application used here to demonstrate FIDO2 clustering will, itself, not be highly available, but demonstrates that the web application can use either or both FIDO2 servers in this HA configuration.
 
-While it is possible to add more than two nodes to the cluster, IT architects will recognize that there is a trade-off with N-way replication designs&mdash;the more nodes in such a configuration, the higher the resource requirements on each node to manage fail-safe replication, which can reduce the overall throughput after a certain point. Each site will have to do its own testing to determine where the throughput curve flattens out. However, if you have truly large-scale deployments in mind, please contact us to see how we can help.
+While it is possible to add more than two nodes to the cluster, IT architects will recognize that there is a trade-off with N-way replication designs&mdash;the more nodes, the higher the resource requirements on each node to manage fail-safe replication, which can reduce the overall throughput after a certain point. Each site will have to do its own testing to discern where the throughput curve flattens out. However, if you have truly large-scale deployments in mind, please contact us to see how we can help.
 
 ### Sample Cluster Configuration
 
