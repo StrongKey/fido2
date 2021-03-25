@@ -361,7 +361,11 @@ public class UtxFidoAuthenticatorReferences implements Serializable {
         job.add("signerPublicKey",this.getSignerPublicKey());
         job.add("fidoSignature", this.getFidoSignature());
         job.add("createDate", this.getCreateDate().toString());
-        job.add("signature", this.getSignature());
+        if(signature ==null){
+            job.addNull("signature");
+        }else{
+            job.add("signature", this.getSignature());            
+        }
 
         return job.build();
     }
