@@ -6,6 +6,9 @@ StrongKey's Certified FIDO2 Server, Community Edition is an open-source solution
 
 ![StrongKey FIDO Certificate](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2certified.png)
 
+[![StrongKey Android Client Library](https://github.com/StrongKey/fido2/raw/master/docs/images/StrongKey-Android.png)](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android)
+
+
 The following links provide some background on FIDO, the FIDO Alliance, and FIDO2:
 
 * [FIDO Alliance Home](https://fidoalliance.org)
@@ -28,8 +31,6 @@ Sample code is provided with a brief explanation of what each sample does:
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
   * [SSO](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/): FIDO Enabled sample applications demonstrating SSO
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO Enabled sample android application and android client library to perform FIDO transactions
-
-    ![StrongKey Android Client Library](https://github.com/StrongKey/fido2/raw/master/docs/images/StrongKey-Android.png)
 
 ## Sample Client
 StrongKey FIDO2 Server client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/master/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
