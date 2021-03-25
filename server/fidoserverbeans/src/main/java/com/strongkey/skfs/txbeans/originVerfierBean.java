@@ -7,7 +7,7 @@
 
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.SKFSCommon;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -46,7 +46,7 @@ public class originVerfierBean implements originVerfierBeanLocal {
                 String domain = appidFQDN.startsWith("www.") ? appidFQDN.substring(4) : appidFQDN;
                 String allowedtld = domain;
 
-                allowedtld = skfsCommon.getTLdplusone(domain);
+                allowedtld = SKFSCommon.getTLdplusone(domain);
 
                 JsonArray resJsonObj = null;
                 JsonReader rdr = null;

@@ -6,9 +6,15 @@
 */
 
 import com.strongkey.skfsclient.common.Constants;
+import com.strongkey.skfsclient.impl.rest.RestCreateFidoPolicy;
+import com.strongkey.skfsclient.impl.rest.RestFidoActionsOnConfiguration;
 import com.strongkey.skfsclient.impl.rest.RestFidoActionsOnKey;
+import com.strongkey.skfsclient.impl.rest.RestFidoActionsOnPolicy;
 import com.strongkey.skfsclient.impl.rest.RestFidoAuthenticate;
+import com.strongkey.skfsclient.impl.rest.RestFidoAuthorize;
+import com.strongkey.skfsclient.impl.rest.RestFidoGetConfiguration;
 import com.strongkey.skfsclient.impl.rest.RestFidoGetKeysInfo;
+import com.strongkey.skfsclient.impl.rest.RestFidoGetPolicyInfo;
 import com.strongkey.skfsclient.impl.rest.RestFidoPing;
 import com.strongkey.skfsclient.impl.rest.RestFidoRegister;
 import com.strongkey.skfsclient.impl.soap.SoapFidoActionsOnKey;
@@ -28,17 +34,22 @@ public class FidoEngine {
 
         String usage =
                        "Command: R (registration) | A (authentication) | G (getkeysinfo) | U (updatekey) | D (deregister) | P (ping)\n"
-//                     + "| CP (createpolicy) | PP (updatepolicy) | DP (deletepolicy) | gp (getpolicy)\n"
+                     + "| CP (createpolicy) | PP (updatepolicy) | DP (deletepolicy) | GP (getpolicy)\n"
+                     + "| GC (getconfiguration) | UC (updateconfiguration) | DC (deleteconfiguration)\n"
                      + "       java -jar skfsclient.jar R <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin>\n"
                      + "       java -jar skfsclient.jar A <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <authcounter>\n"
+                     + "       java -jar skfsclient.jar AZ <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <txid> <txpayload> <origin> <authcounter> <verify>\n"
                      + "       java -jar skfsclient.jar G <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username>\n"
-                     + "       java -jar skfsclient.jar U <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id> <displayname> <Active/Inactive>\n"
+                     + "       java -jar skfsclient.jar U <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id> <displayname> <status>\n"
                      + "       java -jar skfsclient.jar D <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id>\n"
                      + "       java -jar skfsclient.jar P <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ]\n"
-//                     + "       java -jar skfsclient.jar CP <hostport> <did> <accesskey> <secretkey> <start-date> <end-date> <cert-profile-name> <version> <status> <notes> <policy>\n"
-//                     + "       java -jar skfsclient.jar PP <hostport> <did> <accesskey> <secretkey> <sid-pid> <start-date> <end-date> <version> <status> <notes> <policy>\n"
-//                     + "       java -jar skfsclient.jar DP <hostport> <did> <accesskey> <secretkey> <sid-pid>\n"
-//                     + "       java -jar skfsclient.jar GP <hostport> <did> <accesskey> <secretkey> <metatdataonly> <sid-pid>\n\n"
+                     + "       java -jar skfsclient.jar CP <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <status> <notes> <policy>\n"
+                     + "       java -jar skfsclient.jar PP <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <sid> <pid> <status> <notes> <policy>\n"
+                     + "       java -jar skfsclient.jar DP <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <sid> <pid>\n"
+                     + "       java -jar skfsclient.jar GP <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <metatdataonly> <sid> <pid>\n"
+                     + "       java -jar skfsclient.jar GC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ]\n"
+                     + "       java -jar skfsclient.jar UC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey> <configvalue> [<notes>]\n"
+                     + "       java -jar skfsclient.jar DC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey>\n\n"
                      + "Acceptable Values:\n"
                      + "         hostport            : host and port to access the fido \n"
                      + "                                 SOAP & REST format : http://<FQDN>:<non-ssl-portnumber> or \n"
@@ -55,23 +66,28 @@ public class FidoEngine {
                      + "         command             : R (registration) | A (authentication) | G (getkeysinfo) | U (updatekeyinfo) | D (deregister) | P (ping)\n"
                      + "         origin              : Origin to be used by the fido client simulator\n"
                      + "         authcounter         : Auth counter to be used by the fido client simulator\n"
+                     + "         txid                : Unique identifier for the transaction (Base64URLSafe Strong)\n"
+                     + "         txpayload           : Transaction payload to be used to generate the challenge for transaction authorization (Base64URLSafe Strong)\n"
                      + "         random-id           : String associated to a specific fido key registered to a\n"
                      + "                                 specific user. This is needed to perform actions on the key like\n"
                      + "                                 de-activate, activate and deregister.\n"
                      + "                                 Random-id can be obtained by calling 'G' option.\n"
-                     + "         Active/Inactive     : Status to set the fido-key to.\n";
-//                     + "         good/bad signature  : Optional; boolean value that simulates emiting good/bad signatures\n"
-//                     + "                                 true for good signature | false for bad signature\n"
-//                     + "                                 default is true\n"
-//                     + "         start-date          : Unix Timestamp (in milliseconds) when the policy should take effect\n"
-//                     + "         end-date            : Unix Timestamp (in milliseconds) when the policy should end. Can be \"null\"\n"
-//                     + "         cert-profile-name   : A human readable name for the policy\n"
-//                     + "         version             : Version of the policy (currently only value of 1 is accepted)\n"
-//                     + "         status              : Active/Inactive. Status to set the policy to.\n"
-//                     + "         notes               : Optional notes to store with the policy.\n"
-//                     + "         policy              : A JSON object defining the FIDO2 policy.\n"
-//                     + "         sid-pid             : Policy identifier returned by creating a policy.\n"
-//                     + "         metadataonly        : Boolean. If true, returns only the metadata of the policy. If false, returns the metadata + the policy JSON.\n";
+                     + "         good/bad signature  : Optional; boolean value that simulates emiting good/bad signatures\n"
+                     + "                                 true for good signature | false for bad signature\n"
+                     + "                                 default is true\n"
+                     + "         start-date          : Unix Timestamp (in milliseconds) when the policy should take effect\n"
+                     + "         end-date            : Unix Timestamp (in milliseconds) when the policy should end. Can be \"null\"\n"
+                     + "         cert-profile-name   : A human readable name for the policy\n"
+                     + "         verify              : Verify the authorization once again once we receive the response (Boolean value)\n"
+                     + "         version             : Version of the policy (currently only value of 1 is accepted)\n"
+                     + "         status              : Active/Inactive. Status to set the key or policy to.\n"
+                     + "         notes               : Optional notes to store with the policy or configuration.\n"
+                     + "         policy              : A JSON object defining the FIDO2 policy.\n"
+                     + "         sid                 : Server ID: Policy identifier returned by creating a policy.\n"
+                     + "         pid                 : Policy ID: Policy identifier returned by creating a policy.\n"
+                     + "         metadataonly        : Boolean. If true, returns only the metadata of the policy. If false, returns the metadata + the policy JSON.\n"
+                     + "         configkey           : Configuration identifier of server setting.\n"
+                     + "         configvalue         : Value connected to configuration identifier.\n";
 
         // Used for R, A, G, U, D, P commands only
         String command;
@@ -82,11 +98,17 @@ public class FidoEngine {
         String credential1;
         String credential2;
         String username;
+        String txid;
+        String txpayload;
         String randomid;
         String displayname;
         String status;
         String origin;
         int auth_counter;
+        String configkey;
+        String configvalue;
+        String notes;
+        String verifyAuthz;
 
         try {
             if (args.length == 0) {
@@ -113,7 +135,7 @@ public class FidoEngine {
                 System.out.println("Invalid authtype...\n" + usage);
             }
 
-            switch (command) {
+            switch (command.toUpperCase()) {
 
                 case Constants.COMMANDS_REGISTER:
                     if (args.length != 9) {
@@ -145,6 +167,28 @@ public class FidoEngine {
                         RestFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
                     } else {
                         SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
+                    }
+
+                    System.out.println("\nDone with Authenticate!\n");
+                    break;
+                    
+                case Constants.COMMANDS_AUTHORIZE:
+                    if (args.length != 13) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    username        = args[7];
+                    txid            = args[8];
+                    txpayload       = args[9];
+                    origin          = args[10];
+                    auth_counter    = Integer.parseInt(args[11]);
+                    verifyAuthz     = args[12];
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz);
+                    } else {
+                        System.out.println("\nNot yet Implemented!\n");
+//                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
                     }
 
                     System.out.println("\nDone with Authenticate!\n");
@@ -215,51 +259,127 @@ public class FidoEngine {
                     System.out.println("\nDone with Ping!\n");
                     break;
 
-//                case Constants.COMMANDS_CREATE_POLICY:
-//                    if (args.length != 12) {
-//                        System.out.println("Missing arguments...\n" + usage);
-//                        break;
-//                    }
-//
-//                    Long enddate = null;
-//                    if (!args[6].equalsIgnoreCase("null"))
-//                         enddate = Long.parseLong(args[6]);
-//                    RestCreateFidoPolicy.create(args[1], args[2], args[3], args[4], Long.parseLong(args[5]), enddate, args[7], Integer.parseInt(args[8]), args[9], args[10], args[11]);
-//                    System.out.println("\nDone with Create!\n");
-//                    break;
-//
-//                case Constants.COMMANDS_PATCH_POLICY:
-//                    if (args.length != 12) {
-//                        System.out.println("Missing arguments...\n" + usage);
-//                        break;
-//                    }
-//
-//                    enddate = null;
-//                    if (!args[7].equalsIgnoreCase("null"))
-//                         enddate = Long.parseLong(args[7]);
-//                    RestFidoActionsOnPolicy.patch(args[1], args[2], args[3], args[4], args[5], Long.parseLong(args[6]), enddate, Integer.parseInt(args[8]), args[9], args[10], args[11]);
-//                    System.out.println("\nDone with patch!\n");
-//                    break;
-//
-//                case Constants.COMMANDS_DELETE_POLICY:
-//                    if (args.length != 6) {
-//                        System.out.println("Missing arguments...\n" + usage);
-//                        break;
-//                    }
-//
-//                    RestFidoActionsOnPolicy.delete(args[1], args[2], args[3], args[4], args[5]);
-//                    System.out.println("\nDone with delete!\n");
-//                    break;
-//
-//                case Constants.COMMANDS_GET_POLICY:
-//                    if (args.length != 7) {
-//                        System.out.println("Missing arguments...\n" + usage);
-//                        break;
-//                    }
-//
-//                    RestFidoGetPolicyInfo.getPolicyInfo(args[1], args[2], args[3], args[4], args[5], args[6]);
-//                    System.out.println("\nDone with get policy!\n");
-//                    break;
+                case Constants.COMMANDS_CREATE_POLICY:
+                    if (args.length != 10) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestCreateFidoPolicy.create(args[1], args[2], args[4], args[5], args[6], args[7], args[8], args[9]);
+                    } else {
+                        //TODO: Soap create policy method call 
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Create!\n");
+                    break;
+
+                case Constants.COMMANDS_PATCH_POLICY:
+                    if (args.length != 12) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoActionsOnPolicy.patch(args[1], args[2], args[4], args[5], args[6], args[7],args[8], args[9], args[10], args[11]);
+                    } else {
+                        //TODO: Soap patch policy method call 
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with patch!\n");
+                    break;
+
+                case Constants.COMMANDS_DELETE_POLICY:
+                    if (args.length != 9) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoActionsOnPolicy.delete(args[1], args[2], args[4], args[5], args[6],args[7],args[8]);
+                    } else {
+                        //TODO: Soap delete policy method call 
+                        System.out.println("Not yet implemented");
+                    }
+                    
+                    System.out.println("\nDone with delete!\n");
+                    break;
+
+                case Constants.COMMANDS_GET_POLICY:
+                    if (args.length != 10) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    String metadataonly = args[7];
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoGetPolicyInfo.getPolicyInfo(hostport, args[2], authtype, credential1, credential2, metadataonly, args[8], args[9]);
+                    } else {
+                        //TODO: Soap get policy method call 
+                        System.out.println("Not yet implemented");
+                    }
+                    
+                    System.out.println("\nDone with get policy!\n");
+                    break;
+                    
+                case Constants.COMMANDS_GET_CONFIGURATION:
+                    if (args.length != 7) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoGetConfiguration.getConfiguration(hostport, did, authtype, credential1, credential2);
+                    } else {
+//                        SoapFidoGetConfiguration.getConfiguration(hostport, did, authtype, credential1, credential2);
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Get Configuration!\n");
+                    break;
+                    
+                case Constants.COMMANDS_UPDATE_CONFIGURATION:
+                    // adding a note to the configuration is optional
+                    if (args.length != 9 && args.length != 10) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    configkey   = args[7];
+                    configvalue = args[8];
+                    if (args.length == 10) {
+                        notes   = args[9];
+                    } else {
+                        notes   = "";
+                    }
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoActionsOnConfiguration.update(hostport, did, authtype, credential1, credential2, configkey, configvalue, notes);
+                    } else {
+//                        SoapFidoActionsOnConfiguration.update(hostport, did, authtype, credential1, credential2, configkey, configvalue, notes);
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Update Configuration!\n");
+                    break;
+                    
+                case Constants.COMMANDS_DELETE_CONFIGURATION:
+                    if (args.length != 8) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    configkey   = args[7];
+
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoActionsOnConfiguration.delete(hostport, did, authtype, credential1, credential2, configkey);
+                    } else {
+//                        SoapFidoActionsOnConfiguration.delete(hostport, did, authtype, credential1, credential2, configkey);
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Delete Configuration!\n");
+                    break;
 
                 default:
                     System.out.println("Invalid Command...\n" + usage);

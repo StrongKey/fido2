@@ -7,9 +7,9 @@
 
 package com.strongkey.skfs.core;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.security.SecureRandom;
-import org.apache.commons.codec.binary.Base64;
+import java.util.Base64;
 
 /**
  * Utility class with generic methods. Mostly generic for FIDO based operations.
@@ -78,8 +78,8 @@ public class U2FUtility {
      */
     public static String getRandom(int size) {
 
-        if (size > skfsConstants.MAX_RANDOM_NUMBER_SIZE_BITS / 8) {
-            size = skfsConstants.MAX_RANDOM_NUMBER_SIZE_BITS / 8;
+        if (size > SKFSConstants.MAX_RANDOM_NUMBER_SIZE_BITS / 8) {
+            size = SKFSConstants.MAX_RANDOM_NUMBER_SIZE_BITS / 8;
         }
         //Generate seed
         SecureRandom random = new SecureRandom();
@@ -91,6 +91,6 @@ public class U2FUtility {
         byte[] randomBytes = new byte[size];
         sr.nextBytes(randomBytes);
 
-        return Base64.encodeBase64URLSafeString(randomBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 }

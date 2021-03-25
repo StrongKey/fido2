@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.logging.Level;
@@ -106,6 +107,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
             ResultSet lsrs = localserver.executeQuery();
             lsrs.next();
 
+            localserver.close();
             // Check status
             String status = lsrs.getString("status");
             if (!status.equalsIgnoreCase("Active")) {
@@ -135,6 +137,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
                 }
             }
 
+            lsrs.close();
             // See if there is more than one Server in the cluster to replicate to
             PreparedStatement servercount = ctorconn.prepareStatement(
                     "SELECT COUNT(*) FROM SERVERS");
@@ -149,7 +152,9 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
                 servercount.close();
                 return;
             }
-
+            srs.close();
+            
+            servercount.close();
             // Start the thread
             processor = new Thread(this);
             processor.start();
@@ -159,6 +164,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
             zmqBacklogProcessorState = skceConstants.ZMQ_SERVICE_RUNNING;
             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.INFO, classname, "constructor", "SKCE-MSG-6132", "[ZMQBacklogProcessor]: " + applianceCommon.getZMQState(zmqBacklogProcessorState));
 
+         
         } catch (NamingException ex) {
             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "constructor", "SKCE-ERR-6000", "Could not configure JDBC");
             Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,6 +172,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "constructor", "SKCE-ERR-6000", "Could not configure JDBC");
             Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
             // Prevent connection leak in case we throw a SQL Exception
+            
             try {
                 if (ctorconn != null)
                     ctorconn.close();
@@ -399,8 +406,8 @@ Y8b d88P
     @SuppressWarnings("SleepWhileInLoop")
     public void run() {
         Connection conn = null;
+        PreparedStatement countquery = null;
         try {
-            PreparedStatement countquery;
 
             try {
                 // Get local Connection
@@ -473,6 +480,7 @@ Y8b d88P
                             }
                         }
                         counter++;
+                       
                     }
                 } catch (SQLException ex) {
                     strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "constructor", "SKCE-ERR-6000", "Could not configure JDBC");
@@ -482,7 +490,16 @@ Y8b d88P
         } catch (InterruptedException ex) {
         } finally {
             // Clean up helpers
-            for (Long sid : blphelpers.keySet()) {
+            if (countquery != null) {
+                try {
+                    countquery.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+//            for (Long sid : blphelpers.keySet()) {
+            for (Map.Entry<Long, BacklogProcessorHelper> entry : blphelpers.entrySet()) {
+                Long sid = entry.getKey();
                 if (blphelpers.get(sid).isAlive()) {
                     blphelpers.get(sid).interrupt();
                 }
@@ -668,11 +685,11 @@ class BacklogProcessorHelper extends Thread
                             // SQL statement to get the actual object to be replicated
                             objectquery = conn.prepareStatement(
                                 "SELECT SID, DID, USERNAME, FKID, USERID, KEYHANDLE, " +
-                                " APPID, PUBLICKEY, KHDIGEST, KHDIGEST_TYPE, " +
+                                " APPID, PUBLICKEY, " +
                                 " TRANSPORTS, ATTSID, ATTDID, ATTCID, COUNTER, FIDO_VERSION, " +
                                 " FIDO_PROTOCOL, AAGUID, REGISTRATION_SETTINGS,REGISTRATION_SETTINGS_VERSION, " +
                                 " CREATE_DATE, CREATE_LOCATION, MODIFY_DATE, " +
-                                " MODIFY_LOCATION, STATUS, SIGNATURE " +
+                                " MODIFY_LOCATION, STATUS, SIGNATURE_KEYTYPE, SIGNATURE " +
                                 " FROM FIDO_KEYS " +
                                 " WHERE SID = ? " +
                                 " AND DID = ? " +
@@ -692,10 +709,6 @@ class BacklogProcessorHelper extends Thread
                                 // First deal with attributes that might be null
                                 if (objrs.getString("userid") != null)
                                     fkbuilder.setUserid(objrs.getString("userid"));
-                                if (objrs.getString("khdigest") != null)
-                                    fkbuilder.setKhdigest(objrs.getString("khdigest"));
-                                if (objrs.getString("khdigest_type") != null)
-                                    fkbuilder.setKhdigest(objrs.getString("khdigest_type"));
                                 if (objrs.getString("transports") != null)
                                     fkbuilder.setTransports(objrs.getLong("transports"));
                                 if (objrs.getTimestamp("modify_date") != null)
@@ -704,6 +717,8 @@ class BacklogProcessorHelper extends Thread
                                     fkbuilder.setModifyLocation(objrs.getString("modify_location"));
                                 if (objrs.getString("signature") != null)
                                     fkbuilder.setSignature(objrs.getString("signature"));
+                                if (objrs.getString("signature_keytype") != null)
+                                    fkbuilder.setSignatureKeytype(objrs.getString("signature_keytype"));
                                 if (objrs.getString("attsid") != null)
                                     fkbuilder.setAttsid(objrs.getLong("attsid"));
                                 if (objrs.getString("attdid") != null)
@@ -752,6 +767,7 @@ class BacklogProcessorHelper extends Thread
                                         .setPublickey("")
                                         .setSid(objsid)
                                         .setStatus("")
+                                        .setSignatureKeytype("")
                                         .setUsername(objfkuser)
                                         .build();
                                     objbytes = proto.toByteArray();
@@ -960,8 +976,8 @@ class BacklogProcessorHelper extends Thread
 
                             // SQL statement to get the actual object to be replicated
                             objectquery = conn.prepareStatement(
-                                "SELECT SID, DID, PID, START_DATE, END_DATE, CERTIFICATE_PROFILE_NAME, " +
-                                " POLICY, VERSION, STATUS, NOTES, CREATE_DATE, MODIFY_DATE, SIGNATURE " +
+                                "SELECT SID, DID, PID," +
+                                " POLICY, STATUS, NOTES, CREATE_DATE, MODIFY_DATE, SIGNATURE " +
                                 " FROM FIDO_POLICIES " +
                                 " WHERE SID = ? " +
                                 " AND DID = ? " +
@@ -975,9 +991,7 @@ class BacklogProcessorHelper extends Thread
                             if (objrs.next()) {
                                 // First deal with attributes that might be null
                                 ZMQSKCEReplicationProtos.FidoPolicies.Builder fpbuilder = ZMQSKCEReplicationProtos.FidoPolicies.newBuilder();
-                                if (objrs.getTimestamp("end_date") != null) {
-                                    fpbuilder.setEndDate(objrs.getTimestamp("end_date").getTime());
-                                }
+                                
                                 if (objrs.getString("notes") != null) {
                                     fpbuilder.setNotes(objrs.getString("notes"));
                                 }
@@ -994,10 +1008,7 @@ class BacklogProcessorHelper extends Thread
                                         .setSid(objsid)
                                         .setDid(objdid)
                                         .setPid(objpid)
-                                        .setStartDate(objrs.getTimestamp("start_date").getTime())
-                                        .setCertificateProfileName(objrs.getString("certificate_profile_name"))
                                         .setPolicy(objrs.getString("policy"))
-                                        .setVersion(objrs.getLong("version"))
                                         .setStatus(objrs.getString("status"))
                                         .setCreateDate(objrs.getTimestamp("create_date").getTime())
                                         .build();
@@ -1011,6 +1022,60 @@ class BacklogProcessorHelper extends Thread
                             objectquery.close();
                             break;
 
+                        case applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS:
+
+                            // Figure out primary key from keystring
+                            pkarray = dbobjpk.split("-", 2);
+                            objdid = Long.parseLong(pkarray[0]);
+                            String objkey = pkarray[1];
+                            strongkeyLogger.logp(skceConstants.SKEE_LOGGER, Level.FINE, classname, "run", "SKCE-MSG-6046", "[DID-CONFIG_KEY]: " + objdid + "-" + objkey);
+
+                            // SQL statement to get the actual object to be replicated
+                            objectquery = conn.prepareStatement(
+                                    "SELECT DID, CONFIG_KEY, CONFIG_VALUE, NOTES "
+                                    + " FROM CONFIGURATIONS "
+                                    + " WHERE DID = ? "
+                                    + " AND CONFIG_KEY = ?");
+                            objectquery.setLong(1, objdid);
+                            objectquery.setString(2, objkey);
+
+                            // Get object and create proto if found
+                            objrs = objectquery.executeQuery();
+                            ZMQSKCEReplicationProtos.Configurations.Builder cfgbuilder = ZMQSKCEReplicationProtos.Configurations.newBuilder();
+                            if (objrs.next()) {
+                                // First deal with attributes that might be null
+                                
+                                if (objrs.getString("notes") != null) {
+                                    cfgbuilder.setNotes(objrs.getString("notes"));
+                                }
+                                // Now build the proto with all non-null values
+                                ZMQSKCEReplicationProtos.Configurations proto
+                                        = cfgbuilder
+                                                .setConfigKey(objrs.getString("config_key"))
+                                                .setConfigValue(objrs.getString("config_value"))
+                                                .setDid(objdid)
+                                                .build();
+                                strongkeyLogger.logp(skceConstants.SKEE_LOGGER, Level.FINE, classname, "run", "SKCE-MSG-6047", proto.toString());
+                                objbytes = proto.toByteArray();
+                            } else {
+                                if (dbobjop == applianceConstants.REPLICATION_OPERATION_DELETE) {
+                                    ZMQSKCEReplicationProtos.Configurations proto =
+                                        cfgbuilder
+                                        .setConfigKey(objkey)
+                                                .setConfigValue("")
+                                                .setDid(objdid)
+                                                .build();
+                                    objbytes = proto.toByteArray();
+                                } else {
+                                    strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.FINE, classname, "run", "SKCE-ERR-6014", "[DID-CONFIGKEY]: " + objdid + "-" + objkey);
+                                    objectquery.close();
+                                    continue;
+                                }
+                            }
+                            objectquery.close();
+
+                            break;
+   
                         default:
                             strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "run", "SKCE-ERR-6015", applianceCommon.getEntityName(dbobjtype) + " [OBJPK=" + dbobjpk + "] [OBJOP=" + applianceCommon.getRepop(dbobjop) + "]");
                             invalidObject = Boolean.TRUE;
@@ -1041,6 +1106,7 @@ class BacklogProcessorHelper extends Thread
                     }
                 }
             }
+            countquery.close();
         }catch (SQLException ex) {
             Logger.getLogger(SKCEBacklogProcessor.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getSQLState().startsWith("08")) {

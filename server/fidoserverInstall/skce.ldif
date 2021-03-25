@@ -41,6 +41,18 @@ givenName: svcfidouser
 cn: svcfidouser
 sn: svcfidouser
 
+dn: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+changetype: add
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+userPassword: {SSHA}nklQGQl02bhdLQCnEPisiTPLd+/O38RUKqcjNQ==
+givenName: fidoadminuser
+cn: fidoadminuser
+sn: fidoadminuser
+
+
 dn: cn=skceping,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 changetype: add
 objectClass: person
@@ -87,6 +99,30 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: FidoAuthorized
 uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=FidoRegAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoAuthorized
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=FidoSignAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoAuthorized
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=FidoAuthzAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoAuthorized
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+
+dn: cn=FidoAdminAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoAdminAuthorized
+uniqueMember: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 
 dn: cn=EncryptionAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 objectClass: groupOfUniqueNames

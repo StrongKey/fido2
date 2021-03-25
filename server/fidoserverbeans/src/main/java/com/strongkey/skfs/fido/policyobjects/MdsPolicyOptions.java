@@ -6,7 +6,7 @@
 */
 package com.strongkey.skfs.fido.policyobjects;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skce.pojos.MDSEndpoint;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -36,12 +36,12 @@ public class MdsPolicyOptions {
         }
 
         return new MdsPolicyOptions.MdsPolicyOptionsBuilder(
-                new ArrayList<>(mdsJson.getJsonArray(skfsConstants.POLICY_MDS_ENDPOINTS).stream()
+                new ArrayList<>(mdsJson.getJsonArray(SKFSConstants.POLICY_MDS_ENDPOINTS).stream()
                         .map(x -> (JsonObject) x)
-                        .map(x -> new MDSEndpointObject(x.getString(skfsConstants.POLICY_MDS_ENDPOINT_URL, null),
-                                x.getString(skfsConstants.POLICY_MDS_ENDPOINT_TOKEN, null)))
+                        .map(x -> new MDSEndpointObject(x.getString(SKFSConstants.POLICY_MDS_ENDPOINT_URL, null),
+                                x.getString(SKFSConstants.POLICY_MDS_ENDPOINT_TOKEN, null)))
                         .collect(Collectors.toList())),
-                new ArrayList<>(mdsJson.getJsonArray(skfsConstants.POLICY_MDS_CERTIFICATION).stream().map(x -> ((JsonString) x).getString()).collect(Collectors.toList())))
+                new ArrayList<>(mdsJson.getJsonArray(SKFSConstants.POLICY_MDS_CERTIFICATION).stream().map(x -> ((JsonString) x).getString()).collect(Collectors.toList())))
                 .build();
     }
 

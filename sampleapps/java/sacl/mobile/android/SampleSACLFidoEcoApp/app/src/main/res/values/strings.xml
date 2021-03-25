@@ -1,0 +1,291 @@
+<!--
+/**
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License, as published by the Free
+ * Software Foundation and available at
+ * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Copyright (c) 2001-2021 StrongAuth, Inc. (d/b/a StrongKey)
+ *
+ * **********************************************
+ *
+ *  888b    888          888
+ *  8888b   888          888
+ *  88888b  888          888
+ *  888Y88b 888  .d88b.  888888  .d88b.  .d8888b
+ *  888 Y88b888 d88""88b 888    d8P  Y8b 88K
+ *  888  Y88888 888  888 888    88888888 "Y8888b.
+ *  888   Y8888 Y88..88P Y88b.  Y8b.          X88
+ *  888    Y888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * **********************************************
+ *
+ * Strings used in the Sample SACL FIDO eCommerce app
+ */
+-->
+<resources>
+    <string name="app_name">Sample SACL FIDO eCommerce App</string>
+
+    <string name="saclfido_webservice_hostport">https://psd2demo.strongkey.com/sfaeco-web/rest/</string>
+    <string name="saclfido_webservice_operation_check_username">checkUsername</string>
+    <string name="saclfido_webservice_operation_register_user">registerUser</string>
+
+    <string name="saclfido_using_self_signed_certificate">false</string>
+    <string name="saclfido_self_signed_webservice_hostport">https://sakasmb.noorhome.net:8181/sfaeco-web/rest/</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="error_aks_attestation">AndroidKeystore Attestation Failed</string>
+    <string name="error_biometric_authentication">Biometric Authentication erred with</string>
+    <string name="error_failed_persistence">Failed to persist object to RoomDB</string>
+    <string name="error_invalid_key">Invalid Key: </string>
+    <string name="error_null_authentication_signature">AuthenticationSignature object is NULL; network may be unavailable - please try again</string>
+    <string name="error_null_handler">: Could NOT send message: Handler is Null: </string>
+    <string name="error_null_public_key_credential">PublicKeyCredential object is NULL; nothing to display</string>
+    <string name="error_null_registered_device">Registered Device object is NULL</string>
+    <string name="error_null_user">User object is NULL; please enroll if you have not done so</string>
+    <string name="error_null_user_authenticate">User object is NULL; cannot authenticate until registered - please enroll first</string>
+    <string name="error_propose_device">Could not succeed in proposing device</string>
+    <string name="error_register_user">Could not succeed in registering user</string>
+    <string name="error_register_device">Could not succeed in attesting device</string>
+    <string name="error_string">Field must not be empty</string>
+    <string name="error_null_usertx_detail">UserTransaction object is NULL; nothing to display</string>
+
+
+
+    <string name="helper_text_family_name">Lastname</string>
+    <string name="helper_text_given_name">Firstname</string>
+    <string name="helper_text_mobile">Include country code with number</string>
+    <string name="helper_text_password2">Type in password again</string>
+
+    <string name="homepage_welcome">Welcome!\n
+        \nThis is a sample app from StrongKey, simulating a mobile FIDO-enabled e-commerce
+        app. It supports enrolling users, using the Trusted Execution Environment (TEE) or a
+        Secure Element (SE) to:\n\n
+        &#8226; Register a key with the StrongKey FIDO Server\n
+        &#8226; Authenticating with that key to the app server\n
+        &#8226; Digitally signing a transaction with the FIDO key\n
+        &#8226; Submitting the transaction to the app server.\n\n
+        Please email us at the address displayed (when you slide the menu out) if you
+        have any questions.\n
+        \nEnjoy!
+    </string>
+
+    <string name="label_aaguid">AAGUID</string>
+    <string name="label_action">Action</string>
+    <string name="label_aks_authorization_info">AndroidKeystore Authorization</string>
+    <string name="label_attest">Attest</string>
+    <string name="label_attestation_detail">See Attestation Detail</string>
+    <string name="label_authorization_info">Authorization Information</string>
+
+    <string name="label_cancel">Cancel</string>
+    <string name="label_check_authorization">Check</string>
+    <string name="label_clear">Clear</string>
+    <string name="label_create_date">Enroll Date</string>
+
+    <string name="label_date">\nDate: </string>
+    <string name="label_details">Details</string>
+    <string name="label_device_accepted">Device Accepted</string>
+    <string name="label_device_detail">See Detail</string>
+    <string name="label_device_info">Device Information</string>
+    <string name="label_digital_signature_detail">Digital Signature details...</string>
+
+    <string name="label_edit_text_email">email_edit_text</string>
+    <string name="label_edit_text_enroll_date">enroll_date_edit_text</string>
+    <string name="label_edit_text_family_name">family_name_edit_text</string>
+    <string name="label_edit_text_given_name">given_name_edit_text</string>
+    <string name="label_edit_text_other_mobile">other_mobile_edit_text</string>
+    <string name="label_edit_text_password">password_edit_text</string>
+    <string name="label_edit_text_personal_mobile">personal_mobile_edit_text</string>
+    <string name="label_edit_text_status">status_edit_text</string>
+    <string name="label_edit_text_uid">uid_edit_text</string>
+    <string name="label_edit_text_username">username_edit_text</string>
+
+    <string name="label_email">Email Address</string>
+    <string name="label_email_security_key_link">
+        This is not currently implemented.\n\nWhen completed, it will e-mail a
+        one-time link to your registered e-mail address that will enable you
+        to register a FIDO2 Security Key to enable access to your account from
+        a desktop/laptop with a browser.\n\nThe Security Key will also serve
+        as a backup to recover your account in the event you lose (or choose to
+        dispose of) your current mobile device.
+    </string>
+    <string name="label_enroll_date">Enroll Date</string>
+
+    <string name="label_fido_id">ID</string>
+    <string name="label_fido_rawid">Raw ID</string>
+    <string name="label_fido_user_handle">User Handle</string>
+    <string name="label_fido_key_details">FIDO Key Details</string>
+    <string name="label_fido_register">Register</string>
+    <string name="label_fido_register_fido_key">Register FIDO Key</string>
+    <string name="label_fido_registered_key_info">FIDO Registration Information</string>
+    <string name="label_fido_authenticate">Authenticate</string>
+    <string name="label_fido_authentication_info">FIDO Authentication Information</string>
+    <string name="label_fido_authorize">Authorize FIDO Transaction</string>
+    <string name="label_fido_authorized_fido_transaction_info">Authorized FIDO Transaction</string>
+    <string name="label_fido_public_key_detail">Public Key Detail</string>
+    <string name="label_fido_client_data_json_detail">ClientData Json Detail</string>
+    <string name="label_fido_authenticaor_data_detail">Authenticator Data Detail</string>
+    <string name="label_fido_cbor_attestation_detail">CBOR Attestation Detail</string>
+    <string name="label_fido_json_attestation_detail">Json Attestation Detail</string>
+    <string name="label_fido_signature_detail">Digital Signature Detail</string>
+    <string name="label_fido_user_transaction">Transaction Information</string>
+    <string name="label_fido_authenticator_references">FIDO Authenticator References</string>
+
+    <string name="label_family_name">Family Name</string>
+    <string name="label_gallery">Gallery</string>
+    <string name="label_given_name">Given Name</string>
+    <string name="label_mobile_number">Mobile Number</string>
+    <string name="label_notes">Notes</string>
+    <string name="label_ok">OK</string>
+    <string name="label_original_attestation">Original Attestation</string>
+    <string name="label_other_mobile">Official Mobile Number</string>
+
+    <string name="label_password">Password</string>
+    <string name="label_propose_device">Propose Device</string>
+    <string name="label_public_key_info">Public Key Information</string>
+
+    <string name="label_registered_device_info">Registered Device Information</string>
+    <string name="label_reset">Reset</string>
+
+    <string name="label_save">Save</string>
+    <string name="label_search">Search</string>
+    <string name="label_send_security_key_link">Send Security Key Registration e-mail...</string>
+    <string name="label_status">Status</string>
+    <string name="label_submit">Submit</string>
+    <string name="label_submit_transaction">Submit Transaction</string>
+
+    <string name="label_transaction_authorization">Transaction Authorization</string>
+    <string name="label_transaction_cancelled">Transaction Cancelled</string>
+    <string name="label_transaction_success">Transaction Success</string>
+
+    <string name="label_tx_payload">Transaction Payload</string>
+    <string name="label_tx_payload_details">See TxPayload Detail...</string>
+
+    <string name="label_uid">UID</string>
+    <string name="label_use_pin">USE PIN</string>
+    <string name="label_user_info">User Information</string>
+    <string name="label_user_name">Username</string>
+
+    <string name="label_with">with</string>
+
+    <string name="menu_check_authorization">Check Authorization</string>
+    <string name="menu_checkout">Checkout</string>
+    <string name="menu_display_user">Display User</string>
+    <string name="menu_enroll_user">Enroll User</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_payment">Payment Options</string>
+    <string name="menu_propose_device">Propose Device</string>
+    <string name="menu_registered_device">Registered Device</string>
+    <string name="menu_retrieve_user">Retrieve User</string>
+    <string name="menu_see_aks_attestation">See AKS Attestation</string>
+    <string name="menu_validate_aks_attestation">Validate AKS Attestation</string>
+    <string name="menu_fido_registration">FIDO Registration</string>
+    <string name="menu_fido_registered_key">Registered FIDO Key</string>
+    <string name="menu_fido_authentication">FIDO Authentication</string>
+
+    <string name="merchant_name">StrongKey</string>
+
+    <string name="message_added">Added</string>
+    <string name="message_authenticate_fido_key">: Authenticating User with FIDO key: </string>
+    <string name="message_authorize_transaction">: Authorizing Transaction with FIDO key: </string>
+    <string name="message_authorization_pending_or_failure">Authorization pending or not granted yet</string>
+
+    <string name="message_bundled">Bundled: </string>
+    <string name="message_check_for_authorization_success">Successfully received authorization</string>
+    <string name="message_check_out">Check out process starting..</string>
+    <string name="message_connecting">Connecting to: </string>
+    <string name="message_current_products">Current Products</string>
+
+    <string name="message_date">Date</string>
+
+    <string name="message_fingerprint_auth_failure">Device-authentication failed</string>
+    <string name="message_fingerprint_auth_success">Device-authentication succeeded with fingerprint</string>
+    <string name="message_getting_authorization_challenge">: Getting authorization challenge from FIDO server: </string>
+
+    <string name="message_pay">Pay</string>
+    <string name="message_payment_authorization">Payment Authorization</string>
+    <string name="message_payment_method_not_selected">Payment method has not been selected</string>
+    <string name="message_payment_method_selected">Payment method selected</string>
+
+    <string name="message_pin_pattern_auth_success">Device-authentication succeeded with PIN/Patter</string>
+
+    <string name="message_products_not_selected">Products have not been selected</string>
+    <string name="message_products_to_be_signed">Products to be signed: </string>
+    <string name="message_propose_device">: Proposing mobile device: </string>
+    <string name="message_propose_device_success">Proposed device - received DEVID</string>
+    <string name="message_repeat_register_fido_key">: Repeating FIDO key registration: </string>
+    <string name="message_register_fido_key">: Registering FIDO key: </string>
+
+    <string name="message_received">: Received response: </string>
+    <string name="message_received_task">: Received task: </string>
+    <string name="message_received_unknown">: Received unknown response: </string>
+    <string name="message_register_user">: Registering user: </string>
+    <string name="message_register_user_success">Successfully registered user</string>
+    <string name="message_removed">Removed</string>
+    <string name="message_restarted_childhandler">"Restarted SACL Child thread "</string>
+    <string name="message_retreiving_user">: Retrieving user: </string>
+    <string name="message_running_childhandler">"SACL Child thread appears to be running "</string>
+
+    <string name="message_selected">Selected</string>
+    <string name="message_started_mainhandler">"Main Handler and SFA Child thread started "</string>
+    <string name="message_stopped_fido">Stopped FIDO Thread\n</string>
+    <string name="message_stopping_fido">Stopping FIDO Thread\n</string>
+
+    <string name="message_testing">Testing AndroidKeystore</string>
+    <string name="message_txid">TransactionID (TXID): </string>
+    <string name="message_txid_abbreviation">TXID</string>
+    <string name="message_use_device_pin">Use device PIN/Pattern to authorize payment</string>
+    <string name="message_validate_aks_attestation">: Validating AKS attestation: </string>
+
+    <string name="nav_header_title">Sample SACL FIDO eCommerce Application</string>
+    <string name="nav_header_subtitle">info@strongkey.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+
+    <string name="message_transaction_failure">Transaction NOT Verified</string>
+    <string name="message_transaction_success">Transaction Verified</string>
+
+    <string name="store_header">Welcome to the cStore!</string>
+    <string name="store_footer">Click anywhere to shop..</string>
+
+    <string name="product_quantity">Quantity:</string>
+    <string name="product_title_strongkey_logo">StrongKey Logo</string>
+    <string name="product_title_t100">Tellaro T100</string>
+    <string name="product_title_e1000">Tellaro E1000</string>
+    <string name="product_title_fido_cloud">FIDO Cloud</string>
+    <string name="product_title_tellaro_cloud">Tellaro Cloud</string>
+    <string name="product_price_t100">9,995</string>
+    <string name="product_price_e1000">19,995</string>
+    <string name="product_price_fido_cloud">995/year</string>
+    <string name="product_price_tellaro_cloud">11,940/year</string>
+    <string name="product_price_total_label">Total Price:</string>
+
+    <string name="payment_title_amex">AMEX</string>
+    <string name="payment_card_amex">x-1234</string>
+
+    <string name="payment_title_discover">Discover</string>
+    <string name="payment_card_discover">x-5678</string>
+
+    <string name="payment_title_jcb">JCB</string>
+    <string name="payment_card_jcb">x-9012</string>
+
+    <string name="payment_title_mastercard">Mastercard</string>
+    <string name="payment_card_mastercard">x-3456</string>
+
+    <string name="payment_title_visa">Visa</string>
+    <string name="payment_card_visa">x-7890</string>
+
+    <string name="payment_title_sepa">SEPA</string>
+    <string name="payment_card_sepa">x-1357</string>
+
+</resources>

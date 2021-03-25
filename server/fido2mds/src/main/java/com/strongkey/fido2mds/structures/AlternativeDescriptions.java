@@ -7,7 +7,7 @@
 
 package com.strongkey.fido2mds.structures;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+//import com.fasterxml.jackson.annotation.JsonAnySetter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +18,6 @@ public class AlternativeDescriptions {
         return alternativeDescriptions;
     }
 
-    @JsonAnySetter
     public void setAlternativeDescriptions(String locale, String description) {
         alternativeDescriptions.put(locale, description);
     }

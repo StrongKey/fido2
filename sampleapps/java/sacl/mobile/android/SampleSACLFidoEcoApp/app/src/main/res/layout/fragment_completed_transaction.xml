@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License, as published by the Free
+ * Software Foundation and available at
+ * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Copyright (c) 2001-2021 StrongAuth, Inc. (d/b/a StrongKey)
+ *
+ * **********************************************
+ *
+ *  888b    888          888
+ *  8888b   888          888
+ *  88888b  888          888
+ *  888Y88b 888  .d88b.  888888  .d88b.  .d8888b
+ *  888 Y88b888 d88""88b 888    d8P  Y8b 88K
+ *  888  Y88888 888  888 888    88888888 "Y8888b.
+ *  888   Y8888 Y88..88P Y88b.  Y8b.          X88
+ *  888    Y888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * **********************************************
+ *
+ * Completed FIDO authorized transaction
+ */
+-->
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/strongkeyLightGray"
+    tools:context=".ui.CompletedUserTransactionFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_registered_fido_key_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/user_information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_user_info"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <TextView
+                    android:id="@+id/user_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/fido_user_transaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_fido_user_transaction"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <!-- This next element will shown some Transaction details:
+                    - TXID
+                    - TXDate
+                    - Nonce
+                    - Challenge
+                    - FIDO Server Response
+                -->
+
+                <TextView
+                    android:id="@+id/fido_tx_detail_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/text_see_txpayload_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <View
+                    android:id="@+id/divider_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/fido_authenticator_references"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_fido_authenticator_references"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <!-- This next element will shown some FIDOAuthenticatorReferences details:
+                    - Protocol
+                    - RPID
+                    - AuthTime
+                    - UserPresence
+                    - UserVerification
+                    - UsedForThisTransaction
+                -->
+                <TextView
+                    android:id="@+id/text_see_fido_authenticator_reference_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/text_see_id_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_rawid_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_userhandle_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_authenticator_data_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_client_data_json_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_aaguid_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_publickey_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_see_signature_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="?attr/textAppearanceButton"
+                    android:textColor="@color/colorPrimary" />
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</ScrollView>

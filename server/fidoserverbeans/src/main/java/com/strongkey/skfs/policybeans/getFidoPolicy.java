@@ -8,12 +8,13 @@
 package com.strongkey.skfs.policybeans;
 
 import com.strongkey.skfs.entitybeans.FidoPolicies;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Collection;
+import java.util.logging.Level;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -23,6 +24,8 @@ import javax.ws.rs.core.Response.Status;
 
 @Stateless
 public class getFidoPolicy implements getFidoPolicyLocal {
+    
+    
     /**
      * Persistence context for derby
      */
@@ -30,11 +33,9 @@ public class getFidoPolicy implements getFidoPolicyLocal {
     private EntityManager em;
 
     @Override
-    public Response getPolicies(Long did, String sidpid, Boolean metadataonly) {
+    public Response getPolicies(Long did, Long sid, Long pid, Boolean metadataonly) {
         JsonArrayBuilder jarrbldr = Json.createArrayBuilder();
-        if (sidpid != null) {
-            Long sid = Long.parseLong(sidpid.split("-")[0]);
-            Long pid = Long.parseLong(sidpid.split("-")[1]);
+        if (sid != null & pid != null) {
             FidoPolicies fp = getbyPK(did, sid, pid);
             if (fp == null) {
                 return Response.status(Status.NOT_FOUND).build();
@@ -58,7 +59,7 @@ public class getFidoPolicy implements getFidoPolicyLocal {
             }
         }
         String response = Json.createObjectBuilder()
-            .add(skfsConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, jarrbldr)
+            .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, jarrbldr)
             .build().toString();
         return Response.ok().entity(response).build();
     }
@@ -75,6 +76,8 @@ public class getFidoPolicy implements getFidoPolicyLocal {
 //            if (fp != null) {                       //TODO verify signature
 //                verifyDBRecordSignature(did, fp);
 //            }
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0063 "+  "getFidoPolicy successful output: did:" + did +" sid:"+ sid +" pid:"+pid);
+
             return fp;
         } catch (NoResultException ex) {
             return null;

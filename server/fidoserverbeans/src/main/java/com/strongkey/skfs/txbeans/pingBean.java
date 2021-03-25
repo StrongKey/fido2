@@ -21,12 +21,13 @@ package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.skfs.requests.PreregistrationRequest;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.json.Json;
 import javax.ws.rs.core.Response;
 
 @Stateless
@@ -44,7 +45,7 @@ public class pingBean implements pingBeanLocal {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0060", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0060", "[TXID=" + ID + "]"
                 + "\n did=" + did);
 
         StringBuilder sbuf = new StringBuilder(1024);
@@ -57,9 +58,9 @@ public class pingBean implements pingBeanLocal {
 
         pregreq.setUsername("pinguser" + new Date().getTime());
 
-        pregreq.setDisplayname("pinguserkey");
-        pregreq.setOptions("{\"attestation\":\"direct\"}");
-        pregreq.setProtocol("FIDO2_0");
+        pregreq.setDisplayName("pinguserkey");
+        pregreq.setOptions(Json.createObjectBuilder().add("attestation","direct").build());
+        pregreq.getSVCInfo().setProtocol("FIDO2_0");
 
         Response res = u2fHelper.preregister(did, pregreq);
         if (res.getStatus() == 200) {
@@ -71,7 +72,7 @@ public class pingBean implements pingBeanLocal {
         String resp = sbuf.toString();
         out = new Date();
         long rt = out.getTime() - in.getTime();
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0061", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0061", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
                 + "\nPing response = " + resp);
         return resp;
     }

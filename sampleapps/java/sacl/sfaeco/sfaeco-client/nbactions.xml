@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djavax.net.ssl.trustStore=/home/anoor/certs/cacerts -classpath %classpath com.strongkey.mdba.client.MdbaClient https://sakasmb.noorhome.net:8181 1 mysvccred mypassword  PD 7 43212437234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"      [RU johnnyd Abcd1234! John Doe johnnyd@internet.com  1234567891]       [PD 1 4321243234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"]    [AD  1 1 1]</exec.args>
+                <exec.executable>java</exec.executable>
+                <exec.workingdir>/usr/local/workspace/mdba/mdba-client</exec.workingdir>
+            </properties>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -Djavax.net.ssl.trustStore=/home/anoor/certs/cacerts -classpath %classpath com.strongkey.mdba.client.MdbaClient https://sakasmb.noorhome.net:8181 1 mysvccred mypassword  PD 7 43212437234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"      [RU johnnyd Abcd1234! John Doe johnnyd@internet.com  1234567891]       [PD 1 4321243234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"]    [AD  1 1 1]</exec.args>
+                <exec.executable>java</exec.executable>
+                <jpda.listen>true</jpda.listen>
+                <exec.workingdir>/usr/local/workspace/mdba/mdba-client</exec.workingdir>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djavax.net.ssl.trustStore=/home/anoor/certs/cacerts -classpath %classpath com.strongkey.mdba.client.MdbaClient https://sakasmb.noorhome.net:8181 1 mysvccred mypassword  PD 7 43212437234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"      [RU johnnyd Abcd1234! John Doe johnnyd@internet.com  1234567891]       [PD 1 4321243234556  Samsung S6 "8.0.0" 26 "Android/sdk_phone_x86_64/generic_x86_64:8.0.0/OSR1.180418.004/4931640:userdebug/test-keys"]    [AD  1 1 1]</exec.args>
+                <exec.executable>java</exec.executable>
+                <exec.workingdir>/usr/local/workspace/mdba/mdba-client</exec.workingdir>
+            </properties>
+        </action>
+    </actions>

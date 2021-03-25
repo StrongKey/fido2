@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://web.strongkeylite.strongauth.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://web.strongkeylite.strongauth.com/">
+
+<xs:element name="StrongKeyLiteException" type="tns:StrongKeyLiteException"/>
+
+<xs:element name="batchDecrypt" type="tns:batchDecrypt"/>
+
+<xs:element name="batchDecryptResponse" type="tns:batchDecryptResponse"/>
+
+<xs:element name="batchDelete" type="tns:batchDelete"/>
+
+<xs:element name="batchDeleteResponse" type="tns:batchDeleteResponse"/>
+
+<xs:element name="batchEncrypt" type="tns:batchEncrypt"/>
+
+<xs:element name="batchEncryptResponse" type="tns:batchEncryptResponse"/>
+
+<xs:element name="batchSearch" type="tns:batchSearch"/>
+
+<xs:element name="batchSearchResponse" type="tns:batchSearchResponse"/>
+
+<xs:element name="decrypt" type="tns:decrypt"/>
+
+<xs:element name="decryptResponse" type="tns:decryptResponse"/>
+
+<xs:element name="delete" type="tns:delete"/>
+
+<xs:element name="deleteResponse" type="tns:deleteResponse"/>
+
+<xs:element name="encrypt" type="tns:encrypt"/>
+
+<xs:element name="encryptResponse" type="tns:encryptResponse"/>
+
+<xs:element name="entropy" type="tns:entropy"/>
+
+<xs:element name="entropyResponse" type="tns:entropyResponse"/>
+
+<xs:element name="gpkDecrypt" type="tns:gpkDecrypt"/>
+
+<xs:element name="gpkDecrypt2" type="tns:gpkDecrypt2"/>
+
+<xs:element name="gpkDecrypt2Response" type="tns:gpkDecrypt2Response"/>
+
+<xs:element name="gpkDecryptResponse" type="tns:gpkDecryptResponse"/>
+
+<xs:element name="gpkEncrypt" type="tns:gpkEncrypt"/>
+
+<xs:element name="gpkEncrypt2" type="tns:gpkEncrypt2"/>
+
+<xs:element name="gpkEncrypt2Response" type="tns:gpkEncrypt2Response"/>
+
+<xs:element name="gpkEncryptResponse" type="tns:gpkEncryptResponse"/>
+
+<xs:element name="ping" type="tns:ping"/>
+
+<xs:element name="pingResponse" type="tns:pingResponse"/>
+
+<xs:element name="relay" type="tns:relay"/>
+
+<xs:element name="relayResponse" type="tns:relayResponse"/>
+
+<xs:element name="search" type="tns:search"/>
+
+<xs:element name="searchResponse" type="tns:searchResponse"/>
+
+<xs:complexType name="gpkDecrypt2">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="gpktoken" type="xs:string" minOccurs="0"/>
+<xs:element name="ciphertext" type="xs:string" minOccurs="0"/>
+<xs:element name="encoding" type="xs:string" minOccurs="0"/>
+<xs:element name="algorithm" type="xs:string" minOccurs="0"/>
+<xs:element name="iv" type="xs:string" minOccurs="0"/>
+<xs:element name="aad" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkDecrypt2Response">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="StrongKeyLiteException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="entropy">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="size" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="entropyResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="search">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="plaintext" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="searchResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="encrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="plaintext" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="encryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchDecrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="inputfile" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchDecryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchSearch">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="inputfile" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchSearchResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="decrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="token" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="decryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkEncrypt2">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="gpktoken" type="xs:string" minOccurs="0"/>
+<xs:element name="plaintext" type="xs:string" minOccurs="0"/>
+<xs:element name="encoding" type="xs:string" minOccurs="0"/>
+<xs:element name="algorithm" type="xs:string" minOccurs="0"/>
+<xs:element name="iv" type="xs:string" minOccurs="0"/>
+<xs:element name="aad" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkEncrypt2Response">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="relay">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="relayurl" type="xs:string" minOccurs="0"/>
+<xs:element name="relayprotocol" type="xs:string" minOccurs="0"/>
+<xs:element name="relayencoding" type="xs:string" minOccurs="0"/>
+<xs:element name="relaycontent" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="relayResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchEncrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="inputfile" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchEncryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ping">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pingResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkEncrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="gpktoken" type="xs:string" minOccurs="0"/>
+<xs:element name="plaintext" type="xs:string" minOccurs="0"/>
+<xs:element name="encoding" type="xs:string" minOccurs="0"/>
+<xs:element name="algorithm" type="xs:string" minOccurs="0"/>
+<xs:element name="iv" type="xs:string" minOccurs="0"/>
+<xs:element name="aad" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkEncryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchDelete">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="inputfile" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="batchDeleteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkDecrypt">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="gpktoken" type="xs:string" minOccurs="0"/>
+<xs:element name="ciphertext" type="xs:string" minOccurs="0"/>
+<xs:element name="encoding" type="xs:string" minOccurs="0"/>
+<xs:element name="algorithm" type="xs:string" minOccurs="0"/>
+<xs:element name="iv" type="xs:string" minOccurs="0"/>
+<xs:element name="aad" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="gpkDecryptResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="delete">
+<xs:sequence>
+<xs:element name="did" type="xs:long" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="token" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

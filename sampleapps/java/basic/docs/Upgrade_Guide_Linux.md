@@ -30,8 +30,8 @@ This project is a basic service provider web application written in Java to work
 5. Undeploy the old version and deploy the new .war file to Payara.
 
     ```sh
-    payara41/glassfish/bin/asadmin undeploy basicserver
-    payara41/glassfish/bin/asadmin deploy basicserver.war
+    payara5/glassfish/bin/asadmin undeploy basicserver
+    payara5/glassfish/bin/asadmin deploy basicserver.war
     ```
 
 6. Test that the servlet is running by executing the following cURL command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.

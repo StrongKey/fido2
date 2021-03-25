@@ -7,7 +7,7 @@
 
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.requests.PatchFidoKeyRequest;
+import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
 import javax.ejb.Local;
 
@@ -38,5 +38,5 @@ public interface u2fUpdateBeanLocal {
      */
     SKCEReturnObject execute(Long did,
                              String keyid,
-                             PatchFidoKeyRequest fidokey);
+                             UpdateFidoKeyRequest fidokey);
 }

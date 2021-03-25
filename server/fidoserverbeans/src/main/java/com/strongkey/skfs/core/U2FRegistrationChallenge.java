@@ -7,10 +7,10 @@
 
 package com.strongkey.skfs.core;
 
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFEException;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -39,8 +39,8 @@ public class U2FRegistrationChallenge extends U2FChallenge implements Serializab
      */
    public U2FRegistrationChallenge(String u2fversion, String username) throws SKFEException {
         super(u2fversion, username);
-        nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "U2FRegistrationChallenge", skfsCommon.getMessageProperty("FIDO-MSG-5003"), "");
+        nonce = U2FUtility.getRandom(Integer.parseInt(SKFSCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "U2FRegistrationChallenge", SKFSCommon.getMessageProperty("FIDO-MSG-5003"), "");
    }
 
    /**
@@ -70,9 +70,9 @@ public class U2FRegistrationChallenge extends U2FChallenge implements Serializab
     public final JsonObject toJsonObject() {
 
         JsonObject jsonObj = Json.createObjectBuilder()
-                .add(skfsConstants.JSON_KEY_NONCE, this.nonce)
-                .add(skfsConstants.JSON_KEY_VERSION, this.version)
-//                .add(skfsConstants.JSON_KEY_APP_ID, this.appid)
+                .add(SKFSConstants.JSON_KEY_NONCE, this.nonce)
+                .add(SKFSConstants.JSON_KEY_VERSION, this.version)
+//                .add(SKFSConstants.JSON_KEY_APP_ID, this.appid)
                 .build();
 
         return jsonObj;

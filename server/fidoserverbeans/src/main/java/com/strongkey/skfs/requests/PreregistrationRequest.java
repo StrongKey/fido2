@@ -5,60 +5,55 @@
 * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
 */
 
-
 package com.strongkey.skfs.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
-@JsonInclude(Include.NON_NULL)
+/*
+* TODO:
+* Decide whether to keep Payload and SVCInfo as separate classes, make them an inner class, or not have them at all.
+*/
+
 public class PreregistrationRequest {
 
-    private String protocol;
-    private String username;
-    private String displayname;
-    private String options;
-    private String extensions;
+    private SVCInfo svcinfo;
+    private Payload payload;
 
-    public String getProtocol() {
-        return protocol;
+    public PreregistrationRequest() {
+        svcinfo = new SVCInfo();
+        payload = new Payload();
     }
 
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
+    public SVCInfo getSVCInfo() {
+        return svcinfo;
     }
 
-    public String getUsername() {
-        return username;
+    public Payload getPayload() {
+        return payload;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        payload.setUsername(username);
     }
 
-    public String getDisplayname() {
-        return displayname;
+    public void setDisplayName(String displayName) {
+        payload.setDisplayname(displayName);
     }
 
-    public void setDisplayname(String displayname) {
-        this.displayname = displayname;
-    }
-
-    public String getOptions() {
-        return options;
-    }
-
-    public void setOptions(String options) {
-        this.options = options;
-    }
-
-    public String getExtensions() {
-        return extensions;
+    public void setOptions(JsonObject options) {
+        payload.setOptions(options);
     }
 
     public void setExtensions(String extensions) {
-        this.extensions = extensions;
+        payload.setExtensions(extensions);
     }
-
-
+    
+    public JsonObject toJsonObject(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("svcinfo", svcinfo.toJsonObject());
+        job.add("payload", payload.toJsonObject());
+        return job.build();
+    }
 }

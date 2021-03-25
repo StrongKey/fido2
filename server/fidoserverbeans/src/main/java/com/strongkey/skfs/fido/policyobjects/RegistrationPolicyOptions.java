@@ -7,118 +7,81 @@
 
 package com.strongkey.skfs.fido.policyobjects;
 
-import com.strongkey.skfs.fido.policyobjects.AuthenticatorSelection.AuthenticatorSelectionBuilder;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.json.JsonObject;
 import javax.json.JsonString;
-import javax.json.JsonValue;
 
 public class RegistrationPolicyOptions {
-    private final String icon;
     private final String displayName;
-    private final Integer useridLength;
     private final String excludeCredentials;
-    private final AuthenticatorSelection authenticatorSelection;
-    private final List<String> attestation;
+    private final List<String> authenticatorAttachment;
+    private final List<String> requireResidentKey;
 
-    private RegistrationPolicyOptions(String icon, String displayName,
-            Integer useridLength, String excludeCredentials,
-            AuthenticatorSelection authenticatorSelection, List<String> attestation){
-        this.icon = icon;
+    private RegistrationPolicyOptions( String displayName,
+             String excludeCredentials,
+            List<String> authenticatorAttachment, List<String> requireResidentKey){
         this.displayName = displayName;
-        this.useridLength = useridLength;
         this.excludeCredentials = excludeCredentials;
-        this.authenticatorSelection = authenticatorSelection;
-        this.attestation = attestation;
-    }
-
-    public String getIcon() {
-        return icon;
+        this.authenticatorAttachment = authenticatorAttachment;
+        this.requireResidentKey = requireResidentKey;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public Integer getUseridLength(){
-        return useridLength;
-    }
 
     public String getExcludeCredentials() {
         return excludeCredentials;
     }
 
-    public AuthenticatorSelection getAuthenticatorSelection() {
-        return authenticatorSelection;
+    public List<String> getAuthenticatorAttachment() {
+        return authenticatorAttachment;
     }
 
-    public List<String> getAttestation() {
-        return attestation;
+    public List<String> getRequireResidentKey() {
+        return requireResidentKey;
     }
 
     public static RegistrationPolicyOptions parse(JsonObject registrationJson) {
-        JsonObject authenticatorSelectionJson = registrationJson.getJsonObject(skfsConstants.POLICY_REGISTRATION_AUTHENTICATORSELECTION);
-        AuthenticatorSelection authenticatorSelection = new AuthenticatorSelectionBuilder(
-                new ArrayList<>(authenticatorSelectionJson.getJsonArray(skfsConstants.POLICY_REGISTRATION_AUTHENTICATORATTACHMENT).stream()
-                        .map(x -> (JsonString) x)
-                        .map(x -> x.getString())
-                        .collect(Collectors.toList())),
-                new ArrayList<>(authenticatorSelectionJson.getJsonArray(skfsConstants.POLICY_REGISTRATION_REQUIRERESIDENTKEY).stream()
-                        .map(x -> x.equals(JsonValue.TRUE))         //TODO find a better method of getting the value
-                        .collect(Collectors.toList())),
-                new ArrayList<>(authenticatorSelectionJson.getJsonArray(skfsConstants.POLICY_REGISTRATION_USERVERIFICATION).stream()
-                        .map(x -> (JsonString) x)
-                        .map(x -> x.getString())
-                        .collect(Collectors.toList()))).build();
+
 
         return new RegistrationPolicyOptions.RegistrationPolicyOptionsBuilder(
-                registrationJson.getString(skfsConstants.POLICY_REGISTRATION_DISPLAYNAME),
-                registrationJson.getString(skfsConstants.POLICY_REGISTRATION_EXCLUDECREDENTIALS),
-                new ArrayList<>(registrationJson.getJsonArray(skfsConstants.POLICY_REGISTRATION_ATTESTATION).stream()
+                registrationJson.getString(SKFSConstants.POLICY_REGISTRATION_DISPLAYNAME),
+                registrationJson.getString(SKFSConstants.POLICY_REGISTRATION_EXCLUDECREDENTIALS),
+                new ArrayList<>(registrationJson.getJsonArray(SKFSConstants.POLICY_REGISTRATION_REQUIRERESIDENTKEY).stream()
+                        .map(x -> (JsonString) x)
+                        .map(x -> x.getString())
+                        .collect(Collectors.toList())),
+                new ArrayList<>(registrationJson.getJsonArray(SKFSConstants.POLICY_REGISTRATION_AUTHENTICATORATTACHMENT).stream()
                         .map(x -> (JsonString) x)
                         .map(x -> x.getString())
                         .collect(Collectors.toList())))
-                .setIcon(registrationJson.getString(skfsConstants.POLICY_REGISTRATION_ICON, null))
-                .setAuthenticatorSelection(authenticatorSelection)
                 .build();
     }
 
     public static class RegistrationPolicyOptionsBuilder{
-        private String builderIcon;
         private final String builderDisplayName;
-        private Integer builderUseridLength;
-        private final String builderExcludeCredentials;
-        private AuthenticatorSelection builderAuthenticatorSelection;
-        private final List<String> builderAttestation;
 
-        public RegistrationPolicyOptionsBuilder(String displayName, String excludeCredentials, List<String> attestation){
+        private final String builderExcludeCredentials;
+        private final List<String> builderRequireResidentKey;
+        private final List<String> builderAuthenticatorAttachment;
+
+        public RegistrationPolicyOptionsBuilder(String displayName, String excludeCredentials, List<String> requireResidentKey, List<String> authenticatorAttachment){
             this.builderDisplayName = displayName;
             this.builderExcludeCredentials = excludeCredentials;
-            this.builderAttestation = attestation;
+            this.builderAuthenticatorAttachment = authenticatorAttachment;
+            this.builderRequireResidentKey = requireResidentKey;
         }
 
-        public RegistrationPolicyOptionsBuilder setIcon(String icon){
-            this.builderIcon = icon;
-            return this;
-        }
-
-        public RegistrationPolicyOptionsBuilder setUseridLength(Integer useridLength){
-            this.builderUseridLength = useridLength;
-            return this;
-        }
-
-        public RegistrationPolicyOptionsBuilder setAuthenticatorSelection(AuthenticatorSelection authenticatorSelection){
-            this.builderAuthenticatorSelection = authenticatorSelection;
-            return this;
-        }
 
         public RegistrationPolicyOptions build(){
-            return new RegistrationPolicyOptions(builderIcon, builderDisplayName,
-                    builderUseridLength, builderExcludeCredentials,
-                    builderAuthenticatorSelection, builderAttestation);
+            return new RegistrationPolicyOptions(builderDisplayName,
+                    builderExcludeCredentials,
+                    builderAuthenticatorAttachment, builderRequireResidentKey);
         }
     }
 }

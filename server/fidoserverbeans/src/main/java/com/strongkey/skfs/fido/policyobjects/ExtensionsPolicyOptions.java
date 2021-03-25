@@ -9,7 +9,7 @@ package com.strongkey.skfs.fido.policyobjects;
 
 import com.strongkey.skfs.fido.policyobjects.extensions.ExampleFido2Extension;
 import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,8 +18,8 @@ import javax.json.JsonObject;
 public class ExtensionsPolicyOptions {
     private static final Set<String> KNOWNEXTENSIONS = new HashSet<>(
             Arrays.asList(new String[]{
-                skfsConstants.POLICY_EXTENSIONS_EXAMPLE,
-                skfsConstants.POLICY_EXTENSIONS_APPID
+                SKFSConstants.POLICY_EXTENSIONS_EXAMPLE,
+                SKFSConstants.POLICY_EXTENSIONS_APPID
             })
     );
 
@@ -43,10 +43,10 @@ public class ExtensionsPolicyOptions {
 
             Fido2Extension ext;
             switch(extensionIdentifier){
-                case skfsConstants.POLICY_EXTENSIONS_EXAMPLE:
+                case SKFSConstants.POLICY_EXTENSIONS_EXAMPLE:
                     ext = new ExampleFido2Extension();
                     break;
-                case skfsConstants.POLICY_EXTENSIONS_APPID:
+                case SKFSConstants.POLICY_EXTENSIONS_APPID:
                     ext = new ExampleFido2Extension();
                     break;
                 default:

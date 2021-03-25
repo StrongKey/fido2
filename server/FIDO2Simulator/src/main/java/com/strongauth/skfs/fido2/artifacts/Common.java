@@ -22,9 +22,7 @@
 
 package com.strongauth.skfs.fido2.artifacts;
 
-import co.nstant.in.cbor.CborBuilder;
-import co.nstant.in.cbor.CborEncoder;
-import co.nstant.in.cbor.CborException;
+import com.strongkey.cbor.jacob.CborEncoder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -81,13 +79,12 @@ import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
+import org.bouncycastle.util.encoders.Hex;
 
 public final class Common {
 
@@ -215,6 +212,9 @@ public final class Common {
 
         byte flags = 0x00;
         flags |= 0x01;
+        if(userVerified){
+            flags |= (0x01 << 2);
+        }
         if (hasAttested) {
             flags |= (0x01 << 6); // attested credential data included
         }
@@ -244,12 +244,12 @@ public final class Common {
     return hexString.toString();
     }
 
-    /**
-     * Helper method that converts a STRING to byte[].
-     *
-     * @param string. The input string to be converted into byte[] format.
-     * @return data. The byte[] that represents @param string.
-     */
+//    /**
+//     * Helper method that converts a STRING to byte[].
+//     *
+//     * @param string. The input string to be converted into byte[] format.
+//     * @return data. The byte[] that represents @param string.
+//     */
     public static byte[] hexStringToByteArray(String string) {
         int len = string.length();
         byte[] data = new byte[len / 2];
@@ -414,7 +414,7 @@ public final class Common {
         System.arraycopy(q, 0, tbs, currpos, pbkL);
 
         // Return Base64-encoded TBS
-        return Base64.getUrlEncoder().encodeToString(tbs);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(tbs);
     }
 
 
@@ -430,14 +430,14 @@ public final class Common {
         sig.update(tbsbytes);
         byte[] signedBytes = sig.sign();
 
-        return Base64.getUrlEncoder().encodeToString(signedBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(signedBytes);
 
         // Verify before responding (to be sure its accurate); this will slow
         // down responses - comment it out if faster responses are desired
 //        sig.initVerify(pubkey);
 //        sig.update(tbsbytes);
 //        if (sig.verify(signedBytes)) {
-//            return Base64.getUrlEncoder().encodeToString(signedBytes);
+//            return Base64.getUrlEncoder().withoutPadding().encodeToString(signedBytes);
 //        } else {
 //            return null;
 //        }
@@ -542,13 +542,13 @@ public final class Common {
         System.arraycopy(acsig, 0, regresp, currpos, acsiglen);
 
         // Return URL-safe Base64-encoded response
-        return org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(regresp);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(regresp);
     }
 
     public static JsonObject createRegistrationResponse(String clientdata, String regdata)
             throws UnsupportedEncodingException {
         JsonObject jo = Json.createObjectBuilder()
-                .add(Constants.JSON_KEY_CLIENTDATA_LABEL, org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(clientdata.getBytes("UTF-8")))
+                .add(Constants.JSON_KEY_CLIENTDATA_LABEL, Base64.getUrlEncoder().withoutPadding().encodeToString(clientdata.getBytes("UTF-8")))
                 //                .add(Constants.JSON_KEY_SESSIONID_LABEL, sessionid)
                 .add(Constants.JSON_KEY_REGISTRATIONDATA_LABEL, regdata)
                 .build();
@@ -667,7 +667,7 @@ public final class Common {
             sig.update(tbs);
             signedbytes = sig.sign();
 
-        } catch (DecoderException | NoSuchAlgorithmException
+        } catch (NoSuchAlgorithmException
                 | NoSuchProviderException | NoSuchPaddingException
                 | InvalidKeyException | InvalidAlgorithmParameterException
                 | ShortBufferException | IllegalBlockSizeException
@@ -694,7 +694,7 @@ public final class Common {
         System.arraycopy(signedbytes, 0, signdata, currpos, signedbytes.length);
 
         // Return Base64-encoded signature response
-        return org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(signdata);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(signdata);
     }
 
     /**
@@ -713,7 +713,7 @@ public final class Common {
             String signresponse)
             throws UnsupportedEncodingException {
         return Json.createObjectBuilder()
-                .add(Constants.JSON_KEY_CLIENTDATA_LABEL, org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(clientdata.getBytes("UTF-8")))
+                .add(Constants.JSON_KEY_CLIENTDATA_LABEL, Base64.getUrlEncoder().withoutPadding().encodeToString(clientdata.getBytes("UTF-8")))
                 //                .add(Constants.JSON_KEY_SESSIONID_LABEL, sessionid)
                 .add(Constants.JSON_KEY_KEYHANDLE_LABEL, keyhandle)
                 .add(Constants.JSON_KEY_SIGNATURE_LABEL, signresponse)
@@ -744,7 +744,7 @@ public final class Common {
             UnsupportedEncodingException {
         MessageDigest digest = MessageDigest.getInstance(algorithm, "BCFIPS");
         byte[] digestbytes = digest.digest(input);
-        return Base64.getUrlEncoder().encodeToString(digestbytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(digestbytes);
     }
 
     /**
@@ -852,15 +852,15 @@ public final class Common {
      * @throws java.security.spec.InvalidParameterSpecException
      */
     public static String makeKeyHandle(PrivateKey pvk, String originHash)
-            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, FileNotFoundException, DecoderException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidAlgorithmParameterException, ShortBufferException, InvalidKeySpecException, SignatureException, InvalidParameterSpecException {
+            throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, FileNotFoundException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidAlgorithmParameterException, ShortBufferException, InvalidKeySpecException, SignatureException, InvalidParameterSpecException {
         // Get wrapping key
-        byte[] Seckeybytes = Hex.decodeHex(Constants.FIXED_AES256_WRAPPING_KEY.toCharArray());
+        byte[] Seckeybytes = Hex.decode(Constants.FIXED_AES256_WRAPPING_KEY);
         SecretKeySpec sks = new SecretKeySpec(Seckeybytes, "AES");
         ECPrivateKey ecpk = (ECPrivateKey) pvk;
         byte[] s = org.bouncycastle.util.encoders.Hex.decode(String.format("%064x", ecpk.getS()));
 
         // Encode plaintext key-handle into JSON structure
-        String ptkh = encodeKeyHandle(Base64.getUrlEncoder().encodeToString(s), originHash, getDigest(pvk.getEncoded(), "SHA1"));
+        String ptkh = encodeKeyHandle(Base64.getUrlEncoder().withoutPadding().encodeToString(s), originHash, getDigest(pvk.getEncoded(), "SHA1"));
 //        System.out.println("PlaintextKeyHandle:     " + ptkh);
 
         // Encrypt key handle to create ciphertext
@@ -875,7 +875,7 @@ public final class Common {
         System.arraycopy(ctkh, 0, ctkhiv, Constants.ENCRYPTION_MODE_CBC_IV_LENGTH, ctkh.length);  // Append ciphertext KH to IV
 
         // Base64-encode ciphertext keyhandle + IV
-        String ctkhivb64 = Base64.getUrlEncoder().encodeToString(ctkhiv);
+        String ctkhivb64 = Base64.getUrlEncoder().withoutPadding().encodeToString(ctkhiv);
 
         // Test recovery of plaintext key-handle before returning
         //String ptkh2 = decryptKeyHandle(ctkhivb64);
@@ -909,7 +909,7 @@ public final class Common {
      * @throws java.security.spec.InvalidParameterSpecException
      */
     public static String decryptKeyHandle(String s)
-            throws DecoderException, NoSuchAlgorithmException,
+            throws NoSuchAlgorithmException,
             NoSuchProviderException, NoSuchPaddingException,
             InvalidKeyException, InvalidAlgorithmParameterException,
             ShortBufferException, IllegalBlockSizeException,
@@ -918,7 +918,7 @@ public final class Common {
             InvalidParameterSpecException
     {
         // Get wrapping key
-        byte[] Seckeybytes = Hex.decodeHex(Constants.FIXED_AES256_WRAPPING_KEY.toCharArray());
+        byte[] Seckeybytes = Hex.decode(Constants.FIXED_AES256_WRAPPING_KEY);
         SecretKeySpec sks = new SecretKeySpec(Seckeybytes, "AES");
 
         // Decode IV + ciphertext and extract components into new arrays
@@ -1022,18 +1022,36 @@ public final class Common {
         assert y.length == 32;
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CborEncoder cbe = new CborEncoder(baos);
         try {
-            new CborEncoder(baos).encode(new CborBuilder()
-                    .addMap()
-                    .put(1, 2)  // kty: EC2 key type
-                    .put(3, -7) // alg: ES256 sig algorithm
-                    .put(-1, 1) // crv: P-256 curve
-                    .put(-2, x) // x-coord
-                    .put(-3, y) // y-coord
-                    .end()
-                    .build()
-            );
-        } catch (CborException e) {
+            cbe.writeMapStart(5);
+
+            cbe.writeInt(1);
+            cbe.writeInt(2);
+            
+            cbe.writeInt(3);
+            cbe.writeInt(-7);
+            
+            cbe.writeInt(-1);
+            cbe.writeInt(1);
+            
+            cbe.writeInt(-2);
+            cbe.writeByteString(x);
+            
+            cbe.writeInt(-3);
+            cbe.writeByteString(y);
+
+//            new CborEncoder(baos).encode(new CborBuilder()
+//                    .addMap()
+//                    .put(1, 2)  // kty: EC2 key type
+//                    .put(3, -7) // alg: ES256 sig algorithm
+//                    .put(-1, 1) // crv: P-256 curve
+//                    .put(-2, x) // x-coord
+//                    .put(-3, y) // y-coord
+//                    .end()
+//                    .build()
+//            );
+        } catch (Exception e) {
             System.err.println(e.getLocalizedMessage());
             throw new Exception("couldn't serialize to cbor", e);
         }
@@ -1050,6 +1068,13 @@ public final class Common {
         return fixed;
     }
 
+    public static byte[] getDigestBytes(String Input, String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+
+        MessageDigest digest;
+        digest = MessageDigest.getInstance(algorithm, "BCFIPS");
+        byte[] digestbytes = digest.digest(Input.getBytes("UTF-8"));
+        return digestbytes;
+    }
 
     /**
      * Function to retrieve the Attestation Key's digital certificate in Base64

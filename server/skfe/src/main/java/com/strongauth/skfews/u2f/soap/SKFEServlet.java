@@ -27,9 +27,9 @@ import com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal;
 import com.strongkey.skce.jaxb.SKCEServiceInfoType;
 import com.strongkey.skce.utilities.SKCEException;
 import com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
@@ -71,9 +71,9 @@ public class SKFEServlet {
         String prefix = methodname + " web-service; ";
 
         if ( svcinfo==null ) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "SKCEWS-ERR-3014",
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "SKCEWS-ERR-3014",
                     "svcinfo");
-            throw new SKCEException(skfsCommon.getMessageProperty("SKCEWS-ERR-3014")
+            throw new SKCEException(SKFSCommon.getMessageProperty("SKCEWS-ERR-3014")
                     .replace("{0}", "") + prefix + "svcinfo");
         }
     }
@@ -140,31 +140,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildPreRegisterResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildPreRegisterResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_REG);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
 
         return u2fHelper.preregister(did, protocol, payload);
@@ -236,31 +236,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildRegisterResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildRegisterResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_REG);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.register(did, protocol, payload);
     }
@@ -326,31 +326,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_SIGN);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.preauthenticate(did, protocol, payload);
     }
@@ -418,33 +418,38 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_SIGN);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
-        return u2fHelper.authenticate(did, protocol, payload);
+        
+         String agent = request.getHeader("User-Agent");
+        //Example for getting cip
+        String cip = request.getRemoteAddr();
+        
+        return u2fHelper.authenticate(did, protocol, payload, agent, cip);
     }
 
     /*
@@ -507,31 +512,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildPreAuthResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_AUTHZ);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.preauthorize(did, protocol, payload);
     }
@@ -600,31 +605,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildAuthenticateResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO_AUTHZ);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildAuthenticateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildAuthenticateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.authorize(did, protocol, payload);
     }
@@ -694,31 +699,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildDeregisterResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildDeregisterResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildDeregisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildDeregisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildDeregisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildDeregisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildDeregisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.deregister(did, protocol, payload);
     }
@@ -784,31 +789,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildDeactivateResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildDeactivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildDeactivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildDeactivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildDeactivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildDeactivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.deactivate(did, protocol, payload);
     }
@@ -874,31 +879,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildActivateResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildActivateResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildActivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildActivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildActivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildActivateResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildActivateResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.activate(did, protocol, payload);
     }
@@ -968,31 +973,31 @@ public class SKFEServlet {
             svcpassword     = svcinfo.getSvcpassword();
             protocol        = svcinfo.getProtocol();
 
-            skfsCommon.inputValidateSKCEDid(did);
+            SKFSCommon.inputValidateSKCEDid(did);
         } catch (Exception ex) {
-            return skfsCommon.buildGetKeyInfoResponse(null, "", ex.getLocalizedMessage());
+            return SKFSCommon.buildGetKeyInfoResponse(null, "", ex.getLocalizedMessage());
         }
 
         //  2. Input checks
         if (svcusername == null || svcusername.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildGetKeyInfoResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         if (svcpassword == null) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0002", " credential");
+            return SKFSCommon.buildGetKeyInfoResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " credential");
         }
         //authenticate
         boolean isAuthorized;
         try {
-            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, skfsConstants.LDAP_ROLE_FIDO);
+            isAuthorized = authorizebean.execute(Long.parseLong(did), svcusername, svcpassword, SKFSConstants.LDAP_ROLE_FIDO);
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+            return SKFSCommon.buildGetKeyInfoResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
         }
         if (!isAuthorized) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
-            return skfsCommon.buildGetKeyInfoResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0033"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0033", "");
+            return SKFSCommon.buildGetKeyInfoResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
         }
         return u2fHelper.getkeysinfo(did, protocol, payload);
     }

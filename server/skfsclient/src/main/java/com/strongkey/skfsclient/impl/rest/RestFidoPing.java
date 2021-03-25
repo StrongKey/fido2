@@ -7,11 +7,9 @@
 
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.strongkey.skfs.requests.PingRequest;
 import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
-import com.strongkey.skfs.requests.PingRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.http.HttpEntity;
@@ -61,8 +59,8 @@ public class RestFidoPing {
         }
 
         // Prepare for POST call
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(ping);
+        String json = ping.toJsonObject().toString();
+        System.out.println("json = " + json);
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
 

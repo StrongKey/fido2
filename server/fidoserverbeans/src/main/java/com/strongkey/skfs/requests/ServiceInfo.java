@@ -7,10 +7,6 @@
 
 package com.strongkey.skfs.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
 public class ServiceInfo {
 
     private Long did;
@@ -20,8 +16,8 @@ public class ServiceInfo {
     private String authtype;
     private Long timestamp;
     private String authorization;
-    private final String contentType = "application/json";
-    private final String requestURI = "/skfs/soap?wsdl";
+    private final static String contentType = "application/json";
+    private final static String requestURI = "/skfs/soap?wsdl";
     private String strongkeyAPIversion;
     private String contentSHA256;
     private String errormsg;

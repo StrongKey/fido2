@@ -7,15 +7,14 @@
 
 package com.strongkey.skfs.fido2;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.fasterxml.jackson.dataformat.cbor.CBORParser;
+import com.strongkey.cbor.jacob.CborDecoder;
 import com.strongkey.crypto.utility.cryptoCommon;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.KeyFactory;
@@ -25,9 +24,11 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.util.encoders.Hex;
 
 public class FIDO2AttestedCredentialData {
 
@@ -70,15 +71,17 @@ public class FIDO2AttestedCredentialData {
         System.arraycopy(data, 0, aaguid, 0, 16);
         remainingDataIndex += 16;
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "AAGUID : " + Base64.toBase64String(aaguid));
+        
+        //####4.3.2#### Check aaguid fits within rp policy
 
         byte[] lengthValue = new byte[2];
         System.arraycopy(data, remainingDataIndex, lengthValue, 0, 2);
         remainingDataIndex += 2;
         length = ByteBuffer.wrap(lengthValue).getShort();
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "length : " + length);
 
         credentialId = new byte[length];
@@ -88,37 +91,61 @@ public class FIDO2AttestedCredentialData {
         byte[] cbor = new byte[data.length - remainingDataIndex];
         System.arraycopy(data, remainingDataIndex, cbor, 0, data.length - remainingDataIndex);
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "cbor (hex): \n" + bytesToHexString(cbor, cbor.length));
-        CBORFactory f = new CBORFactory();
-        ObjectMapper mapper = new ObjectMapper(f);
-        int kty = 0;
-        CBORParser parser = f.createParser(cbor);
-        Map<String, Object> pkObjectMap = mapper.readValue(parser, new TypeReference<Map<String, Object>>() {
-        });
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                    "cbor (hex): \n" + Hex.toHexString(cbor));
+//        CBORFactory f = new CBORFactory();
+//        ObjectMapper mapper = new ObjectMapper(f);
+        long kty = 0;
+//        CBORParser parser = f.createParser(cbor);
+//        Map<String, Object> pkObjectMap = mapper.readValue(parser, new TypeReference<Map<String, Object>>() {
+//        });
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "pkObjectMap: ");
-        for(String key: pkObjectMap.keySet()){
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+        ByteArrayInputStream m_bais = new ByteArrayInputStream(cbor);
+        PushbackInputStream m_is = new PushbackInputStream(m_bais);
+        CborDecoder m_stream = new CborDecoder(m_is);
+
+        long len = m_stream.readMapLength();
+        Map<Object, Object> pkObjectMap = new HashMap<>();
+        for (long i = 0; len < 0 || i < len; i++) {
+            Object key = SKFSCommon.readGenericItem(m_stream);
+            if (len < 0 && (key == null)) {
+                // break read...
+                break;
+            }
+            Object value = SKFSCommon.readGenericItem(m_stream);
+            pkObjectMap.put(key, value);
+        }
+        
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                "pkObjectMap: ");
+        for (Map.Entry<Object,Object> entry : pkObjectMap.entrySet()) {
+            Object key = entry.getKey();
+            if ((long) key == 1) {
+                kty = (long) pkObjectMap.get(key);
+            }
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Key: " + key + ", Object: " + pkObjectMap.get(key).toString());
         }
-        kty = (int) pkObjectMap.get("1");
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "KTY = " + kty);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                "KTY = " + kty);
+        
+        int cborLength = 0;
+        
         if (kty == 2) {
             ECKeyObject eck = new ECKeyObject();
             eck.decode(cbor);
-
-            int crv = eck.getCrv();
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+            
+            cborLength = eck.getEncodedLength();
+            
+            long crv = eck.getCrv();
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "crv = " + crv);
-            String curveString = skfsCommon.getCurveFromFIDOECCCurveID(crv);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+            String curveString = SKFSCommon.getCurveFromFIDOECCCurveID(crv);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "curveString = " + curveString);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "X = " + org.bouncycastle.util.encoders.Hex.toHexString(eck.getX()));
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "Y = " + org.bouncycastle.util.encoders.Hex.toHexString(eck.getY()));
             publicKey = cryptoCommon.getUserECPublicKey(eck.getX(), eck.getY(), curveString);
 
@@ -127,6 +154,7 @@ public class FIDO2AttestedCredentialData {
             RSAKeyObject rko = new RSAKeyObject();
             rko.decode(cbor);
 
+            cborLength = rko.getEncodedLength();
 
             RSAPublicKeySpec spec = new RSAPublicKeySpec(new BigInteger(1,rko.getN()), new BigInteger(1,rko.getE()));
             publicKey = KeyFactory.getInstance("RSA").generatePublic(spec);
@@ -135,19 +163,8 @@ public class FIDO2AttestedCredentialData {
         }
 
         //Return size of AttestedCredentialData
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "FIDO2AttestedCredentialData size (bytes: " + parser.getCurrentLocation().getByteOffset());
-        return remainingDataIndex + (int) parser.getCurrentLocation().getByteOffset();
-    }
-
-    private static String bytesToHexString(byte[] rawBytes, int num) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < num; i++) {
-            if (i % 16 == 0) {
-                sb.append('\n');
-            }
-            sb.append(String.format("%02x ", rawBytes[i]));
-        }
-        return sb.toString();
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                    "FIDO2AttestedCredentialData size (bytes: " + cborLength);
+        return remainingDataIndex + cborLength;
     }
 }

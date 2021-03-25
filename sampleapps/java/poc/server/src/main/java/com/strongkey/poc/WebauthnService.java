@@ -332,7 +332,7 @@ public class WebauthnService {
                 String authresponse = SKFSClient.authenticate(username, getOrigin(), input);
                 session.setAttribute("username", username);
                 session.setAttribute("isAuthenticated", true);
-                return generateResponse(Response.Status.OK, getResponseFromSKFSResponse(authresponse));
+                return generateAuthenticateResponse(Response.Status.OK, getResponseFromSKFSResponse(authresponse),getJWTFromSKFSResponse(authresponse));
             } else {
                 POCLogger.logp(Level.SEVERE, CLASSNAME, "authenticate", "POC-WS-ERR-1002", username);
                 return generateResponse(Response.Status.CONFLICT, POCLogger.getMessageProperty("POC-WS-ERR-1002"));
@@ -580,6 +580,15 @@ public class WebauthnService {
         }
         return response;
     }
+    // Parse response string from SKFS
+    private String getJWTFromSKFSResponse(String SKFSResponse) {
+        JsonObject SKFSResponseObject = Json.createReader(new StringReader(SKFSResponse)).readObject();
+        String response = SKFSResponseObject.getString("jwt", null);
+        if (response == null) {
+            throw new IllegalArgumentException("Unexpected Response");
+        }
+        return response;
+    }
 
     // Remove all keys
     private void removeKeys(JsonArray keyIds) throws Exception {
@@ -605,6 +614,20 @@ public class WebauthnService {
                 .add(Constants.RP_JSON_KEY_RESPONSE, response)
                 .add(Constants.RP_JSON_KEY_MESSAGE, message)
                 .add(Constants.RP_JSON_KEY_ERROR, error)
+                .build().toString();
+        return Response.status(status)
+                .entity(responseString).build();
+    }
+    
+    private Response generateAuthenticateResponse(Status status, String responsetext, String jwt) {
+        String response = status.equals(Response.Status.OK) ? responsetext : "";
+        String message = status.equals(Response.Status.OK) ? "": responsetext;
+        String error = status.equals(Response.Status.OK) ? Constants.RP_JSON_VALUE_FALSE_STRING: Constants.RP_JSON_VALUE_TRUE_STRING;
+        String responseString = Json.createObjectBuilder()
+                .add(Constants.RP_JSON_KEY_RESPONSE, response)
+                .add(Constants.RP_JSON_KEY_MESSAGE, message)
+                .add(Constants.RP_JSON_KEY_ERROR, error)
+                .add(Constants.RP_JSON_KEY_JWT, jwt)
                 .build().toString();
         return Response.status(status)
                 .entity(responseString).build();

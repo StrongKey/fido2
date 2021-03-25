@@ -103,13 +103,13 @@ At this point, the PoC server is installed. Continue to install the front-end An
 11. Copy all the files to the Payara _docroot_.
 
     ```
-    cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
+    cp -r dist/* /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot
     ```
 12. Optional: Modify the background image and the logo image.
 
     ```
-    cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
-    cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
+    cp <your background> /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
+    cp <your logo> /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
     ```
 13. The application is deployed in _docroot_ on the PoC server and can be accessed as follows in a browser:
 

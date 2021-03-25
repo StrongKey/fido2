@@ -23,14 +23,12 @@
 package com.strongauth.skfs.fido2.artifacts;
 
 import co.nstant.in.cbor.CborBuilder;
-import co.nstant.in.cbor.CborEncoder;
-import co.nstant.in.cbor.CborException;
+import com.strongkey.cbor.jacob.CborEncoder;
 import java.io.ByteArrayOutputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.codec.binary.Base64;
 
 public class FIDO2AttestationObject {
 
@@ -87,9 +85,34 @@ public class FIDO2AttestationObject {
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+        CborEncoder cbe = new CborEncoder(baos);
         try {
             if (attStmt.getAttestationType().equalsIgnoreCase("self")) {
-                new CborEncoder(baos).encode(new CborBuilder()
+                System.out.println("SELF");
+                cbe.writeMapStart(3);
+                // First element
+                cbe.writeTextString("fmt");
+                cbe.writeTextString(attFormat);
+
+                // Second element
+                cbe.writeTextString("authData");
+                cbe.writeByteString(encodedAuthData);
+
+                // Third element
+                cbe.writeTextString("attStmt");
+                cbe.writeMapStart(2);
+
+                // First sub-element
+                cbe.writeTextString("alg");
+                cbe.writeInt(attStmt.getAlg());
+                
+                // SEcond sub-element
+                cbe.writeTextString("sig");
+                cbe.writeByteString(attStmt.signwithCredentialKey(pvtKey, tbs));
+        
+        
+                new co.nstant.in.cbor.CborEncoder(baos2).encode(new CborBuilder()
                         .addMap()
                         .put("authData", encodedAuthData)
                         .put("fmt", attFormat)
@@ -101,7 +124,37 @@ public class FIDO2AttestationObject {
                         .build()
                 );
             } else if (attStmt.getAttestationType().equalsIgnoreCase("basic")) {
-                new CborEncoder(baos).encode(new CborBuilder()
+                System.out.println("BASIC");
+                
+                cbe.writeMapStart(3);
+                // First element
+                cbe.writeTextString("authData");
+                cbe.writeByteString(encodedAuthData);
+
+                // Second element
+                cbe.writeTextString("fmt");
+                cbe.writeTextString(attFormat);
+
+                // Third element
+                cbe.writeTextString("attStmt");
+                cbe.writeMapStart(3);
+
+                // First sub-element
+                cbe.writeTextString("alg");
+                cbe.writeInt(attStmt.getAlg());
+                
+                // SEcond sub-element
+                cbe.writeTextString("sig");
+                cbe.writeByteString(attStmt.signwithCredentialKey(pvtKey, tbs));
+                
+                // Third sub-element
+                cbe.writeTextString("x5c");
+                cbe.writeArrayStart(1);
+                
+                // First sub-sub-element
+                cbe.writeByteString(attStmt.getX5c());
+                
+                new co.nstant.in.cbor.CborEncoder(baos2).encode(new CborBuilder()
                         .addMap()
                         .put("authData", encodedAuthData)
                         .put("fmt", attFormat)
@@ -123,9 +176,17 @@ public class FIDO2AttestationObject {
             }
 
             byte[] encodedAttObject = baos.toByteArray();
-            return Base64.encodeBase64URLSafeString(encodedAttObject);
+            byte[] encodedAttObject2 = baos2.toByteArray();
+            
+            System.out.println("********************");
+            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject));
+            System.out.println("");
+            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject2));
+            System.out.println("********************");
+            
+            return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject2);
 
-        } catch (CborException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FIDO2AttestationObject.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

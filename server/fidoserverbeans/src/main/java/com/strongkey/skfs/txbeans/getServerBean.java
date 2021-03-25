@@ -9,8 +9,8 @@ package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Servers;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,13 +41,13 @@ public class getServerBean implements getServerBeanLocal {
      */
     @Override
      public Collection<Servers> byActiveSubscribers(String fqdn) throws SKFEException {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byActiveSubscribers");
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "byActiveSubscribers");
         try {
             TypedQuery<Servers> q = em.createNamedQuery("Servers.findByActiveSubscribers", Servers.class);
             q.setParameter("fqdn", fqdn);
             return q.getResultList();
         } catch (NoResultException ex) {
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "byActiveSubscribers");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "byActiveSubscribers");
             return null;
         }
     }
@@ -61,11 +61,11 @@ public class getServerBean implements getServerBeanLocal {
      */
     @Override
      public Servers byFqdn(String fqdn) throws SKFEException {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byFqdn");
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "byFqdn");
         try {
             return (Servers) em.createNamedQuery("Servers.findByFqdn").setParameter("fqdn", fqdn).getSingleResult();
         } catch (NoResultException ex) {
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "byFqdn");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "byFqdn");
             return null;
         }
     }

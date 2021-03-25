@@ -12,5 +12,5 @@ import javax.ws.rs.core.Response;
 
 @Local
 public interface deleteFidoPolicyLocal {
-    public Response execute(Long did, String sidpid) ;
+    public Response execute(Long did, Long sid, Long pid) ;
 }

@@ -85,7 +85,11 @@ public class skceConstants {
     public static final String LDAP_ROLE_LOADKEY = "LDKY";  //  'cn=LoadAuthorized'
     public static final String LDAP_ROLE_SIGN = "SIGN";     //  'cn=SignAuthorized'
     public static final String LDAP_ROLE_REMOVEKEY = "RMKY"; //  'cn=RemoveAuthorized'
-    public static final String LDAP_ROLE_FIDO = "FIDO"; //  'cn=RemoveAuthorized'
+    public static final String LDAP_ROLE_FIDO = "FIDO"; //  'cn=FIDOAuthorized'
+    public static final String LDAP_ROLE_FIDO_REG = "FIDOREG"; //  'cn=FIDORegAuthorized'
+    public static final String LDAP_ROLE_FIDO_SIGN = "FIDOSIGN"; //  'cn=FIDOSIGNAuthorized'
+    public static final String LDAP_ROLE_FIDO_AUTHZ = "FIDOAUTHZ"; //  'cn=FIDOAUTHZAuthorized'
+    public static final String LDAP_ROLE_FIDO_ADMIN = "FIDOADM"; //  'cn=RemoveAuthorized'
 
     /**
      * *********************************************************************

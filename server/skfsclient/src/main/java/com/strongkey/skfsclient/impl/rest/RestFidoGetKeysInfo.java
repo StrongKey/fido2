@@ -7,11 +7,9 @@
 
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.strongkey.skfs.requests.GetKeysInfoRequest;
 import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
-import com.strongkey.skfs.requests.GetKeysInfoRequest;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,8 +69,8 @@ public class RestFidoGetKeysInfo {
         getkeysinfo.setUsername(username);
 
         // Prepare for POST call
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(getkeysinfo);
+        String json = getkeysinfo.toJsonObject().toString();
+        System.out.println(json);
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
 
@@ -84,7 +82,7 @@ public class RestFidoGetKeysInfo {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-            String payloadHash = common.calculateSha256(ow.writeValueAsString(getkeysinfo.getPayload()));
+            String payloadHash = common.calculateSha256(getkeysinfo.getPayload().toJsonObject().toString());
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
             String requestToHmac = httpPost.getMethod() + "\n"
                     + payloadHash + "\n"

@@ -85,6 +85,8 @@ public class FEreturn implements Serializable {
                         sb.append(parser.getString()).append("\",\n");
                         break;
                     }
+                    default:
+                        break;
                 }
             }   sb.append("\t}");
         }

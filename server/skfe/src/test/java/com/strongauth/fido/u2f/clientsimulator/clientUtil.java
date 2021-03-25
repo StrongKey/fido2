@@ -40,7 +40,6 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
@@ -61,9 +60,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.xml.bind.DatatypeConverter;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.util.encoders.Hex;
 
 public class clientUtil {
 
@@ -111,7 +109,7 @@ public class clientUtil {
         MessageDigest digest;
         digest = MessageDigest.getInstance(algorithm, "BCFIPS");
         byte[] digestbytes = digest.digest(Input.getBytes("UTF-8"));
-        String dig = Base64.encodeBase64String(digestbytes);
+        String dig = Base64.toBase64String(digestbytes);
         return dig;
 
     }
@@ -121,7 +119,7 @@ public class clientUtil {
         MessageDigest digest;
         digest = MessageDigest.getInstance(algorithm, "BCFIPS");
         byte[] digestbytes = digest.digest(Input);
-        String dig = Base64.encodeBase64String(digestbytes);
+        String dig = Base64.toBase64String(digestbytes);
         return dig;
 
     }
@@ -176,10 +174,10 @@ public class clientUtil {
 
     }
 
-    public static String makeKeyHandle(PrivateKey key, String originHash) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, FileNotFoundException, DecoderException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidAlgorithmParameterException, ShortBufferException, InvalidKeySpecException, SignatureException {
+    public static String makeKeyHandle(PrivateKey key, String originHash) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, FileNotFoundException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidAlgorithmParameterException, ShortBufferException, InvalidKeySpecException, SignatureException {
 
         //Get wrapping key
-        byte[] Seckeybytes = Hex.decodeHex(CSConstants.SECURE_ELEMENT_SECRET_KEY.toCharArray());
+        byte[] Seckeybytes = Hex.decode(CSConstants.SECURE_ELEMENT_SECRET_KEY);
         SecretKeySpec sks = new SecretKeySpec(Seckeybytes, "AES");
 
         //get key sha1sum
@@ -187,7 +185,7 @@ public class clientUtil {
         byte[] keydigestbytes = DatatypeConverter.parseBase64Binary(keyDigest);
 
         //print originHash
-        byte[] originhashbytes = Base64.decodeBase64(originHash);
+        byte[] originhashbytes = Base64.decode(originHash);
 
         String khunwrapped = keyHandleEncode(DatatypeConverter.printBase64Binary(key.getEncoded()), originHash, keyDigest);
         System.out.println("\t\t[-] Key handle : ");
@@ -210,7 +208,7 @@ public class clientUtil {
         System.arraycopy(wrapped, 0, keyHandlewithIV, iv.length, wrapped.length);
 
         //base64 encode keyhandlewith IV
-        String keyHandleWithIV = Base64.encodeBase64String(keyHandlewithIV);
+        String keyHandleWithIV = Base64.toBase64String(keyHandlewithIV);
 
         //test key handle
         String keyHandleDecrypted = decryptKeyHandle(keyHandleWithIV);
@@ -223,10 +221,10 @@ public class clientUtil {
 
     }
 
-    public static String decryptKeyHandle(String keyHandleWithIV) throws DecoderException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidKeySpecException, SignatureException {
+    public static String decryptKeyHandle(String keyHandleWithIV) throws  NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidKeySpecException, SignatureException {
 
         //get secure element key to decrypt
-        byte[] Seckeybytes = Hex.decodeHex(CSConstants.SECURE_ELEMENT_SECRET_KEY.toCharArray());
+        byte[] Seckeybytes = Hex.decode(CSConstants.SECURE_ELEMENT_SECRET_KEY);
         SecretKeySpec sks = new SecretKeySpec(Seckeybytes, "AES");
 
         byte[] receivedkeyHandle = DatatypeConverter.parseBase64Binary(keyHandleWithIV);
@@ -252,7 +250,7 @@ public class clientUtil {
 
         //put decrypted key in a BCPrivate key object //to test
         String privateKey = keyHandleDecode(new String(receivedunwrappedKeyHandle, "UTF-8"), 0); //0 for key
-        byte[] prk = Base64.decodeBase64(privateKey);
+        byte[] prk = Base64.decode(privateKey);
 
         //get private key into BC understandable form -- test working
         ECPrivateKeySpec ecpks = new ECPrivateKeySpec(new BigInteger(prk), null);
@@ -279,7 +277,7 @@ public class clientUtil {
         sr.nextBytes(randomBytes);
 
         //Hex encode and return
-        return new String(Base64.encodeBase64(randomBytes));
+        return new String(Base64.toBase64String(randomBytes));
 
     }
     // getObjectToSign("0x00",ApplicationParam,ChallengeParam,kh,genKeys.getPublic());
@@ -287,13 +285,13 @@ public class clientUtil {
     public static String getObjectToSign(String ApplicationParam, String ChallengeParam, String kh, String PublicKey) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
         byte[] constant = {(byte) 0x00};
         int constantL = constant.length;
-        byte[] Challenge = Base64.decodeBase64(ChallengeParam);
+        byte[] Challenge = Base64.decode(ChallengeParam);
         int ChanllengeL = Challenge.length;
-        byte[] Application = Base64.decodeBase64(ApplicationParam);
+        byte[] Application = Base64.decode(ApplicationParam);
         int ApplicationL = Application.length;
-        byte[] keyHandle = Base64.decodeBase64(kh);
+        byte[] keyHandle = Base64.decode(kh);
         int keyHandleL = keyHandle.length;
-        byte[] publicKey = Base64.decodeBase64(PublicKey);
+        byte[] publicKey = Base64.decode(PublicKey);
         int publicKeyL = publicKey.length;
         /////////
         //Convert back to publicKey
@@ -317,13 +315,13 @@ public class clientUtil {
         tot += keyHandleL;
         System.arraycopy(publicKey, 0, ob2Sign, tot, pukL);
         tot += pukL;
-        return Base64.encodeBase64String(ob2Sign);
+        return Base64.toBase64String(ob2Sign);
     }
 
     public String signObject(String input) throws FileNotFoundException, KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, NoSuchProviderException, InvalidKeyException, SignatureException {
 
         //Base64 decode input
-        byte[] inputbytes = Base64.decodeBase64(input);
+        byte[] inputbytes = Base64.decode(input);
 
         KeyStore attks = KeyStore.getInstance("JCEKS");
         attks.load(getClass().getResourceAsStream(CSConstants.ATTESTATION_KEYSTORE), CSConstants.ATTESTATION_KEYSTORE_TOUCH_PASSWORD.toCharArray());
@@ -344,7 +342,7 @@ public class clientUtil {
         sig.initVerify(pkey);
         sig.update(inputbytes);
         if (sig.verify(signedBytes)) {
-            return Base64.encodeBase64String(signedBytes);
+            return Base64.toBase64String(signedBytes);
         } else {
             return null;
         }
@@ -353,13 +351,13 @@ public class clientUtil {
 
     public String makeObject2Send(String userPublicKey, String keyHandle, String AttestationCertificate, String Signature) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
         byte constant = 0x05;
-        byte[] upk = Base64.decodeBase64(userPublicKey);
+        byte[] upk = Base64.decode(userPublicKey);
         int upkL = upk.length;
-        byte[] kh = Base64.decodeBase64(keyHandle);
+        byte[] kh = Base64.decode(keyHandle);
         int khL = kh.length;
-        byte[] ac = Base64.decodeBase64(AttestationCertificate);
+        byte[] ac = Base64.decode(AttestationCertificate);
         int acL = ac.length;
-        byte[] sig = Base64.decodeBase64(Signature);
+        byte[] sig = Base64.decode(Signature);
         int sigL = sig.length;
 
         //Convert back to publicKey
@@ -391,7 +389,7 @@ public class clientUtil {
         System.arraycopy(sig, 0, obj2send, tot, sigL);
         tot += sigL;
 
-        return Base64.encodeBase64URLSafeString(obj2send);
+        return Base64.toBase64String(obj2send);
 
     }
 

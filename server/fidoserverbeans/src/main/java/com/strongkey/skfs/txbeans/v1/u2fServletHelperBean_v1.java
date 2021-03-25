@@ -104,15 +104,16 @@ import com.strongkey.skfs.txbeans.updateFidoKeysLocal;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -186,7 +187,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
     @EJB
     getDomainsBeanLocal getdomainejb;
 
-    String ldapusermetadata_loc = skfsCommon.getConfigurationProperty("skfs.cfg.property.fido.usermetadata");
+//    String ldapusermetadata_loc = SKFSCommon.getConfigurationProperty("skfs.cfg.property.fido.usermetadata");
 
 
     /*
@@ -240,37 +241,37 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0001", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0001", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0014"), " Invalid json");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0014"), " Invalid json");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-5002"), protocol);
-            return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-5002"), protocol);
+            return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
 //check for protocol and call separate EJB
-        if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
+        if (protocol.equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
             //  fetch the username
             String username = (String) applianceCommon.getJsonValue(payload,
-                    skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
+                    SKFSConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
             if (username == null || username.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-                return skfsCommon.buildPreRegisterResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+                return SKFSCommon.buildPreRegisterResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " username");
             }
 
             //  3. Do processing - Do not do it here.. instead call preauthenticate on every key handle
@@ -281,24 +282,24 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             try {
                 FEreturn fer = u2fpreregbean.execute(Long.parseLong(did), protocol, username);
                 if (fer != null) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0046"), fer.toString());
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0046"), fer.toString());
 
                     logs = fer.getLogmsg();
                     regChallenge = (U2FRegistrationChallenge) fer.getResponse();
                     if (regChallenge == null) {
                         //  Chould not generate registration nonce.
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0025"), "");
-                        return skfsCommon.buildPreRegisterResponse(null, logs, skfsCommon.getMessageProperty("FIDO-ERR-0025") + "");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0025"), "");
+                        return SKFSCommon.buildPreRegisterResponse(null, logs, SKFSCommon.getMessageProperty("FIDO-ERR-0025") + "");
                     } else {
                         //  Fetch sessionid, nonce & appid from the Challenge object
                         //  then store it in the sessionMap for further use.
                         String nonce = regChallenge.getNonce();
-                        String nonceHash = skfsCommon.getDigest(nonce, "SHA-256");
+                        String nonceHash = SKFSCommon.getDigest(nonce, "SHA-256");
 
                         UserSessionInfo session = new UserSessionInfo(username, nonce, appid, "register", "", "");
                         session.setSid(applianceCommon.getServerId().shortValue());
                         session.setSkid(applianceCommon.getServerId().shortValue());
-                        skceMaps.getMapObj().put(skfsConstants.MAP_USER_SESSION_INFO, nonceHash, session);
+                        skceMaps.getMapObj().put(SKFSConstants.MAP_USER_SESSION_INFO, nonceHash, session);
                         //replicate map to other server
                         session.setMapkey(nonceHash);
                         try {
@@ -310,28 +311,26 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         }
                         //end publish
 
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0021"), " username=" + username);
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0021"), " username=" + username);
                     }
                 }
-            } catch (SKFEException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, skfsCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-                return skfsCommon.buildPreRegisterResponse(null, logs, skfsCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
-            } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
-                Logger.getLogger(u2fServletHelperBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (SKFEException | NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
+                return SKFSCommon.buildPreRegisterResponse(null, logs, SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage());
+            } 
 
             //  Make a silent preauthenticate call to fetch all the key handles.
             //  Look into the database to check for key handles
             String[] authresponses = null;
             try {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0031"), "");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0031"), "");
                 Collection<FidoKeys> kh_coll = getkeybean.getByUsername(Long.parseLong(did), username);
                 if (kh_coll != null) {
                     authresponses = new String[kh_coll.size()];
                     Iterator it = kh_coll.iterator();
                     int i = 0;
 
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0032"), "");
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0032"), "");
                     while (it.hasNext()) {
                         FidoKeys key = (FidoKeys) it.next();
                         if (key != null) {
@@ -339,7 +338,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
                             // Do a silent preauthenticate call to get auth wsresponse for this key handle.
                             // Fetch transports from the child table and create a jsonarray and pass it on to the auth challenge object
-                            FEreturn feskcero = u2fpreauthbean.execute(Long.parseLong(did), protocol, username, kh, key.getAppid(), skfsCommon.getTransportJson(key.getTransports().intValue()));
+                            FEreturn feskcero = u2fpreauthbean.execute(Long.parseLong(did), protocol, username, kh, key.getAppid(), SKFSCommon.getTransportJson(key.getTransports().intValue()));
                             if (feskcero != null) {
                                 U2FAuthenticationChallenge authChallenge = (U2FAuthenticationChallenge) feskcero.getResponse();
                                 if (authChallenge != null) {
@@ -350,12 +349,12 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         }
                     }
 
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, skfsCommon.getMessageProperty("FIDO-MSG-0033"), "");
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0033"), "");
                 }
             } catch (SKFEException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
-                return skfsCommon.buildPreRegisterResponse(null, "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0008") + ex.getMessage());
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+                return SKFSCommon.buildPreRegisterResponse(null, "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0008") + ex.getMessage());
             }
 
             JsonObject combined_regresponse;
@@ -374,7 +373,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
                     signDataArray = arrayBuilder.build();
 
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0034", " signdata array length = "
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0034", " signdata array length = "
                             + authresponses.length);
                 }
 
@@ -388,30 +387,30 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
                 if (signDataArray == null) {
                     combined_regresponse = Json.createObjectBuilder()
-                            .add(skfsConstants.JSON_KEY_APP_ID, appid)
-                            .add(skfsConstants.JSON_KEY_REGISTERREQUEST, regarrayBuilder.build())
+                            .add(SKFSConstants.JSON_KEY_APP_ID, appid)
+                            .add(SKFSConstants.JSON_KEY_REGISTERREQUEST, regarrayBuilder.build())
                             .build();
                 } else {
                     combined_regresponse = Json.createObjectBuilder()
-                            .add(skfsConstants.JSON_KEY_APP_ID, appid)
-                            .add(skfsConstants.JSON_KEY_REGISTERREQUEST, regarrayBuilder.build())
-                            .add(skfsConstants.JSON_KEY_REGISTEREDKEY, signDataArray)
+                            .add(SKFSConstants.JSON_KEY_APP_ID, appid)
+                            .add(SKFSConstants.JSON_KEY_REGISTERREQUEST, regarrayBuilder.build())
+                            .add(SKFSConstants.JSON_KEY_REGISTEREDKEY, signDataArray)
                             .build();
                 }
             } catch (Exception ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", ex.getMessage());
-                return skfsCommon.buildPreRegisterResponse(null, "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0014") + ex.getMessage());
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", ex.getMessage());
+                return SKFSCommon.buildPreRegisterResponse(null, "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0014") + ex.getMessage());
             }
 
             // Build the output json object
-            String response = skfsCommon.buildPreRegisterResponse(combined_regresponse, logs, errmsg);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0035", "");
+            String response = SKFSCommon.buildPreRegisterResponse(combined_regresponse, logs, errmsg);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0035", "");
 
             out = new Date();
             long rt = out.getTime() - in.getTime();
             //  4. Log output and return
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
                     + "\nU2FRegistration Challenge parameters = " + response);
             return response;
         } else {
@@ -419,7 +418,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             out = new Date();
             long rt = out.getTime() - in.getTime();
             //  4. Log output and return
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0002", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
                     + "\nFIDO2Registration Challenge parameters = " + response);
             return response;
         }
@@ -476,42 +475,42 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0003", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0003", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", " payload");
-            return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0004")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", " payload");
+            return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0004")
                     + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
 
         //  3. Retrieve data from payload
         //  fetch response and metadata fields from payload
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", "");
-            return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0004"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0004", "");
+            return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0004"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0016", "");
-            return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0016"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0016", "");
+            return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0016"));
         }
 
         //  based on the structure of the regresponse, decide the protocol version.
         if (protocol == null || protocol.trim().isEmpty()) {
-            protocol = skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2;
+            protocol = SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2;
         }
 
         String registrationresponse = response.toString();
@@ -521,24 +520,24 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
         //begine u2f code
         try {
-            if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
+            if (protocol.equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
                 responseJSON = U2FRegejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata, protocol);
             } else {
                 responseJSON = FIDO2Regejb.execute(Long.parseLong(did), registrationresponse, registrationmetadata);
             }
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-            return skfsCommon.buildRegisterResponse(null, "", ex.getMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
+            return SKFSCommon.buildRegisterResponse(null, "", ex.getMessage());
         }
 
         //  9.  Build the output json object
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0037", "");
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0037", "");
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  10. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0004", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0004", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
         return responseJSON;
     }
 
@@ -587,31 +586,31 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0005", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0005", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002")
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-5002")
                     + protocol);
         }
 
@@ -619,21 +618,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         //  fetch the username
         //  fetch extensions (if they exist)
         String username = (String) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
         JsonObject extensions = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
         // fetch options inputs if they exist (TODO refactor when options are no longer in payload)
         String userVerification = (String) applianceCommon.getJsonValue(payload,
-                skfsConstants.FIDO2_ATTR_USERVERIFICATION, "String");
+                SKFSConstants.FIDO2_ATTR_USERVERIFICATION, "String");
         JsonObjectBuilder optionsBuilder = Json.createObjectBuilder();
         if (userVerification != null) {
-            optionsBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
+            optionsBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
         }
         JsonObject options = optionsBuilder.build();
 
         if (username == null || username.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " username");
         }
 
@@ -643,7 +642,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  5. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0006", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0006", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
                 + "\nU2FAuthentication Challenge parameters = " + responseJSON);
         return responseJSON;
     }
@@ -687,44 +686,44 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
      * something went wrong. Will be empty if successful.
      */
     @Override
-    public String authenticate(String did, String protocol, String payload) {
+    public String authenticate(String did, String protocol, String payload, String agent, String cip) {
 
         Date in = new Date();
         Date out;
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0007", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0007", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         //  3. Retrieve data from payload
         //  fetch response and metadata fields from payload
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
-            return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0010"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
+            return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0010"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
-            return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0017"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
+            return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0017"));
         }
 
         String authenticationresponse = response.toString();
@@ -737,16 +736,18 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     authenticationresponse,
                     authenticationmetadata,
                     protocol,
-                    "authentication");
+                    "authentication",
+                    agent,
+                    cip);
         } catch (SKFEException ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
-            return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0034"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
+            return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0034"));
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  5. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0008", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0008", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
         return responseJSON;
     }
 
@@ -765,14 +766,14 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         Long[] regkeyids;
         Short[] serverids;
         String responseJSON;
-        if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
+        if (protocol.equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
             try {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0031", "");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0031", "");
                 Collection<FidoKeys> kh_coll
                         = getkeybean.getByUsernameStatus(Long.parseLong(did), username, applianceConstants.ACTIVE_STATUS);
                 if (kh_coll == null || kh_coll.size() <= 0) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0007", "");
-                    return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0007"));
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0007", "");
+                    return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0007"));
                 }
 
                 keyhandles = new String[kh_coll.size()];
@@ -786,27 +787,27 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 int i = 0;
 
                 //  Populate all key handles and their respective origins.
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0032", "");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0032", "");
                 while (it.hasNext()) {
                     FidoKeys key = (FidoKeys) it.next();
                     if (key != null) {
                         String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
                         FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
-                        skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
+                        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
                         keyhandles[i] = decryptKH(key.getKeyhandle());
                         upkeys[i] = key.getPublickey();
                         regkeyids[i] = key.getFidoKeysPK().getFkid();
                         serverids[i] = key.getFidoKeysPK().getSid();
                         appids[i] = key.getAppid();
-                        transports[i] = skfsCommon.getTransportJson(key.getTransports().intValue());
+                        transports[i] = SKFSCommon.getTransportJson(key.getTransports().intValue());
                         i++;
                     }
                 }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
-                return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0008")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
+                return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0008")
                         + ex.getMessage());
             }
 
@@ -816,18 +817,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             try {
                 //  For every keyhandle found, make a preauthenticate call and get authresponse
                 //  also add a user session for every preauthenticate call.
+                StringBuffer buf = new StringBuffer();
+                buf.append(logs);
                 for (int j = 0; j < keyhandles.length; j++) {
                     FEreturn fer = u2fpreauthbean.execute(Long.parseLong(did), protocol, username, keyhandles[j], appids[j], transports[j]);
                     if (fer != null) {
                         authresponses[j] = (U2FAuthenticationChallenge) fer.getResponse();
-                        logs = logs + fer.getLogmsg();
+                        buf.append(fer.getLogmsg());
                     }
                 }
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0026",
+                logs = buf.toString();
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0026",
                         " key handles count = " + keyhandles.length);
 
                 if (authresponses != null) {
-                    String nonce = U2FUtility.getRandom(Integer.parseInt(skfsCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
+                    String nonce = U2FUtility.getRandom(Integer.parseInt(SKFSCommon.getConfigurationProperty("skfs.cfg.property.entropylength")));
 
                     JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                     JsonArrayBuilder allowedCredBuilder = Json.createArrayBuilder();
@@ -837,18 +841,18 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         //  fetch the details of auth nonce
                         String keyhandle = authChallenge.getKeyhandle();
                         JsonArray trasnportArrsy = authChallenge.getTransports();
-                        String KHHash = skfsCommon.getDigest(keyhandle, "SHA-256");
+                        String KHHash = SKFSCommon.getDigest(keyhandle, "SHA-256");
 
                         //                    String khurlsafe = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(Base64.decode(keyhandle));
                         //                    System.out.println("KH b64 = " + keyhandle);
                         //                    System.out.println("KH b64URL = " + khurlsafe);
                         //  add a user session of type preauthenticate.
                         UserSessionInfo session = new UserSessionInfo(username,
-                                nonce, appid, skfsConstants.FIDO_USERSESSION_AUTH, upkeys[k], "");
+                                nonce, appid, SKFSConstants.FIDO_USERSESSION_AUTH, upkeys[k], "");
                         session.setFkid(regkeyids[k]);
                         session.setSkid(serverids[k]);
                         session.setSid(applianceCommon.getServerId().shortValue());
-                        skceMaps.getMapObj().put(skfsConstants.MAP_USER_SESSION_INFO, KHHash, session);
+                        skceMaps.getMapObj().put(SKFSConstants.MAP_USER_SESSION_INFO, KHHash, session);
 
                         //replicate map to other server
                         session.setMapkey(KHHash);
@@ -860,7 +864,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                             throw new RuntimeException(e.getLocalizedMessage());
                         }
                         //end publish
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0021", " username=" + username);
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0021", " username=" + username);
 
                         arrayBuilder.add(authChallenge.toJsonObject(appid));
                         //                    allowedCredBuilder.add(Json.createObjectBuilder().add("type", "public-key").add("id", keyhandle).add("transports", trasnportArrsy));
@@ -869,31 +873,31 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     signDataArray = arrayBuilder.build();
                     if (signDataArray == null) {
                         jsonObject = Json.createObjectBuilder()
-                                .add(skfsConstants.JSON_KEY_NONCE, nonce)
-                                .add(skfsConstants.JSON_KEY_APP_ID, appid)
-                                .add(skfsConstants.JSON_KEY_REGISTEREDKEY, "").
+                                .add(SKFSConstants.JSON_KEY_NONCE, nonce)
+                                .add(SKFSConstants.JSON_KEY_APP_ID, appid)
+                                .add(SKFSConstants.JSON_KEY_REGISTEREDKEY, "").
                                 build();
                     } else {
                         jsonObject = Json.createObjectBuilder()
-                                .add(skfsConstants.JSON_KEY_NONCE, nonce)
-                                .add(skfsConstants.JSON_KEY_APP_ID, appid)
-                                .add(skfsConstants.JSON_KEY_REGISTEREDKEY, signDataArray).
+                                .add(SKFSConstants.JSON_KEY_NONCE, nonce)
+                                .add(SKFSConstants.JSON_KEY_APP_ID, appid)
+                                .add(SKFSConstants.JSON_KEY_REGISTEREDKEY, signDataArray).
                                 build();
                     }
                 }
 //            } catch (SKFEException ex) {
-//                skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0009", ex.getMessage());
-//                return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0009") + ex.getMessage());
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0009", ex.getMessage());
+//                return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0009") + ex.getMessage());
             } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
                 Logger.getLogger(u2fServletHelperBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-            responseJSON = skfsCommon.buildPreAuthResponse(jsonObject, logs, errmsg);
+            responseJSON = SKFSCommon.buildPreAuthResponse(jsonObject, logs, errmsg);
         } else {
             responseJSON = fido2preauthbean.execute(Long.parseLong(did), username, options, extensions);
         }
 
         // Build the output json object
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0036", "");
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0036", "");
 
         return responseJSON;
     }
@@ -902,7 +906,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String authresponse,
             String authmetadata,
             String protocol,
-            String method) throws SKFEException {
+            String method, String agent, String cip) throws SKFEException {
         /* Check for needed fields in authresponse and metadata */
         String logs = "";
         String errmsg = "";
@@ -911,83 +915,79 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
         //  based on the structure of the regresponse, decide the protocol version.
         if (protocol == null || protocol.trim().isEmpty()) {
-            protocol = skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2;
+            protocol = SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2;
         }
-        if (protocol.equalsIgnoreCase(skfsConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
+        if (protocol.equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2)) {
             //  fetch needed fields from authresponse
             String browserdata = (String) applianceCommon.getJsonValue(authresponse,
-                    skfsConstants.JSON_KEY_CLIENTDATA, "String");
+                    SKFSConstants.JSON_KEY_CLIENTDATA, "String");
             if (browserdata == null || browserdata.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'clientData'");
-                return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'clientData'");
+                return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'clientData'");
             }
 
             //parse browserdata
             try {
-                String browserdataJson = new String(org.apache.commons.codec.binary.Base64.decodeBase64(browserdata), "UTF-8");
+                String browserdataJson = new String(Base64.getUrlDecoder().decode(browserdata), "UTF-8");
                 JsonReader jsonReader = Json.createReader(new StringReader(browserdataJson));
                 JsonObject jsonObject = jsonReader.readObject();
                 jsonReader.close();
 
-                String bdreqtype = jsonObject.getString(skfsConstants.JSON_KEY_REQUESTTYPE);
-                String bdnonce = jsonObject.getString(skfsConstants.JSON_KEY_NONCE);
-                String bdorigin = jsonObject.getString(skfsConstants.JSON_KEY_SERVERORIGIN);
+                String bdreqtype = jsonObject.getString(SKFSConstants.JSON_KEY_REQUESTTYPE);
+                String bdnonce = jsonObject.getString(SKFSConstants.JSON_KEY_NONCE);
+                String bdorigin = jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
                 if (bdreqtype == null || bdnonce == null || bdorigin == null) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
-                            skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Missing 'registrationData'");
-                    return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE,
+                            SKFSCommon.getMessageProperty("FIDO-ERR-5011"), " Missing 'registrationData'");
+                    return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-5011")
                             + " Missing 'registrationData'");
                 }
             } catch (Exception ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE,
-                        skfsCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'clientDATA'");
-                return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5011")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE,
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'clientDATA'");
+                return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-5011")
                         + " Invalid 'clientDATA'");
             }
-            ////
-            ////
-            ////
-            ////
 
             String signdata = (String) applianceCommon.getJsonValue(authresponse,
-                    skfsConstants.JSON_KEY_SIGNATUREDATA, "String");
+                    SKFSConstants.JSON_KEY_SIGNATUREDATA, "String");
             if (signdata == null || signdata.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'signatureData'");
-                return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'signatureData'");
+                return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'signatureData'");
             }
 
             String keyhandle = (String) applianceCommon.getJsonValue(authresponse,
-                    skfsConstants.JSON_USER_KEY_HANDLE_SERVLET, "String");
+                    SKFSConstants.JSON_USER_KEY_HANDLE_SERVLET, "String");
             if (keyhandle == null || keyhandle.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'keyHandle'");
-                return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0011")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0011", " Missing 'keyHandle'");
+                return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0011")
                         + " Missing 'keyHandle'");
             }
 
             //  fetch version and modifylocation from metadata
             String version = (String) applianceCommon.getJsonValue(authmetadata,
-                    skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
+                    SKFSConstants.FIDO_METADATA_KEY_VERSION, "String");
             if (version == null || version.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
-                return skfsCommon.buildAuthenticateResponse("", "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+                return SKFSCommon.buildAuthenticateResponse("", "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
             }
 
             String modifyloc = (String) applianceCommon.getJsonValue(authmetadata,
-                    skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
+                    SKFSConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
             if (modifyloc == null || modifyloc.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
-                return skfsCommon.buildAuthenticateResponse("", "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+                return SKFSCommon.buildAuthenticateResponse("", "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
             }
 
             String username_received = (String) applianceCommon.getJsonValue(authmetadata,
-                    skfsConstants.FIDO_METADATA_KEY_USERNAME, "String");
+                    SKFSConstants.FIDO_METADATA_KEY_USERNAME, "String");
             if (username_received == null || username_received.isEmpty()) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - username");
-                return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - username");
+                return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0019")
                         + " Missing metadata - username");
             }
 
@@ -1000,39 +1000,39 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
             try {
                 //  calculate the hash of keyhandle received
-                KHhash = skfsCommon.getDigest(keyhandle, "SHA-256");
+                KHhash = SKFSCommon.getDigest(keyhandle, "SHA-256");
             } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
-                return skfsCommon.buildAuthenticateResponse("", "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
+                return SKFSCommon.buildAuthenticateResponse("", "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash");
             }
 
             //  Look for the sessionid in the sessionmap and retrieve the username
-            UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
+            UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
             if (user == null) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0006", "");
-                return skfsCommon.buildAuthenticateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0006"));
-            } else if (user.getSessiontype().equalsIgnoreCase(skfsConstants.FIDO_USERSESSION_AUTH)) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0006", "");
+                return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0006"));
+            } else if (user.getSessiontype().equalsIgnoreCase(SKFSConstants.FIDO_USERSESSION_AUTH)) {
                 username = user.getUsername();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0022", " username=" + username);
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0022", " username=" + username);
 
                 appid_Received = user.getAppid();
                 challenge = user.getNonce();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0042", " appid=" + appid_Received);
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0042", " appid=" + appid_Received);
             }
 
             //verify that the call is for the right user
             if (!username.equalsIgnoreCase(username_received)) {
                 //throw erro saying wrong username sent
-                return skfsCommon.buildAuthenticateResponse("", "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0037"));
+                return SKFSCommon.buildAuthenticateResponse("", "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0037"));
             }
 
             //appid verifier
-            String origin = skfsCommon.getOriginfromBrowserdata(browserdata);
+            String origin = SKFSCommon.getOriginfromBrowserdata(browserdata);
             if (!originverifierbean.execute(appid_Received, origin)) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0032", "");
-                return skfsCommon.buildRegisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0032")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0032", "");
+                return SKFSCommon.buildRegisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0032")
                         + " : " + appid_Received + "-" + origin);
             }
 
@@ -1048,13 +1048,13 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             try {
                 fer = u2fauthbean.execute(Long.parseLong(did), protocol, authresponse, userpublickey, challenge, appid_Received);
             } catch (SKFEException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
-                return skfsCommon.buildAuthenticateResponse("", "",
-                        skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
+                return SKFSCommon.buildAuthenticateResponse("", "",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
             }
 
             if (fer != null) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", fer.getResponse());
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", fer.getResponse());
                 logs = fer.getLogmsg();
                 U2FAuthenticationResponse authResponse = (U2FAuthenticationResponse) fer.getResponse();
                 if (authResponse != null) {
@@ -1063,22 +1063,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     int userpresence = authResponse.getUsertouch();
 //                String chall = authResponse.getChallenge();
 //                try {
-//                    KHhash = skfsCommon.getDigest(chall, "SHA-256");
+//                    KHhash = SKFSCommon.getDigest(chall, "SHA-256");
 //                } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
-//                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
-//                    return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash");
+//                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0001", " Error generating hash");
+//                    return SKFSCommon.buildAuthenticateResponse("", logs, SKFSCommon.getMessageProperty("FIDO-ERR-0001") + " Error generating hash");
 //                }
-                    if (userpresence != skfsConstants.USER_PRESENT_FLAG) {
+                    if (userpresence != SKFSConstants.USER_PRESENT_FLAG) {
                         //  Remove the sessionid from the sessionmap
-                        skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
+                        skceMaps.getMapObj().remove(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0031", "");
-                        return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0031"));
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0031", "");
+                        return SKFSCommon.buildAuthenticateResponse("", logs, SKFSCommon.getMessageProperty("FIDO-ERR-0031"));
                     }
                     //  Persist sign counter info & the user presence bytes to the database - TBD
                     FidoKeys key = null;
-                    FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(skfsConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + username + "-" + regkeyid);
+                    FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + username + "-" + regkeyid);
                     if (fkinfo != null) {
                         key = fkinfo.getFk();
                     }
@@ -1096,11 +1096,11 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                                  * proceed ahead.
                                  */
                                 //  Remove the user session from the sessionmap
-                                skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
-                                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
+                                skceMaps.getMapObj().remove(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
+                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
-                                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0030", "");
-                                return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0030"));
+                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0030", "");
+                                return SKFSCommon.buildAuthenticateResponse("", logs, SKFSCommon.getMessageProperty("FIDO-ERR-0030"));
                             }
                         }
                         //  update the sign counter value in the database with the new counter value.
@@ -1109,24 +1109,24 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();
                         }
-                        Boolean status = jo.getBoolean(skfsConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
+                        Boolean status = jo.getBoolean(SKFSConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
                         if (status) {
-                            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0027", "");
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0027", "");
                         } else {
-                            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0026", " new value=" + newCounter);
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0026", " new value=" + newCounter);
                         }
                     }
 
                     //  Remove the sessionid from the sessionmap
-                    skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", " username=" + username);
+                    skceMaps.getMapObj().remove(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", " username=" + username);
                 } else {
                     //  Remove the sessionid from the sessionmap
-                    skceMaps.getMapObj().remove(skfsConstants.MAP_USER_SESSION_INFO, KHhash);
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
+                    skceMaps.getMapObj().remove(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0023", "");
 
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", "");
-                    return skfsCommon.buildAuthenticateResponse("", logs, skfsCommon.getMessageProperty("FIDO-ERR-0015") + "");
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015", "");
+                    return SKFSCommon.buildAuthenticateResponse("", logs, SKFSCommon.getMessageProperty("FIDO-ERR-0015") + "");
                 }
 
                 switch (method) {
@@ -1135,6 +1135,8 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                         break;
                     case "authorization":
                         response = "Successfully processed authorization response";
+                        break;
+                    default:
                         break;
                 }
             } else {
@@ -1145,15 +1147,17 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     case "authorization":
                         errmsg = "Failed to process authorization response";
                         break;
+                    default:
+                        break;
                 }
             }
-            responseJSON = skfsCommon.buildAuthenticateResponse(response, logs, errmsg);
+            responseJSON = SKFSCommon.buildAuthenticateResponse(response, logs, errmsg);
         } else {
-            responseJSON = FIDO2Authejb.execute(Long.parseLong(did), authresponse, authmetadata, method);
+            responseJSON = FIDO2Authejb.execute(Long.parseLong(did), authresponse, authmetadata, method, null,null, agent, cip);
         }
 
         // Build the output json object
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0038", "");
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0038", "");
         return responseJSON;
     }
 
@@ -1202,54 +1206,54 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0013", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0013", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014",
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014",
                     " Invalid json");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0014")
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0014")
                     + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-5002")
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-5002")
                     + " protocol");
         }
 
         //  3. Retrieve data from payload
         //  fetch the username
         String username = (String) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
         JsonObject extensions = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_EXTENSIONS, "JsonObject");
 
         // fetch options inputs if they exist (TODO refactor when options are no longer in payload)
         String userVerification = (String) applianceCommon.getJsonValue(payload,
-                skfsConstants.FIDO2_ATTR_USERVERIFICATION, "String");
+                SKFSConstants.FIDO2_ATTR_USERVERIFICATION, "String");
         JsonObjectBuilder optionsBuilder = Json.createObjectBuilder();
         if (userVerification != null) {
-            optionsBuilder.add(skfsConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
+            optionsBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, userVerification);
         }
         JsonObject options = optionsBuilder.build();
 
         if (username == null || username.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            return skfsCommon.buildPreAuthResponse(null, "", skfsCommon.getMessageProperty("FIDO-ERR-0002")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+            return SKFSCommon.buildPreAuthResponse(null, "", SKFSCommon.getMessageProperty("FIDO-ERR-0002")
                     + " username");
         }
 
@@ -1258,7 +1262,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0014", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0014", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]"
                 + "\nU2FAuthorization Challenge parameters = " + responseJSON);
         return responseJSON;
     }
@@ -1308,37 +1312,37 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0015"), "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, SKFSCommon.getMessageProperty("FIDO-MSG-0015"), "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", " payload");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0010") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         //  3. Fetch response and metadata fields from payload
         JsonObject response = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_RESPONSE, "JsonObject");
         if (response == null || response.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0010"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0010", "");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0010"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0017"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0017"));
         }
 
         String authorizationresponse = response.toString();
@@ -1350,17 +1354,19 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     authorizationresponse,
                     authorizationmetadata,
                     protocol,
-                    "authorization");
+                    "authorization",
+                    "",
+                    "");
         } catch (SKFEException ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
-            return skfsCommon.buildAuthenticateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0034"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
+            return SKFSCommon.buildAuthenticateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0034"));
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0016", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0016", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse = " + responseJSON);
         return responseJSON;
     }
 
@@ -1416,78 +1422,76 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0009", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0009", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
         //  3. fetch the deregistrationrequest
         JsonObject request = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST,
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_REQUEST,
                 "JsonObject");
         if (request == null || request.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
-            return skfsCommon.buildDeregisterResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+            return SKFSCommon.buildDeregisterResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
         String deregistrationrequest = request.toString();
 
         //  4. fetch uername and randomid from request.
-        String username = (String) applianceCommon.getJsonValue(
-                deregistrationrequest, skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
+        String username = (String) applianceCommon.getJsonValue(deregistrationrequest, SKFSConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'username'");
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'username'");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'username'");
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'username'");
         }
 
-        String randomid = (String) applianceCommon.getJsonValue(
-                deregistrationrequest, skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
+        String randomid = (String) applianceCommon.getJsonValue(deregistrationrequest, SKFSConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'randomid'");
-            return skfsCommon.buildDeregisterResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'randomid'");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing 'randomid'");
+            return SKFSCommon.buildDeregisterResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing 'randomid'");
         }
 
         //  5. handover the job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2fderegbean.execute(did, protocol, username, randomid);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
         if (skcero.getErrorkey() != null) {
-            responseJSON = skfsCommon.buildDeregisterResponse("", "", skcero.getErrormsg());
+            responseJSON = SKFSCommon.buildDeregisterResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully deleted user registered security key";
-            responseJSON = skfsCommon.buildDeregisterResponse(response, "", "");
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
+            responseJSON = SKFSCommon.buildDeregisterResponse(response, "", "");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  6. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
         return responseJSON;
     }
 
@@ -1542,43 +1546,43 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("FIDO-MSG-0019"), "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, SKFSCommon.getMessageProperty("FIDO-MSG-0019"), "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
         //  3. fetch request and metadata fields from payload
         JsonObject request = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
         if (request == null || request.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0019"));
         }
 
         String activationrequest = request.toString();
@@ -1586,56 +1590,56 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
         //  4. fetch username and randomid from request
         String username = (String) applianceCommon.getJsonValue(activationrequest,
-                skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
+                SKFSConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
-            return skfsCommon.buildActivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+            return SKFSCommon.buildActivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
         }
 
         String randomid = (String) applianceCommon.getJsonValue(activationrequest,
-                skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
+                SKFSConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
-            return skfsCommon.buildActivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+            return SKFSCommon.buildActivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
         }
 
         //  5. fetch version and modifylocation from metadata
         String version = (String) applianceCommon.getJsonValue(activationmetadata,
-                skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
+                SKFSConstants.FIDO_METADATA_KEY_VERSION, "String");
         if (version == null || version.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
-            return skfsCommon.buildActivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+            return SKFSCommon.buildActivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0019")
                     + " Missing metadata - version");
         }
 
         String modifyloc = (String) applianceCommon.getJsonValue(activationmetadata,
-                skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
+                SKFSConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
         if (modifyloc == null || modifyloc.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
-            return skfsCommon.buildActivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0019")
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+            return SKFSCommon.buildActivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0019")
                     + " Missing metadata - modifylocation");
         }
 
         //  6. handover job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2factbean.execute(did, protocol, username, randomid, modifyloc);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
         if (skcero.getErrorkey() != null) {
-            responseJSON = skfsCommon.buildActivateResponse("", "", skcero.getErrormsg());
+            responseJSON = SKFSCommon.buildActivateResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully activated user registered security key";
-            responseJSON = skfsCommon.buildActivateResponse(response, "", "");
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0052", "");
+            responseJSON = SKFSCommon.buildActivateResponse(response, "", "");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0052", "");
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  7. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0020", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0020", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
         return responseJSON;
     }
 
@@ -1692,47 +1696,47 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0017", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0017", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
         //  3. fetch request and metadata fields from payload
         JsonObject request = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_REQUEST, "JsonObject");
         if (request == null || request.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
-            return skfsCommon.buildDeactivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0021"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0021", "");
+            return SKFSCommon.buildDeactivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0021"));
         }
 
         JsonObject metadata = (JsonObject) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_METADATA, "JsonObject");
         if (metadata == null || metadata.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
-            return skfsCommon.buildDeactivateResponse("", "", skfsCommon.getMessageProperty("FIDO-ERR-0019"));
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", "");
+            return SKFSCommon.buildDeactivateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0019"));
         }
 
         String deactivationrequest = request.toString();
@@ -1740,55 +1744,55 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
 
         //  4. fetch username and randomid from request
         String username = (String) applianceCommon.getJsonValue(deactivationrequest,
-                skfsConstants.FIDO_JSON_KEY_USERNAME, "String");
+                SKFSConstants.FIDO_JSON_KEY_USERNAME, "String");
         if (username == null || username.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing username");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing username");
         }
 
         String randomid = (String) applianceCommon.getJsonValue(deactivationrequest,
-                skfsConstants.FIDO_JSON_KEY_RANDOMID, "String");
+                SKFSConstants.FIDO_JSON_KEY_RANDOMID, "String");
         if (randomid == null || randomid.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0020", " Missing randomid");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " Missing randomid");
         }
 
         //  5. fetch version and modifylocation from metadata
         String version = (String) applianceCommon.getJsonValue(deactivationmetadata,
-                skfsConstants.FIDO_METADATA_KEY_VERSION, "String");
+                SKFSConstants.FIDO_METADATA_KEY_VERSION, "String");
         if (version == null || version.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - version");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - version");
         }
 
         String modifyloc = (String) applianceCommon.getJsonValue(deactivationmetadata,
-                skfsConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
+                SKFSConstants.FIDO_METADATA_KEY_MODIFY_LOC, "String");
         if (modifyloc == null || modifyloc.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
-            return skfsCommon.buildDeactivateResponse("", "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0019", " Missing metadata - modifylocation");
+            return SKFSCommon.buildDeactivateResponse("", "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0019") + " Missing metadata - modifylocation");
         }
 
         //  6. handover job to an ejb
         String responseJSON;
         SKCEReturnObject skcero = u2fdeactbean.execute(did, protocol, username, randomid, modifyloc);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
         if (skcero.getErrorkey() != null) {
-            responseJSON = skfsCommon.buildDeactivateResponse("", "", skcero.getErrormsg());
+            responseJSON = SKFSCommon.buildDeactivateResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
             String response = "Successfully de-activated user registered security key";
-            responseJSON = skfsCommon.buildDeactivateResponse(response, "", "");
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0051", "");
+            responseJSON = SKFSCommon.buildDeactivateResponse(response, "", "");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0051", "");
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  7. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0018", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0018", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
         return responseJSON;
     }
 
@@ -1840,49 +1844,49 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
         long thId = Thread.currentThread().getId();
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0011", "[TXID=" + ID + "]"
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0011", "[TXID=" + ID + "]"
                 + "\n did=" + did
                 + "\n protocol=" + protocol
                 + "\n payload=" + payload);
 
         //  2. Input checks
         if (payload == null || payload.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
-            return skfsCommon.buildPreRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " payload");
+            return SKFSCommon.buildPreRegisterResponse(null, "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " payload");
         }
-        if (!skfsCommon.isValidJsonObject(payload)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
-            return skfsCommon.buildPreRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
+        if (!SKFSCommon.isValidJsonObject(payload)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0014", " Invalid json");
+            return SKFSCommon.buildPreRegisterResponse(null, "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " Invalid json");
         }
 
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
-            return skfsCommon.buildPreRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " protocol");
+            return SKFSCommon.buildPreRegisterResponse(null, "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " protocol");
         }
-        if (!skfsCommon.isFIDOProtocolSupported(protocol)) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
-            return skfsCommon.buildPreRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
+        if (!SKFSCommon.isFIDOProtocolSupported(protocol)) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5002", protocol);
+            return SKFSCommon.buildPreRegisterResponse(null, "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-5002") + protocol);
         }
 
         //  fetch the username
         String username = (String) applianceCommon.getJsonValue(payload,
-                skfsConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_USERNAME, "String");
         if (username == null || username.isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            return skfsCommon.buildPreRegisterResponse(null, "",
-                    skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+            return SKFSCommon.buildPreRegisterResponse(null, "",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " username");
         }
 
         //  3. Hand over the job to an ejb.
         String responseJSON;
         SKCEReturnObject skcero = u2fgetkeysbean.execute(Long.parseLong(did), username);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0046", skcero);
         if (skcero.getErrorkey() != null) {
-            responseJSON = skfsCommon.buildGetKeyInfoResponse(null, "", skcero.getErrormsg());
+            responseJSON = SKFSCommon.buildGetKeyInfoResponse(null, "", skcero.getErrormsg());
         } else {
             // Build the output
             String keysJsonString = (String) skcero.getReturnval();
@@ -1891,22 +1895,22 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 keysJsonObj = jr.readObject();
             }
 
-            responseJSON = skfsCommon.buildGetKeyInfoResponse(keysJsonObj, "", "");
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0040", "");
+            responseJSON = SKFSCommon.buildGetKeyInfoResponse(keysJsonObj, "", "");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0040", "");
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  4. Print output and Return
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0012", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0012", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
         return responseJSON;
     }
 
     private String decryptKH(String token) {
         String retvalue = token;
-        if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
+        if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt").equalsIgnoreCase("true")) {
             String clusterid = "1";
-            String domainid = skfsCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
+            String domainid = SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.keyhandle.encrypt.saka.domainid");
             String sakausername = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "username");
             String sakapassword = skceCommon.getClusterDomainProperty(Long.parseLong(clusterid), Long.parseLong(domainid), "password");
             String hosturl = skceCommon.getWorkingHostURLInCluster(Long.parseLong(clusterid), Long.parseLong(domainid));
@@ -1914,21 +1918,21 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             if (port == null) {
                 // Create URL for calling web-service
                 URL baseUrl = com.strongkey.saka.web.EncryptionService.class.getResource(".");
-                String ENCRYPTION_SERVICE_WSDL_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
+                String ENCRYPTION_SERVICE_WSDL_SUFFIX = SKFSCommon.getConfigurationProperty("skfs.cfg.property.saka.encryption.wsdlsuffix");
                 URL url = null;
                 try {
                     url = new URL(baseUrl, hosturl + ENCRYPTION_SERVICE_WSDL_SUFFIX);
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(FidoKeys.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "SKCE-MSG-4028", hosturl);
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "SKCE-MSG-4028", hosturl);
 
                 //  Check to see if the url is available.
                 if (skceCommon.isURLAccessible(url)) {
                     // Create EncryptionService and Encryption objects
                     EncryptionService cryptosvc = new EncryptionService(url);
                     port = cryptosvc.getEncryptionPort();
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "SKCE-MSG-4013", hosturl);
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "SKCE-MSG-4013", hosturl);
                 }
             }
 

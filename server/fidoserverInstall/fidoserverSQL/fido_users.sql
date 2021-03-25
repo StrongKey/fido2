@@ -26,7 +26,7 @@
 create table IF NOT EXISTS fido_users (
         sid                      tinyint NOT NULL DEFAULT 1,
         did                      tinyint NOT NULL DEFAULT 1,
-        username                 varchar(256) NULL,
+        username                 varchar(256) NOT NULL,
         userdn                   varchar(2048) NULL,
         fido_keys_enabled        ENUM('true','false') NULL,
         two_step_verification    ENUM('true','false') NULL,

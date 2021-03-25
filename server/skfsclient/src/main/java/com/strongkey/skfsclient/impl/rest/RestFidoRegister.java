@@ -7,8 +7,6 @@
 
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongauth.skfs.fido2.simulator.FIDO2AuthenticatorSimulator;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
@@ -70,7 +68,7 @@ public class RestFidoRegister {
             prereg.getSVCInfo().setSVCUsername(credential1);
             prereg.getSVCInfo().setSVCPassword(credential2);
         }
-
+        
         // Build request payload
         prereg.setUsername(username);
         prereg.setDisplayName(username);
@@ -78,11 +76,12 @@ public class RestFidoRegister {
         prereg.setExtensions(Constants.JSON_EMPTY);
 
         // Prepare for POST call
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(prereg);
+        String json = prereg.toJsonObject().toString();
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
 
+        System.out.println("preregjson = ");
+        System.out.println(json);
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_PRE_REGISTER_ENDPOINT;
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -91,7 +90,7 @@ public class RestFidoRegister {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-            String payloadHash = common.calculateSha256(ow.writeValueAsString(prereg.getPayload()));
+            String payloadHash = common.calculateSha256(prereg.getPayload().toJsonObject().toString());
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
             String requestToHmac = httpPost.getMethod() + "\n"
                     + payloadHash + "\n"
@@ -170,6 +169,8 @@ public class RestFidoRegister {
                     System.out.println(parser.getString());
                     break;
                 }
+                    default:
+                        break;
             }
         }
 
@@ -206,13 +207,16 @@ public class RestFidoRegister {
                 .add("response", reg_inner_response) // inner response object
                 .add("type", input.getString("type"))
                 .build();
-        reg.setMetadata(reg_metadata.toString());
-        reg.setResponse(reg_response.toString());
+        reg.setMetadata(reg_metadata);
+        reg.setResponse(reg_response);
 
         // Prepare for POST call
-        json = ow.writeValueAsString(reg);
+        json = reg.toJsonObject().toString();
         body = new StringEntity(json, mimetype);
 
+        System.out.println("regjson = ");
+        System.out.println(json);
+        
         resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_REGISTER_ENDPOINT;
 
         httpclient = HttpClients.createDefault();
@@ -221,7 +225,8 @@ public class RestFidoRegister {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-            String payloadHash = common.calculateSha256(ow.writeValueAsString(reg.getPayload()));
+            System.out.println("payload = "+ reg.getPayload().toJsonObject().toString());
+            String payloadHash = common.calculateSha256(reg.getPayload().toJsonObject().toString());
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
             String requestToHmac = httpPost.getMethod() + "\n"
                     + payloadHash + "\n"
@@ -259,7 +264,7 @@ public class RestFidoRegister {
                 case 400:
                 case 500:
                 default:
-                    System.out.println("Error during register : " + responseStatusLine.getStatusCode() + " " + result);
+                    System.out.println("Error during register : " + responseStatusLine.getStatusCode() + " " + regresponse);
                     return;
             }
         } finally {

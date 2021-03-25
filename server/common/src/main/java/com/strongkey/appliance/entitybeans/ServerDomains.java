@@ -160,7 +160,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
         }
         // Check if it is a number
         try {
-            BigInteger throwaway = new BigInteger(tmpStr);
+            new BigInteger(tmpStr);
         } catch (NumberFormatException ex) {
             strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, classname, "setPseudoNumber", "APPL-ERR-1092", "PSEUDO_NUMBER=" + tmpStr);
             throw new IllegalArgumentException("APPL-ERR-1092: PSEUDO_NUMBER=" + tmpStr);

@@ -8,26 +8,26 @@
 
 package com.strongkey.skfs.policybeans;
 
-import com.google.common.primitives.Longs;
 import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.skce.pojos.MDSClient;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.utilities.PKIXChainValidation;
+import com.strongkey.skfs.fido.policyobjects.AlgorithmsPolicyOptions;
+import com.strongkey.skfs.fido.policyobjects.AttestationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.CounterPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.CryptographyPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.MdsPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.RegistrationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
 import com.strongkey.skfs.fido2.ECKeyObject;
 import com.strongkey.skfs.fido2.FIDO2AttestationObject;
 import com.strongkey.skfs.fido2.FIDO2AttestationStatement;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skfs.utilities.SKIllegalArgumentException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import java.nio.ByteBuffer;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertPath;
@@ -64,36 +64,81 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             FidoPolicyMDSObject fidoPolicyMDS = getpolicybean.getByMapKey(userInfo.getPolicyMapKey());
             FidoPolicyObject fidoPolicy = fidoPolicyMDS.getFp();
 
-            verifyCryptographyOptions(fidoPolicy.getCryptographyOptions(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyRpOptions(fidoPolicy.getRpOptions(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyTimeout(fidoPolicy.getTimeout(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyMDS(fidoPolicy.getMdsOptions(), clientJson, attObject, fidoPolicyMDS.getMds(), fidoPolicy.getVersion());
-            verifyTokenBinding(fidoPolicy.getTokenBindingOption(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyCounter(fidoPolicy.getCounterOptions(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyUserSettings(fidoPolicy.isUserSettingsRequired(), clientJson, attObject, fidoPolicy.getVersion());
-            handleSignature(fidoPolicy.isStoreSignatures(), clientJson, attObject, fidoPolicy.getVersion());
-            verifyRegistration(fidoPolicy.getRegistrationOptions(), clientJson, attObject,
+            verifyCryptographyOptions(fidoPolicy, clientJson, attObject, fidoPolicy.getVersion());
+            verifyAuthenticatorTrust(fidoPolicy.getAllowedAAGUIDs(), clientJson, attObject);
+            verifyRegistration(fidoPolicy, clientJson, attObject,
                     userInfo.getUserVerificationReq(), userInfo.getAttestationPreferance(), fidoPolicy.getVersion());
         }
         catch(Exception ex){
             ex.printStackTrace();
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-MSG-0053", ex.getLocalizedMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-MSG-0053", ex.getLocalizedMessage());
             throw new SKFEException(ex.getLocalizedMessage());
         }
     }
+    public static String getAAGUID(FIDO2AttestationObject attObject){
+        byte[] aaguidbytes = attObject.getAuthData().getAttCredData().getAaguid();
+        byte[] aaguidbytes1 = new byte[8];
+        byte[] aaguidbytes2 = new byte[8];
+        System.arraycopy(aaguidbytes, 0, aaguidbytes1, 0, 8);
+        System.arraycopy(aaguidbytes, 8, aaguidbytes2, 0, 8);
+        UUID uuid = new UUID(bytesToLong(aaguidbytes1), bytesToLong(aaguidbytes2));
+        return uuid.toString();
+    }
+    
+    public static long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer.getLong();
+    }
 
+    private void verifyAuthenticatorTrust( ArrayList<String> allowedAaguids, JsonObject clientJson,
+            FIDO2AttestationObject attObject )throws SKFEException {
+        
+        //if all aaguids allowed then skip aaguid check
+        if(allowedAaguids.contains("all")){
+            return;
+        }
+        //get aaguid from attestation object;
+        String aaguid = getAAGUID(attObject);
+       
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                        "AAGUID: " + aaguid);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                        "Allowed AAGUID: " + allowedAaguids);
+        
+        if( !(allowedAaguids.isEmpty()) && !allowedAaguids.contains(aaguid)){
+
+            throw new SKFEException("Rejected Authenticator: AAGUID: " + aaguid);
+        }
+           
+    }
+    
     //TODO move private functions to be public functions of PolicyOption Objects
     //Currently blocked by the need to move more objects to common.
 
     //TODO refactor exceptions to have standard error messages
-    private void verifyCryptographyOptions(CryptographyPolicyOptions cryptoOp, JsonObject clientJson,
-            FIDO2AttestationObject attObject, Integer version) throws SKFEException {
-        ArrayList<String> allowedRSASignatures = cryptoOp.getAllowedRSASignatures();
-        ArrayList<String> allowedECSignatures = cryptoOp.getAllowedECSignatures();
-        ArrayList<String> supportedCurves = cryptoOp.getSupportedEllipticCurves();
-        ArrayList<String> allowedAttestationFormats = cryptoOp.getAllowedAttestationFormats();
-        ArrayList<String> allowedAttestationTypes = cryptoOp.getAllowedAttestationTypes();
+    private void verifyCryptographyOptions(FidoPolicyObject fidoPolicy, JsonObject clientJson,
+            FIDO2AttestationObject attObject, String version) throws SKFEException {
+        AlgorithmsPolicyOptions algoOp = fidoPolicy.getAlgorithmsOptions();
+        AttestationPolicyOptions attOp = fidoPolicy.getAttestationOptions();
+        ArrayList<String> allowedRSASignatures = algoOp.getAllowedRSASignatures();
+        ArrayList<String> allowedECSignatures = algoOp.getAllowedECSignatures();
+        ArrayList<String> supportedCurves = algoOp.getSupportedEllipticCurves();
+        ArrayList<String> allowedAttestationFormats = attOp.getAttestationFormats();
 
+        //if policy set of RSA signatures is set to 'all' then populate allowed RSA signatures with all possible options
+        if (allowedRSASignatures.contains("all")){
+            allowedRSASignatures = SKFSConstants.ALL_RSA_SIGNATURES;
+        }
+         //if policy set of EC signatures is set to 'all' then populate allowed EC signatures with all possible options
+        if (allowedECSignatures.contains("all")){
+            allowedECSignatures = SKFSConstants.ALL_EC_SIGNATURES;
+        }
+        if (supportedCurves.contains("all")){
+            supportedCurves = SKFSConstants.ALL_EC_CURVES;
+        }
+      
         //Verify attestation key
         ArrayList certificateChain = attObject.getAttStmt().getX5c();
         if(certificateChain != null){
@@ -107,20 +152,22 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             if(!attestationAlgType.equalsIgnoreCase("RSA") && !attestationAlgType.equalsIgnoreCase("EC")){
                 throw new SKFEException("Unknown key algorithm (Attestation)");
             }
-            if((allowedRSASignatures == null
-                    || !allowedRSASignatures.contains(skfsCommon.getPolicyAlgFromAlg(attestationCert.getSigAlgName())))
-                    && (allowedECSignatures == null
-                    || !allowedECSignatures.contains(skfsCommon.getPolicyAlgFromAlg(attestationCert.getSigAlgName())))){
-                throw new SKFEException("Signature Algorithm not supported by policy (Attestation): " + attestationCert.getSigAlgName());
-            }
-
+            
+            // we dont need to check the signing algorithm of the attestation certificate but we will add a new policy option in the future for the same
+//            if((allowedRSASignatures == null
+//                    || !allowedRSASignatures.contains(SKFSCommon.getPolicyAlgFromAlg(attestationCert.getSigAlgName())))
+//                    && (allowedECSignatures == null
+//                    || !allowedECSignatures.contains(SKFSCommon.getPolicyAlgFromAlg(attestationCert.getSigAlgName())))){
+//                throw new SKFEException("Signature Algorithm not supported by policy (Attestation): " + attestationCert.getSigAlgName());
+//            }
+            
             //Verify that the curve used by the attestation key is approved
             if(attestationAlgType.equalsIgnoreCase("EC")){
                 byte[] enc = attestationKey.getEncoded();
                 SubjectPublicKeyInfo spki = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(enc));
                 AlgorithmIdentifier algid = spki.getAlgorithm();
                 ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier) algid.getParameters();
-                if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromOID(oid))){
+                if(!supportedCurves.contains(SKFSCommon.getPolicyCurveFromOID(oid))){
                     throw new SKFEException("EC Curve not supported by policy (Attestation)");
                 }
             }
@@ -133,33 +180,33 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             throw new SKFEException("Unknown attestation key algorithm (Signing)");
         }
         if((allowedRSASignatures == null
-                || !allowedRSASignatures.contains(skfsCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg())))
+                || !allowedRSASignatures.contains(SKFSCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg())))
                 && (allowedECSignatures == null
-                ||!allowedECSignatures.contains(skfsCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg())))){
+                ||!allowedECSignatures.contains(SKFSCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg())))){
             throw new SKFEException("Rejected key algorithm (Signing): " +
-                    skfsCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg()));
+                    SKFSCommon.getPolicyAlgFromIANACOSEAlg(attObject.getAuthData().getAttCredData().getFko().getAlg()));
         }
         if(signingAlgType.equalsIgnoreCase("EC")){
             ECKeyObject eckey = (ECKeyObject) attObject.getAuthData().getAttCredData().getFko();
-            if(!supportedCurves.contains(skfsCommon.getPolicyCurveFromFIDOECCCurveID(eckey.getCrv()))){
+            if(!supportedCurves.contains(SKFSCommon.getPolicyCurveFromFIDOECCCurveID(eckey.getCrv()))){
                 throw new SKFEException("EC Curve not supported by policy (Signing)");
             }
         }
+        
+        
+
+        
 
         //Verify allowed AttestationFormat
         if(!allowedAttestationFormats.contains(attObject.getAttFormat())){
             throw new SKFEException("Attestation format not supported by policy: " + attObject.getAttFormat());
         }
 
-        //Verify allowed AttestationType
-        if (!allowedAttestationTypes.contains(attObject.getAttStmt().getAttestationType())) {
-            throw new SKFEException("Attestation type not supported by policy: " + attObject.getAttStmt().getAttestationType());
-        }
     }
 
     //Currently no checks on the RP options
     private void verifyRpOptions(RpPolicyOptions rpOp, JsonObject clientJson,
-            FIDO2AttestationObject attObject, Integer version) throws SKFEException {
+            FIDO2AttestationObject attObject, String version) throws SKFEException {
     }
 
     private void verifyTimeout(Integer timeoutOp, JsonObject clientJson,
@@ -180,8 +227,8 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         byte[] aaguidbytes2 = new byte[8];
         System.arraycopy(aaguidbytes, 0, aaguidbytes1, 0, 8);
         System.arraycopy(aaguidbytes, 8, aaguidbytes2, 0, 8);
-        UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1),
-                Longs.fromByteArray(aaguidbytes2));
+//        UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1),Longs.fromByteArray(aaguidbytes2));
+        UUID uuid = new UUID(ByteBuffer.wrap(aaguidbytes1).getLong(), ByteBuffer.wrap(aaguidbytes2).getLong());
         JsonObject trustAnchors = mds.getTrustAnchors(uuid.toString(), mdsOp.getAllowedCertificationLevel());
 
         FIDO2AttestationStatement attStmt = attObject.getAttStmt();
@@ -216,7 +263,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
         if (!attBytesChain.isEmpty()) {
             for (int attCertIndex = 1; attCertIndex < attBytesChain.size(); attCertIndex++) {
                 X509Certificate attestationCert = cryptoCommon.generateX509FromBytes((byte[]) attBytesChain.get(attCertIndex));
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         "CertPath " + attCertIndex + ": " + attestationCert);
                 certchain.add(attestationCert);
             }
@@ -251,7 +298,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
     //TODO expand checks as token binding spec changes
     private void verifyTokenBinding(String tokenBindingOp, JsonObject clientJson,
             FIDO2AttestationObject attObject, Integer version) throws SKFEException {
-        JsonObject tokenBinding = clientJson.getJsonObject(skfsConstants.JSON_KEY_TOKENBINDING);
+        JsonObject tokenBinding = clientJson.getJsonObject(SKFSConstants.JSON_KEY_TOKENBINDING);
         if(tokenBindingOp != null){
             if(tokenBinding == null){
                 throw new SKFEException("Policy requires Token Binding");
@@ -266,46 +313,43 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
 
     //Currently no checks on the Counter options
     private void verifyCounter(CounterPolicyOptions counterOp, JsonObject clientJson,
-            FIDO2AttestationObject attObject, Integer version) throws SKFEException {
+            FIDO2AttestationObject attObject, String version) throws SKFEException {
     }
 
     //Currently no checks on the UserSettings options
     private void verifyUserSettings(Boolean userOp, JsonObject clientJson,
-            FIDO2AttestationObject attObject, Integer version){
+            FIDO2AttestationObject attObject, String version){
     }
 
     //TODO store registration signature if required
     private void handleSignature(Boolean signatureOp, JsonObject clientJson,
-            FIDO2AttestationObject attObject, Integer version){
+            FIDO2AttestationObject attObject, String version){
     }
 
-    private void verifyRegistration(RegistrationPolicyOptions regOp, JsonObject clientJson,
+    private void verifyRegistration(FidoPolicyObject fidoPolicy, JsonObject clientJson,
             FIDO2AttestationObject attObject, String userVerificationReq, String attestationPreference,
-            Integer version) throws SKFEException {
+            String version) throws SKFEException {
         //Default blank to Webauthn defined defaults
-        userVerificationReq = (userVerificationReq == null) ? skfsConstants.POLICY_CONST_PREFERRED : userVerificationReq;
-        attestationPreference = (attestationPreference == null) ? skfsConstants.POLICY_CONST_NONE : attestationPreference;
+        userVerificationReq = (userVerificationReq == null) ? SKFSConstants.POLICY_CONST_PREFERRED : userVerificationReq;
+        attestationPreference = (attestationPreference == null) ? SKFSConstants.POLICY_CONST_NONE : attestationPreference;
 
-        //Double check that what was stored in UserSessionInfo is valid for the policy
-        if(regOp.getAuthenticatorSelection() == null){
-            throw new SKIllegalArgumentException("Policy Exception: Null policy");
-        }
-        if(!regOp.getAuthenticatorSelection().getUserVerification().contains(userVerificationReq)){
+
+        if(!fidoPolicy.getUserVerification().contains(userVerificationReq)){
             throw new SKIllegalArgumentException("Policy Exception: Prereg userVerificationRequirement does not meet policy");
         }
-        if(!regOp.getAttestation().contains(attestationPreference)){
+        if(!fidoPolicy.getAttestationOptions().getAttestationConveyance().contains(attestationPreference)){
             throw new SKIllegalArgumentException("Policy Exception: Prereg AttestationConveyancePreference does not meet policy");
         }
 
         //If None attestation was requested (or defaulted to), ensure None attestation is given
         //+ no attestation data is given. Conformance requirement.
-        if (attestationPreference.equalsIgnoreCase(skfsConstants.POLICY_CONST_NONE)
+        if (attestationPreference.equalsIgnoreCase(SKFSConstants.POLICY_CONST_NONE)
                 && !attObject.getAttFormat().equalsIgnoreCase(attestationPreference)) {
             throw new SKFEException("Policy requested none attestation, was given attestation");
         }
 
         //If User Verification was required, verify it was provided
-        if(userVerificationReq.equalsIgnoreCase(skfsConstants.POLICY_CONST_REQUIRED) && !attObject.getAuthData().isUserVerified()){
+        if(userVerificationReq.equalsIgnoreCase(SKFSConstants.POLICY_CONST_REQUIRED) && !attObject.getAuthData().isUserVerified()){
             throw new SKFEException("User Verification required by policy");
         }
 

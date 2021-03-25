@@ -7,19 +7,18 @@
 
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.strongkey.skfs.requests.PatchFidoPolicyRequest;
 import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
-import com.strongkey.skfs.requests.PatchFidoPolicyRequest;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.json.JsonObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -30,37 +29,82 @@ public class RestFidoActionsOnPolicy {
 
     public static void delete(String REST_URI,
                                 String did,
-                                String accesskey,
-                                String secretkey,
-                                String sidpid) throws IOException
+                                String authtype,
+                                String credential1,
+                                String credential2,
+                                String sid,
+                                String pid) throws IOException, NoSuchAlgorithmException
     {
-        System.out.println("Delete policy test");
+        System.out.println("REST Delete policy test with " + authtype);
         System.out.println("******************************************");
+        
+         if (!authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC) && !authtype.equalsIgnoreCase(Constants.AUTHORIZATION_PASSWORD)) {
+                System.out.println("Invalid Authentication Type...\n");
+                return;
+            }
+      JsonObject svcinfo;
 
+
+         if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+            svcinfo = javax.json.Json.createObjectBuilder()
+            .add("did", Long.valueOf(did))
+            .add("protocol", "FIDO2_0") 
+            .add("authtype", Constants.AUTHORIZATION_HMAC)
+            .build();
+        } else {
+            svcinfo = javax.json.Json.createObjectBuilder()
+            .add("did", Long.valueOf(did))
+            .add("protocol", "FIDO2_0")      
+            .add("authtype", Constants.AUTHORIZATION_PASSWORD)
+            .add("svcusername", credential1)
+            .add("svcpassword", credential2)
+            .build();
+        }
+
+        JsonObject payload  = javax.json.Json.createObjectBuilder()
+            .add("did", did)
+            .add("sid", sid)
+            .add("pid", pid)    
+            .build();
+
+        JsonObject data  = javax.json.Json.createObjectBuilder()
+            .add("svcinfo", svcinfo)
+            .add("payload", payload)
+            .build();
+        
         String apiversion = "2.0";
 
         //  Make API rest call and get response from the server
-        String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.DELETE_POLICY_ENDPOINT + "/" + sidpid;
+        String resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_DELETE_POLICY;
         System.out.println("\nCalling delete policy @ " + resourceLoc);
 
-        String contentSHA = "";
-        String contentType = "";
+        ContentType mimetype = ContentType.APPLICATION_JSON;
+        StringEntity dataStringEntity = new StringEntity(data.toString(), mimetype);
+        
+
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
+        String contentSHA = common.calculateSha256(payload.toString());
+        
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpDelete httpDelete = new HttpDelete(resourceLoc);
-        String requestToHmac = httpDelete.getMethod() + "\n"
+        HttpPost httpPost = new HttpPost(resourceLoc);
+        String requestToHmac = httpPost.getMethod() + "\n"
                 + contentSHA + "\n"
-                + contentType + "\n"
+                + mimetype.getMimeType()  + "\n"
                 + currentDate + "\n"
                 + apiversion + "\n"
-                + httpDelete.getURI().getPath();
+                + httpPost.getURI().getPath();
 
-        String hmac = common.calculateHMAC(secretkey, requestToHmac);
-        httpDelete.addHeader("Authorization", "HMAC " + accesskey + ":" + hmac);
-        httpDelete.addHeader("Date", currentDate);
-        httpDelete.addHeader("strongkey-api-version", apiversion);
-        CloseableHttpResponse response = httpclient.execute(httpDelete);
+        if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {  
+                String hmac = common.calculateHMAC(credential2, requestToHmac);
+                httpPost.addHeader("Authorization", "HMAC " + credential1 + ":" + hmac);
+        }
+        httpPost.addHeader("strongkey-content-sha256", contentSHA);
+        httpPost.addHeader("Content-Type", mimetype.getMimeType());
+        httpPost.addHeader("Date", currentDate);
+        httpPost.addHeader("strongkey-api-version", apiversion);
+        httpPost.setEntity(dataStringEntity);
+        CloseableHttpResponse response = httpclient.execute(httpPost);
         String result;
         try {
             StatusLine responseStatusLine = response.getStatusLine();
@@ -96,60 +140,94 @@ public class RestFidoActionsOnPolicy {
 
     public static void patch(String REST_URI,
                             String did,
-                            String accesskey,
-                            String secretkey,
-                            String sidpid,
-                            Long startdate,
-                            Long enddate,
-                            Integer version,
+                            String authtype,
+                            String credential1,
+                            String credential2,
+                            String sid,
+                            String pid,
                             String status,
                             String notes,
                             String policy) throws Exception
     {
-        System.out.println("Patch policy test");
+        System.out.println("REST Patch policy test " + authtype);
         System.out.println("******************************************");
 
+        if (!authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC) && !authtype.equalsIgnoreCase(Constants.AUTHORIZATION_PASSWORD)) {
+                System.out.println("Invalid Authentication Type...\n");
+                return;
+            }
+        
+        JsonObject svcinfo;
+
+         if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+            svcinfo = javax.json.Json.createObjectBuilder()
+            .add("did", Long.valueOf(did))
+            .add("protocol", "FIDO2_0") 
+            .add("authtype", Constants.AUTHORIZATION_HMAC)
+            .build();
+        } else {
+            svcinfo = javax.json.Json.createObjectBuilder()
+            .add("did", Long.valueOf(did))
+            .add("protocol", "FIDO2_0")      
+            .add("authtype", Constants.AUTHORIZATION_PASSWORD)
+            .add("svcusername", credential1)
+            .add("svcpassword", credential2)
+            .build();
+        }
+
+        JsonObject payload  = javax.json.Json.createObjectBuilder()
+            .add("did", did)
+            .add("sid", sid)
+            .add("pid", pid)
+            .add("status", status)
+            .add("notes", notes)
+            .add("policy", policy)     
+            .build();
+
+        JsonObject data  = javax.json.Json.createObjectBuilder()
+            .add("svcinfo", svcinfo)
+            .add("payload", payload)
+            .build();
+        
         String apiversion = "2.0";
 
         //  Make API rest call and get response from the server
-        String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.PATCH_POLICY_ENDPOINT + "/" + sidpid;
+        String resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_PATCH_POLICY;
         System.out.println("\nCalling update @ " + resourceLoc);
 
         PatchFidoPolicyRequest pfpr = new PatchFidoPolicyRequest();
-        pfpr.setStartDate(startdate);
-        if (enddate != null)
-            pfpr.setEndDate(enddate);
-        pfpr.setVersion(version);
         pfpr.setStatus(status);
         pfpr.setNotes(notes);
         pfpr.setPolicy(policy);
 
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(pfpr);
+//        String json = pfpr.toJsonObject().toString();
 
-        ContentType mimetype = ContentType.create("application/merge-patch+json");
-        StringEntity body = new StringEntity(json, mimetype);
+        ContentType mimetype = ContentType.APPLICATION_JSON;
+        StringEntity dataStringEntity = new StringEntity(data.toString(), mimetype);
+        
 
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
-        String contentSHA = common.calculateSha256(json);
+        String contentSHA = common.calculateSha256(payload.toString());
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpPatch httpPatch = new HttpPatch(resourceLoc);
-        httpPatch.setEntity(body);
-        String requestToHmac = httpPatch.getMethod() + "\n"
+        HttpPost httpPost = new HttpPost(resourceLoc);
+        httpPost.setEntity(dataStringEntity);
+        String requestToHmac = httpPost.getMethod() + "\n"
                 + contentSHA + "\n"
                 + mimetype.getMimeType() + "\n"
                 + currentDate + "\n"
                 + apiversion + "\n"
-                + httpPatch.getURI().getPath();
+                + httpPost.getURI().getPath();
 
-        String hmac = common.calculateHMAC(secretkey, requestToHmac);
-        httpPatch.addHeader("Authorization", "HMAC " + accesskey + ":" + hmac);
-        httpPatch.addHeader("strongkey-content-sha256", contentSHA);
-        httpPatch.addHeader("Content-Type", mimetype.getMimeType());
-        httpPatch.addHeader("Date", currentDate);
-        httpPatch.addHeader("strongkey-api-version", apiversion);
-        CloseableHttpResponse response = httpclient.execute(httpPatch);
+        if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {  
+                String hmac = common.calculateHMAC(credential2, requestToHmac);
+                httpPost.addHeader("Authorization", "HMAC " + credential1 + ":" + hmac);
+        }
+        httpPost.addHeader("strongkey-content-sha256", contentSHA);
+        httpPost.addHeader("Content-Type", mimetype.getMimeType());
+        httpPost.addHeader("Date", currentDate);
+        httpPost.addHeader("strongkey-api-version", apiversion);
+        CloseableHttpResponse response = httpclient.execute(httpPost);
         String result;
         try {
             StatusLine responseStatusLine = response.getStatusLine();

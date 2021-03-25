@@ -7,20 +7,20 @@
 package com.strongkey.apiws.rest;
 
 import com.strongkey.apiws.utility.PATCH;
+import com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal;
 import com.strongkey.skfs.requests.AuthenticationRequest;
-import com.strongkey.skfs.requests.PatchFidoKeyRequest;
 import com.strongkey.skfs.requests.PreauthenticationRequest;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
+import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
 import com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal;
-import com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -207,7 +207,7 @@ public class APIServlet {
     @Path("/{kid}")
     @Consumes({"application/merge-patch+json"})
     @Produces({"application/json"})
-    public Response patchkey(PatchFidoKeyRequest patchkey,
+    public Response patchkey(UpdateFidoKeyRequest patchkey,
                            @PathParam("did") Long did,
                            @PathParam("kid") String kid) {
 

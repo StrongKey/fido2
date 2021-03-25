@@ -7,47 +7,31 @@
 
 package com.strongkey.skfs.fido.policyobjects;
 
-import com.strongkey.skfs.utilities.skfsConstants;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import javax.json.JsonObject;
-import javax.json.JsonString;
+
 
 public class AuthenticationPolicyOptions {
     private final String allowCredentials;
-    private final List<String> userVerification;
 
-    public AuthenticationPolicyOptions(String allowCredentials, List<String> userVerification){
+
+    public AuthenticationPolicyOptions(String allowCredentials){
         this.allowCredentials = allowCredentials;
-        this.userVerification = userVerification;
     }
 
     public String getAllowCredentials() {
         return allowCredentials;
     }
 
-    public List<String> getUserVerification() {
-        return userVerification;
-    }
-
     public static AuthenticationPolicyOptions parse(JsonObject authenticationJson) {
-        return new AuthenticationPolicyOptions.AuthenticationPolicyOptionsBuilder(
-                new ArrayList<>(authenticationJson.getJsonArray(skfsConstants.POLICY_AUTHENTICATION_USERVERIFICATION).stream()
-                        .map(x -> (JsonString) x)
-                        .map(x -> x.getString())
-                        .collect(Collectors.toList())))
-                .setAllowCredentials(authenticationJson.getString(skfsConstants.POLICY_AUTHENTICATION_ALLOWCREDENTIALS, null))
+        return new AuthenticationPolicyOptions.AuthenticationPolicyOptionsBuilder()
+                .setAllowCredentials(authenticationJson.getString(SKFSConstants.POLICY_AUTHENTICATION_ALLOWCREDENTIALS, null))
                 .build();
     }
 
     public static class AuthenticationPolicyOptionsBuilder{
         private String builderAllowCredentials;
-        private final List<String> builderUserVerification;
 
-        public AuthenticationPolicyOptionsBuilder(List<String> userVerification) {
-            this.builderUserVerification = userVerification;
-        }
 
         public AuthenticationPolicyOptionsBuilder setAllowCredentials(String allowCredentials){
             this.builderAllowCredentials = allowCredentials;
@@ -55,7 +39,7 @@ public class AuthenticationPolicyOptions {
         }
 
         public AuthenticationPolicyOptions build(){
-            return new AuthenticationPolicyOptions(builderAllowCredentials, builderUserVerification);
+            return new AuthenticationPolicyOptions(builderAllowCredentials);
         }
     }
 }

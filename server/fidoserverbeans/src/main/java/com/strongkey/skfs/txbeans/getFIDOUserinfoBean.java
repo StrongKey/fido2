@@ -10,9 +10,9 @@ package com.strongkey.skfs.txbeans;
 import com.strongkey.skfs.entitybeans.FidoUsers;
 import com.strongkey.skfs.pojos.FIDOUserMetadata;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -34,18 +34,18 @@ public class getFIDOUserinfoBean implements getFIDOUserinfoBeanLocal {
     @Override
     public FIDOUserMetadata execute(Long did, String username) throws SKFEException {
         //  Inputs check
-        skfsCommon.inputValidateSKCEDid(Long.toString(did));
+        SKFSCommon.inputValidateSKCEDid(Long.toString(did));
         if (username == null || username.trim().isEmpty()) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.WARNING, "SKCE-ERR-1000", "NULL or empty argument for username : " + username);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.WARNING, "SKCE-ERR-1000", "NULL or empty argument for username : " + username);
             throw new SKFEException("NULL or empty argument for username : " + username);
         }
 
         FIDOUserMetadata authres = null;
 
-        FidoUsers FIDOUser = getfidouserbean.GetByUsername(did, username);
+        FidoUsers FIDOUser = getfidouserbean.getByUsername(did, username);
         if (FIDOUser == null) {
             addfidouserbean.execute(did, username);
-            FIDOUser = getfidouserbean.GetByUsername(did, username);
+            FIDOUser = getfidouserbean.getByUsername(did, username);
         }
         //  Build the auth result object
         authres = new FIDOUserMetadata(username,
@@ -59,7 +59,7 @@ public class getFIDOUserinfoBean implements getFIDOUserinfoBeanLocal {
                 FIDOUser.getTwoStepVerification(),
                 did);
 
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
         return authres;
     }
 }

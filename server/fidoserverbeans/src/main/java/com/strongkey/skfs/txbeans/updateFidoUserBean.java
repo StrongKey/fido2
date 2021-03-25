@@ -11,12 +11,12 @@ import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.crypto.interfaces.initCryptoModule;
 import com.strongkey.crypto.utility.CryptoException;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.entitybeans.FidoUsers;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,7 +90,7 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
             String key,
             String value,
             boolean deletion) throws SKFEException {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER, classname, "execute");
 
         //Json return object
         JsonObject retObj;
@@ -100,26 +100,26 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
         String errmsg;
 
         //  Inputs check
-        skfsCommon.inputValidateSKCEDid(Long.toString(did));
+        SKFSCommon.inputValidateSKCEDid(Long.toString(did));
         if (username == null || username.trim().isEmpty()
                 || key == null || key.trim().isEmpty()
                 || value == null) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " ";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " ";
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
 
-        if (!key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY) && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_FIDOENABLED) && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_DEFAULTTARGET)
-                && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_EMAILADDRESSES) && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PHONENUMBERS) && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PRIMARYEMAIL)
-                && !key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PRIMARYPHONE)) {
+        if (!key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY) && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED) && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_DEFAULTTARGET)
+                && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_EMAILADDRESSES) && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PHONENUMBERS) && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PRIMARYEMAIL)
+                && !key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PRIMARYPHONE)) {
             throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; ");
         }
 
         //  checks for deletion - There could be other attributes which are never
         // deletable, need to add them to the list
-        if ((key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY)
-                || key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_FIDOENABLED))
+        if ((key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY)
+                || key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED))
                 && deletion) {
             throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; "
                     + " Value for " + key + " can not be deleted");
@@ -127,22 +127,22 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
 
         if (!deletion) {
             //  Checks on the new value for the key.
-            if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
+            if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
                 if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
                     throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; "
-                            + " Value for " + skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY
+                            + " Value for " + SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY
                             + " has to be one of 'true' or 'false'");
                 }
-            } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_FIDOENABLED)) {
+            } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED)) {
                 if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
                     throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; "
-                            + " Value for " + skfsConstants.LDAP_ATTR_KEY_FIDOENABLED
+                            + " Value for " + SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED
                             + " has to be one of 'true' or 'false'");
                 }
-            } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_DEFAULTTARGET)) {
+            } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_DEFAULTTARGET)) {
                 if (!value.equalsIgnoreCase("email") && !value.equalsIgnoreCase("phone")) {
                     throw new SKFEException("SKCEWS-ERR-3018: Invalid value for ldap key; "
-                            + " Value for " + skfsConstants.LDAP_ATTR_KEY_DEFAULTTARGET
+                            + " Value for " + SKFSConstants.LDAP_ATTR_KEY_DEFAULTTARGET
                             + " has to be one of 'email' or 'phone'");
                 }
             }
@@ -151,31 +151,31 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
         //get fido user
         FidoUsers fidoUser;
         try {
-            fidoUser = getFidoUserbean.GetByUsername(did, username);
+            fidoUser = getFidoUserbean.getByUsername(did, username);
             if (fidoUser == null) {
-//                if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
+//                if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
                 addfidouserbean.execute(did, username);
-                fidoUser = getFidoUserbean.GetByUsername(did, username);
-//                    skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
+                fidoUser = getFidoUserbean.getByUsername(did, username);
+//                    SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
 //                    return response;
 //                } //add user with the property
 //                else {
-//                    skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0036", "");
-//                    throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-0036"));
+//                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "FIDO-ERR-0036", "");
+//                    throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0036"));
 //                }
             }
         } catch (Exception ex) {
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
         }
 
-        if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
+        if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY)) {
             fidoUser.setTwoStepVerification(value);
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_FIDOENABLED)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED)) {
             //check if keys exist for user
             if (value.equalsIgnoreCase("false")) {
                 if (getfidokeysbean.getByUsernameStatus(did, username, applianceConstants.ACTIVE_STATUS).size() > 0) {
-                    skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-6001", "");
+                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-6001", "");
                 } else {
                     fidoUser.setFidoKeysEnabled(value);
                 }
@@ -183,31 +183,31 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
                 fidoUser.setFidoKeysEnabled(value);
             }
 
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_DEFAULTTARGET)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_DEFAULTTARGET)) {
             if (deletion) {
                 fidoUser.setTwoStepTarget(null);
             } else {
                 fidoUser.setTwoStepTarget(value);
             }
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_EMAILADDRESSES)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_EMAILADDRESSES)) {
             if (deletion) {
                 fidoUser.setRegisteredEmails("");
             } else {
                 fidoUser.setRegisteredEmails(value);
             }
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PHONENUMBERS)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PHONENUMBERS)) {
             if (deletion) {
                 fidoUser.setRegisteredPhoneNumbers("");
             } else {
                 fidoUser.setRegisteredPhoneNumbers(value);
             }
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PRIMARYEMAIL)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PRIMARYEMAIL)) {
             if (deletion) {
                 fidoUser.setPrimaryEmail("");
             } else {
                 fidoUser.setPrimaryEmail(value);
             }
-        } else if (key.equalsIgnoreCase(skfsConstants.LDAP_ATTR_KEY_PRIMARYPHONE)) {
+        } else if (key.equalsIgnoreCase(SKFSConstants.LDAP_ATTR_KEY_PRIMARYPHONE)) {
             if (deletion) {
                 fidoUser.setPrimaryPhoneNumber("");
             } else {
@@ -217,13 +217,13 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
         String primarykey = fidoUser.getFidoUsersPK().getSid() + "-" + fidoUser.getFidoUsersPK().getDid() + "-" + fidoUser.getFidoUsersPK().getUsername();
         fidoUser.setId(primarykey);
 
-        if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
+        if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
                 .equalsIgnoreCase("true")) {
 
-            String standalone = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
+            String standalone = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
             String signingKeystorePassword = "";
             if (standalone.equalsIgnoreCase("true")) {
-                signingKeystorePassword = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
+                signingKeystorePassword = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
             }
             //  convert the java object into xml to get it signed.
             StringWriter writer = new StringWriter();
@@ -238,13 +238,14 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
 
             }
             String efsXml = writer.toString();
-            if (efsXml == null) {
-                status = false;
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "FK Xml");
-                errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " FK Xml";
-                retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
-                return retObj.toString();
-            }
+//            String efsXml = fidoUser.toJsonObject();
+//            if (efsXml == null) {
+//                status = false;
+//                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "FK Xml");
+//                errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " FK Xml";
+//                retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
+//                return retObj.toString();
+//            }
             //  get signature for the xml
             Domains d = getdomain.byDid(did);
 
@@ -257,8 +258,8 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
 
             if (signedxml == null) {
                 status = false;
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "SignedXML");
-                errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " SignedXML";
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "SignedXML");
+                errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " SignedXML";
                 retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
                 return retObj.toString();
             } else {
@@ -271,21 +272,23 @@ public class updateFidoUserBean implements updateFidoUserBeanLocal {
 
         try {
             if (applianceCommon.replicate()) {
-                String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_USERS, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, fidoUser);
-                if(response != null){
-                    return response;
+                if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
+                    String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_USERS, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, fidoUser);
+                    if (response != null) {
+                        return response;
+                    }
                 }
             }
         } catch (Exception e) {
             sc.setRollbackOnly();
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             throw new RuntimeException(e.getLocalizedMessage());
         }
 
         //return a success message
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2010", "");
-        retObj = Json.createObjectBuilder().add("status", status).add("message", skfsCommon.getMessageProperty("FIDOJPA-MSG-2010")).build();
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2010", "");
+        retObj = Json.createObjectBuilder().add("status", status).add("message", SKFSCommon.getMessageProperty("FIDOJPA-MSG-2010")).build();
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
         return retObj.toString();
     }
 }

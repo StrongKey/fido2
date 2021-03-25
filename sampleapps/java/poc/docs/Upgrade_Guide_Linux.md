@@ -34,8 +34,8 @@ This project is a service provider web application written in JavaScript and Jav
 6. Undeploy the old version and deploy the new .war file to Payara.
 
     ```sh
-    payara41/glassfish/bin/asadmin undeploy poc
-    payara41/glassfish/bin/asadmin deploy --contextroot poc --name poc pocserver.war
+    payara5/glassfish/bin/asadmin undeploy poc
+    payara5/glassfish/bin/asadmin deploy --contextroot poc --name poc pocserver.war
     ```
 7. Test that the servlet is running by executing the following cURL command and confirming that you get the API _Web Application Definition Language (WADL)_ file back in response.
 
@@ -56,19 +56,19 @@ This project is a service provider web application written in JavaScript and Jav
 10. Remove all the files for the old distribution from Payara _docroot_.
 
     ```
-    rm -rf /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/*.js /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/index.html /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/styles.*.css /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/ /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/3rdpartylicenses.txt
+    rm -rf /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/*.js /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/index.html /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/styles.*.css /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/assets/ /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/3rdpartylicenses.txt
     ```
 11. Copy all the files for the new poc distribution to the Payara _docroot_.
 
     ```
-    cp -r dist/* /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot
+    cp -r dist/* /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot
     ```
     
 12. Optional: Modify the background image and the logo image.
 
     ```
-    cp <your background> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
-    cp <your logo> /usr/local/strongkey/payara41/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
+    cp <your background> /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/assets/app/media/img/bg/background.jpg
+    cp <your logo> /usr/local/strongkey/payara5/glassfish/domains/domain1/docroot/assets/app/media/img/logo/logo.png
     ```
 13. The application is deployed in _docroot_ on the PoC server and can be accessed as follows in a browser:
 

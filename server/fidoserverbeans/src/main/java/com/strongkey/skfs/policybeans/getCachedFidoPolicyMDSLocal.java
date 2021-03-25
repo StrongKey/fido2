@@ -8,12 +8,13 @@
 
 package com.strongkey.skfs.policybeans;
 
+import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import javax.ejb.Local;
 
 @Local
 public interface getCachedFidoPolicyMDSLocal {
-    public FidoPolicyObject getPolicyByDidUsername(Long did, String username);
+    public FidoPolicyObject getPolicyByDidUsername(Long did, String username, FidoKeys fk);
     public FidoPolicyMDSObject getByMapKey(String policyMapKey);
 }

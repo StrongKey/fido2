@@ -14,9 +14,9 @@ if [ -f /etc/init.d/functions ]; then
         . /etc/init.d/functions
 fi
 
-PROGRAM="--user strongkey /usr/local/strongkey/payara41/glassfish/bin/asadmin"
+PROGRAM="--user strongkey /usr/local/strongkey/payara5/glassfish/bin/asadmin"
 
-prog="Glassfish 4 Application Server"
+prog="Glassfish 5 Application Server"
 
 start () {
 	echo -n $"Starting $prog: "

@@ -49,14 +49,13 @@ import javax.json.Json;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
 import javax.json.stream.JsonParserFactory;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.util.encoders.Base64;
 
 public class SoapFidoClient {
 
     public static final String appidforbadsignature = "TESTBADSIGNATUREWITHINVALIDAPPID";
 
-    public static String generateAuthenticationResponse2fs(String preAuthresponse, boolean goodSignature) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, DecoderException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, SignatureException {
+    public static String generateAuthenticationResponse2fs(String preAuthresponse, boolean goodSignature) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, SignatureException {
         clientUtilAuth ca = new clientUtilAuth();
 
         //get challenge
@@ -88,7 +87,7 @@ public class SoapFidoClient {
         System.out.println("KeyHandle : " + keyHandle);
 
         //calculate keyhandlelength
-        byte[] rawkh = Base64.decodeBase64(keyHandle);
+        byte[] rawkh = Base64.decode(keyHandle);
         int keyHandlelength = rawkh.length;
         if (keyHandlelength > 255) {
             System.out.println("Fatal error Key handle > 255");
@@ -110,7 +109,7 @@ public class SoapFidoClient {
 
         //prepare authenticationresponse for the server
         //{"bd": "", "challenge": "", "app_id": "", "sessionId": "", "sign": ""}
-        String authresp2server = ca.encodeAuth(Base64.encodeBase64URLSafeString(Client_Data.getBytes("UTF-8")), challenge, appid, ca.decodePreauth(preAuthresponse, 1), authenticationResponse);
+        String authresp2server = ca.encodeAuth(Base64.toBase64String(Client_Data.getBytes("UTF-8")), challenge, appid, ca.decodePreauth(preAuthresponse, 1), authenticationResponse);
         return authresp2server;
 
     }
@@ -140,10 +139,12 @@ public class SoapFidoClient {
      * @throws UnrecoverableKeyException
      * @throws InvalidKeySpecException
      */
-    public static String generateRegistrationResponse(String preregisterStr, boolean goodSignature) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, KeyStoreException, IOException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, NoSuchPaddingException, FileNotFoundException, DecoderException, IllegalBlockSizeException, BadPaddingException, ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException {
+    public static String generateRegistrationResponse(String preregisterStr, boolean goodSignature) throws NoSuchAlgorithmException, NoSuchProviderException, 
+            UnsupportedEncodingException, KeyStoreException, IOException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, 
+            SignatureException, NoSuchPaddingException, FileNotFoundException, IllegalBlockSizeException, BadPaddingException, ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException {
         clientUtil cu = new clientUtil();
         //generate random username
-        String UserName = Base64.encodeBase64URLSafeString(new SecureRandom().generateSeed(20));
+        String UserName = Base64.toBase64String(new SecureRandom().generateSeed(20));
         //call enroll webservice
         String preRegisterReply = preregisterStr;
         System.out.println("Fido Client\n\tCalling preRegister ...\n\tService returned : ");
@@ -190,7 +191,7 @@ public class SoapFidoClient {
 
         System.out.println("\tCreating Registration Response...");
         //create Registration response
-        String RegistrationResponse = cu.createRegistrationResponse(Base64.encodeBase64URLSafeString(Client_Data.getBytes("UTF-8")), cu.decodePreRegister(preRegisterReply, 0), reg_resp);
+        String RegistrationResponse = cu.createRegistrationResponse(Base64.toBase64String(Client_Data.getBytes("UTF-8")), cu.decodePreRegister(preRegisterReply, 0), reg_resp);
 
         System.out.println("\tRegistration Parameters : ");
         printJson(RegistrationResponse);
@@ -221,7 +222,10 @@ public class SoapFidoClient {
 
     }
 
-    private static String authenticator_reg(String ChallengeParam, String ApplicationParam) throws KeyStoreException, NoSuchProviderException, IOException, NoSuchAlgorithmException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, NoSuchPaddingException, FileNotFoundException, DecoderException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException {
+    private static String authenticator_reg(String ChallengeParam, String ApplicationParam) throws KeyStoreException, NoSuchProviderException, 
+            IOException, NoSuchAlgorithmException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, 
+            NoSuchPaddingException, FileNotFoundException, IllegalBlockSizeException, BadPaddingException, 
+            UnsupportedEncodingException, ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException {
 
         System.out.println("\n\tFido Authenticator");
 
@@ -242,7 +246,7 @@ public class SoapFidoClient {
 
         //make object to sign
         System.out.println("\t\tCreating byte string to sign...");
-        String ob2sign = cu.getObjectToSign(ApplicationParam, ChallengeParam, kh, Base64.encodeBase64String(genKeys.getPublic().getEncoded()));
+        String ob2sign = cu.getObjectToSign(ApplicationParam, ChallengeParam, kh, Base64.toBase64String(genKeys.getPublic().getEncoded()));
         System.out.println("\t\tByte String to sign : " + ob2sign);
 
         //sign object
@@ -257,7 +261,7 @@ public class SoapFidoClient {
             System.out.println("Fatal error in creating the object to send, attestation certificate not found");
             return null;
         }
-        String registrationData = cu.makeObject2Send(Base64.encodeBase64String(genKeys.getPublic().getEncoded()), kh, Base64.encodeBase64String(cert.getEncoded()), signatureb64);
+        String registrationData = cu.makeObject2Send(Base64.toBase64String(genKeys.getPublic().getEncoded()), kh, Base64.toBase64String(cert.getEncoded()), signatureb64);
         if (registrationData == null) //KH was too large
         {
             return null;

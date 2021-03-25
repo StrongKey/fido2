@@ -7,7 +7,10 @@
 package com.strongkey.skfs.messaging;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.strongkey.appliance.entitybeans.Configurations;
+import com.strongkey.appliance.entitybeans.ConfigurationsPK;
 import com.strongkey.appliance.entitybeans.Domains;
+import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceMaps;
 import com.strongkey.appliance.utilities.strongkeyLogger;
@@ -15,6 +18,7 @@ import com.strongkey.fido2mds.MDS;
 import com.strongkey.skce.pojos.MDSClient;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.txbeans.persistSKCEObjectRemote;
+import com.strongkey.skce.utilities.skceCommon;
 import com.strongkey.skce.utilities.skceConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
@@ -28,13 +32,16 @@ import com.strongkey.skfs.entitybeans.FidoUsersPK;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -59,9 +66,10 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
     private UserSessionInfo     usersessioninfo;
     private FidoPolicies        fidopolicies,       fpresult;
     private AttestationCertificates attestationcertificates, acresult;
+    private Configurations config, configresult;
 
     private Long did, fkid, sid, pid, attcid = 0L;
-    private String fidouser, pkey = null;
+    private String fidouser, pkey, config_key = null;
 
     @Override
     public boolean execute(String repobjpk, int objectype, int objectop, String objectpk, byte[] msg) {
@@ -110,11 +118,10 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                         fidokeys.setStatus(fkproto.getStatus());
 
                         if(fkproto.hasUserid()) fidokeys.setUserid(fkproto.getUserid());
-                        if(fkproto.hasKhdigest()) fidokeys.setKhdigest(fkproto.getKhdigest());
-                        if(fkproto.hasKhdigestType()) fidokeys.setKhdigestType(fkproto.getKhdigestType());
                         if(fkproto.hasModifyDate()) fidokeys.setModifyDate(new Date(fkproto.getModifyDate()));
                         if(fkproto.hasModifyLocation()) fidokeys.setModifyLocation(fkproto.getModifyLocation());
                         if(fkproto.hasSignature()) fidokeys.setSignature(fkproto.getSignature());
+                        if(fkproto.hasSignatureKeytype()) fidokeys.setSignatureKeytype(fkproto.getSignatureKeytype());
                         if(fkproto.hasTransports()) fidokeys.setTransports((short)fkproto.getTransports());
                         if(fkproto.hasAttsid()) fidokeys.setAttsid((short)fkproto.getAttsid());
                         if(fkproto.hasAttdid()) fidokeys.setAttdid((short)fkproto.getAttdid());
@@ -370,16 +377,13 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                     fidopolicies.setFidoPoliciesPK(new FidoPoliciesPK(sid.shortValue(), did.shortValue(), pid.shortValue()));
                     if (objectop != applianceConstants.REPLICATION_OPERATION_DELETE) {
                         // If objectop == DELETE, these values can be null so we only set them when objectop != DELETE
-                        fidopolicies.setStartDate(new Date(policyproto.getStartDate()));
-                        fidopolicies.setCertificateProfileName(policyproto.getCertificateProfileName());
+
                         fidopolicies.setPolicy(policyproto.getPolicy());
-                        fidopolicies.setVersion((int) policyproto.getVersion());
+
                         fidopolicies.setStatus(policyproto.getStatus());
                         fidopolicies.setCreateDate(new Date(policyproto.getCreateDate()));
 
-                        if (policyproto.hasEndDate()) {
-                            fidopolicies.setEndDate(new Date(policyproto.getEndDate()));
-                        }
+
                         if (policyproto.hasNotes()) {
                             fidopolicies.setNotes(policyproto.getNotes());
                         }
@@ -410,16 +414,11 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                             strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.INFO, classname, "execute", "SKCE-MSG-6036", "Constants.ENTITY_TYPE_FIDOPOLICY [" + pkey + "]");
                             FidoPolicyObject fidoPolicyObject = FidoPolicyObject.parse(
                                     fidopolicies.getPolicy(),
-                                    fidopolicies.getVersion(),
                                     (long) fidopolicies.getFidoPoliciesPK().getDid(),
                                     (long) fidopolicies.getFidoPoliciesPK().getSid(),
-                                    (long) fidopolicies.getFidoPoliciesPK().getPid(),
-                                    fidopolicies.getStartDate(),
-                                    fidopolicies.getEndDate());
+                                    (long) fidopolicies.getFidoPoliciesPK().getPid());
                             MDSClient mds = null;
-                            if (fidoPolicyObject.getMdsOptions() != null) {
-                                mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
-                            }
+
                             skceMaps.getMapObj().put(skceConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
                         } else {
                             // Invalid operation on a non-existent object
@@ -434,18 +433,15 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                             case applianceConstants.REPLICATION_OPERATION_UPDATE:
                                 em.merge(fidopolicies);
                                 strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.INFO, classname, "execute", "SKCE-MSG-6037", "Constants.ENTITY_TYPE_FIDOPOLICY [" + pkey + "]");
+                                
                                 FidoPolicyObject fidoPolicyObject = FidoPolicyObject.parse(
                                         fidopolicies.getPolicy(),
-                                        fidopolicies.getVersion(),
+
                                         (long) fidopolicies.getFidoPoliciesPK().getDid(),
                                         (long) fidopolicies.getFidoPoliciesPK().getSid(),
-                                        (long) fidopolicies.getFidoPoliciesPK().getPid(),
-                                        fidopolicies.getStartDate(),
-                                        fidopolicies.getEndDate());
+                                        (long) fidopolicies.getFidoPoliciesPK().getPid());
                                 MDSClient mds = null;
-                                if (fidoPolicyObject.getMdsOptions() != null) {
-                                    mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
-                                }
+
                                 skceMaps.getMapObj().put(skceConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
                                 break;
                             case applianceConstants.REPLICATION_OPERATION_DELETE:
@@ -544,8 +540,103 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                 }
                 break;
 
+            case applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS:
+                pkarray = objectpk.split("-", 2);
+                did = Long.parseLong(pkarray[0]);
+                config_key = pkarray[1];
+                pkey = "DID-CONFIG_KEY=" + did + "-" + config_key;
+                strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "SKCE-MSG-6034", repobjpk + " containing ENTITY_TYPE_FIDO_CONFIGURATION [" + pkey + "]");
+
+                
+                // Parse Proto object and create entitybean
+                ZMQSKCEReplicationProtos.Configurations cfgproto;
+                try {
+                    cfgproto = ZMQSKCEReplicationProtos.Configurations.parseFrom(msg);
+                    config = new Configurations();
+                    config.setConfigurationsPK(new ConfigurationsPK(did, config_key));
+                    config.setConfigValue(cfgproto.getConfigValue());
+                    // Set optional values if not null
+                    if (cfgproto.hasNotes()) config.setNotes(cfgproto.getNotes());
+                } catch (IllegalArgumentException | InvalidProtocolBufferException ex) {
+                    strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6009", "Constants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                    Logger.getLogger(persistSKCEObject.class.getName()).log(Level.SEVERE, null, ex);
+                    isValid = false;
+                    // Break from switch since we have an error in the proto message
+                    break;
+                }
+
+                        // Search for object in local DB if it exists
+                configresult = em.find(Configurations.class, config.getConfigurationsPK());
+                Configurations[] configarray = new Configurations[1];
+                configarray[0] = config;
+                // If not found, what operation are we performing?
+                if (configresult == null) {
+                    strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "SKCE-MSG-6035", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                    if (objectop == applianceConstants.REPLICATION_OPERATION_ADD) {
+                        em.persist(config);
+                        strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "SKCE-MSG-6036", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                        //update map
+                        SKFSCommon.putConfiguration(did, configarray);
+                        skceCommon.putConfiguration(did, configarray);
+                        if(config_key.equalsIgnoreCase("appl.cfg.property.service.ce.ldap.ldaptype")){
+                            skceCommon.setldaptype(did, config.getConfigValue());
+                        }
+                        if(config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapdnsuffix")){
+                            skceCommon.setdnSuffixConfigured(Boolean.TRUE);
+                        }
+                        if(config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapgroupsuffix")){
+                            skceCommon.setgroupSuffixConfigured(Boolean.TRUE);
+                        }
+                    } else {
+                        strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6010", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                    }
+                } else {
+                    switch (objectop) {
+                        case applianceConstants.REPLICATION_OPERATION_ADD:
+                            // Error - it already exists
+                            strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6011", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                            break;
+                        case applianceConstants.REPLICATION_OPERATION_UPDATE:
+                            em.merge(config);
+                            strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "SKCE-MSG-6037", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                            //update map
+                            if (config_key.equalsIgnoreCase("appl.cfg.property.service.ce.ldap.ldaptype")) {
+                                skceCommon.setldaptype(did, config.getConfigValue());
+                            }
+                            if (config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapdnsuffix")) {
+                                skceCommon.setdnSuffixConfigured(Boolean.TRUE);
+                            }
+                            if (config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapgroupsuffix")) {
+                                skceCommon.setgroupSuffixConfigured(Boolean.TRUE);
+                            }
+                            SKFSCommon.putConfiguration(did, configarray);
+                            skceCommon.putConfiguration(did, configarray);
+                            break;
+                        case applianceConstants.REPLICATION_OPERATION_DELETE:
+                            em.remove(config);
+                            strongkeyLogger.logp(skceConstants.SKEE_LOGGER, Level.INFO, classname, "execute", "SKCE-MSG-6038", "Constants.ENTITY_TYPE_FIDOKEYS [" + pkey + "]");
+                            if (config_key.equalsIgnoreCase("appl.cfg.property.service.ce.ldap.ldaptype")) {
+                                skceCommon.setldaptype(did, applianceCommon.getApplianceConfigurationProperty(config_key));
+                            }
+                            if (config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapdnsuffix")) {
+                                skceCommon.setdnSuffixConfigured(Boolean.FALSE);
+                            }
+                            if (config_key.equalsIgnoreCase("ldape.cfg.property.service.ce.ldap.ldapgroupsuffix")) {
+                                skceCommon.setgroupSuffixConfigured(Boolean.FALSE);
+                            }
+                            SKFSCommon.removeConfiguration(did, configarray);
+                            skceCommon.removeConfiguration(did, configarray);
+                            break;
+                        default:
+                            // Invalid operation
+                            strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.WARNING, classname, "execute", "SKCE-ERR-6038", "applianceConstants.ENTITY_TYPE_CONFIGURATIONS [" + pkey + "]");
+                            break;
+                    }
+                }
+                break;
+
             default:
-                strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.SEVERE, classname, "execute", "SKCE-ERR-6008", objectype);
+                strongkeyLogger.logp(skceConstants.SKEE_LOGGER, Level.SEVERE, classname, "execute", "SKCE-ERR-6008", objectype);
                 return false;
 
         }

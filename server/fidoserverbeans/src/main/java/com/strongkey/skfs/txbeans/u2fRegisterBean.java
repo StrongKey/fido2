@@ -8,10 +8,10 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceMaps;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.core.U2FRegistrationResponse;
 import com.strongkey.skfs.utilities.FEreturn;
 import java.util.logging.Level;
@@ -53,8 +53,8 @@ public class u2fRegisterBean implements u2fRegisterBeanLocal {
 
         String appid = applianceMaps.getDomain(Long.parseLong(did)).getSkfeAppid();
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5001"),
                         " EJB name=" + classname +
                         " did=" + did +
                         " protocol=" + protocol +
@@ -64,14 +64,14 @@ public class u2fRegisterBean implements u2fRegisterBeanLocal {
 
         //  Input checks
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-5001"), protocol);
-            fr.append(skfsCommon.getMessageProperty("FIDO-ERR-5001") + "protocol=" + protocol);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), protocol);
+            fr.append(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + "protocol=" + protocol);
             return fr;
         }
 
         if (regresponseJson == null || regresponseJson.isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-5001"), regresponseJson);
-            fr.append(skfsCommon.getMessageProperty("FIDO-ERR-5001") + "registration response =" + regresponseJson);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), regresponseJson);
+            fr.append(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + "registration response =" + regresponseJson);
             return fr;
         }
 
@@ -82,8 +82,8 @@ public class u2fRegisterBean implements u2fRegisterBeanLocal {
         }
 
         //  log the exit and return
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5002"), classname);
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
         return fr;
     }
 }

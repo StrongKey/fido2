@@ -10,6 +10,7 @@ package com.strongkey.skfs.txbeans;
 import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.utilities.SKFEException;
 import java.util.Collection;
+import java.util.List;
 import javax.ejb.Local;
 
 @Local
@@ -20,4 +21,5 @@ public interface getFidoKeysLocal {
     FidoKeys getByUsernameKH(Long did, String username, String KH)throws SKFEException;
     FidoKeys getByfkid(Short sid, Long did, String username,Long fkid)throws SKFEException;
     FidoKeys getNewestKeyByUsernameStatus(Long did, String username, String status) throws SKFEException;
+    List<FidoKeys> getKeysByUsernameStatus(Long did, String username, String status) throws SKFEException;
 }

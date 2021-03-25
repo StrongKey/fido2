@@ -31,8 +31,6 @@
 
 package com.strongauth.skfs.fido2.simulator;
 
-import co.nstant.in.cbor.CborException;
-import com.google.common.primitives.Bytes;
 import com.strongauth.skfs.fido2.artifacts.ClientData;
 import com.strongauth.skfs.fido2.artifacts.Common;
 import com.strongauth.skfs.fido2.artifacts.Constants;
@@ -58,6 +56,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -67,9 +66,6 @@ import javax.crypto.ShortBufferException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
-import static org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString;
 
 public class FIDO2AuthenticatorSimulator
 {
@@ -81,7 +77,7 @@ public class FIDO2AuthenticatorSimulator
     }
 
     public byte[] encodeBase64(String encodeMe) {
-        byte[] encodedBytes = Base64.encodeBase64(encodeMe.getBytes());
+        byte[] encodedBytes = Base64.getUrlEncoder().withoutPadding().encode(encodeMe.getBytes());
         return encodedBytes;
     }
 
@@ -140,9 +136,9 @@ public class FIDO2AuthenticatorSimulator
             InvalidKeyException, InvalidKeyException, InvalidKeyException,
             SignatureException, SignatureException,
             InvalidParameterSpecException, FileNotFoundException,
-            NoSuchPaddingException, IllegalBlockSizeException, DecoderException,
+            NoSuchPaddingException, IllegalBlockSizeException,
             BadPaddingException, ShortBufferException,
-            UnrecoverableKeyException, InvalidKeySpecException, CborException
+            UnrecoverableKeyException, InvalidKeySpecException
     {
         // Get the challenge nonce from the FIDO2 server's signature request
 //        System.out.println("signreq = " + registrationRequest);
@@ -195,8 +191,13 @@ public class FIDO2AuthenticatorSimulator
         FIDO2AuthenticatorData authdata = new FIDO2AuthenticatorData(rpidhash, flags, Boolean.TRUE, Constants.FIDO_REGISTER_COUNTER, new FIDO2Extensions());
         byte[] AD = authdata.encodeAuthData(Constants.AAGUID.getBytes(), java.util.Base64.getUrlDecoder().decode(keyhandle), pbk);
 
+        byte[] browserdatabytes = java.util.Base64.getUrlDecoder().decode(cdhash);
         // Create to-be-signed (TBS) object (Registration Data)
-        byte[] tbs = Bytes.concat(AD, java.util.Base64.getUrlDecoder().decode(cdhash));
+
+        byte[] tbs = new byte[AD.length + browserdatabytes.length];
+
+        System.arraycopy(AD, 0, tbs, 0, AD.length);
+        System.arraycopy(browserdatabytes, 0, tbs, AD.length, browserdatabytes.length);
 //        System.out.println("To-Be-Signed (TBS):     " + Arrays.toString(tbs));
 
         // Create the attestation object - currently only supports "packed" format
@@ -206,13 +207,13 @@ public class FIDO2AuthenticatorSimulator
         String attObject = attestationObject.encodeAttestationObject(AD, tbs, attestationType, pvk, pbk);
 
 
-        String base64clientData = encodeBase64URLSafeString(cds.getBytes());
+        String base64clientData = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(cds.getBytes());
         JsonObject response = Json.createObjectBuilder()
                 .add("attestationObject", attObject)
                 .add("clientDataJSON", base64clientData)
                 .build();
 
-        String encodedID = encodeBase64URLSafeString(java.util.Base64.getUrlDecoder().decode(keyhandle));
+        String encodedID = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(java.util.Base64.getUrlDecoder().decode(keyhandle));
         JsonObject registrationResponse = Json.createObjectBuilder()
                 .add("id", encodedID)
                 .add("rawId", encodedID)
@@ -263,21 +264,35 @@ public class FIDO2AuthenticatorSimulator
     ) throws KeyStoreException, IOException, FileNotFoundException,
             NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException,
             NoSuchProviderException, InvalidKeyException, SignatureException,
-            InvalidParameterSpecException, DecoderException, NoSuchPaddingException,
+            InvalidParameterSpecException, NoSuchPaddingException,
             InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException,
             BadPaddingException, UnsupportedEncodingException, InvalidKeySpecException,
             Exception
     {
+        
+        JsonObject authJson;
+        try (JsonReader jsonReader = Json.createReader(new StringReader(challenge))) {
+            authJson = jsonReader.readObject();
+        }
+        String nonce = authJson.getString(Constants.JSON_KEY_CHALLENGE_LABEL);
+        byte[] rpIDHash;
+        if(authJson.containsKey(Constants.JSON_KEY_RPID_LABEL)){
+            String rpid = authJson.getString(Constants.JSON_KEY_RPID_LABEL);
+            rpIDHash = Common.getDigestBytes(rpid,"SHA256");
+       
+        }else{
+            rpIDHash = Common.getRPID(new URI(origin).getHost());
+        }
+        
+        
+        
         /* Build clientDataJson. */
-        JsonObject clientData = Json.createObjectBuilder()
-                .add("type", "webauthn.get")
-                .add("challenge", challenge)
-                .add("origin", origin)
-                .build();
+        ClientData cd = new ClientData("webauthn.get", nonce, origin);
+        String cds = cd.toJsonString();
 
         /* Step 10. Create the almighty AUTHDATA (without attestedCredentialData). */
         /* Sets the RP ID Hash. */
-        byte[] rpIDHash = Common.getRPID(new URI(origin).getHost());
+//        byte[] rpIDHash = Common.getRPID(new URI(origin).getHost());
 
         byte flags = 0x00;
         flags |= 0x01;
@@ -290,13 +305,19 @@ public class FIDO2AuthenticatorSimulator
         byte[] authdata = authdataBuffer.array();
 
 //        String keyHandle = selectedCredential.getKeyHandle();
-        String clientDataHash = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(clientData.toString().getBytes());
+//        String clientDataHash = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(clientData.toString().getBytes());
+        
+        
+        // Generate the challenge parameter (SHA-256 digest of nonce)
+        String cdhash = Common.getDigest(cds, "SHA256");
 
-//        byte[] tbs = new byte[authdata.length + clientDataHash.getBytes().length];
+         byte[] browserdatabytes = java.util.Base64.getUrlDecoder().decode(cdhash);
+         
+        byte[] tbs = new byte[authdata.length + browserdatabytes.length];
 //
-//        System.arraycopy(authdata, 0, tbs, 0, authdata.length);
-//        System.arraycopy(clientDataHash.getBytes(), 0, tbs, authdata.length, clientDataHash.getBytes().length);
-        byte[] tbs = Bytes.concat(authdata, Common.getDigestBytes(java.util.Base64.getDecoder().decode(clientDataHash), "SHA-256"));
+        System.arraycopy(authdata, 0, tbs, 0, authdata.length);
+        System.arraycopy(browserdatabytes, 0, tbs, authdata.length, browserdatabytes.length);
+//        byte[] tbs = Bytes.concat(authdata, Common.getDigestBytes(java.util.Base64.getDecoder().decode(clientDataHash), "SHA-256"));
 
         // Decrypt KeyHandle
         String khjson;
@@ -313,7 +334,7 @@ public class FIDO2AuthenticatorSimulator
             Logger.getLogger(FIDO2AuthenticatorSimulator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        String signature = Common.signWithCredKey(pvk, java.util.Base64.getUrlEncoder().encodeToString(tbs));
+        String signature = Common.signWithCredKey(pvk, java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(tbs));
 
 //        /* Encode the authdata using CBOR and Base64. */
 //        ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -326,14 +347,15 @@ public class FIDO2AuthenticatorSimulator
 //            throw new Exception("Failed to CBOR encode authdata.", e);
 //        }
 //        byte[] encodedAuthData = baos.toByteArray();
-        String Base64AuthData = java.util.Base64.getUrlEncoder().encodeToString(authdata);
+        String Base64AuthData = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(authdata);
 
+        String base64clientData = Base64.getUrlEncoder().withoutPadding().encodeToString(cds.getBytes());
         /* Return the authResponse to the user in JSON format. */
         JsonObject miniResp = Json.createObjectBuilder()
                 .add("authenticatorData", Base64AuthData)
                 .add("signature", signature)
                 .add("userHandle", "")
-                .add("clientDataJSON", clientDataHash)
+                .add("clientDataJSON", base64clientData)
                 .build();
 
         JsonObject authResponse = Json.createObjectBuilder()
@@ -401,7 +423,10 @@ public class FIDO2AuthenticatorSimulator
             String origin,
             //                                                        String sessionid,
             boolean goodsignature)
-            throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, KeyStoreException, IOException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, NoSuchPaddingException, FileNotFoundException, DecoderException, IllegalBlockSizeException, BadPaddingException, ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException, InvalidParameterSpecException {
+            throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException, KeyStoreException, 
+            IOException, CertificateException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException, 
+            NoSuchPaddingException, FileNotFoundException, IllegalBlockSizeException, BadPaddingException, 
+            ShortBufferException, UnrecoverableKeyException, InvalidKeySpecException, InvalidParameterSpecException {
         // Get the challenge nonce from the U2F server's signature request
         String challenge = (String) Common.decodeRegistrationSignatureRequest(signrequest, Constants.JSON_KEY_CHALLENGE);
         System.out.println("ChallengeNonce:         " + challenge);
@@ -490,7 +515,7 @@ public class FIDO2AuthenticatorSimulator
             boolean goodsignature)
         throws
             NoSuchAlgorithmException, NoSuchProviderException,
-            UnsupportedEncodingException, DecoderException,
+            UnsupportedEncodingException,
             NoSuchPaddingException, InvalidKeyException,
             InvalidAlgorithmParameterException, ShortBufferException,
             IllegalBlockSizeException, BadPaddingException,
@@ -534,7 +559,7 @@ public class FIDO2AuthenticatorSimulator
         System.out.println("CiphertextKeyHandle:  " + keyhandle);
 
         // Verify that KeyHandle is NOT greater than 255 bytes
-        byte[] khbytes = Base64.decodeBase64(keyhandle);
+        byte[] khbytes = Base64.getUrlDecoder().decode(keyhandle);
         int khlen = khbytes.length;
         if (khlen > 255) {
             System.err.println("Fatal Error: KeyHandle > 255");

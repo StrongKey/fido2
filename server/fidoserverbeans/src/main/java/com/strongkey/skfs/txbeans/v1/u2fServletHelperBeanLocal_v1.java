@@ -34,7 +34,7 @@ public interface u2fServletHelperBeanLocal_v1 {
 
     String preauthenticate(String did, String protocol, String username);
 
-    String authenticate(String did, String protocol, String payload);
+    String authenticate(String did, String protocol, String payload, String agent, String cip);
 
     String preauthorize(String did, String protocol, String username);
 

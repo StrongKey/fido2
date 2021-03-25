@@ -7,17 +7,19 @@
 
 package com.strongkey.skfs.fido2;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.fasterxml.jackson.dataformat.cbor.CBORParser;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.cbor.jacob.CborDecoder;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -40,32 +42,40 @@ public class FIDO2AttestationObject {
     }
 
     public void decodeAttestationObject(String attestationObject) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, InvalidParameterSpecException {
-        CBORFactory f = new CBORFactory();
-        ObjectMapper mapper = new ObjectMapper(f);
         byte[] authenticatorData = null;
         Object attestationStmt = null;
-        CBORParser parser = f.createParser(org.apache.commons.codec.binary.Base64.decodeBase64(attestationObject));
-        Map<String, Object> attObjectMap = mapper.readValue(parser, new TypeReference<Map<String, Object>>() {
-        });
 
-        //Verify cbor is properly formatted cbor (no extra bytes)
-        if(parser.nextToken() != null){
-            throw new IllegalArgumentException("FIDO2AttestationObject contains invalid CBOR");
-        }
+        ByteArrayInputStream m_bais = new ByteArrayInputStream(Base64.getUrlDecoder().decode(attestationObject));
+        PushbackInputStream m_is = new PushbackInputStream(m_bais);
+        CborDecoder m_stream = new CborDecoder(m_is);
 
-        for (String key : attObjectMap.keySet()) {
+         long len = m_stream.readMapLength();
+         Map<String, Object> attObjectMap = new HashMap<>();
+            for (long i = 0; len < 0 || i < len; i++) {
+                String key = (String) SKFSCommon.readGenericItem(m_stream);
+                if (len < 0 && (key == null)) {
+                    // break read...
+                    break;
+                }
+                Object value = SKFSCommon.readGenericItem(m_stream);
+                attObjectMap.put(key, value);
+            }
+        
+//        for (String key : attObjectMap.keySet()) {
+        for (Map.Entry<String,Object> entry : attObjectMap.entrySet()) {
+            String key = entry.getKey();
             if (key.equalsIgnoreCase("fmt")) {
-                attFormat = attObjectMap.get(key).toString();
+                attFormat = entry.getValue().toString();
             } else if (key.equalsIgnoreCase("authData")) {
-                authenticatorData = (byte[]) attObjectMap.get(key);
+                authenticatorData = (byte[]) entry.getValue();
             } else if (key.equalsIgnoreCase("attStmt")) {
-                attestationStmt = attObjectMap.get(key);
+                attestationStmt = entry.getValue();
             }
         }
         authData = new FIDO2AuthenticatorData();
         authData.decodeAuthData(authenticatorData);
 
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "ATTFORMAT = "  +attFormat);
         switch (attFormat) {
             case "fido-u2f":
@@ -75,6 +85,11 @@ public class FIDO2AttestationObject {
 
             case "packed":
                 attStmt = new PackedAttestationStatement();
+                attStmt.decodeAttestationStatement(attestationStmt);
+                break;
+            
+            case "apple":
+                attStmt = new AppleAttestationStatement();
                 attStmt.decodeAttestationStatement(attestationStmt);
                 break;
 

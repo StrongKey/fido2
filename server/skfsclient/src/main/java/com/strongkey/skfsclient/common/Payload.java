@@ -5,24 +5,29 @@
  */
 package com.strongkey.skfsclient.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  *
  * @author pleung
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Payload {
 
     private String username;
     private String status;
     private String modify_location;
     private String displayname;
-    private String options;
+    private JsonObject options;
     private String extensions;
-    private String response;
-    private String metadata;
+    private JsonObject response;
+    private JsonObject metadata;
     private String keyid;
+    private JsonArray configurations;
+    private String txid;
+    private String txpayload;
 
     public String getUsername() {
         return username;
@@ -40,11 +45,11 @@ public class Payload {
         this.displayname = displayname;
     }
 
-    public String getOptions() {
+    public JsonObject getOptions() {
         return options;
     }
 
-    public void setOptions(String options) {
+    public void setOptions(JsonObject options) {
         this.options = options;
     }
 
@@ -56,19 +61,19 @@ public class Payload {
         this.extensions = extensions;
     }
 
-    public String getResponse() {
+    public JsonObject getResponse() {
         return response;
     }
 
-    public void setResponse(String response) {
+    public void setResponse(JsonObject response) {
         this.response = response;
     }
 
-    public String getMetadata() {
+    public JsonObject getMetadata() {
         return metadata;
     }
     
-    public void setMetadata(String metadata) {
+    public void setMetadata(JsonObject metadata) {
         this.metadata = metadata;
     }
 
@@ -95,5 +100,69 @@ public class Payload {
     public void setModify_location(String modify_location) {
         this.modify_location = modify_location;
     }
+
+    public JsonArray getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(JsonArray configurations) {
+        this.configurations = configurations;
+    }
+
+    public String getTxid() {
+        return txid;
+    }
+
+    public void setTxid(String txid) {
+        this.txid = txid;
+    }
+
+    public String getTxpayload() {
+        return txpayload;
+    }
+
+    public void setTxpayload(String txpayload) {
+        this.txpayload = txpayload;
+    }
     
+    public JsonObject toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        if (this.username != null) {
+            job.add("username", username);
+        }
+        if (this.txid != null) {
+            job.add("txid", txid);
+        }
+        if (this.txpayload != null) {
+            job.add("txpayload", txpayload);
+        }
+        if (this.status != null) {
+            job.add("status", status);
+        }
+        if (this.modify_location != null) {
+            job.add("modify_location", modify_location);
+        }
+        if (this.displayname != null) {
+            job.add("displayname", displayname);
+        }
+        if (this.options != null) {
+            job.add("options", options);
+        }
+        if (this.extensions != null) {
+            job.add("extensions", extensions);
+        }
+        if (this.response != null) {
+            job.add("publicKeyCredential", response);
+        }
+        if (this.metadata != null) {
+            job.add("strongkeyMetadata", metadata);
+        }
+        if (this.keyid != null) {
+            job.add("keyid", keyid);
+        }
+        if (this.configurations != null) {
+            job.add("configurations", configurations);
+        }
+        return job.build();
+    }
 }

@@ -61,8 +61,12 @@ public class FidoAdminServlet {
         if (!authRest.execute(did, request, null)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
+        
+        //Conversion from old parameter format to new without changing the webservice end point
+        Long sid = Long.parseLong(sidpid.split("-")[0]);
+        Long pid = Long.parseLong(sidpid.split("-")[1]);
 
-        return getpolicybean.getPolicies(did, sidpid, metadataonly);
+        return getpolicybean.getPolicies(did, sid, pid, metadataonly);
     }
 
     @PATCH
@@ -71,25 +75,32 @@ public class FidoAdminServlet {
     @Produces({"application/json"})
     public Response updateFidoPolicy(PatchFidoPolicyRequest patchfidopolicy,
                                      @PathParam("did") Long did,
-                                     @PathParam("pid") String pid) {
+                                     @PathParam("pid") String sidpid) {
 
         if (!authRest.execute(did, request, patchfidopolicy)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        return updatepolicybean.execute(did, pid, patchfidopolicy);
+        //Conversion from old parameter format to new without changing the webservice end point
+        Long sid = Long.parseLong(sidpid.split("-")[0]);
+        Long pid = Long.parseLong(sidpid.split("-")[1]);
+        
+        return updatepolicybean.execute(did, sid ,pid, patchfidopolicy);
     }
 
     @DELETE
     @Path("/{pid}")
     @Produces({"application/json"})
     public Response deleteFidoPolicy(@PathParam("did") Long did,
-                                     @PathParam("pid") String pid) {
+                                     @PathParam("pid") String sidpid) {
 
         if (!authRest.execute(did, request, null)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-
-        return deletepolicybean.execute(did, pid);
+        //Conversion from old parameter format to new without changing the webservice end point
+        Long sid = Long.parseLong(sidpid.split("-")[0]);
+        Long pid = Long.parseLong(sidpid.split("-")[1]);
+        
+        return deletepolicybean.execute(did, sid, pid);
     }
 }

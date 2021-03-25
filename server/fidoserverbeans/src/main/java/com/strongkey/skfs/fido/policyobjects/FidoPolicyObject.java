@@ -1,3 +1,4 @@
+
 /**
 * Copyright StrongAuth, Inc. All Rights Reserved.
 *
@@ -8,67 +9,87 @@
 package com.strongkey.skfs.fido.policyobjects;
 
 import com.strongkey.appliance.utilities.applianceCommon;
+import com.strongkey.appliance.utilities.strongkeyLogger;
+import com.strongkey.skce.utilities.skceConstants;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 import javax.json.JsonObject;
+import javax.json.JsonString;
 
 public class FidoPolicyObject {
     private final Long did;
     private final Long sid;
     private final Long pid;
-    private final Integer version;
+    private final String version;
     private final Date startDate;
     private final Date endDate;
-    private final CryptographyPolicyOptions cryptographyOptions;
+    private final AlgorithmsPolicyOptions algorithmsOptions;
+    private final String requireCounter;
     private final RpPolicyOptions rpOptions;
-    private final Integer timeout;
-    private final MdsPolicyOptions mdsOptions;
-    private final String tokenBindingOption;
-    private final CounterPolicyOptions counterOptions;
     private final Boolean isUserSettingsRequired;
     private final Boolean isStoreSignaturesRequired;
     private final RegistrationPolicyOptions registrationOptions;
     private final AuthenticationPolicyOptions authenticationOptions;
     private final ExtensionsPolicyOptions extensionsOptions;
+    private final TrustedAuthenticatorPolicyOptions authenticatorOptions;
+    private final ArrayList<String> userVerification;
+    private final Integer userPresenceTimeout;
+    private final AttestationPolicyOptions attestation;
+    private final JWTPolicyOptions jwt;
+    private final Integer jwtRenewalWindow;
+    private final Integer jwtKeyValidity; 
 
     private FidoPolicyObject(
             Long did,
             Long sid,
             Long pid,
-            Integer version,
+            String version,
             Date startDate,
             Date endDate,
-            CryptographyPolicyOptions cryptographyOptions,
+            AlgorithmsPolicyOptions algorithmsOptions,
             RpPolicyOptions rpOptions,
-            Integer timeout,
-            MdsPolicyOptions mdsOptions,
-            String tokenBindingOption,
-            CounterPolicyOptions counterOptions,
+            String requireCounter,
             Boolean isUserSettingsRequired,
             Boolean isStoreSignaturesRequired,
             RegistrationPolicyOptions registrationOptions,
             AuthenticationPolicyOptions authenticationOptions,
-            ExtensionsPolicyOptions extensionsOptions){
+            ExtensionsPolicyOptions extensionsOptions,
+            TrustedAuthenticatorPolicyOptions authenticatorOptions,
+            ArrayList<String> userVerification,
+            Integer userPresenceTimeout,
+            AttestationPolicyOptions attestation,
+            JWTPolicyOptions jwt,
+            Integer jwtRenewalWindow,
+            Integer jwtKeyValidity){
         this.did = did;
         this.sid = sid;
         this.pid = pid;
         this.version = version;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.cryptographyOptions = cryptographyOptions;
+        this.algorithmsOptions = algorithmsOptions;
         this.rpOptions = rpOptions;
-        this.timeout = timeout;
-        this.mdsOptions = mdsOptions;
-        this.tokenBindingOption = tokenBindingOption;
-        this.counterOptions = counterOptions;
+        this.requireCounter = requireCounter;
         this.isUserSettingsRequired = isUserSettingsRequired;
         this.isStoreSignaturesRequired = isStoreSignaturesRequired;
         this.registrationOptions = registrationOptions;
         this.authenticationOptions = authenticationOptions;
         this.extensionsOptions = extensionsOptions;
+        this.authenticatorOptions = authenticatorOptions;
+        this.userVerification = userVerification;
+        this.userPresenceTimeout = userPresenceTimeout;
+        this.attestation = attestation;
+        this.jwt = jwt;
+        this.jwtRenewalWindow = jwtRenewalWindow;
+        this.jwtKeyValidity = jwtKeyValidity;
     }
 
     public Long getDid() {
@@ -87,40 +108,33 @@ public class FidoPolicyObject {
         return sid+"-"+did+"-"+pid;
     }
 
-    public Integer getVersion(){
+    public String getVersion(){
         return version;
     }
 
     public Date getStartDate() {
-        return startDate;
+        return new Date(startDate.getTime());
     }
 
     public Date getEndDate() {
-        return endDate;
+        return new Date(endDate.getTime());
     }
 
-    public CryptographyPolicyOptions getCryptographyOptions() {
-        return cryptographyOptions;
+    public AlgorithmsPolicyOptions getAlgorithmsOptions() {
+        return algorithmsOptions;
     }
 
+      public ArrayList<String> getAllowedAAGUIDs() {
+        return authenticatorOptions.getAllowedAAGUIDs();
+    }
+    
     public RpPolicyOptions getRpOptions() {
         return rpOptions;
     }
 
-    public Integer getTimeout() {
-        return timeout;
-    }
 
-    public MdsPolicyOptions getMdsOptions() {
-        return mdsOptions;
-    }
-
-    public String getTokenBindingOption() {
-        return tokenBindingOption;
-    }
-
-    public CounterPolicyOptions getCounterOptions() {
-        return counterOptions;
+    public String getCounterOptions() {
+        return requireCounter;
     }
 
     public Boolean isUserSettingsRequired() {
@@ -142,98 +156,153 @@ public class FidoPolicyObject {
     public ExtensionsPolicyOptions getExtensionsOptions() {
         return extensionsOptions;
     }
+    
+    public ArrayList<String> getUserVerification(){
+        return userVerification;
+    }
+    public Integer getUserPresenceTimeout(){
+        return userPresenceTimeout;
+    }
+    public AttestationPolicyOptions getAttestationOptions(){
+        return attestation;
+    }
+    public String getCounterRequirement(){
+        return requireCounter;
+    }
+    public JWTPolicyOptions getJWT(){
+        return jwt;
+    }
+    public Integer getJwtRenewalWindow(){
+        return jwtRenewalWindow;
+    }
+    public Integer getJwtKeyValidity(){
+        return jwtKeyValidity;
+    }
 
-    public static FidoPolicyObject parse(String base64Policy, Integer version,
-            Long did, Long sid, Long pid, Date startDate, Date endDate) throws SKFEException {
+    public static FidoPolicyObject parse(String base64Policy, Long did, Long sid, Long pid) throws SKFEException {
         try {
-            String policyString = new String(Base64.getUrlDecoder().decode(base64Policy));
+            String policyString = new String(Base64.getUrlDecoder().decode(base64Policy), "UTF-8");
             JsonObject policyJson = applianceCommon.stringToJSON(policyString);
 
-            CryptographyPolicyOptions crypto = CryptographyPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_CRYPTOGRAPHY));
+                               
+                               
 
-            RpPolicyOptions rp = RpPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_RP));
+            JsonObject FidoPolicyJson = policyJson.getJsonObject(SKFSConstants.POLICY_SYSTEM_FIDO_POLICY);
+            JsonObject systemJson = FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_SYSTEM);
+            
+            String startDateString = FidoPolicyJson.getString(SKFSConstants.POLICY_SYSTEM_START_DATE);
+            Date startDate = new Date(Long.parseLong(startDateString)); 
+            
 
-            int timeoutInt = policyJson.getInt(skfsConstants.POLICY_ATTR_TIMEOUT, -1);
-            Integer timeout = (timeoutInt == -1) ? null : timeoutInt;
+            String endDateString = FidoPolicyJson.getString(SKFSConstants.POLICY_SYSTEM_END_DATE);
+            Date endDate;
+            if(endDateString.equals("")){
+                endDate = null;
+            } else {
+                endDate = new Date(Long.parseLong(endDateString));
+            } 
+            
+            String version = FidoPolicyJson.getString(SKFSConstants.POLICY_SYSTEM_VERSION);
+            
+            AlgorithmsPolicyOptions algorithms = AlgorithmsPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTR_ALGORITHMS));
+           
+            RpPolicyOptions rp = RpPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTR_RP));
+         
+            String requireCounter = systemJson.getString(SKFSConstants.POLICY_ATTR_COUNTER);
+            
+            ArrayList<String> userVerification = new ArrayList<>(systemJson.getJsonArray(SKFSConstants.POLICY_SYSTEM_USER_VERIFICATION).stream()
+                    .map(x -> (JsonString) x)
+                    .map(x -> x.getString())
+                    .collect(Collectors.toList()));
+            
+            Integer userPresenceTimeout = systemJson.getInt(SKFSConstants.POLICY_SYSTEM_USER_PRESENCE_TIMEOUT);
+            
 
-            MdsPolicyOptions mds = MdsPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_MDS));
+            Boolean storeSignatures = SKFSCommon.handleNonExistantJsonBoolean(systemJson, SKFSConstants.POLICY_ATTR_STORESIGNATURES);
 
-            String tokenBinding = policyJson.getString(skfsConstants.POLICY_ATTR_TOKENBINDING, null);
+            RegistrationPolicyOptions registration = RegistrationPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTR_REGISTRATION));
 
-            CounterPolicyOptions counter = CounterPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_COUNTER));
+            AuthenticationPolicyOptions authentication = AuthenticationPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTR_AUTHENTICATION));
 
-            Boolean userSettings = skfsCommon.handleNonExistantJsonBoolean(policyJson, skfsConstants.POLICY_ATTR_USERSETTINGS);
-
-            Boolean storeSignatures = skfsCommon.handleNonExistantJsonBoolean(policyJson, skfsConstants.POLICY_ATTR_STORESIGNATURES);
-
-            RegistrationPolicyOptions registration = RegistrationPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_REGISTRATION));
-
-            AuthenticationPolicyOptions authentication = AuthenticationPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_AUTHENTICATION));
-
-            ExtensionsPolicyOptions extensions = ExtensionsPolicyOptions.parse(policyJson.getJsonObject(skfsConstants.POLICY_ATTR_EXTENSIONS));
-
-            return new FidoPolicyObject.FidoPolicyObjectBuilder(did, sid, pid, version,
-                    startDate, endDate, crypto, rp, mds, counter, registration, authentication)
-                    .setTimeout(timeout)
-                    .setTokenBindingOption(tokenBinding)
-                    .setIsUserSettingsRequired(userSettings)
+            ExtensionsPolicyOptions extensions = ExtensionsPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTR_EXTENSIONS));
+            
+            TrustedAuthenticatorPolicyOptions aaguids = TrustedAuthenticatorPolicyOptions.parse(systemJson);
+            
+            AttestationPolicyOptions attestation = AttestationPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_ATTESTATION));
+            
+            JWTPolicyOptions jwt = JWTPolicyOptions.parse(FidoPolicyJson.getJsonObject(SKFSConstants.POLICY_JWT));
+            
+            Integer jwtRenewalWindow =  systemJson.getInt(SKFSConstants.POLICY_JWT_RENEWAL);
+            Integer jwtKeyValidity =  systemJson.getInt(SKFSConstants.POLICY_JWT_KEY_VALIDITY);
+                            
+                            
+            
+            return new FidoPolicyObject.FidoPolicyObjectBuilder(did, sid, pid, version, userVerification, userPresenceTimeout,
+                    startDate, endDate, algorithms, rp, requireCounter, registration, authentication, aaguids, attestation,jwt,jwtRenewalWindow,jwtKeyValidity)
                     .setIsStoreSignatureRequired(storeSignatures)
                     .setBuilderExtensionsOptions(extensions)
                     .build();
-        } catch (ClassCastException | NullPointerException ex) {
+        } catch (ClassCastException | NullPointerException | UnsupportedEncodingException ex) {
             ex.printStackTrace();
             throw new SKFEException(ex.getLocalizedMessage());      //TODO replace with standard parsing error message
-        }
+        } 
     }
 
     public static class FidoPolicyObjectBuilder{
         private final Long builderDid;
         private final Long builderSid;
         private final Long builderPid;
-        private final Integer builderVersion;
+        private final String builderVersion;
         private final Date builderStartDate;
         private final Date builderEndDate;
-        private final CryptographyPolicyOptions builderCryptographyOptions;
+        private final AlgorithmsPolicyOptions builderAlgorithmsOptions;
         private final RpPolicyOptions builderRpOptions;
-        private Integer builderTimeout;
-        private final MdsPolicyOptions builderMdsOptions;
-        private String builderTokenBindingOption;
-        private final CounterPolicyOptions builderCounterOptions;
+        private final String builderRequireCounter;
         private Boolean builderIsUserSettingsRequired;
         private Boolean builderIsStoreSignaturesRequired;
         private final RegistrationPolicyOptions builderRegistrationOptions;
         private final AuthenticationPolicyOptions builderAuthenticationOptions;
         private ExtensionsPolicyOptions builderExtensionsOptions;
+        private TrustedAuthenticatorPolicyOptions builderAllowedAAGUIDs;
+        private final ArrayList<String> builderUserVerification; 
+        private final Integer builderUserPresenceTimeout;
+        private final AttestationPolicyOptions builderAttestation;
+        private final JWTPolicyOptions builderJWT;
+        private final Integer builderJwtRenewalWindow;
+        private final Integer builderJwtKeyValidity; 
+                
 
         public FidoPolicyObjectBuilder(
-                Long did, Long sid, Long pid, Integer version, Date startDate,
-                Date endDate, CryptographyPolicyOptions cryptographyOptions,
-                RpPolicyOptions rpOptions, MdsPolicyOptions mdsOptions,
-                CounterPolicyOptions counterOptions,
+                Long did, Long sid, Long pid, String version,  ArrayList<String> userVerification,
+                Integer userPresenceTimeout, Date startDate,
+                Date endDate, AlgorithmsPolicyOptions algorithmsOptions,
+                RpPolicyOptions rpOptions,String requireCounter,
                 RegistrationPolicyOptions registrationOptions,
-                AuthenticationPolicyOptions authenticationOptions){
+                AuthenticationPolicyOptions authenticationOptions, 
+                TrustedAuthenticatorPolicyOptions trustedAuthenticatorsOptions, 
+                AttestationPolicyOptions attestation, JWTPolicyOptions jwt,Integer jwtRenewalWindow,Integer jwtKeyValidity){
             this.builderDid = did;
             this.builderSid = sid;
             this.builderPid = pid;
             this.builderVersion = version;
-            this.builderStartDate = startDate;
-            this.builderEndDate = endDate;
-            this.builderCryptographyOptions = cryptographyOptions;
+            this.builderStartDate = new Date(startDate.getTime());
+            if (endDate != null) {
+                this.builderEndDate = new Date(endDate.getTime());
+            } else {
+                this.builderEndDate = null;
+            }
+            this.builderAlgorithmsOptions = algorithmsOptions;
             this.builderRpOptions = rpOptions;
-            this.builderMdsOptions = mdsOptions;
-            this.builderCounterOptions = counterOptions;
+            this.builderRequireCounter = requireCounter;
             this.builderRegistrationOptions = registrationOptions;
             this.builderAuthenticationOptions = authenticationOptions;
-        }
-
-        public FidoPolicyObjectBuilder setTimeout(Integer timeout) {
-            this.builderTimeout = timeout;
-            return this;
-        }
-
-        public FidoPolicyObjectBuilder setTokenBindingOption(String tokenBindingOption) {
-            this.builderTokenBindingOption = tokenBindingOption;
-            return this;
+            this.builderAllowedAAGUIDs = trustedAuthenticatorsOptions;
+            this.builderUserVerification = userVerification;
+            this.builderUserPresenceTimeout = userPresenceTimeout;
+            this.builderAttestation = attestation;
+            this.builderJWT = jwt;
+            this.builderJwtRenewalWindow = jwtRenewalWindow;
+            this.builderJwtKeyValidity = jwtKeyValidity;
         }
 
         public FidoPolicyObjectBuilder setIsUserSettingsRequired(Boolean isUserSettingsRequired) {
@@ -254,11 +323,12 @@ public class FidoPolicyObject {
         public FidoPolicyObject build(){
             return new FidoPolicyObject(
                     builderDid, builderSid, builderPid, builderVersion, builderStartDate,
-                    builderEndDate, builderCryptographyOptions, builderRpOptions,
-                    builderTimeout, builderMdsOptions, builderTokenBindingOption,
-                    builderCounterOptions, builderIsUserSettingsRequired,
+                    builderEndDate, builderAlgorithmsOptions, builderRpOptions,
+                    builderRequireCounter, builderIsUserSettingsRequired,
                     builderIsStoreSignaturesRequired, builderRegistrationOptions,
-                    builderAuthenticationOptions, builderExtensionsOptions);
+                    builderAuthenticationOptions, builderExtensionsOptions,
+                    builderAllowedAAGUIDs,builderUserVerification,builderUserPresenceTimeout,
+                    builderAttestation, builderJWT,builderJwtRenewalWindow,builderJwtKeyValidity);
         }
     }
 }

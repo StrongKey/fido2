@@ -1,0 +1,3 @@
+rootProject.name='StrongKey Android Client Library'
+include ':app'
+include ':sacl'

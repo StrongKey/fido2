@@ -12,14 +12,13 @@ import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.crypto.interfaces.initCryptoModule;
 import com.strongkey.crypto.utility.CryptoException;
 import com.strongkey.skce.pojos.FidoKeysInfo;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
-import java.io.StringWriter;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,8 +32,6 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 
 @Stateless
 public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
@@ -87,8 +84,8 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         //NULL Argument
         if (sid == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "sid");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " sid";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "sid");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " sid";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
@@ -96,19 +93,19 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         // fkid is negative, zero or larger than max value (becomes negative)
         if (sid < 1) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "sid");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " sid";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "sid");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " sid";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "sid=" + sid);
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "sid=" + sid);
 
         //did
         //NULL Argument
         if (did == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "did");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " did";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "did");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " did";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
@@ -116,19 +113,19 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         // fkid is negative, zero or larger than max value (becomes negative)
         if (did < 1) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "did");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " did";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "did");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " did";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "did=" + did);
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "did=" + did);
 
         //fkid
         //NULL Argument
         if (fkid == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "fkid");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " fkid";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "fkid");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " fkid";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
@@ -136,46 +133,46 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         // fkid is negative, zero or larger than max value (becomes negative)
         if (fkid < 1) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "fkid");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " fkid";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "fkid");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " fkid";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "fkid=" + fkid);
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "fkid=" + fkid);
 
         //USER modify_location
         if (modify_location == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "MODIFY LOCATION");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " MODIFY LOCATION";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "MODIFY LOCATION");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " MODIFY LOCATION";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         } else if (modify_location.trim().length() == 0) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1003", "MODIFY LOCATION");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1003") + " MODIFY LOCATION";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1003", "MODIFY LOCATION");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1003") + " MODIFY LOCATION";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         } else if (modify_location.trim().length() > 255) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "MODIFY LOCATION");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " MODIFY LOCATION";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "MODIFY LOCATION");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " MODIFY LOCATION";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "MODIFY LOCATION=" + modify_location);
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "MODIFY LOCATION=" + modify_location);
 
         //key status
         if (status == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "STATUS");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " STATUS";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "STATUS");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " STATUS";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         } else if (status.trim().length() == 0) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1003", "STATUS");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1003") + " STATUS";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1003", "STATUS");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1003") + " STATUS";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
@@ -184,17 +181,17 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         } else if (status.trim().equalsIgnoreCase(applianceConstants.INACTIVE_STATUS)) {
         } else {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "STATUS");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1002") + " STATUS";
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "STATUS");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " STATUS";
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "STATUS=" + status);
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2001", "STATUS=" + status);
 
         //  Verify if the fkid exists.
         FidoKeys rk = null;
         try {
-            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(skfsConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + username + "-" + fkid);
+            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + username + "-" + fkid);
             if (fkinfo != null) {
                 rk = fkinfo.getFk();
             }
@@ -206,8 +203,8 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         }
         if (rk == null) {
             outputstatus = false;
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2002", "");
-            errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-2002");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2002", "");
+            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-2002");
             retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
             return retObj.toString();
         }
@@ -227,31 +224,32 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         rk.setStatus(status);
         rk.setId(primarykey);
 
-        if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
+        if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")
                 .equalsIgnoreCase("true")) {
 
-            String standalone = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
+            String standalone = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
             String signingKeystorePassword = "";
             if (standalone.equalsIgnoreCase("true")) {
-                signingKeystorePassword = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
+                signingKeystorePassword = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
             }
             //  convert the java object into xml to get it signed.
-            StringWriter writer = new StringWriter();
-            JAXBContext jaxbContext;
-            Marshaller marshaller;
-            try {
-                jaxbContext = JAXBContext.newInstance(FidoKeys.class);
-                marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(rk, writer);
-            } catch (javax.xml.bind.JAXBException ex) {
-                Logger.getLogger(updateFidoKeysStatus.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            String efsXml = writer.toString();
+//            StringWriter writer = new StringWriter();
+//            JAXBContext jaxbContext;
+//            Marshaller marshaller;
+//            try {
+//                jaxbContext = JAXBContext.newInstance(FidoKeys.class);
+//                marshaller = jaxbContext.createMarshaller();
+//                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//                marshaller.marshal(rk, writer);
+//            } catch (javax.xml.bind.JAXBException ex) {
+//                Logger.getLogger(updateFidoKeysStatus.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            String efsXml = writer.toString();
+            String efsXml = rk.toJsonObject();
             if (efsXml == null) {
                 outputstatus = false;
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "FK Xml");
-                errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " FK Xml";
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "FK Xml");
+                errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " FK Xml";
                 retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
                 return retObj.toString();
             }
@@ -268,36 +266,40 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
 
             if (signedxml == null) {
                 outputstatus = false;
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "SignedXML");
-                errmsg = skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " SignedXML";
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1001", "SignedXML");
+                errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " SignedXML";
                 retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", errmsg).build();
                 return retObj.toString();
             } else {
-                String xmlsignature = new String(signedxml);
+                String xmlsignature = signedxml;
+                rk.setSignatureKeytype("EC");
                 rk.setSignature(xmlsignature);
             }
         }
 
         em.merge(rk);
         em.flush();
+        em.clear();
 
         try {
             if (applianceCommon.replicate()) {
-                String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_KEYS, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, rk);
-                if(response != null){
-                    return response;
+                if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
+                    String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_KEYS, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, rk);
+                    if (response != null) {
+                        return response;
+                    }
                 }
             }
         } catch (Exception e) {
             sc.setRollbackOnly();
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             throw new RuntimeException(e.getLocalizedMessage());
         }
 
         //return a success message
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2004", "");
-        retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", skfsCommon.getMessageProperty("FIDOJPA-MSG-2004")).build();
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDOJPA-MSG-2004", "");
+        retObj = Json.createObjectBuilder().add("status", outputstatus).add("message", SKFSCommon.getMessageProperty("FIDOJPA-MSG-2004")).build();
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
         return retObj.toString();
     }
 }

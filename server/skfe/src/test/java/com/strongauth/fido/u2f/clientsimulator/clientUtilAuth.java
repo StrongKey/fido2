@@ -42,8 +42,7 @@ import javax.crypto.ShortBufferException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  *
@@ -93,11 +92,11 @@ public class clientUtilAuth {
     }
 
     public String makeAuthenticationRequest(byte controlbyte, String challengeparam, String applicationparam, String keyHandle) {
-        byte[] chalparam = Base64.decodeBase64(challengeparam);
+        byte[] chalparam = Base64.decode(challengeparam);
         int cpL = chalparam.length;
-        byte[] appparam = Base64.decodeBase64(applicationparam);
+        byte[] appparam = Base64.decode(applicationparam);
         int apL = appparam.length;
-        byte[] keyHandlebytes = Base64.decodeBase64(keyHandle);
+        byte[] keyHandlebytes = Base64.decode(keyHandle);
         int khL = keyHandlebytes.length;
 
         if (khL > 255) {
@@ -120,12 +119,12 @@ public class clientUtilAuth {
         tot++;
         System.arraycopy(keyHandlebytes, 0, authreq, tot, khL);
 
-        return Base64.encodeBase64String(authreq);
+        return Base64.toBase64String(authreq);
 
     }
 
-    public String authenticatorProcess(String authRequest) throws DecoderException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidKeySpecException, SignatureException {
-        byte[] authreqbytes = Base64.decodeBase64(authRequest);
+    public String authenticatorProcess(String authRequest) throws  NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, InvalidKeySpecException, SignatureException {
+        byte[] authreqbytes = Base64.decode(authRequest);
         byte controlbyte = authreqbytes[0];
 
         int tot = 1;
@@ -152,7 +151,7 @@ public class clientUtilAuth {
         //deryptkeyhandle
         String keyHandleJson = null;
         try {
-            keyHandleJson = clientUtil.decryptKeyHandle(Base64.encodeBase64String(keyHandle));
+            keyHandleJson = clientUtil.decryptKeyHandle(Base64.toBase64String(keyHandle));
         } catch (Exception ex) {
             System.out.println("Bad KeyHandle...");
             return null;
@@ -164,7 +163,7 @@ public class clientUtilAuth {
         System.out.println("Private key  : " + privateKey);
 
         //make object to sign
-        String object2sign = makeObjecttoSign(Base64.encodeBase64String(appParam), Base64.encodeBase64String(chalParam));
+        String object2sign = makeObjecttoSign(Base64.toBase64String(appParam), Base64.toBase64String(chalParam));
         System.out.println("Authenticator object to sign : " + object2sign);
 
         //sign object
@@ -179,7 +178,7 @@ public class clientUtilAuth {
 
     public String makeauthenticationresponsemsg(String signedObject) {
 
-        byte[] signedObjectBytes = Base64.decodeBase64(signedObject);
+        byte[] signedObjectBytes = Base64.decode(signedObject);
         int soL = signedObjectBytes.length;
         byte[] authresp = new byte[1 + 4 + soL];
         int tot = 1;
@@ -188,14 +187,14 @@ public class clientUtilAuth {
         tot += 4;
         System.arraycopy(signedObjectBytes, 0, authresp, tot, soL);
         tot += soL;
-        return Base64.encodeBase64URLSafeString(authresp);
+        return Base64.toBase64String(authresp);
 
     }
 
     public String makeObjecttoSign(String applicationparam, String challengeParam) {
-        byte[] appparam = Base64.decodeBase64(applicationparam);
+        byte[] appparam = Base64.decode(applicationparam);
         int apL = appparam.length;
-        byte[] challparam = Base64.decodeBase64(challengeParam);
+        byte[] challparam = Base64.decode(challengeParam);
         int cpL = challparam.length;
 
         byte[] ob2sign = new byte[apL + 1 + 4 + cpL];
@@ -210,7 +209,7 @@ public class clientUtilAuth {
         System.arraycopy(challparam, 0, ob2sign, tot, cpL);
         tot += cpL;
 
-        return Base64.encodeBase64String(ob2sign);
+        return Base64.toBase64String(ob2sign);
 
     }
 
@@ -226,7 +225,7 @@ public class clientUtilAuth {
     public static String signObject(String input, String privateKeyS) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, InvalidKeySpecException {
 
         ////put decrypted private key in a BCPrivate key object
-        byte[] prk = Base64.decodeBase64(privateKeyS);
+        byte[] prk = Base64.decode(privateKeyS);
 
         //get private key into BC understandable form
         ECPrivateKeySpec ecpks = new ECPrivateKeySpec(new BigInteger(privateKeyS), null);
@@ -234,7 +233,7 @@ public class clientUtilAuth {
         PrivateKey pvk = kf.generatePrivate(ecpks);
 
         //Base64 decode input
-        byte[] inputbytes = Base64.decodeBase64(input);
+        byte[] inputbytes = Base64.decode(input);
 
         //sign
         Signature sig = Signature.getInstance("SHA256withECDSA", "BCFIPS");
@@ -251,6 +250,6 @@ public class clientUtilAuth {
 //        } else {
 //            return null;
 //        }
-        return Base64.encodeBase64String(signedBytes);
+        return Base64.toBase64String(signedBytes);
     }
 }

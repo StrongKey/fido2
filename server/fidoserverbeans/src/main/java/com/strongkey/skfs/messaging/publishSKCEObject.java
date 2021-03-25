@@ -6,8 +6,8 @@
 */
 package com.strongkey.skfs.messaging;
 
+import com.strongkey.appliance.entitybeans.Configurations;
 import com.strongkey.appliance.entitybeans.Domains;
-import com.strongkey.appliance.entitybeans.Servers;
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.strongkeyLogger;
@@ -18,7 +18,6 @@ import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.entitybeans.AttestationCertificates;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
 import com.strongkey.skfs.entitybeans.FidoUsers;
-import java.util.Collection;
 import java.util.logging.Level;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
@@ -30,8 +29,6 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
      ** This class's name - used for logging & not persisted
      **/
     private final String classname = this.getClass().getName();
-
-    Collection<Servers> subscribers = null;
 
     @Override
     @Asynchronous
@@ -48,12 +45,6 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 if (fkbean.getUserid() != null){
                     fkbuilder.setUserid(fkbean.getUserid());
                 }
-                if (fkbean.getKhdigest() != null) {
-                    fkbuilder.setKhdigest(fkbean.getKhdigest());
-                }
-                if (fkbean.getKhdigestType() != null) {
-                    fkbuilder.setKhdigest(fkbean.getKhdigestType());
-                }
                 if (fkbean.getTransports() != null) {
                     fkbuilder.setTransports(fkbean.getTransports().longValue());
                 }
@@ -65,6 +56,9 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 }
                 if (fkbean.getSignature() != null) {
                     fkbuilder.setSignature(fkbean.getSignature());
+                }
+                if (fkbean.getSignatureKeytype()!= null) {
+                    fkbuilder.setSignatureKeytype(fkbean.getSignatureKeytype());
                 }
                 if (fkbean.getAttsid() != null) {
                     fkbuilder.setAttsid(fkbean.getAttsid());
@@ -228,9 +222,6 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 FidoPolicies fpbean = (FidoPolicies) obj;
                 ZMQSKCEReplicationProtos.FidoPolicies.Builder fpbuilder = ZMQSKCEReplicationProtos.FidoPolicies.newBuilder();
                 // First deal with attributes that might be null
-                if (fpbean.getEndDate() != null) {
-                    fpbuilder.setEndDate(fpbean.getEndDate().getTime());
-                }
                 if (fpbean.getNotes() != null) {
                     fpbuilder.setNotes(fpbean.getNotes());
                 }
@@ -247,10 +238,7 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                         .setSid(fpbean.getFidoPoliciesPK().getSid())
                         .setDid(fpbean.getFidoPoliciesPK().getDid())
                         .setPid(fpbean.getFidoPoliciesPK().getPid())
-                        .setStartDate(fpbean.getStartDate().getTime())
-                        .setCertificateProfileName(fpbean.getCertificateProfileName())
                         .setPolicy(fpbean.getPolicy())
-                        .setVersion(fpbean.getVersion())
                         .setStatus(fpbean.getStatus())
                         .setCreateDate(fpbean.getCreateDate().getTime())
                         .build();
@@ -290,6 +278,22 @@ public class publishSKCEObject implements publishSKCEObjectLocal, publishSKCEObj
                 objectbytes = acproto.toByteArray();
                 break;
 
+            case applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS:
+                Configurations cfgbean = (Configurations) obj;
+                ZMQSKCEReplicationProtos.Configurations.Builder cfgbuilder = ZMQSKCEReplicationProtos.Configurations.newBuilder();
+                if (cfgbean.getNotes() != null)
+                    cfgbuilder.setNotes(cfgbean.getNotes());
+                // Now build the proto with all non-null values
+                ZMQSKCEReplicationProtos.Configurations cfgproto =
+                        cfgbuilder
+                                .setConfigKey(cfgbean.getConfigurationsPK().getConfigKey())
+                                .setConfigValue(cfgbean.getConfigValue())
+                                .setDid(cfgbean.getConfigurationsPK().getDid())
+                                .build();
+                strongkeyLogger.logp(skceConstants.SKFE_LOGGER, Level.FINE, classname, "run", "SKCE-MSG-6007", cfgproto.toString());
+                objectbytes = cfgproto.toByteArray();
+                break;
+                
             default:
                 strongkeyLogger.logp(skceConstants.SKEE_LOGGER,Level.WARNING, classname, "run", "SKCE-ERR-6001", applianceCommon.getEntityName(objectype) + " [OBJPK=" + objectpk + "] [OBJOP=" + applianceCommon.getRepop(objectop) + "]");
 

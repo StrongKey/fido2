@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.3.0</version>
+        <version>4.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -16,21 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
-	    <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>1.1.2</version>
-	    <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.13.1</version>
             <scope>test</scope>
             <type>jar</type>
 	    <optional>true</optional>
@@ -41,12 +29,7 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.everit.json</groupId>
-            <artifactId>org.everit.json.schema</artifactId>
-            <version>1.5.1</version>
-            <type>jar</type>
-        </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>fidoserverbeans</artifactId>

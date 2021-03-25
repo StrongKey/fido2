@@ -38,6 +38,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapContext;
 
+
 /**
  * EJB to perform ldap based authorizations
  */
@@ -63,10 +64,10 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
 
     /**
      * This method authenticates a credential - username and password - for a
-     * specified operation against the configured LDAP directory.  Only LDAP-based
-     * authentication is supported currently; however both Active Directory and a
-     * standards-based, open-source LDAP directories are supported.  For the latter,
-     * this has been tested with OpenDS 2.0 (https://docs.opends.org).
+     * specified operation against the configured LDAP directory.Only LDAP-based
+ authentication is supported currently; however both Active Directory and a
+ standards-based, open-source LDAP directories are supported.  For the latter,
+ this has been tested with OpenDS 2.0 (https://docs.opends.org).
      *
      * @param did
      * @param username - String containing the credential's username
@@ -101,15 +102,34 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
 
 
         // Get configured parameters for this domain
-        String ldapurl = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapurl");
-        String dnprefix = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapdnprefix");
-        String dnsuffix = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapdnsuffix");
-        String groupsuffix = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapgroupsuffix");
+        String ldapurl = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapurl");
+        String dnprefix = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapdnprefix");
+        String dnsuffix = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapdnsuffix");
+        String groupsuffix = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapgroupsuffix");
 
         // Setup paramters from class variables
         strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.FINE, "APPL-MSG-1000", "setup principal");
-        String principal = dnprefix + username + skceCommon.getSERVICE_OU_PREFIX() + did + dnsuffix;
+        String SERVICE_OU_PREFIX;
+        String ldaptype = skceCommon.getldaptype(did);
+        if (ldaptype.equalsIgnoreCase("LDAP")) {
+             SERVICE_OU_PREFIX = ",did=";
+        } else {
+            SERVICE_OU_PREFIX = ",ou=";
+        }
+        String principalSuffix ;
+        if (skceCommon.isdnSuffixConfigured()) {
+            principalSuffix = dnsuffix;
+        } else {
+            principalSuffix = SERVICE_OU_PREFIX + did + dnsuffix;
+        }
+        String principal = dnprefix + username + principalSuffix;
 
+        String groupdnsuffix;
+        if (skceCommon.isgroupSuffixConfigured()) {
+            groupdnsuffix = groupsuffix;
+        } else {
+            groupdnsuffix = SERVICE_OU_PREFIX + did + groupsuffix;
+        }
 
         strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.FINE, "APPL-MSG-1000", principal);
 
@@ -121,32 +141,41 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
             String group = null;
             if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_ENC)) {
                 // Encryption Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapencryptiongroup") +skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapencryptiongroup") +groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_DEC)) {
                 // Decryption Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapdecryptiongroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapdecryptiongroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_CMV)) {
                 // Cloud move Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapcloudmovegroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapcloudmovegroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_SRV)) {
                 // Cloud move Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapservicegroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapservicegroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_ADM)) {
                 // Admin Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapadmingroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapadmingroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_LOADKEY)) {
                 // Load Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldaploadgroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldaploadgroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_SIGN)) {
                 // Sign Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapsigngroup")+skceCommon.getSERVICE_OU_PREFIX()+ did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapsigngroup")+SERVICE_OU_PREFIX+ did + groupsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_REMOVEKEY)) {
                 // Removekey Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapremovegroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapremovegroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidogroup")+groupdnsuffix;
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_REG)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoreggroup")+groupdnsuffix;
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_SIGN)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidosigngroup")+groupdnsuffix;
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_AUTHZ)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoauthzgroup")+groupdnsuffix;
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_ADMIN)) {
                 // Removekey Group
-                group = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldapfidogroup")+skceCommon.getSERVICE_OU_PREFIX() + did + groupsuffix;
-            } else {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoadmingroup")+groupdnsuffix;
+            } 
+            else {
                 // Invalid operation
                 strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.SEVERE, "APPL-MSG-1000", "User-Operation=" + username + "-" + operation + "]");
                 return false;
@@ -161,7 +190,6 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
                  * so we have to test for "member" instead * of "uniqueMember"
                  * when testing against AD.
                  */
-                String ldaptype = skceCommon.getConfigurationProperty("ldape.cfg.property.service.ce.ldap.ldaptype");
                 Attributes attrs ;
                 if (ldaptype.equalsIgnoreCase("AD")) {
                     String[] attrIDs = {"member"};
@@ -179,7 +207,7 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
                         String unqmem = (String) e.next();
                         strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.FINE, "APPL-MSG-1000", unqmem);
                         if (unqmem.equalsIgnoreCase(principal)) {
-                            strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.FINE, "APPL-MSG-1000", group + " (" + principal + ")");
+                            strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.INFO, "APPL-MSG-1000", "request user: "+group + " (" + principal + ")");
                             ctx.close();
                             lc.close();
                             return true;

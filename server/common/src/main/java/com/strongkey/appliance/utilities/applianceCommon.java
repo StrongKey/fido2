@@ -53,6 +53,8 @@ public class applianceCommon {
     private static final ResourceBundle vrb = ResourceBundle.getBundle("resources.appliance.appliance-version");
 
     private static final ResourceBundle defaultApplianceConfig = ResourceBundle.getBundle("resources.appliance.appliance-configuration");
+    
+    private static SortedMap<Long, Map> applconfigmap = new ConcurrentSkipListMap<>();
 
     // Property files used by this application for application messages
     private static final ResourceBundle msgrb = ResourceBundle.getBundle("resources.appliance.appliance-messages");
@@ -312,10 +314,11 @@ Y8P          Y8P 888
 
         String hash = "";
 
+        FileInputStream fis = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-            FileInputStream fis = new FileInputStream(filelocation);
+            fis = new FileInputStream(filelocation);
             byte[] dataBytes = new byte[1024];
             int nread;
             while ((nread = fis.read(dataBytes)) != -1) {
@@ -335,7 +338,14 @@ Y8P          Y8P 888
         } catch (IOException ex) {
             Logger.getLogger(classname).log(Level.SEVERE, null, ex);
         }
-
+        finally{
+            try {
+                if(fis !=null)
+                    fis.close();
+            } catch (IOException ex) {
+                Logger.getLogger(applianceCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return hash;
     }
 
@@ -655,7 +665,7 @@ Y8P          Y8P 888
                 rb = new java.util.PropertyResourceBundle(fis);
             }
 
-            if (rb != null) {
+//            if (rb != null) {
                 appliancehrb = rb;
 
                 // Sort properties for readability
@@ -674,9 +684,9 @@ Y8P          Y8P 888
 
                 strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER, Level.INFO, "APPL-MSG-1110", baos.toString());
                 return true;
-            } else {
-                strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, "APPL-ERR-1113", f.getName());
-            }
+//            } else {
+//                strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, "APPL-ERR-1113", f.getName());
+//            }
         } catch (IOException ex) {
             strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, "APPL-ERR-1113", null);
             Logger.getLogger(classname).log(Level.SEVERE, null, ex);
@@ -699,13 +709,16 @@ Y8P          Y8P 888
     public static String reversedn(String dn) {
         String[] splitstring = dn.split(",");
         String newdn = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = splitstring.length - 1; i >= 0; i--) {
             if (i != 0) {
-                newdn += splitstring[i] + ",";
+//                newdn += splitstring[i] + ",";
+                sb.append(splitstring[i]).append(",");
             } else {
-                newdn += splitstring[i];
+                sb.append(splitstring[i]);
             }
         }
+        newdn = sb.toString();
         return newdn;
     }
 
@@ -808,6 +821,7 @@ Y8P          Y8P 888
         entitynames.put(applianceConstants.ENTITY_TYPE_MAP_USER_SESSION_INFO, "ENTITY_TYPE_MAP_USER_SESSION_INFO");
         entitynames.put(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, "ENTITY_TYPE_FIDO_POLICIES");
         entitynames.put(applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES, "ENTITY_TYPE_ATTESTATION_CERTIFICATES");
+        entitynames.put(applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS, "ENTITY_TYPE_FIDO_CONFIGURATIONS");
 
         repops.put(applianceConstants.REPLICATION_OPERATION_ADD, "REPLICATION_OPERATION_ADD");
         repops.put(applianceConstants.REPLICATION_OPERATION_DELETE, "REPLICATION_OPERATION_DELETE");

@@ -6,7 +6,7 @@
 */
 package com.strongkey.skfs.fido.policyobjects;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import javax.json.JsonObject;
 
 public class RpPolicyOptions {
@@ -34,9 +34,9 @@ public class RpPolicyOptions {
 
     public static RpPolicyOptions parse(JsonObject rpJson) {
         return new RpPolicyOptions.RpPolicyOptionsBuilder(
-                rpJson.getString(skfsConstants.POLICY_RP_NAME, null))
-                .setId(rpJson.getString(skfsConstants.POLICY_RP_ID, null))
-                .setIcon(rpJson.getString(skfsConstants.POLICY_RP_ICON, null))
+                rpJson.getString(SKFSConstants.POLICY_RP_NAME, null))
+                .setId(rpJson.getString(SKFSConstants.POLICY_RP_ID, null))
+                .setIcon(rpJson.getString(SKFSConstants.POLICY_RP_ICON, null))
                 .build();
     }
 

@@ -32,8 +32,6 @@ CREATE TABLE IF NOT EXISTS fido_keys (
         keyhandle                       VARCHAR(512) NOT NULL,
         appid                           VARCHAR(512) NULL,
         publickey                       VARCHAR(512) NULL,
-        khdigest                        VARCHAR(512) NULL,
-        khdigest_type                   ENUM('SHA256','SHA384','SHA512'),
         transports                      tinyint(4) UNSIGNED NULL,
         attsid                          tinyint(4) NULL,
         attdid                          smallint(5) NULL,
@@ -49,11 +47,12 @@ CREATE TABLE IF NOT EXISTS fido_keys (
         modify_date                     DATETIME NULL,
         modify_location                 VARCHAR(256),
         status                          ENUM('Active','Inactive') NOT NULL,
+        signature_keytype               ENUM('RSA','EC','OTHER') NOT NULL,
         signature                       VARCHAR(2048) NULL,
                 PRIMARY KEY (sid,did,username,fkid),
                 index (did, username, keyhandle),
                 index (sid, did, fkid)
         )
-        ENGINE = InnoDB;
+        ENGINE = InnoDB DEFAULT CHARSET=latin1;
 
 /* EOF */

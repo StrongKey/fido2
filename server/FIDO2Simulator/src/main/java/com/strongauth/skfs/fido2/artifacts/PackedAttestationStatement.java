@@ -22,16 +22,8 @@
 
 package com.strongauth.skfs.fido2.artifacts;
 
-import com.google.common.primitives.Bytes;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -39,17 +31,11 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.SecretKey;
-import javax.rmi.CORBA.Util;
-import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 
 

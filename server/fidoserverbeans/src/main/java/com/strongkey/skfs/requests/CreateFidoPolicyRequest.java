@@ -1,50 +1,23 @@
 /**
-* Copyright StrongAuth, Inc. All Rights Reserved.
-*
-* Use of this source code is governed by the GNU Lesser General Public License v2.1
-* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
-*/
-
-
+ * Copyright StrongAuth, Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+ */
 package com.strongkey.skfs.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
-@JsonInclude(Include.NON_NULL)
 public class CreateFidoPolicyRequest {
 
-    private Long startDate;
-    private Long endDate;
-    private String certificateProfileName;
+
     private String Policy;
-    private Integer version;
     private String status;
     private String notes;
 
-    public Long getStartDate() {
-        return startDate;
-    }
 
-    public void setStartDate(Long startDate) {
-        this.startDate = startDate;
-    }
-
-    public Long getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Long endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getCertificateProfileName() {
-        return certificateProfileName;
-    }
-
-    public void setCertificateProfileName(String certificateProfileName) {
-        this.certificateProfileName = certificateProfileName;
-    }
 
     public String getPolicy() {
         return Policy;
@@ -54,13 +27,7 @@ public class CreateFidoPolicyRequest {
         this.Policy = Policy;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public String getStatus() {
         return status;
@@ -78,5 +45,21 @@ public class CreateFidoPolicyRequest {
         this.notes = notes;
     }
 
+    public JsonObject toJsonObject() {
+
+        JsonObjectBuilder job = Json.createObjectBuilder();
+
+        if (this.Policy != null) {
+            job.add("Policy", Policy);
+        }
+ 
+        if (this.status != null) {
+            job.add("status", status);
+        }
+        if (this.notes != null) {
+            job.add("notes", notes);
+        }
+        return job.build();
+    }
 
 }

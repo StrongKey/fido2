@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.PaymentFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewAmex"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewAmex"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_amex"
+                    android:scaleX=".6"
+                    android:scaleY=".6"
+                    android:src="@drawable/ic_amex" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_title_amex"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_amex"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewDiscover"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_discover"
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    android:src="@drawable/discover" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_title_discover"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_discover"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewJCB"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewJCB"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_jcb"
+                    android:scaleX=".6"
+                    android:scaleY=".6"
+                    android:src="@drawable/jcb" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="@string/payment_title_jcb"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_jcb"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewMC"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewMC"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_mastercard"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:src="@drawable/ic_mastercard" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="@string/payment_title_mastercard"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_mastercard"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewVisa"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewVisa"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_visa"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:src="@drawable/visa" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="@string/payment_title_visa"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_visa"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewSEPA"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:checkable="true"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/imageViewSEPA"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="top"
+                    android:contentDescription="@string/payment_title_sepa"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:src="@drawable/sepa" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="?attr/colorAccent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="@string/payment_title_sepa"
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:text="@string/payment_card_sepa"
+                        android:textAppearance="?attr/textAppearanceBody2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/checkout_button"
+                android:minWidth="64dp"
+                android:minHeight="64dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_arrow_right_24dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</FrameLayout>

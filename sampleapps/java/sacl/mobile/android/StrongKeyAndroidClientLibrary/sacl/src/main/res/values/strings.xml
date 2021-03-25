@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License, as published by the Free
+ * Software Foundation and available at
+ * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Copyright (c) 2001-2020 StrongAuth, Inc. (d/b/a StrongKey)
+ *
+ * **********************************************
+ *
+ *  888b    888          888
+ *  8888b   888          888
+ *  88888b  888          888
+ *  888Y88b 888  .d88b.  888888  .d88b.  .d8888b
+ *  888 Y88b888 d88""88b 888    d8P  Y8b 88K
+ *  888  Y88888 888  888 888    88888888 "Y8888b.
+ *  888   Y8888 Y88..88P Y88b.  Y8b.          X88
+ *  888    Y888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * **********************************************
+ *
+ * Strings used in this app.
+ */
+-->
+
+<resources>
+
+    <string name="sacl_service_hostport">https://psd2demo.strongkey.com/sfaeco-web/rest/</string>
+    <string name="sacl_service_domainid">1</string>
+    <string name="sacl_service_service_credential_username">svccred</string>
+    <string name="sacl_service_service_credential_password">Abcd1234!</string>
+
+    <string name="sacl_using_self_signed_certificate">false</string>
+    <string name="sacl_self_signed_service_hostport">https://sakasmb.noorhome.net:8181/sfaeco-web/rest/</string>
+    <string name="sacl_self_signed_service_cert">sakasmb_noorhome_net</string>
+
+    <string name="ERROR_ANDROID_KEYSTORE_EMPTY">AndroidKeystore has no entries</string>
+    <string name="ERROR_EMULATOR">Running inside an emulator - no SE or TEE</string>
+    <string name="ERROR_EXCEPTION">Token Exception: Most likely, an invalid appid, username or non-existent keyhandle</string>
+    <string name="ERROR_INVALID_FUNCTION">An invalid FIDO function was requested</string>
+    <string name="ERROR_INVALID_WEBSERVICE">Invalid webservice called..</string>
+    <string name="ERROR_NETWORK_UNAVAILABLE">Network unavailable. Please activate network..</string>
+    <string name="ERROR_NOT_IMPLEMENTED_YET">This function has not been implemented yet..</string>
+    <string name="ERROR_NOT_PRIVATE_KEY"> is not an instance of a PrivateKeyEntry</string>
+    <string name="ERROR_NULL_CONTEXT">A valid Context was not passed into the library</string>
+    <string name="ERROR_SIGNATURE_OBJECT_NOT_INITIALIZED"> has NOT been initialized</string>
+    <string name="ERROR_SINGLE_CERTIFICATE_IN_CHAIN">Only a single certificate was found in the chain; key was not generated in AndroidKeystore</string>
+    <string name="ERROR_TLS_CONNECTION">Failed to connect to webservice for AndroidKeystore key attestation..</string>
+    <string name="ERROR_UNAUTHENTICATED_USER">User is not authenticated to device</string>
+
+    <string name="fido_error_authentication">Received error during authentication</string>
+    <string name="fido_error_authorization">Received error during authorization</string>
+    <string name="fido_error_null_challenge">Received null instead of challenge</string>
+    <string name="fido_error_registration">Received error during registration</string>
+    <string name="fido_error_task_instantiation">Error in instantiating asynchronous task</string>
+    <string name="fido_error_unknown_response">Unknown response; please enroll if you have not done so</string>
+
+    <string name="fido_message_authentication">Succcessfully authenticated using FIDO key</string>
+    <string name="fido_message_authorization">Succcessfully authorized transaction using FIDO key</string>
+    <string name="fido_message_registration">Succcessfully registered new FIDO key</string>
+
+    <string name="message_certificate_not_found">Digital certificate for alias not found:</string>
+    <string name="message_connecting">Connecting to</string>
+    <string name="message_challenge_error">Challenge unavailable - cannot perform task</string>
+    <string name="message_challenge_null">Null challenge in webservice response</string>
+    <string name="message_creating">Creating AndroidKeystore keys</string>
+    <string name="message_deleting">Deleting AndroidKeystore keys</string>
+    <string name="message_duplicate">A key-handle already exists for this username</string>
+    <string name="message_http_fail">Failed: HTTP error code:</string>
+    <string name="message_initialized_signature_object">Initialized cryptographic Signature object</string>
+
+    <string name="message_jws_java_signature_base64url">Base64Url encoded Java digital signature:</string>
+    <string name="message_jws_json_web_signature">JWS object:</string>
+    <string name="message_jws_payload_base64url">Base64Url encoded payload element:</string>
+    <string name="message_jws_payload_unencoded">Unencoded payload element:</string>
+    <string name="message_jws_protected_unencoded">Unencoded protected element:</string>
+    <string name="message_jws_signature">JWS digital signature:</string>
+    <string name="message_jws_signature_base64url">Base64Url encoded JWS digital signature:</string>
+    <string name="message_jws_signature_not_verified">JWS digital signature NOT verified</string>
+    <string name="message_jws_signature_verified">JWS digital signature verified</string>
+    <string name="message_jws_tbs_canonicalized">JCS canonicalized plaintext:</string>
+    <string name="message_jws_tbs_unencoded">Unencoded plaintext to be signed:</string>
+    <string name="message_jws_tbv_unencoded">Unencoded plaintext to be verified:</string>
+
+    <string name="message_key_acquired">Acquired key:</string>
+    <string name="message_key_found">Found key with alias:</string>
+    <string name="message_key_not_found">Key with alias not found:</string>
+    <string name="message_key_not_private_key">Key is not a PrivateKeyEntry:</string>
+    <string name="message_keygen_failure_se">Hardware secure element NOT found; attempting to use TEE</string>
+    <string name="message_keygen_success_se">Generated key-pair in hardware secure element</string>
+    <string name="message_keygen_success_tee">Generated key-pair in trusted execution environment</string>
+    <string name="message_keystore_entry">AndroidKeystore entry is a key</string>
+    <string name="message_keystore_entry_attribute">AndroidKeystore entry Attribute</string>
+    <string name="message_listing">Listing AndroidKeystore keys</string>
+
+    <string name="message_signing">Signing with AndroidKeystore keys</string>
+
+    <string name="vmessage_algorithm">Algorithm: </string>
+    <string name="vmessage_keyname">Keyname: </string>
+    <string name="vmessage_keystore_entry_name">Keystore Entry name: </string>
+    <string name="vmessage_number_of_certificates">Number of certificates in chain: </string>
+    <string name="vmessage_origin">Origin: </string>
+    <string name="vmessage_semodule">SEModule: </string>
+    <string name="vmessage_signature">Signature: </string>
+    <string name="vmessage_size">Size: </string>
+    <string name="vmessage_tbs">Hex-encoded ToBeSigned: </string>
+    <string name="vmessage_userauth">UserAuth?: </string>
+
+    <string name="activity_label">FIDO Preregistration</string>
+    <string name="label_authenticate">Authenticate</string>
+    <string name="label_authorize">Authorize</string>
+
+    <string name="label_devid">DEVID</string>
+    <string name="label_displayname">Displayname</string>
+
+    <string name="label_list">List</string>
+    <string name="label_output">Output</string>
+    <string name="label_pem_certificate">PEM certificate</string>
+
+    <string name="label_preauthenticate">Preauthenticate</string>
+    <string name="label_preauthorize">Preauthorize</string>
+    <string name="label_preregister">Preregister</string>
+
+    <string name="label_rdid">RDID</string>
+    <string name="label_register">Register</string>
+    <string name="label_rpid">RPID</string>
+    <string name="label_subjectdn">SubjectDN</string>
+
+    <string name="label_uid">UID</string>
+    <string name="label_username">Username</string>
+
+    <string name="error_string">Field must not be empty.</string>
+    <string name="error_pkix">Caught PKIX exception - using local Truststore ..</string>
+    <string name="title_activity_register_fido_key">Register Fido Key</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="null_attestation">Attestation is NULL</string>
+    <string name="origin_rpid_mismatch">Origin and RPID from preregister challenge are not identical</string>
+    <string name="aks_keygen_failed">AndroidKeystore failed to generate key-pair; see log for errors</string>
+
+</resources>

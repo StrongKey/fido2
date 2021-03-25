@@ -6,17 +6,17 @@
 */
 package com.strongkey.skfs.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.strongkey.skfsclient.common.Payload;
 import com.strongkey.skfsclient.common.SVCInfo;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /*
 * TODO:
 * Decide whether to keep Payload and SVCInfo as separate classes, make them an inner class, or not have them at all.
 */
 
-@JsonInclude(Include.NON_NULL)
 public class GetKeysInfoRequest {
 
     private SVCInfo svcinfo;
@@ -37,5 +37,13 @@ public class GetKeysInfoRequest {
 
     public void setUsername(String username) {
         payload.setUsername(username);
+    }
+    
+    
+    public JsonObject toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("svcinfo", svcinfo.toJsonObject());
+        job.add("payload", payload.toJsonObject());
+        return job.build();
     }
 }

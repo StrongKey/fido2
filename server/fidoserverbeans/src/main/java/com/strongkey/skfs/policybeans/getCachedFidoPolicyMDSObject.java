@@ -7,19 +7,16 @@
 
 package com.strongkey.skfs.policybeans;
 
+import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,19 +29,19 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
 
     //TODO fix logic to return the FidoPolicyMDSObject rather than the policy
     @Override
-    public FidoPolicyObject getPolicyByDidUsername(Long did, String username){
-        FidoKeys fk = null;
-        try {
-            fk = getFidoKeysBean.getNewestKeyByUsernameStatus(did, username, "Active");
-        } catch (SKFEException ex) {
-            Logger.getLogger(getCachedFidoPolicyMDSObject.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public FidoPolicyObject getPolicyByDidUsername(Long did, String username, FidoKeys fk){
+//        FidoKeys fk = null;
+//        try {
+//            fk = getFidoKeysBean.getNewestKeyByUsernameStatus(did, username, "Active");
+//        } catch (SKFEException ex) {
+//            Logger.getLogger(getCachedFidoPolicyMDSObject.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         return lookupPolicyFromNewestKey(did, fk);
     }
 
     @Override
     public FidoPolicyMDSObject getByMapKey(String policyMapKey) {
-        return (FidoPolicyMDSObject) skceMaps.getMapObj().get(skfsConstants.MAP_FIDO_POLICIES, policyMapKey);
+        return (FidoPolicyMDSObject) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_POLICIES, policyMapKey);
     }
 
 
@@ -56,7 +53,7 @@ public class getCachedFidoPolicyMDSObject implements getCachedFidoPolicyMDSLocal
         //Only check policies from the listed domain, that have started, and whose end_date has not passed
         Date currentDate = new Date();
         Collection<FidoPolicyObject> fpCol
-                = ((Collection<FidoPolicyMDSObject>) skceMaps.getMapObj().values(skfsConstants.MAP_FIDO_POLICIES))
+                = ((Collection<FidoPolicyMDSObject>) skceMaps.getMapObj().values(SKFSConstants.MAP_FIDO_POLICIES))
                 .stream()
                 .map(fpm -> fpm.getFp())
                 .filter(fp -> fp.getDid().equals(did))

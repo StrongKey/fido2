@@ -10,20 +10,18 @@ package com.strongkey.skfs.policybeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
 import com.strongkey.skce.pojos.MDSClient;
-import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
-import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
+import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
-import com.strongkey.fido2mds.MDS;
 import com.strongkey.skfs.requests.PatchFidoPolicyRequest;
+import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Base64;
-import java.util.Date;
 import java.util.logging.Level;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -33,8 +31,6 @@ import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.core.Response;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 @Stateless
 public class updateFidoPolicy implements updateFidoPolicyLocal {
@@ -56,43 +52,57 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
 
     @Override
     public Response execute(Long did,
-                             String sidpid,
+                             Long sid,
+                             Long pid,
                              PatchFidoPolicyRequest request) {
 
         //get policy
-        Long sid;
-        Long pid;
-        try {
-            sid = Long.parseLong(sidpid.split("-")[0]);
-            pid = Long.parseLong(sidpid.split("-")[1]);
-        } catch (Exception ex) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         FidoPolicies fidopolicy = getpolicybean.getbyPK(did, sid, pid);
 
         if(fidopolicy == null){
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2005", "");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2005", "");
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        if(request.getStartDate() != null)
-            fidopolicy.setStartDate(new Date(request.getStartDate()));
-        if(request.getEndDate() != null)
-            fidopolicy.setEndDate(new Date(request.getEndDate()));
-        if(request.getVersion() != null)
-            fidopolicy.setVersion(request.getVersion());
         if(request.getStatus() != null)
             fidopolicy.setStatus(request.getStatus());
         if(request.getNotes() != null)
             fidopolicy.setNotes(request.getNotes());
         if (request.getPolicy() != null) {
-            JSONObject policy;
-            try {
-                policy = new JSONObject(request.getPolicy());
-            } catch (JSONException ex) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5011", ex.getLocalizedMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDO-ERR-5011") + "Check server logs for details.").build();
-            }
-            String policyBase64 = Base64.getEncoder().encodeToString(policy.toString().getBytes());
+              //This code block would truncate the attestation formats to only packed and tpm if unique aaguids are present in allowedAaguidss
+//            JsonObject policy;
+//            try {
+//                policy = request.getPolicy();
+//            } catch (Exception ex) {
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5011", ex.getLocalizedMessage());
+//                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-5011") + "Check server logs for details.").build();
+//            } 
+//            try {
+//                if(!policy.getJsonObject("trusted_authenticators").getJsonArray("aaguids").isEmpty()){
+//                    JsonObject cyptoPolicy = policy.getJsonObject("cryptography");
+//                    List<String> oldAttFmt = Arrays.asList(cyptoPolicy.getJsonArray("attestation_formats").toString().split(","));
+//                    ArrayList<String> newAttFmt = new ArrayList<>();
+//                    ArrayList<String> removedAttFmt = new ArrayList<>();
+//                    if(cyptoPolicy.getJsonArray("attestation_formats").toString().contains("\"packed\"")){
+//                        newAttFmt.add("packed");
+//                    }
+//                    if(cyptoPolicy.getJsonArray("attestation_formats").toString().contains("\"tpm\"")){
+//                        newAttFmt.add("tpm");
+//                    }
+//                    if(newAttFmt.isEmpty()){
+//                            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-5011") + "Attestation formats must be include 'packed' and/or 'tpm' when restricting Athenticator AAGUIDS").build();
+//                    }
+//                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0063 -"+"newAttFmt " + newAttFmt);
+//                    cyptoPolicy.put("attestation_formats", newAttFmt);
+//                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0063 -"+"cyptoPolicy " + cyptoPolicy);
+//                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0063 -"+"Attestation formats " + removedAttFmt+ " were removed due to AAGUIDS specification");
+//
+//                    policy.put("cryptography", cyptoPolicy);
+//                }
+//            } catch (Exception ex) {
+//                Logger.getLogger(updateFidoPolicy.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            String policyBase64 = Base64.getEncoder().encodeToString(policy.toString().getBytes());
+            String policyBase64 = Base64.getEncoder().encodeToString(request.getPolicy().getBytes());
             fidopolicy.setPolicy(policyBase64);
         }
 
@@ -103,9 +113,11 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
         //Replicate
         String primarykey = sid + "-" + did + "-" + pid;
         if (applianceCommon.replicate()) {
-            String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, fidopolicy);
-            if (response != null){
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
+            if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
+                String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, fidopolicy);
+                if (response != null) {
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
+                }
             }
         }
 
@@ -115,26 +127,22 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
         try {
             fidoPolicyObject = FidoPolicyObject.parse(
                     fidopolicy.getPolicy(),
-                    fidopolicy.getVersion(),
                     (long) fidopolicy.getFidoPoliciesPK().getDid(),
                     (long) fidopolicy.getFidoPoliciesPK().getSid(),
-                    (long) fidopolicy.getFidoPoliciesPK().getPid(),
-                    fidopolicy.getStartDate(),
-                    fidopolicy.getEndDate());
+                    (long) fidopolicy.getFidoPoliciesPK().getPid());
         } catch (SKFEException ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + ex.getLocalizedMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + ex.getLocalizedMessage()).build();
         }
         MDSClient mds = null;
-        if (fidoPolicyObject.getMdsOptions() != null) {
-            mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
-        }
-        skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
+        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
 
         String response = Json.createObjectBuilder()
-                .add(skfsConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, "Successfully patched policy " + sid + "-" + pid)
+                .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, "Successfully patched policy " + sid + "-" + pid)
                 .build().toString();
 
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0063 "+  "updateFidoPolicy successful output: did:" + did +" sid:"+ sid +" pid:"+pid);
+
         return Response.ok().entity(response).build();
     }
 }

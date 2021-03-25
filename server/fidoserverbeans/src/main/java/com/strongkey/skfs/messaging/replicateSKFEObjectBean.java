@@ -7,6 +7,7 @@
 
 package com.strongkey.skfs.messaging;
 
+import com.strongkey.appliance.entitybeans.Configurations;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.strongkeyLogger;
 import com.strongkey.skce.pojos.UserSessionInfo;
@@ -79,6 +80,10 @@ public class replicateSKFEObjectBean implements replicateSKFEObjectBeanLocal {
                 case applianceConstants.ENTITY_TYPE_FIDO_USERS:
                     FidoUsers user = (FidoUsers) obj;
                     publishSKCEObj.execute(replpk, entityType, replicationOperation, primarykey, user);
+                    break;
+                case applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS:
+                    Configurations config = (Configurations) obj;
+                    publishSKCEObj.execute(replpk, entityType, replicationOperation, primarykey, config);
                     break;
                 case applianceConstants.ENTITY_TYPE_MAP_USER_SESSION_INFO:
                     UserSessionInfo session = (UserSessionInfo) obj;

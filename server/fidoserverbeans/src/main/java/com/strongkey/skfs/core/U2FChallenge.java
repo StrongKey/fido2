@@ -8,9 +8,9 @@
 package com.strongkey.skfs.core;
 
 import com.strongkey.appliance.utilities.applianceCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.Serializable;
 import java.util.logging.Level;
 
@@ -29,8 +29,8 @@ public class U2FChallenge implements Serializable {
     /**
      * Supported versions for U2F protocol
      */
-    final String U2F_VERSION_V2 = "U2F_V2";
-    final String FIDO = "FIDO2_0";
+    final static String U2F_VERSION_V2 = "U2F_V2";
+    final static String FIDO = "FIDO2_0";
 
     /**
      * Common parameters for a challenge in U2F
@@ -52,18 +52,18 @@ public class U2FChallenge implements Serializable {
 
         //  Input checks
         if ( u2fversion==null || u2fversion.trim().isEmpty() ) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " protocol");
-            throw new IllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " protocol");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), " protocol");
+            throw new IllegalArgumentException(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + " protocol");
         }
 
         if (username==null || username.trim().isEmpty() ) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " username");
-            throw new IllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " username");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), " username");
+            throw new IllegalArgumentException(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + " username");
         }
 
         if (username.trim().length() > Integer.parseInt(applianceCommon.getApplianceConfigurationProperty("appliance.cfg.maxlen.256charstring"))) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", skfsCommon.getMessageProperty("FIDO-ERR-0027"), " username should be limited to 256 characters");
-            throw new IllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-0027") + " username should be limited to 256 characters");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", SKFSCommon.getMessageProperty("FIDO-ERR-0027"), " username should be limited to 256 characters");
+            throw new IllegalArgumentException(SKFSCommon.getMessageProperty("FIDO-ERR-0027") + " username should be limited to 256 characters");
         }
 
         //  u2f version specific code
@@ -71,8 +71,8 @@ public class U2FChallenge implements Serializable {
             version = u2fversion;
 //            sessionid = U2FUtility.generateSessionid(this.nonce);
         } else {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", skfsCommon.getMessageProperty("FIDO-ERR-5002"), " protocol passed=" + u2fversion);
-            throw new IllegalArgumentException(skfsCommon.getMessageProperty("FIDO-ERR-5002") + " protocol passed=" + u2fversion);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FChallenge", SKFSCommon.getMessageProperty("FIDO-ERR-5002"), " protocol passed=" + u2fversion);
+            throw new IllegalArgumentException(SKFSCommon.getMessageProperty("FIDO-ERR-5002") + " protocol passed=" + u2fversion);
         }
     }
 

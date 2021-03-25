@@ -13,5 +13,5 @@ import javax.ejb.Local;
 
 @Local
 public interface getFidoUserLocal {
-    FidoUsers GetByUsername(Long did, String username) throws SKFEException;
+    FidoUsers getByUsername(Long did, String username) throws SKFEException;
 }

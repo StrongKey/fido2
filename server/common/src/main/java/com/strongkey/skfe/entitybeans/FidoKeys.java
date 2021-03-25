@@ -1,9 +1,35 @@
 /**
-* Copyright StrongAuth, Inc. All Rights Reserved.
-*
-* Use of this source code is governed by the GNU Lesser General Public License v2.1
-* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
-*/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License, as published by the Free Software Foundation and
+ * available at http://www.fsf.org/licensing/licenses/lgpl.html,
+ * version 2.1 or above.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2001-2020 StrongAuth, Inc.
+ *
+ * $Date: $
+ * $Revision: $
+ * $Author: $
+ * $URL: $
+ *
+ * *********************************************
+ *                    888
+ *                    888
+ *                    888
+ *  88888b.   .d88b.  888888  .d88b.  .d8888b
+ *  888 "88b d88""88b 888    d8P  Y8b 88K
+ *  888  888 888  888 888    88888888 "Y8888b.
+ *  888  888 Y88..88P Y88b.  Y8b.          X88
+ *  888  888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * *********************************************
+ *
+ */
 
 package com.strongkey.skfe.entitybeans;
 
@@ -18,6 +44,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -49,21 +77,25 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FidoKeys.findBySidDidFkid", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.sid = :sid and f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.fidoKeysPK.fkid = :fkid"),
     @NamedQuery(name = "FidoKeys.findByUsername", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username"),
     @NamedQuery(name = "FidoKeys.findByFkid", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.fkid = :fkid"),
+    @NamedQuery(name = "FidoKeys.findByUserid", query = "SELECT f FROM FidoKeys f WHERE f.userid = :userid"),
     @NamedQuery(name = "FidoKeys.findByKeyhandle", query = "SELECT f FROM FidoKeys f WHERE f.keyhandle = :keyhandle"),
     @NamedQuery(name = "FidoKeys.findByAppid", query = "SELECT f FROM FidoKeys f WHERE f.appid = :appid"),
     @NamedQuery(name = "FidoKeys.findByPublickey", query = "SELECT f FROM FidoKeys f WHERE f.publickey = :publickey"),
-    @NamedQuery(name = "FidoKeys.findByKhdigest", query = "SELECT f FROM FidoKeys f WHERE f.khdigest = :khdigest"),
-    @NamedQuery(name = "FidoKeys.findByKhdigestType", query = "SELECT f FROM FidoKeys f WHERE f.khdigestType = :khdigestType"),
     @NamedQuery(name = "FidoKeys.findByTransports", query = "SELECT f FROM FidoKeys f WHERE f.transports = :transports"),
+    @NamedQuery(name = "FidoKeys.findByAttsid", query = "SELECT f FROM FidoKeys f WHERE f.attsid = :attsid"),
+    @NamedQuery(name = "FidoKeys.findByAttdid", query = "SELECT f FROM FidoKeys f WHERE f.attdid = :attdid"),
     @NamedQuery(name = "FidoKeys.findByAttcid", query = "SELECT f FROM FidoKeys f WHERE f.attcid = :attcid"),
     @NamedQuery(name = "FidoKeys.findByCounter", query = "SELECT f FROM FidoKeys f WHERE f.counter = :counter"),
     @NamedQuery(name = "FidoKeys.findByFidoVersion", query = "SELECT f FROM FidoKeys f WHERE f.fidoVersion = :fidoVersion"),
     @NamedQuery(name = "FidoKeys.findByFidoProtocol", query = "SELECT f FROM FidoKeys f WHERE f.fidoProtocol = :fidoProtocol"),
+    @NamedQuery(name = "FidoKeys.findByAaguid", query = "SELECT f FROM FidoKeys f WHERE f.aaguid = :aaguid"),
+    @NamedQuery(name = "FidoKeys.findByRegistrationSettingsVersion", query = "SELECT f FROM FidoKeys f WHERE f.registrationSettingsVersion = :registrationSettingsVersion"),
     @NamedQuery(name = "FidoKeys.findByCreateDate", query = "SELECT f FROM FidoKeys f WHERE f.createDate = :createDate"),
     @NamedQuery(name = "FidoKeys.findByCreateLocation", query = "SELECT f FROM FidoKeys f WHERE f.createLocation = :createLocation"),
     @NamedQuery(name = "FidoKeys.findByModifyDate", query = "SELECT f FROM FidoKeys f WHERE f.modifyDate = :modifyDate"),
     @NamedQuery(name = "FidoKeys.findByModifyLocation", query = "SELECT f FROM FidoKeys f WHERE f.modifyLocation = :modifyLocation"),
     @NamedQuery(name = "FidoKeys.findByStatus", query = "SELECT f FROM FidoKeys f WHERE f.status = :status"),
+    @NamedQuery(name = "FidoKeys.findBySignatureKeytype", query = "SELECT f FROM FidoKeys f WHERE f.signatureKeytype = :signatureKeytype"),
     @NamedQuery(name = "FidoKeys.findBySignature", query = "SELECT f FROM FidoKeys f WHERE f.signature = :signature"),
     @NamedQuery(name = "FidoKeys.findByUsernameStatus", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.status = :status"),
 //    @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid and f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username"),
@@ -71,6 +103,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FidoKeys.maxpk", query = "SELECT max(f.fidoKeysPK.fkid) FROM FidoKeys f where f.fidoKeysPK.sid = :sid and f.fidoKeysPK.did = :did"),
     @NamedQuery(name = "FidoKeys.findNewestKeyByUsernameStatus", query = "SELECT f FROM FidoKeys f where f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.status = :status ORDER BY f.createDate DESC"),
     @NamedQuery(name = "FidoKeys.findByUsernameKH", query = "SELECT f FROM FidoKeys f WHERE f.fidoKeysPK.did = :did and f.fidoKeysPK.username = :username and f.keyhandle = :keyhandle")})
+
 public class FidoKeys implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,12 +123,6 @@ public class FidoKeys implements Serializable {
     @Size(max = 512)
     @Column(name = "publickey")
     private String publickey;
-    @Size(max = 512)
-    @Column(name = "khdigest")
-    private String khdigest;
-    @Size(max = 7)
-    @Column(name = "khdigest_type")
-    private String khdigestType;
     @Column(name = "transports")
     private Short transports;
     @Column(name = "attsid")
@@ -144,6 +171,11 @@ public class FidoKeys implements Serializable {
     @Size(min = 1, max = 8)
     @Column(name = "status")
     private String status;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "signature_keytype")
+    private String signatureKeytype;
     @Size(max = 2048)
     @Column(name = "signature")
     private String signature;
@@ -158,13 +190,18 @@ public class FidoKeys implements Serializable {
         this.fidoKeysPK = fidoKeysPK;
     }
 
-    public FidoKeys(FidoKeysPK fidoKeysPK, String keyhandle, int counter, Date createDate, String createLocation, String status) {
+    public FidoKeys(FidoKeysPK fidoKeysPK, String keyhandle, int counter, Date createDate, String createLocation, String status, String signatureKeytype) {
         this.fidoKeysPK = fidoKeysPK;
         this.keyhandle = keyhandle;
         this.counter = counter;
-        this.createDate = createDate;
+        if(createDate !=null){
+            this.createDate = new Date(createDate.getTime());
+        }else{
+            this.createDate =null;
+        }
         this.createLocation = createLocation;
         this.status = status;
+        this.signatureKeytype = signatureKeytype;
     }
 
     public FidoKeys(short sid, short did, String username, long fkid) {
@@ -245,22 +282,6 @@ public class FidoKeys implements Serializable {
 
     public void setPublickey(String publickey) {
         this.publickey = publickey;
-    }
-
-    public String getKhdigest() {
-        return khdigest;
-    }
-
-    public void setKhdigest(String khdigest) {
-        this.khdigest = khdigest;
-    }
-
-    public String getKhdigestType() {
-        return khdigestType;
-    }
-
-    public void setKhdigestType(String khdigestType) {
-        this.khdigestType = khdigestType;
     }
 
     public Short getTransports() {
@@ -346,11 +367,18 @@ public class FidoKeys implements Serializable {
 
     @XmlTransient
     public Date getCreateDate() {
-        return createDate;
+        if (createDate ==null) {
+            return null;
+        }
+        return new Date(createDate.getTime());
     }
 
     public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+        if(createDate == null){
+            this.createDate = null;
+        }else{
+            this.createDate = new Date(createDate.getTime());
+        }
     }
 
     @XmlTransient
@@ -364,11 +392,18 @@ public class FidoKeys implements Serializable {
 
     @XmlTransient
     public Date getModifyDate() {
-        return modifyDate;
+        if (modifyDate ==null) {
+            return null;
+        }
+        return new Date(modifyDate.getTime());
     }
 
     public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+        if(modifyDate == null){
+            this.modifyDate = null;
+        }else{
+            this.modifyDate = new Date(modifyDate.getTime());
+        }
     }
 
     @XmlTransient
@@ -389,6 +424,14 @@ public class FidoKeys implements Serializable {
     }
 
     @XmlTransient
+    public String getSignatureKeytype() {
+        return signatureKeytype;
+    }
+
+    public void setSignatureKeytype(String signatureKeytype) {
+        this.signatureKeytype = signatureKeytype;
+    }
+
     public String getSignature() {
         return signature;
     }
@@ -425,9 +468,62 @@ public class FidoKeys implements Serializable {
         }
         return true;
     }
-
+    
+    public String toJsonObject(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("sid", this.getFidoKeysPK().getSid());
+        job.add("did", this.getFidoKeysPK().getDid());
+        job.add("fkid", this.getFidoKeysPK().getFkid());
+        job.add("username", this.getFidoKeysPK().getUsername());
+        if (this.userid != null) {
+            job.add("userid", this.getUserid());
+        }
+        if (this.keyhandle != null) {
+            job.add("keyhandle", this.getKeyhandle());
+        }
+        if (this.appid != null) {
+            job.add("appid", this.getAppid());
+        }
+        if (this.publickey != null) {
+            job.add("publickey", this.getPublickey());
+        }
+        if (this.transports != null) {
+            job.add("transports", this.getTransports());
+        }
+        if (this.attsid != null) {
+            job.add("attsid", this.getAttsid());
+        }
+        if (this.attdid != null) {
+            job.add("attdid", this.getAttdid());
+        }
+        if (this.attcid != null) {
+            job.add("attcid", this.getAttsid());
+        }
+        if (this.fidoVersion != null) {
+            job.add("fidoVersion", this.getFidoVersion());
+        }
+        if (this.fidoProtocol != null) {
+            job.add("fidoProtocol", this.getFidoProtocol());
+        }
+        if (this.aaguid != null) {
+            job.add("aaguid", this.getAaguid());
+        }
+        if (this.registrationSettings != null) {
+            job.add("registrationSettings", this.getRegistrationSettings());
+        }
+        if (this.registrationSettingsVersion != null) {
+            job.add("registrationSettingsVersion", this.getRegistrationSettingsVersion());
+        }
+        
+        job.add("status", this.getStatus());
+        
+        String res = job.build().toString();
+        return res;
+    }
+    
     @Override
     public String toString() {
-        return "FidoKeys[ fidoKeysPK=" + fidoKeysPK + " ]";
+        return "com.strongauth.entitybeans.FidoKeys[ fidoKeysPK=" + fidoKeysPK + " ]";
     }
+
 }

@@ -5,13 +5,15 @@
  */
 package com.strongkey.skfsclient.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 
 /**
  *
  * @author pleung
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SVCInfo {
     
     private int did;
@@ -66,6 +68,20 @@ public class SVCInfo {
 
     public void setSVCPassword(String svcpassword) {
         this.svcpassword = svcpassword;
+    }
+    
+    public JsonObject toJsonObject(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("did", this.did);
+        job.add("protocol", this.protocol);
+        job.add("authtype", this.authtype);
+        if(this.svcusername != null){
+            job.add("svcusername", this.svcusername);
+        }
+        if(this.svcpassword != null){
+            job.add("svcpassword", this.svcpassword);
+        }
+        return job.build();
     }
 //    public String getTimestamp() {
 //        return timestamp;

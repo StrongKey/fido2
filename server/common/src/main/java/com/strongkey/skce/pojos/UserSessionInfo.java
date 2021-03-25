@@ -17,6 +17,10 @@ public class UserSessionInfo implements Serializable {
     private String displayName = null;
     private String rpName = null;
     private String nonce = null;
+    private String initnonce = null;
+    private Long txtimestamp = null;
+    private String txpayload = null;
+    private String txid = null;
     private String userId = null;
     private String appid = null;
     private String sessiontype = null;
@@ -102,12 +106,20 @@ public class UserSessionInfo implements Serializable {
         this.sessiontype = sessiontype;
     }
 
+    
     public Date getCreationdate() {
-        return creationdate;
+        if(creationdate == null){
+            return null;
+        }
+        return new Date(creationdate.getTime());
     }
 
     public void setCreationdate(Date creationdate) {
-        this.creationdate = creationdate;
+        if(creationdate == null){
+            this.creationdate = null;
+        }else{
+            this.creationdate = new Date(creationdate.getTime());    
+        }
     }
 
     public long getSessionAge() {
@@ -211,6 +223,41 @@ public class UserSessionInfo implements Serializable {
     public void setPolicyMapKey(String policyMapKey) {
         this.policyMapKey = policyMapKey;
     }
+
+    public String getInitnonce() {
+        return initnonce;
+    }
+
+    public void setInitnonce(String initnonce) {
+        this.initnonce = initnonce;
+    }
+
+    public String getTxpayload() {
+        return txpayload;
+    }
+
+    public void setTxpayload(String txpayload) {
+        this.txpayload = txpayload;
+    }
+
+    public String getTxid() {
+        return txid;
+    }
+
+    public void setTxid(String txid) {
+        this.txid = txid;
+    }
+
+    public Long getTxtimestamp() {
+        return txtimestamp;
+    }
+
+    public void setTxtimestamp(Long txtimestamp) {
+        this.txtimestamp = txtimestamp;
+    }
+    
+    
+    
     /**
      * Over-ridden toString method to print the object content in a readable
      * manner

@@ -7,9 +7,18 @@
 
 package com.strongkey.fido2mds.structures;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 public class Version {
     private Integer major;
     private Integer minor;
+    
+    public Version (JsonObject jsonInput) {
+        if (jsonInput.containsKey("major")) major = jsonInput.getInt("major");
+        if (jsonInput.containsKey("minor")) minor = jsonInput.getInt("minor");
+    }
 
     public Integer getMajor() {
         return major;
@@ -25,5 +34,12 @@ public class Version {
 
     public void setMinor(Integer minor) {
         this.minor = minor;
+    }
+    
+    public JsonObject toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        if (this.major != null) job.add("major", major);
+        if (this.minor != null) job.add("minor", minor);
+        return job.build();
     }
 }

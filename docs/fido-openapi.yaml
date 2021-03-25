@@ -3,7 +3,7 @@ info:
   title: FIDO2 Server API
   version: 3.0.0
   description: |
-    The FIDO2 Server API provides the registration and authentication web services required to manage user FIDO2 keys.
+    The FIDO2 Server API provides the registration and authentication web services required to manage users' FIDO2 keys.
 
     All API calls require a cryptographic domain ID ("did"), a FIDO2 protocol ("protocol"), and the type of authentication used ("authtype"). 
     
@@ -32,7 +32,7 @@ tags:
 paths:
   /preregister:
     post:
-      summary: Request a one-time challenge for registration.
+      summary: Request a one time challenge for registration.
       description: Step 1 for registering a FIDO2 key. This method creates and returns a challenge to the caller.
       tags:
         - Registration
@@ -70,7 +70,7 @@ paths:
                       example: "{}"
       responses:
         '200':
-          description: Returned a one-time challenge for FIDO2 registration.
+          description: Returned a one time challenge for FIDO2 registration.
           content:
             application/json:
               schema:
@@ -131,7 +131,7 @@ paths:
           $ref: '#/components/responses/UnusedRoute'
   /register:
     post:
-      summary: Submit a one-time signed challenge for registration.
+      summary: Submit a one time signed challenge for registration.
       description: Step 2 for registering a FIDO2 key. This API call allows the user to return the signed challenge to the server for verification.
       tags:
         - Registration
@@ -182,7 +182,7 @@ paths:
           $ref: '#/components/responses/UnusedRoute'
   /preauthenticate:
     post:
-      summary: Request a one-time challenge for authentication.
+      summary: Request a one time challenge for authentication.
       description: Step 1 for authenticating a FIDO2 key. This API call creates and returns a challenge to the caller.
       tags:
         - Authentication
@@ -204,16 +204,16 @@ paths:
                     - username
                   properties:
                     username:
-                      description: Name of the current user calling the preauthentication route.
+                      description: Name of the current user calling the preauthentication route
                       type: string
                       example: "johndoe"
                     options:
-                      description: Holds options required by the preauthentication route.
+                      description: Holds options required by the preauthentication route
                       type: string
                       example: "{}"
       responses:
         '200':
-          description: Returned a one-time challenge for FIDO2 authentication.
+          description: Returned a one time challenge for FIDO2 authentication.
           content:
             application/json:
               schema:
@@ -259,7 +259,7 @@ paths:
           $ref: '#/components/responses/UnusedRoute'
   /authenticate:
     post:
-      summary: Submit a one-time signed challenge for authentication.
+      summary: Submit a one time signed challenge for authentication.
       description: Step 2 for authenticating a FIDO2 key. This API call allows the user to return the signed challenge to the server for verification.
       tags:
         - Authentication
@@ -311,7 +311,7 @@ paths:
   /updatekeyinfo:
     post:
       summary: Updates information about a given FIDO2 key.
-      description: This method changes the status of a given key stored in persistent storage. The FIDO2 protocol does not define any activation or deactivation processes. This API call just changes the registered FIDO2 Authenticator to possess a new status in the persistent storage for the purpose of FIDO2 authentication. Since the user can have multiple FIDO2 Authenticators, a key ID is passed to the server. This key ID can be obtained by making a *getkeysinfo* call, which will return an array of registered key metadata with each entry being mapped to a key ID. Client applications will need to cache these IDs in order to activate, deactivate, or register keys.
+      description: This method changes the status of a given key stored in persistent storage. The FIDO2 protocol does not define any activation or deactivation processes. This API call just changes the registered FIDO2 authenticator to possess a new status in the persistent storage for the purpose of FIDO2 authentication. Since the user can have multiple FIDO2 authenticators, a key ID is passed to the server. This key ID can be obtained by making a *getkeysinfo* call, which will return an array of registered key metadata with each entry being mapped to a key ID. Client applications will need to cache these IDs in order to activate, deactivate, or register keys.
       tags:
         - Key Regulation
       requestBody:
@@ -330,31 +330,31 @@ paths:
                   type: object
                   properties:
                     status:
-                      description: Current status of the FIDO2 key, whether it is Active or Inactive.
+                      description: Current status of the FIDO2 key, whether it is Active or Inactive
                       type: string
                       example: "Active"
                     modify_location:
-                      description: Location of the update request.
+                      description: Location of the update request
                       type: string
                       example: "Cupertino, CA"
                     displayname:
-                      description: Name of the FIDO2 key being updated.
+                      description: Name of the FIDO2 key being updated
                       type: string
                       example: "johndoe"
                     keyid:
-                      description: ID of the FIDO2 key being updated.
+                      description: ID of the FIDO2 key being updated
                       type: string
                       example: "1-1-johndoe-154"
       responses:
         '200':
-          description: The FIDO2 key status has been updated successfully.
+          description: The FIDO2 key has had its status updated successfully.
           content:
             application/json:
               schema:
                 type: string
                 example: |
                   {
-                    "Response": "Successfully updated user registered security key."
+                    "Response": "Successfully updated user registered security key"
                   }
         '400':
           $ref: '#/components/responses/BadInput'
@@ -369,7 +369,7 @@ paths:
   /getkeysinfo:
     post:
       summary: Returns all keys associated with a registered user.
-      description: Returns a list of all registered FIDO2 Authenticators belonging to a specified user.
+      description: Returns a list of all registered FIDO2 authenticators belonging to a specified user.
       tags:
         - Key Regulation
       requestBody:
@@ -388,7 +388,7 @@ paths:
                   type: object
                   properties:
                     username:
-                      description: Name of the active user.
+                      description: Name of the active user
                       type: string
                       example: "johndoe"
       responses:
@@ -412,7 +412,7 @@ paths:
   /deregister:
     post:
       summary: Deregisters a registered key.
-      description: Deregisters a FIDO2 Authenticator. This API call requires a username and key ID in order to point to a unique key registered to that user. The key ID can be obtained by making a call to *getkeysinfo*.
+      description: Deregisters a FIDO2 authenticator. This API call requires a username and key ID in order to point to a unique key registered to that user. The key ID can be obtained by making a call to *getkeysinfo*.
       tags:
         - Key Regulation
       requestBody:
@@ -513,7 +513,7 @@ components:
           format: password
           example: Abcd1234!
     preregisterpayload:
-      description: The payload containing information for the preregister route.
+      description: The payload containing information for the Preregister route.
       type: object
       required:
         - username
@@ -540,7 +540,7 @@ components:
               type: string
               example: req
             userverification:
-              description: Determines whether or not user presence is required to verify the challenge.
+              description: Determines whether or not a user's presence is required to verify the challenge.
               type: boolean
               example: true
         extensions:
@@ -548,7 +548,7 @@ components:
           type: string
           example: "{}"
     registerpayload:
-      description: The payload containing information for the register route.
+      description: The payload containing information for the Register route.
       type: object
       required:
         - metadata
@@ -587,7 +587,7 @@ components:
               type: string
               example: 79U...kTg
             response:
-              description: The response from the server.
+              description: The response from the server
               type: object
               properties:
                 attestationObject:
@@ -603,21 +603,21 @@ components:
               type: string
               example: public-key
     preauthenticatepayload:
-      description: The payload containing information for the preauthenticate route.
+      description: The payload containing information for the Preauthenticate route.
       type: object
       required:
         - username
       properties:
         username:
-          description: Name of the current user calling the preauthentication route.
+          description: Name of the current user calling the preauthentication route
           type: string
           example: "johndoe"
         options:
-          description: Holds options required by the preauthentication route.
+          description: Holds options required by the preauthentication route
           type: string
           example: "{}"
     authenticatepayload:
-      description: The payload containing information for the preauthenticate route.
+      description: The payload containing information for the Preauthenticate route.
       type: object
       required:
         - metadata
@@ -689,19 +689,19 @@ components:
         - status
       properties:
         status:
-          description: Current status of the FIDO2 key, whether it is Active or Inactive.
+          description: Current status of the FIDO2 key, whether it is Active or Inactive
           type: string
           example: "Active"
         modify_location:
-          description: Location of the update request.
+          description: Location of the update request
           type: string
           example: "Cupertino, CA"
         displayname:
-          description: Name of the FIDO2 key being updated.
+          description: Name of the FIDO2 key being updated
           type: string
           example: "johndoe"
         keyid:
-          description: ID of the FIDO2 key being updated.
+          description: ID of the FIDO2 key being updated
           type: string
           example: "1-1-johndoe-154"
     getkeysinfopayload:
@@ -711,24 +711,24 @@ components:
         - username
       properties:
         username:
-          description: Name of the active user.
+          description: Name of the active user
           type: string
           example: "johndoe"
     deregisterpayload:
-      description: The payload containing information for the deregister route.
+      description: The payload containing information for the Deregister route.
       type: object
       required:
         - keyid
       properties:
         keyid:
-          description: ID for the key to be removed.
+          description: ID for the key to be removed
           type: string
           example: 79U...kTg
     Response:
       description: Response JSON object returned by web services.
       properties:
         Response:
-          description: The result of the API call; typically an error message for returns that are not 200.
+          description: The result of the API call, typically an error message for returns that aren't 200.
           type: string
   responses:
     SuccessResponse:
@@ -742,7 +742,7 @@ components:
               "Response": "",
             }
     BadAuth:
-      description: The HMAC authentication failed.
+      description: The HMAC Authentication failed.
     MissingResource:
       description: The requested resource is unavailable.
     BadInput:

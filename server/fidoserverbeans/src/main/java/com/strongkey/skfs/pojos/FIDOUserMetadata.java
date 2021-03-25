@@ -6,7 +6,7 @@
 */
 package com.strongkey.skfs.pojos;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.io.Serializable;
 import javax.json.JsonObject;
 
@@ -85,15 +85,15 @@ public class FIDOUserMetadata implements Serializable {
         // Build the output json object
         JsonObject metadataJSON = javax.json.Json.createObjectBuilder()
                 .add("username", username)
-                .add(skfsConstants.LDAP_ATTR_KEY_DN, userdn)
-                .add(skfsConstants.LDAP_ATTR_KEY_EMAILADDRESSES, emailaddresses)
-                .add(skfsConstants.LDAP_ATTR_KEY_PRIMARYEMAIL, primaryemail)
-                .add(skfsConstants.LDAP_ATTR_KEY_PHONENUMBERS, phonenumbers)
-                .add(skfsConstants.LDAP_ATTR_KEY_PRIMARYPHONE, primaryphone)
-                .add(skfsConstants.LDAP_ATTR_KEY_DEFAULTTARGET, defaultcommunication)
-                .add(skfsConstants.LDAP_ATTR_KEY_FIDOENABLED, fidokeysenabled)
-                .add(skfsConstants.LDAP_ATTR_KEY_2STEPVERIFY, twostepverification)
-                .add(skfsConstants.LDAP_ATTR_KEY_DOMAINID, did).
+                .add(SKFSConstants.LDAP_ATTR_KEY_DN, userdn)
+                .add(SKFSConstants.LDAP_ATTR_KEY_EMAILADDRESSES, emailaddresses)
+                .add(SKFSConstants.LDAP_ATTR_KEY_PRIMARYEMAIL, primaryemail)
+                .add(SKFSConstants.LDAP_ATTR_KEY_PHONENUMBERS, phonenumbers)
+                .add(SKFSConstants.LDAP_ATTR_KEY_PRIMARYPHONE, primaryphone)
+                .add(SKFSConstants.LDAP_ATTR_KEY_DEFAULTTARGET, defaultcommunication)
+                .add(SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED, fidokeysenabled)
+                .add(SKFSConstants.LDAP_ATTR_KEY_2STEPVERIFY, twostepverification)
+                .add(SKFSConstants.LDAP_ATTR_KEY_DOMAINID, did).
                 build();
 
         return metadataJSON;

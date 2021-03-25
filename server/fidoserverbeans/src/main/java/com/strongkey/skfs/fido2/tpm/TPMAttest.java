@@ -81,16 +81,4 @@ public class TPMAttest implements TPMMarshallable {
                 firmwareVersion,
                 attested);
     }
-
-    private static String bytesToHexString(byte[] rawBytes, int num) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < num; i++) {
-            if (i % 16 == 0) {
-                sb.append('\n');
-            }
-            sb.append(String.format("%02x ", rawBytes[i]));
-        }
-        return sb.toString();
-    }
-
 }

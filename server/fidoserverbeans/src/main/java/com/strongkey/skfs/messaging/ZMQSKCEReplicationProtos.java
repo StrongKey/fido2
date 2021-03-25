@@ -2109,213 +2109,199 @@ public final class ZMQSKCEReplicationProtos {
         getPublickeyBytes();
 
     /**
-     * <code>optional string khdigest = 9;</code>
-     */
-    boolean hasKhdigest();
-    /**
-     * <code>optional string khdigest = 9;</code>
-     */
-    java.lang.String getKhdigest();
-    /**
-     * <code>optional string khdigest = 9;</code>
-     */
-    com.google.protobuf.ByteString
-        getKhdigestBytes();
-
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    boolean hasKhdigestType();
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    java.lang.String getKhdigestType();
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    com.google.protobuf.ByteString
-        getKhdigestTypeBytes();
-
-    /**
-     * <code>optional int64 transports = 11;</code>
+     * <code>optional int64 transports = 9;</code>
      */
     boolean hasTransports();
     /**
-     * <code>optional int64 transports = 11;</code>
+     * <code>optional int64 transports = 9;</code>
      */
     long getTransports();
 
     /**
-     * <code>optional int64 attsid = 12;</code>
+     * <code>optional int64 attsid = 10;</code>
      */
     boolean hasAttsid();
     /**
-     * <code>optional int64 attsid = 12;</code>
+     * <code>optional int64 attsid = 10;</code>
      */
     long getAttsid();
 
     /**
-     * <code>optional int64 attdid = 13;</code>
+     * <code>optional int64 attdid = 11;</code>
      */
     boolean hasAttdid();
     /**
-     * <code>optional int64 attdid = 13;</code>
+     * <code>optional int64 attdid = 11;</code>
      */
     long getAttdid();
 
     /**
-     * <code>optional int64 attcid = 14;</code>
+     * <code>optional int64 attcid = 12;</code>
      */
     boolean hasAttcid();
     /**
-     * <code>optional int64 attcid = 14;</code>
+     * <code>optional int64 attcid = 12;</code>
      */
     long getAttcid();
 
     /**
-     * <code>required int64 counter = 15;</code>
+     * <code>required int64 counter = 13;</code>
      */
     boolean hasCounter();
     /**
-     * <code>required int64 counter = 15;</code>
+     * <code>required int64 counter = 13;</code>
      */
     long getCounter();
 
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     boolean hasFidoVersion();
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     java.lang.String getFidoVersion();
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     com.google.protobuf.ByteString
         getFidoVersionBytes();
 
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     boolean hasFidoProtocol();
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     java.lang.String getFidoProtocol();
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     com.google.protobuf.ByteString
         getFidoProtocolBytes();
 
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     boolean hasAaguid();
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     java.lang.String getAaguid();
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     com.google.protobuf.ByteString
         getAaguidBytes();
 
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     boolean hasRegistrationSettings();
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     java.lang.String getRegistrationSettings();
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     com.google.protobuf.ByteString
         getRegistrationSettingsBytes();
 
     /**
-     * <code>optional int64 registration_settings_version = 20;</code>
+     * <code>optional int64 registration_settings_version = 18;</code>
      */
     boolean hasRegistrationSettingsVersion();
     /**
-     * <code>optional int64 registration_settings_version = 20;</code>
+     * <code>optional int64 registration_settings_version = 18;</code>
      */
     long getRegistrationSettingsVersion();
 
     /**
-     * <code>required int64 create_date = 21;</code>
+     * <code>required int64 create_date = 19;</code>
      */
     boolean hasCreateDate();
     /**
-     * <code>required int64 create_date = 21;</code>
+     * <code>required int64 create_date = 19;</code>
      */
     long getCreateDate();
 
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     boolean hasCreateLocation();
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     java.lang.String getCreateLocation();
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     com.google.protobuf.ByteString
         getCreateLocationBytes();
 
     /**
-     * <code>optional int64 modify_date = 23;</code>
+     * <code>optional int64 modify_date = 21;</code>
      */
     boolean hasModifyDate();
     /**
-     * <code>optional int64 modify_date = 23;</code>
+     * <code>optional int64 modify_date = 21;</code>
      */
     long getModifyDate();
 
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     boolean hasModifyLocation();
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     java.lang.String getModifyLocation();
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     com.google.protobuf.ByteString
         getModifyLocationBytes();
 
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     boolean hasStatus();
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     java.lang.String getStatus();
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     com.google.protobuf.ByteString
         getStatusBytes();
 
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>required string signature_keytype = 24;</code>
+     */
+    boolean hasSignatureKeytype();
+    /**
+     * <code>required string signature_keytype = 24;</code>
+     */
+    java.lang.String getSignatureKeytype();
+    /**
+     * <code>required string signature_keytype = 24;</code>
+     */
+    com.google.protobuf.ByteString
+        getSignatureKeytypeBytes();
+
+    /**
+     * <code>optional string signature = 25;</code>
      */
     boolean hasSignature();
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>optional string signature = 25;</code>
      */
     java.lang.String getSignature();
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>optional string signature = 25;</code>
      */
     com.google.protobuf.ByteString
         getSignatureBytes();
@@ -2417,103 +2403,97 @@ public final class ZMQSKCEReplicationProtos {
               publickey_ = bs;
               break;
             }
-            case 74: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 72: {
               bitField0_ |= 0x00000100;
-              khdigest_ = bs;
+              transports_ = input.readInt64();
               break;
             }
-            case 82: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 80: {
               bitField0_ |= 0x00000200;
-              khdigestType_ = bs;
+              attsid_ = input.readInt64();
               break;
             }
             case 88: {
               bitField0_ |= 0x00000400;
-              transports_ = input.readInt64();
+              attdid_ = input.readInt64();
               break;
             }
             case 96: {
               bitField0_ |= 0x00000800;
-              attsid_ = input.readInt64();
+              attcid_ = input.readInt64();
               break;
             }
             case 104: {
               bitField0_ |= 0x00001000;
-              attdid_ = input.readInt64();
-              break;
-            }
-            case 112: {
-              bitField0_ |= 0x00002000;
-              attcid_ = input.readInt64();
-              break;
-            }
-            case 120: {
-              bitField0_ |= 0x00004000;
               counter_ = input.readInt64();
+              break;
+            }
+            case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00002000;
+              fidoVersion_ = bs;
+              break;
+            }
+            case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00004000;
+              fidoProtocol_ = bs;
               break;
             }
             case 130: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              fidoVersion_ = bs;
+              aaguid_ = bs;
               break;
             }
             case 138: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              fidoProtocol_ = bs;
-              break;
-            }
-            case 146: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00020000;
-              aaguid_ = bs;
-              break;
-            }
-            case 154: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00040000;
               registrationSettings_ = bs;
               break;
             }
-            case 160: {
-              bitField0_ |= 0x00080000;
+            case 144: {
+              bitField0_ |= 0x00020000;
               registrationSettingsVersion_ = input.readInt64();
+              break;
+            }
+            case 152: {
+              bitField0_ |= 0x00040000;
+              createDate_ = input.readInt64();
+              break;
+            }
+            case 162: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00080000;
+              createLocation_ = bs;
               break;
             }
             case 168: {
               bitField0_ |= 0x00100000;
-              createDate_ = input.readInt64();
+              modifyDate_ = input.readInt64();
               break;
             }
             case 178: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00200000;
-              createLocation_ = bs;
+              modifyLocation_ = bs;
               break;
             }
-            case 184: {
+            case 186: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00400000;
-              modifyDate_ = input.readInt64();
+              status_ = bs;
               break;
             }
             case 194: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00800000;
-              modifyLocation_ = bs;
+              signatureKeytype_ = bs;
               break;
             }
             case 202: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x01000000;
-              status_ = bs;
-              break;
-            }
-            case 210: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x02000000;
               signature_ = bs;
               break;
             }
@@ -2812,175 +2792,91 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int KHDIGEST_FIELD_NUMBER = 9;
-    private java.lang.Object khdigest_;
+    public static final int TRANSPORTS_FIELD_NUMBER = 9;
+    private long transports_;
     /**
-     * <code>optional string khdigest = 9;</code>
+     * <code>optional int64 transports = 9;</code>
      */
-    public boolean hasKhdigest() {
+    public boolean hasTransports() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional string khdigest = 9;</code>
-     */
-    public java.lang.String getKhdigest() {
-      java.lang.Object ref = khdigest_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          khdigest_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string khdigest = 9;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKhdigestBytes() {
-      java.lang.Object ref = khdigest_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        khdigest_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int KHDIGEST_TYPE_FIELD_NUMBER = 10;
-    private java.lang.Object khdigestType_;
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    public boolean hasKhdigestType() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    public java.lang.String getKhdigestType() {
-      java.lang.Object ref = khdigestType_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          khdigestType_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string khdigest_type = 10;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKhdigestTypeBytes() {
-      java.lang.Object ref = khdigestType_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        khdigestType_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int TRANSPORTS_FIELD_NUMBER = 11;
-    private long transports_;
-    /**
-     * <code>optional int64 transports = 11;</code>
-     */
-    public boolean hasTransports() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
-    }
-    /**
-     * <code>optional int64 transports = 11;</code>
+     * <code>optional int64 transports = 9;</code>
      */
     public long getTransports() {
       return transports_;
     }
 
-    public static final int ATTSID_FIELD_NUMBER = 12;
+    public static final int ATTSID_FIELD_NUMBER = 10;
     private long attsid_;
     /**
-     * <code>optional int64 attsid = 12;</code>
+     * <code>optional int64 attsid = 10;</code>
      */
     public boolean hasAttsid() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>optional int64 attsid = 12;</code>
+     * <code>optional int64 attsid = 10;</code>
      */
     public long getAttsid() {
       return attsid_;
     }
 
-    public static final int ATTDID_FIELD_NUMBER = 13;
+    public static final int ATTDID_FIELD_NUMBER = 11;
     private long attdid_;
     /**
-     * <code>optional int64 attdid = 13;</code>
+     * <code>optional int64 attdid = 11;</code>
      */
     public boolean hasAttdid() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional int64 attdid = 13;</code>
+     * <code>optional int64 attdid = 11;</code>
      */
     public long getAttdid() {
       return attdid_;
     }
 
-    public static final int ATTCID_FIELD_NUMBER = 14;
+    public static final int ATTCID_FIELD_NUMBER = 12;
     private long attcid_;
     /**
-     * <code>optional int64 attcid = 14;</code>
+     * <code>optional int64 attcid = 12;</code>
      */
     public boolean hasAttcid() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional int64 attcid = 14;</code>
+     * <code>optional int64 attcid = 12;</code>
      */
     public long getAttcid() {
       return attcid_;
     }
 
-    public static final int COUNTER_FIELD_NUMBER = 15;
+    public static final int COUNTER_FIELD_NUMBER = 13;
     private long counter_;
     /**
-     * <code>required int64 counter = 15;</code>
+     * <code>required int64 counter = 13;</code>
      */
     public boolean hasCounter() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
-     * <code>required int64 counter = 15;</code>
+     * <code>required int64 counter = 13;</code>
      */
     public long getCounter() {
       return counter_;
     }
 
-    public static final int FIDO_VERSION_FIELD_NUMBER = 16;
+    public static final int FIDO_VERSION_FIELD_NUMBER = 14;
     private java.lang.Object fidoVersion_;
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     public boolean hasFidoVersion() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     public java.lang.String getFidoVersion() {
       java.lang.Object ref = fidoVersion_;
@@ -2997,7 +2893,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string fido_version = 16;</code>
+     * <code>optional string fido_version = 14;</code>
      */
     public com.google.protobuf.ByteString
         getFidoVersionBytes() {
@@ -3013,16 +2909,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int FIDO_PROTOCOL_FIELD_NUMBER = 17;
+    public static final int FIDO_PROTOCOL_FIELD_NUMBER = 15;
     private java.lang.Object fidoProtocol_;
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     public boolean hasFidoProtocol() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     public java.lang.String getFidoProtocol() {
       java.lang.Object ref = fidoProtocol_;
@@ -3039,7 +2935,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string fido_protocol = 17;</code>
+     * <code>optional string fido_protocol = 15;</code>
      */
     public com.google.protobuf.ByteString
         getFidoProtocolBytes() {
@@ -3055,16 +2951,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int AAGUID_FIELD_NUMBER = 18;
+    public static final int AAGUID_FIELD_NUMBER = 16;
     private java.lang.Object aaguid_;
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     public boolean hasAaguid() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     public java.lang.String getAaguid() {
       java.lang.Object ref = aaguid_;
@@ -3081,7 +2977,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string aaguid = 18;</code>
+     * <code>optional string aaguid = 16;</code>
      */
     public com.google.protobuf.ByteString
         getAaguidBytes() {
@@ -3097,16 +2993,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int REGISTRATION_SETTINGS_FIELD_NUMBER = 19;
+    public static final int REGISTRATION_SETTINGS_FIELD_NUMBER = 17;
     private java.lang.Object registrationSettings_;
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     public boolean hasRegistrationSettings() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
+      return ((bitField0_ & 0x00010000) == 0x00010000);
     }
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     public java.lang.String getRegistrationSettings() {
       java.lang.Object ref = registrationSettings_;
@@ -3123,7 +3019,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string registration_settings = 19;</code>
+     * <code>optional string registration_settings = 17;</code>
      */
     public com.google.protobuf.ByteString
         getRegistrationSettingsBytes() {
@@ -3139,46 +3035,46 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int REGISTRATION_SETTINGS_VERSION_FIELD_NUMBER = 20;
+    public static final int REGISTRATION_SETTINGS_VERSION_FIELD_NUMBER = 18;
     private long registrationSettingsVersion_;
     /**
-     * <code>optional int64 registration_settings_version = 20;</code>
+     * <code>optional int64 registration_settings_version = 18;</code>
      */
     public boolean hasRegistrationSettingsVersion() {
-      return ((bitField0_ & 0x00080000) == 0x00080000);
+      return ((bitField0_ & 0x00020000) == 0x00020000);
     }
     /**
-     * <code>optional int64 registration_settings_version = 20;</code>
+     * <code>optional int64 registration_settings_version = 18;</code>
      */
     public long getRegistrationSettingsVersion() {
       return registrationSettingsVersion_;
     }
 
-    public static final int CREATE_DATE_FIELD_NUMBER = 21;
+    public static final int CREATE_DATE_FIELD_NUMBER = 19;
     private long createDate_;
     /**
-     * <code>required int64 create_date = 21;</code>
+     * <code>required int64 create_date = 19;</code>
      */
     public boolean hasCreateDate() {
-      return ((bitField0_ & 0x00100000) == 0x00100000);
+      return ((bitField0_ & 0x00040000) == 0x00040000);
     }
     /**
-     * <code>required int64 create_date = 21;</code>
+     * <code>required int64 create_date = 19;</code>
      */
     public long getCreateDate() {
       return createDate_;
     }
 
-    public static final int CREATE_LOCATION_FIELD_NUMBER = 22;
+    public static final int CREATE_LOCATION_FIELD_NUMBER = 20;
     private java.lang.Object createLocation_;
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     public boolean hasCreateLocation() {
-      return ((bitField0_ & 0x00200000) == 0x00200000);
+      return ((bitField0_ & 0x00080000) == 0x00080000);
     }
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     public java.lang.String getCreateLocation() {
       java.lang.Object ref = createLocation_;
@@ -3195,7 +3091,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string create_location = 22;</code>
+     * <code>required string create_location = 20;</code>
      */
     public com.google.protobuf.ByteString
         getCreateLocationBytes() {
@@ -3211,31 +3107,31 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int MODIFY_DATE_FIELD_NUMBER = 23;
+    public static final int MODIFY_DATE_FIELD_NUMBER = 21;
     private long modifyDate_;
     /**
-     * <code>optional int64 modify_date = 23;</code>
+     * <code>optional int64 modify_date = 21;</code>
      */
     public boolean hasModifyDate() {
-      return ((bitField0_ & 0x00400000) == 0x00400000);
+      return ((bitField0_ & 0x00100000) == 0x00100000);
     }
     /**
-     * <code>optional int64 modify_date = 23;</code>
+     * <code>optional int64 modify_date = 21;</code>
      */
     public long getModifyDate() {
       return modifyDate_;
     }
 
-    public static final int MODIFY_LOCATION_FIELD_NUMBER = 24;
+    public static final int MODIFY_LOCATION_FIELD_NUMBER = 22;
     private java.lang.Object modifyLocation_;
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     public boolean hasModifyLocation() {
-      return ((bitField0_ & 0x00800000) == 0x00800000);
+      return ((bitField0_ & 0x00200000) == 0x00200000);
     }
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     public java.lang.String getModifyLocation() {
       java.lang.Object ref = modifyLocation_;
@@ -3252,7 +3148,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string modify_location = 24;</code>
+     * <code>optional string modify_location = 22;</code>
      */
     public com.google.protobuf.ByteString
         getModifyLocationBytes() {
@@ -3268,16 +3164,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int STATUS_FIELD_NUMBER = 25;
+    public static final int STATUS_FIELD_NUMBER = 23;
     private java.lang.Object status_;
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     public boolean hasStatus() {
-      return ((bitField0_ & 0x01000000) == 0x01000000);
+      return ((bitField0_ & 0x00400000) == 0x00400000);
     }
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     public java.lang.String getStatus() {
       java.lang.Object ref = status_;
@@ -3294,7 +3190,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string status = 25;</code>
+     * <code>required string status = 23;</code>
      */
     public com.google.protobuf.ByteString
         getStatusBytes() {
@@ -3310,16 +3206,58 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int SIGNATURE_FIELD_NUMBER = 26;
-    private java.lang.Object signature_;
+    public static final int SIGNATURE_KEYTYPE_FIELD_NUMBER = 24;
+    private java.lang.Object signatureKeytype_;
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>required string signature_keytype = 24;</code>
      */
-    public boolean hasSignature() {
-      return ((bitField0_ & 0x02000000) == 0x02000000);
+    public boolean hasSignatureKeytype() {
+      return ((bitField0_ & 0x00800000) == 0x00800000);
     }
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>required string signature_keytype = 24;</code>
+     */
+    public java.lang.String getSignatureKeytype() {
+      java.lang.Object ref = signatureKeytype_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          signatureKeytype_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string signature_keytype = 24;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSignatureKeytypeBytes() {
+      java.lang.Object ref = signatureKeytype_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        signatureKeytype_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SIGNATURE_FIELD_NUMBER = 25;
+    private java.lang.Object signature_;
+    /**
+     * <code>optional string signature = 25;</code>
+     */
+    public boolean hasSignature() {
+      return ((bitField0_ & 0x01000000) == 0x01000000);
+    }
+    /**
+     * <code>optional string signature = 25;</code>
      */
     public java.lang.String getSignature() {
       java.lang.Object ref = signature_;
@@ -3336,7 +3274,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string signature = 26;</code>
+     * <code>optional string signature = 25;</code>
      */
     public com.google.protobuf.ByteString
         getSignatureBytes() {
@@ -3361,8 +3299,6 @@ public final class ZMQSKCEReplicationProtos {
       keyhandle_ = "";
       appid_ = "";
       publickey_ = "";
-      khdigest_ = "";
-      khdigestType_ = "";
       transports_ = 0L;
       attsid_ = 0L;
       attdid_ = 0L;
@@ -3378,6 +3314,7 @@ public final class ZMQSKCEReplicationProtos {
       modifyDate_ = 0L;
       modifyLocation_ = "";
       status_ = "";
+      signatureKeytype_ = "";
       signature_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -3430,6 +3367,10 @@ public final class ZMQSKCEReplicationProtos {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasSignatureKeytype()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3462,58 +3403,55 @@ public final class ZMQSKCEReplicationProtos {
         output.writeBytes(8, getPublickeyBytes());
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(9, getKhdigestBytes());
+        output.writeInt64(9, transports_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeBytes(10, getKhdigestTypeBytes());
+        output.writeInt64(10, attsid_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeInt64(11, transports_);
+        output.writeInt64(11, attdid_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeInt64(12, attsid_);
+        output.writeInt64(12, attcid_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeInt64(13, attdid_);
+        output.writeInt64(13, counter_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeInt64(14, attcid_);
+        output.writeBytes(14, getFidoVersionBytes());
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeInt64(15, counter_);
+        output.writeBytes(15, getFidoProtocolBytes());
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeBytes(16, getFidoVersionBytes());
+        output.writeBytes(16, getAaguidBytes());
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeBytes(17, getFidoProtocolBytes());
+        output.writeBytes(17, getRegistrationSettingsBytes());
       }
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        output.writeBytes(18, getAaguidBytes());
+        output.writeInt64(18, registrationSettingsVersion_);
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        output.writeBytes(19, getRegistrationSettingsBytes());
+        output.writeInt64(19, createDate_);
       }
       if (((bitField0_ & 0x00080000) == 0x00080000)) {
-        output.writeInt64(20, registrationSettingsVersion_);
+        output.writeBytes(20, getCreateLocationBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
-        output.writeInt64(21, createDate_);
+        output.writeInt64(21, modifyDate_);
       }
       if (((bitField0_ & 0x00200000) == 0x00200000)) {
-        output.writeBytes(22, getCreateLocationBytes());
+        output.writeBytes(22, getModifyLocationBytes());
       }
       if (((bitField0_ & 0x00400000) == 0x00400000)) {
-        output.writeInt64(23, modifyDate_);
+        output.writeBytes(23, getStatusBytes());
       }
       if (((bitField0_ & 0x00800000) == 0x00800000)) {
-        output.writeBytes(24, getModifyLocationBytes());
+        output.writeBytes(24, getSignatureKeytypeBytes());
       }
       if (((bitField0_ & 0x01000000) == 0x01000000)) {
-        output.writeBytes(25, getStatusBytes());
-      }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
-        output.writeBytes(26, getSignatureBytes());
+        output.writeBytes(25, getSignatureBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -3558,75 +3496,71 @@ public final class ZMQSKCEReplicationProtos {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(9, getKhdigestBytes());
+          .computeInt64Size(9, transports_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(10, getKhdigestTypeBytes());
+          .computeInt64Size(10, attsid_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(11, transports_);
+          .computeInt64Size(11, attdid_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(12, attsid_);
+          .computeInt64Size(12, attcid_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(13, attdid_);
+          .computeInt64Size(13, counter_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(14, attcid_);
+          .computeBytesSize(14, getFidoVersionBytes());
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(15, counter_);
+          .computeBytesSize(15, getFidoProtocolBytes());
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(16, getFidoVersionBytes());
+          .computeBytesSize(16, getAaguidBytes());
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(17, getFidoProtocolBytes());
+          .computeBytesSize(17, getRegistrationSettingsBytes());
       }
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(18, getAaguidBytes());
+          .computeInt64Size(18, registrationSettingsVersion_);
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(19, getRegistrationSettingsBytes());
+          .computeInt64Size(19, createDate_);
       }
       if (((bitField0_ & 0x00080000) == 0x00080000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(20, registrationSettingsVersion_);
+          .computeBytesSize(20, getCreateLocationBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(21, createDate_);
+          .computeInt64Size(21, modifyDate_);
       }
       if (((bitField0_ & 0x00200000) == 0x00200000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(22, getCreateLocationBytes());
+          .computeBytesSize(22, getModifyLocationBytes());
       }
       if (((bitField0_ & 0x00400000) == 0x00400000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(23, modifyDate_);
+          .computeBytesSize(23, getStatusBytes());
       }
       if (((bitField0_ & 0x00800000) == 0x00800000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(24, getModifyLocationBytes());
+          .computeBytesSize(24, getSignatureKeytypeBytes());
       }
       if (((bitField0_ & 0x01000000) == 0x01000000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(25, getStatusBytes());
-      }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(26, getSignatureBytes());
+          .computeBytesSize(25, getSignatureBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3761,42 +3695,40 @@ public final class ZMQSKCEReplicationProtos {
         bitField0_ = (bitField0_ & ~0x00000040);
         publickey_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
-        khdigest_ = "";
-        bitField0_ = (bitField0_ & ~0x00000100);
-        khdigestType_ = "";
-        bitField0_ = (bitField0_ & ~0x00000200);
         transports_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
         attsid_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         attdid_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         attcid_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         counter_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         fidoVersion_ = "";
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         fidoProtocol_ = "";
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         aaguid_ = "";
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         registrationSettings_ = "";
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         registrationSettingsVersion_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         createDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         createLocation_ = "";
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         modifyDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         modifyLocation_ = "";
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         status_ = "";
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x00400000);
+        signatureKeytype_ = "";
+        bitField0_ = (bitField0_ & ~0x00800000);
         signature_ = "";
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         return this;
       }
 
@@ -3860,73 +3792,69 @@ public final class ZMQSKCEReplicationProtos {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
         }
-        result.khdigest_ = khdigest_;
+        result.transports_ = transports_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.khdigestType_ = khdigestType_;
+        result.attsid_ = attsid_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000400;
         }
-        result.transports_ = transports_;
+        result.attdid_ = attdid_;
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.attsid_ = attsid_;
+        result.attcid_ = attcid_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00001000;
         }
-        result.attdid_ = attdid_;
+        result.counter_ = counter_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00002000;
         }
-        result.attcid_ = attcid_;
+        result.fidoVersion_ = fidoVersion_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00004000;
         }
-        result.counter_ = counter_;
+        result.fidoProtocol_ = fidoProtocol_;
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00008000;
         }
-        result.fidoVersion_ = fidoVersion_;
+        result.aaguid_ = aaguid_;
         if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
           to_bitField0_ |= 0x00010000;
         }
-        result.fidoProtocol_ = fidoProtocol_;
+        result.registrationSettings_ = registrationSettings_;
         if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
           to_bitField0_ |= 0x00020000;
         }
-        result.aaguid_ = aaguid_;
+        result.registrationSettingsVersion_ = registrationSettingsVersion_;
         if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
           to_bitField0_ |= 0x00040000;
         }
-        result.registrationSettings_ = registrationSettings_;
+        result.createDate_ = createDate_;
         if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00080000;
         }
-        result.registrationSettingsVersion_ = registrationSettingsVersion_;
+        result.createLocation_ = createLocation_;
         if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
           to_bitField0_ |= 0x00100000;
         }
-        result.createDate_ = createDate_;
+        result.modifyDate_ = modifyDate_;
         if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
           to_bitField0_ |= 0x00200000;
         }
-        result.createLocation_ = createLocation_;
+        result.modifyLocation_ = modifyLocation_;
         if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
           to_bitField0_ |= 0x00400000;
         }
-        result.modifyDate_ = modifyDate_;
+        result.status_ = status_;
         if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
           to_bitField0_ |= 0x00800000;
         }
-        result.modifyLocation_ = modifyLocation_;
+        result.signatureKeytype_ = signatureKeytype_;
         if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
           to_bitField0_ |= 0x01000000;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
-          to_bitField0_ |= 0x02000000;
         }
         result.signature_ = signature_;
         result.bitField0_ = to_bitField0_;
@@ -3979,16 +3907,6 @@ public final class ZMQSKCEReplicationProtos {
           publickey_ = other.publickey_;
           onChanged();
         }
-        if (other.hasKhdigest()) {
-          bitField0_ |= 0x00000100;
-          khdigest_ = other.khdigest_;
-          onChanged();
-        }
-        if (other.hasKhdigestType()) {
-          bitField0_ |= 0x00000200;
-          khdigestType_ = other.khdigestType_;
-          onChanged();
-        }
         if (other.hasTransports()) {
           setTransports(other.getTransports());
         }
@@ -4005,22 +3923,22 @@ public final class ZMQSKCEReplicationProtos {
           setCounter(other.getCounter());
         }
         if (other.hasFidoVersion()) {
-          bitField0_ |= 0x00008000;
+          bitField0_ |= 0x00002000;
           fidoVersion_ = other.fidoVersion_;
           onChanged();
         }
         if (other.hasFidoProtocol()) {
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00004000;
           fidoProtocol_ = other.fidoProtocol_;
           onChanged();
         }
         if (other.hasAaguid()) {
-          bitField0_ |= 0x00020000;
+          bitField0_ |= 0x00008000;
           aaguid_ = other.aaguid_;
           onChanged();
         }
         if (other.hasRegistrationSettings()) {
-          bitField0_ |= 0x00040000;
+          bitField0_ |= 0x00010000;
           registrationSettings_ = other.registrationSettings_;
           onChanged();
         }
@@ -4031,7 +3949,7 @@ public final class ZMQSKCEReplicationProtos {
           setCreateDate(other.getCreateDate());
         }
         if (other.hasCreateLocation()) {
-          bitField0_ |= 0x00200000;
+          bitField0_ |= 0x00080000;
           createLocation_ = other.createLocation_;
           onChanged();
         }
@@ -4039,17 +3957,22 @@ public final class ZMQSKCEReplicationProtos {
           setModifyDate(other.getModifyDate());
         }
         if (other.hasModifyLocation()) {
-          bitField0_ |= 0x00800000;
+          bitField0_ |= 0x00200000;
           modifyLocation_ = other.modifyLocation_;
           onChanged();
         }
         if (other.hasStatus()) {
-          bitField0_ |= 0x01000000;
+          bitField0_ |= 0x00400000;
           status_ = other.status_;
           onChanged();
         }
+        if (other.hasSignatureKeytype()) {
+          bitField0_ |= 0x00800000;
+          signatureKeytype_ = other.signatureKeytype_;
+          onChanged();
+        }
         if (other.hasSignature()) {
-          bitField0_ |= 0x02000000;
+          bitField0_ |= 0x01000000;
           signature_ = other.signature_;
           onChanged();
         }
@@ -4099,6 +4022,10 @@ public final class ZMQSKCEReplicationProtos {
           return false;
         }
         if (!hasStatus()) {
+          
+          return false;
+        }
+        if (!hasSignatureKeytype()) {
           
           return false;
         }
@@ -4600,185 +4527,33 @@ public final class ZMQSKCEReplicationProtos {
         return this;
       }
 
-      private java.lang.Object khdigest_ = "";
+      private long transports_ ;
       /**
-       * <code>optional string khdigest = 9;</code>
+       * <code>optional int64 transports = 9;</code>
        */
-      public boolean hasKhdigest() {
+      public boolean hasTransports() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional string khdigest = 9;</code>
-       */
-      public java.lang.String getKhdigest() {
-        java.lang.Object ref = khdigest_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            khdigest_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string khdigest = 9;</code>
-       */
-      public com.google.protobuf.ByteString
-          getKhdigestBytes() {
-        java.lang.Object ref = khdigest_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          khdigest_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string khdigest = 9;</code>
-       */
-      public Builder setKhdigest(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000100;
-        khdigest_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string khdigest = 9;</code>
-       */
-      public Builder clearKhdigest() {
-        bitField0_ = (bitField0_ & ~0x00000100);
-        khdigest_ = getDefaultInstance().getKhdigest();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string khdigest = 9;</code>
-       */
-      public Builder setKhdigestBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000100;
-        khdigest_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object khdigestType_ = "";
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public boolean hasKhdigestType() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
-      }
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public java.lang.String getKhdigestType() {
-        java.lang.Object ref = khdigestType_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            khdigestType_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public com.google.protobuf.ByteString
-          getKhdigestTypeBytes() {
-        java.lang.Object ref = khdigestType_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          khdigestType_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public Builder setKhdigestType(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000200;
-        khdigestType_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public Builder clearKhdigestType() {
-        bitField0_ = (bitField0_ & ~0x00000200);
-        khdigestType_ = getDefaultInstance().getKhdigestType();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string khdigest_type = 10;</code>
-       */
-      public Builder setKhdigestTypeBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000200;
-        khdigestType_ = value;
-        onChanged();
-        return this;
-      }
-
-      private long transports_ ;
-      /**
-       * <code>optional int64 transports = 11;</code>
-       */
-      public boolean hasTransports() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
-      }
-      /**
-       * <code>optional int64 transports = 11;</code>
+       * <code>optional int64 transports = 9;</code>
        */
       public long getTransports() {
         return transports_;
       }
       /**
-       * <code>optional int64 transports = 11;</code>
+       * <code>optional int64 transports = 9;</code>
        */
       public Builder setTransports(long value) {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         transports_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 transports = 11;</code>
+       * <code>optional int64 transports = 9;</code>
        */
       public Builder clearTransports() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
         transports_ = 0L;
         onChanged();
         return this;
@@ -4786,31 +4561,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long attsid_ ;
       /**
-       * <code>optional int64 attsid = 12;</code>
+       * <code>optional int64 attsid = 10;</code>
        */
       public boolean hasAttsid() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional int64 attsid = 12;</code>
+       * <code>optional int64 attsid = 10;</code>
        */
       public long getAttsid() {
         return attsid_;
       }
       /**
-       * <code>optional int64 attsid = 12;</code>
+       * <code>optional int64 attsid = 10;</code>
        */
       public Builder setAttsid(long value) {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00000200;
         attsid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 attsid = 12;</code>
+       * <code>optional int64 attsid = 10;</code>
        */
       public Builder clearAttsid() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         attsid_ = 0L;
         onChanged();
         return this;
@@ -4818,31 +4593,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long attdid_ ;
       /**
-       * <code>optional int64 attdid = 13;</code>
+       * <code>optional int64 attdid = 11;</code>
        */
       public boolean hasAttdid() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional int64 attdid = 13;</code>
+       * <code>optional int64 attdid = 11;</code>
        */
       public long getAttdid() {
         return attdid_;
       }
       /**
-       * <code>optional int64 attdid = 13;</code>
+       * <code>optional int64 attdid = 11;</code>
        */
       public Builder setAttdid(long value) {
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00000400;
         attdid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 attdid = 13;</code>
+       * <code>optional int64 attdid = 11;</code>
        */
       public Builder clearAttdid() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         attdid_ = 0L;
         onChanged();
         return this;
@@ -4850,31 +4625,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long attcid_ ;
       /**
-       * <code>optional int64 attcid = 14;</code>
+       * <code>optional int64 attcid = 12;</code>
        */
       public boolean hasAttcid() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional int64 attcid = 14;</code>
+       * <code>optional int64 attcid = 12;</code>
        */
       public long getAttcid() {
         return attcid_;
       }
       /**
-       * <code>optional int64 attcid = 14;</code>
+       * <code>optional int64 attcid = 12;</code>
        */
       public Builder setAttcid(long value) {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         attcid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 attcid = 14;</code>
+       * <code>optional int64 attcid = 12;</code>
        */
       public Builder clearAttcid() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         attcid_ = 0L;
         onChanged();
         return this;
@@ -4882,31 +4657,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long counter_ ;
       /**
-       * <code>required int64 counter = 15;</code>
+       * <code>required int64 counter = 13;</code>
        */
       public boolean hasCounter() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>required int64 counter = 15;</code>
+       * <code>required int64 counter = 13;</code>
        */
       public long getCounter() {
         return counter_;
       }
       /**
-       * <code>required int64 counter = 15;</code>
+       * <code>required int64 counter = 13;</code>
        */
       public Builder setCounter(long value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00001000;
         counter_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int64 counter = 15;</code>
+       * <code>required int64 counter = 13;</code>
        */
       public Builder clearCounter() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         counter_ = 0L;
         onChanged();
         return this;
@@ -4914,13 +4689,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object fidoVersion_ = "";
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public boolean hasFidoVersion() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public java.lang.String getFidoVersion() {
         java.lang.Object ref = fidoVersion_;
@@ -4937,7 +4712,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public com.google.protobuf.ByteString
           getFidoVersionBytes() {
@@ -4953,36 +4728,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public Builder setFidoVersion(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00008000;
+  bitField0_ |= 0x00002000;
         fidoVersion_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public Builder clearFidoVersion() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         fidoVersion_ = getDefaultInstance().getFidoVersion();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fido_version = 16;</code>
+       * <code>optional string fido_version = 14;</code>
        */
       public Builder setFidoVersionBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00008000;
+  bitField0_ |= 0x00002000;
         fidoVersion_ = value;
         onChanged();
         return this;
@@ -4990,13 +4765,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object fidoProtocol_ = "";
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public boolean hasFidoProtocol() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public java.lang.String getFidoProtocol() {
         java.lang.Object ref = fidoProtocol_;
@@ -5013,7 +4788,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public com.google.protobuf.ByteString
           getFidoProtocolBytes() {
@@ -5029,36 +4804,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public Builder setFidoProtocol(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00010000;
+  bitField0_ |= 0x00004000;
         fidoProtocol_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public Builder clearFidoProtocol() {
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         fidoProtocol_ = getDefaultInstance().getFidoProtocol();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string fido_protocol = 17;</code>
+       * <code>optional string fido_protocol = 15;</code>
        */
       public Builder setFidoProtocolBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00010000;
+  bitField0_ |= 0x00004000;
         fidoProtocol_ = value;
         onChanged();
         return this;
@@ -5066,13 +4841,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object aaguid_ = "";
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public boolean hasAaguid() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public java.lang.String getAaguid() {
         java.lang.Object ref = aaguid_;
@@ -5089,7 +4864,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public com.google.protobuf.ByteString
           getAaguidBytes() {
@@ -5105,36 +4880,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public Builder setAaguid(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00020000;
+  bitField0_ |= 0x00008000;
         aaguid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public Builder clearAaguid() {
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         aaguid_ = getDefaultInstance().getAaguid();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string aaguid = 18;</code>
+       * <code>optional string aaguid = 16;</code>
        */
       public Builder setAaguidBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00020000;
+  bitField0_ |= 0x00008000;
         aaguid_ = value;
         onChanged();
         return this;
@@ -5142,13 +4917,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object registrationSettings_ = "";
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public boolean hasRegistrationSettings() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public java.lang.String getRegistrationSettings() {
         java.lang.Object ref = registrationSettings_;
@@ -5165,7 +4940,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public com.google.protobuf.ByteString
           getRegistrationSettingsBytes() {
@@ -5181,36 +4956,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public Builder setRegistrationSettings(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00040000;
+  bitField0_ |= 0x00010000;
         registrationSettings_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public Builder clearRegistrationSettings() {
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         registrationSettings_ = getDefaultInstance().getRegistrationSettings();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string registration_settings = 19;</code>
+       * <code>optional string registration_settings = 17;</code>
        */
       public Builder setRegistrationSettingsBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00040000;
+  bitField0_ |= 0x00010000;
         registrationSettings_ = value;
         onChanged();
         return this;
@@ -5218,31 +4993,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long registrationSettingsVersion_ ;
       /**
-       * <code>optional int64 registration_settings_version = 20;</code>
+       * <code>optional int64 registration_settings_version = 18;</code>
        */
       public boolean hasRegistrationSettingsVersion() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       /**
-       * <code>optional int64 registration_settings_version = 20;</code>
+       * <code>optional int64 registration_settings_version = 18;</code>
        */
       public long getRegistrationSettingsVersion() {
         return registrationSettingsVersion_;
       }
       /**
-       * <code>optional int64 registration_settings_version = 20;</code>
+       * <code>optional int64 registration_settings_version = 18;</code>
        */
       public Builder setRegistrationSettingsVersion(long value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00020000;
         registrationSettingsVersion_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 registration_settings_version = 20;</code>
+       * <code>optional int64 registration_settings_version = 18;</code>
        */
       public Builder clearRegistrationSettingsVersion() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         registrationSettingsVersion_ = 0L;
         onChanged();
         return this;
@@ -5250,31 +5025,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long createDate_ ;
       /**
-       * <code>required int64 create_date = 21;</code>
+       * <code>required int64 create_date = 19;</code>
        */
       public boolean hasCreateDate() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       /**
-       * <code>required int64 create_date = 21;</code>
+       * <code>required int64 create_date = 19;</code>
        */
       public long getCreateDate() {
         return createDate_;
       }
       /**
-       * <code>required int64 create_date = 21;</code>
+       * <code>required int64 create_date = 19;</code>
        */
       public Builder setCreateDate(long value) {
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00040000;
         createDate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int64 create_date = 21;</code>
+       * <code>required int64 create_date = 19;</code>
        */
       public Builder clearCreateDate() {
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         createDate_ = 0L;
         onChanged();
         return this;
@@ -5282,13 +5057,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object createLocation_ = "";
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public boolean hasCreateLocation() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public java.lang.String getCreateLocation() {
         java.lang.Object ref = createLocation_;
@@ -5305,7 +5080,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public com.google.protobuf.ByteString
           getCreateLocationBytes() {
@@ -5321,36 +5096,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public Builder setCreateLocation(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00200000;
+  bitField0_ |= 0x00080000;
         createLocation_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public Builder clearCreateLocation() {
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         createLocation_ = getDefaultInstance().getCreateLocation();
         onChanged();
         return this;
       }
       /**
-       * <code>required string create_location = 22;</code>
+       * <code>required string create_location = 20;</code>
        */
       public Builder setCreateLocationBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00200000;
+  bitField0_ |= 0x00080000;
         createLocation_ = value;
         onChanged();
         return this;
@@ -5358,31 +5133,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long modifyDate_ ;
       /**
-       * <code>optional int64 modify_date = 23;</code>
+       * <code>optional int64 modify_date = 21;</code>
        */
       public boolean hasModifyDate() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+        return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
-       * <code>optional int64 modify_date = 23;</code>
+       * <code>optional int64 modify_date = 21;</code>
        */
       public long getModifyDate() {
         return modifyDate_;
       }
       /**
-       * <code>optional int64 modify_date = 23;</code>
+       * <code>optional int64 modify_date = 21;</code>
        */
       public Builder setModifyDate(long value) {
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00100000;
         modifyDate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 modify_date = 23;</code>
+       * <code>optional int64 modify_date = 21;</code>
        */
       public Builder clearModifyDate() {
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         modifyDate_ = 0L;
         onChanged();
         return this;
@@ -5390,13 +5165,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object modifyLocation_ = "";
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public boolean hasModifyLocation() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
+        return ((bitField0_ & 0x00200000) == 0x00200000);
       }
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public java.lang.String getModifyLocation() {
         java.lang.Object ref = modifyLocation_;
@@ -5413,7 +5188,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public com.google.protobuf.ByteString
           getModifyLocationBytes() {
@@ -5429,36 +5204,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public Builder setModifyLocation(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
+  bitField0_ |= 0x00200000;
         modifyLocation_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public Builder clearModifyLocation() {
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         modifyLocation_ = getDefaultInstance().getModifyLocation();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string modify_location = 24;</code>
+       * <code>optional string modify_location = 22;</code>
        */
       public Builder setModifyLocationBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
+  bitField0_ |= 0x00200000;
         modifyLocation_ = value;
         onChanged();
         return this;
@@ -5466,13 +5241,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object status_ = "";
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public boolean hasStatus() {
-        return ((bitField0_ & 0x01000000) == 0x01000000);
+        return ((bitField0_ & 0x00400000) == 0x00400000);
       }
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public java.lang.String getStatus() {
         java.lang.Object ref = status_;
@@ -5489,7 +5264,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public com.google.protobuf.ByteString
           getStatusBytes() {
@@ -5505,50 +5280,126 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public Builder setStatus(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x01000000;
+  bitField0_ |= 0x00400000;
         status_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public Builder clearStatus() {
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x00400000);
         status_ = getDefaultInstance().getStatus();
         onChanged();
         return this;
       }
       /**
-       * <code>required string status = 25;</code>
+       * <code>required string status = 23;</code>
        */
       public Builder setStatusBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x01000000;
+  bitField0_ |= 0x00400000;
         status_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object signatureKeytype_ = "";
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public boolean hasSignatureKeytype() {
+        return ((bitField0_ & 0x00800000) == 0x00800000);
+      }
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public java.lang.String getSignatureKeytype() {
+        java.lang.Object ref = signatureKeytype_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            signatureKeytype_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSignatureKeytypeBytes() {
+        java.lang.Object ref = signatureKeytype_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          signatureKeytype_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public Builder setSignatureKeytype(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        signatureKeytype_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public Builder clearSignatureKeytype() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        signatureKeytype_ = getDefaultInstance().getSignatureKeytype();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string signature_keytype = 24;</code>
+       */
+      public Builder setSignatureKeytypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        signatureKeytype_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object signature_ = "";
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public boolean hasSignature() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
+        return ((bitField0_ & 0x01000000) == 0x01000000);
       }
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public java.lang.String getSignature() {
         java.lang.Object ref = signature_;
@@ -5565,7 +5416,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public com.google.protobuf.ByteString
           getSignatureBytes() {
@@ -5581,36 +5432,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public Builder setSignature(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x02000000;
+  bitField0_ |= 0x01000000;
         signature_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public Builder clearSignature() {
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         signature_ = getDefaultInstance().getSignature();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string signature = 26;</code>
+       * <code>optional string signature = 25;</code>
        */
       public Builder setSignatureBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x02000000;
+  bitField0_ |= 0x01000000;
         signature_ = value;
         onChanged();
         return this;
@@ -15341,116 +15192,75 @@ public final class ZMQSKCEReplicationProtos {
     long getPid();
 
     /**
-     * <code>required int64 start_date = 4;</code>
-     */
-    boolean hasStartDate();
-    /**
-     * <code>required int64 start_date = 4;</code>
-     */
-    long getStartDate();
-
-    /**
-     * <code>optional int64 end_date = 5;</code>
-     */
-    boolean hasEndDate();
-    /**
-     * <code>optional int64 end_date = 5;</code>
-     */
-    long getEndDate();
-
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    boolean hasCertificateProfileName();
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    java.lang.String getCertificateProfileName();
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    com.google.protobuf.ByteString
-        getCertificateProfileNameBytes();
-
-    /**
-     * <code>required string policy = 7;</code>
+     * <code>required string policy = 4;</code>
      */
     boolean hasPolicy();
     /**
-     * <code>required string policy = 7;</code>
+     * <code>required string policy = 4;</code>
      */
     java.lang.String getPolicy();
     /**
-     * <code>required string policy = 7;</code>
+     * <code>required string policy = 4;</code>
      */
     com.google.protobuf.ByteString
         getPolicyBytes();
 
     /**
-     * <code>required int64 version = 8;</code>
-     */
-    boolean hasVersion();
-    /**
-     * <code>required int64 version = 8;</code>
-     */
-    long getVersion();
-
-    /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     boolean hasStatus();
     /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     java.lang.String getStatus();
     /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     com.google.protobuf.ByteString
         getStatusBytes();
 
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     boolean hasNotes();
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     java.lang.String getNotes();
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     com.google.protobuf.ByteString
         getNotesBytes();
 
     /**
-     * <code>required int64 create_date = 11;</code>
+     * <code>required int64 create_date = 7;</code>
      */
     boolean hasCreateDate();
     /**
-     * <code>required int64 create_date = 11;</code>
+     * <code>required int64 create_date = 7;</code>
      */
     long getCreateDate();
 
     /**
-     * <code>optional int64 modify_date = 12;</code>
+     * <code>optional int64 modify_date = 8;</code>
      */
     boolean hasModifyDate();
     /**
-     * <code>optional int64 modify_date = 12;</code>
+     * <code>optional int64 modify_date = 8;</code>
      */
     long getModifyDate();
 
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     boolean hasSignature();
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     java.lang.String getSignature();
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     com.google.protobuf.ByteString
         getSignatureBytes();
@@ -15522,58 +15332,37 @@ public final class ZMQSKCEReplicationProtos {
               pid_ = input.readInt64();
               break;
             }
-            case 32: {
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              startDate_ = input.readInt64();
+              policy_ = bs;
               break;
             }
-            case 40: {
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              endDate_ = input.readInt64();
+              status_ = bs;
               break;
             }
             case 50: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              certificateProfileName_ = bs;
+              notes_ = bs;
               break;
             }
-            case 58: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+            case 56: {
               bitField0_ |= 0x00000040;
-              policy_ = bs;
+              createDate_ = input.readInt64();
               break;
             }
             case 64: {
               bitField0_ |= 0x00000080;
-              version_ = input.readInt64();
+              modifyDate_ = input.readInt64();
               break;
             }
             case 74: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              status_ = bs;
-              break;
-            }
-            case 82: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000200;
-              notes_ = bs;
-              break;
-            }
-            case 88: {
-              bitField0_ |= 0x00000400;
-              createDate_ = input.readInt64();
-              break;
-            }
-            case 96: {
-              bitField0_ |= 0x00000800;
-              modifyDate_ = input.readInt64();
-              break;
-            }
-            case 106: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00001000;
               signature_ = bs;
               break;
             }
@@ -15662,88 +15451,16 @@ public final class ZMQSKCEReplicationProtos {
       return pid_;
     }
 
-    public static final int START_DATE_FIELD_NUMBER = 4;
-    private long startDate_;
+    public static final int POLICY_FIELD_NUMBER = 4;
+    private java.lang.Object policy_;
     /**
-     * <code>required int64 start_date = 4;</code>
+     * <code>required string policy = 4;</code>
      */
-    public boolean hasStartDate() {
+    public boolean hasPolicy() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required int64 start_date = 4;</code>
-     */
-    public long getStartDate() {
-      return startDate_;
-    }
-
-    public static final int END_DATE_FIELD_NUMBER = 5;
-    private long endDate_;
-    /**
-     * <code>optional int64 end_date = 5;</code>
-     */
-    public boolean hasEndDate() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int64 end_date = 5;</code>
-     */
-    public long getEndDate() {
-      return endDate_;
-    }
-
-    public static final int CERTIFICATE_PROFILE_NAME_FIELD_NUMBER = 6;
-    private java.lang.Object certificateProfileName_;
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    public boolean hasCertificateProfileName() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    public java.lang.String getCertificateProfileName() {
-      java.lang.Object ref = certificateProfileName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          certificateProfileName_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string certificate_profile_name = 6;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCertificateProfileNameBytes() {
-      java.lang.Object ref = certificateProfileName_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        certificateProfileName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int POLICY_FIELD_NUMBER = 7;
-    private java.lang.Object policy_;
-    /**
-     * <code>required string policy = 7;</code>
-     */
-    public boolean hasPolicy() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>required string policy = 7;</code>
+     * <code>required string policy = 4;</code>
      */
     public java.lang.String getPolicy() {
       java.lang.Object ref = policy_;
@@ -15760,7 +15477,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string policy = 7;</code>
+     * <code>required string policy = 4;</code>
      */
     public com.google.protobuf.ByteString
         getPolicyBytes() {
@@ -15776,31 +15493,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int VERSION_FIELD_NUMBER = 8;
-    private long version_;
-    /**
-     * <code>required int64 version = 8;</code>
-     */
-    public boolean hasVersion() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>required int64 version = 8;</code>
-     */
-    public long getVersion() {
-      return version_;
-    }
-
-    public static final int STATUS_FIELD_NUMBER = 9;
+    public static final int STATUS_FIELD_NUMBER = 5;
     private java.lang.Object status_;
     /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     public boolean hasStatus() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     public java.lang.String getStatus() {
       java.lang.Object ref = status_;
@@ -15817,7 +15519,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>required string status = 9;</code>
+     * <code>required string status = 5;</code>
      */
     public com.google.protobuf.ByteString
         getStatusBytes() {
@@ -15833,16 +15535,16 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int NOTES_FIELD_NUMBER = 10;
+    public static final int NOTES_FIELD_NUMBER = 6;
     private java.lang.Object notes_;
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     public boolean hasNotes() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     public java.lang.String getNotes() {
       java.lang.Object ref = notes_;
@@ -15859,7 +15561,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string notes = 10;</code>
+     * <code>optional string notes = 6;</code>
      */
     public com.google.protobuf.ByteString
         getNotesBytes() {
@@ -15875,46 +15577,46 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
 
-    public static final int CREATE_DATE_FIELD_NUMBER = 11;
+    public static final int CREATE_DATE_FIELD_NUMBER = 7;
     private long createDate_;
     /**
-     * <code>required int64 create_date = 11;</code>
+     * <code>required int64 create_date = 7;</code>
      */
     public boolean hasCreateDate() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>required int64 create_date = 11;</code>
+     * <code>required int64 create_date = 7;</code>
      */
     public long getCreateDate() {
       return createDate_;
     }
 
-    public static final int MODIFY_DATE_FIELD_NUMBER = 12;
+    public static final int MODIFY_DATE_FIELD_NUMBER = 8;
     private long modifyDate_;
     /**
-     * <code>optional int64 modify_date = 12;</code>
+     * <code>optional int64 modify_date = 8;</code>
      */
     public boolean hasModifyDate() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional int64 modify_date = 12;</code>
+     * <code>optional int64 modify_date = 8;</code>
      */
     public long getModifyDate() {
       return modifyDate_;
     }
 
-    public static final int SIGNATURE_FIELD_NUMBER = 13;
+    public static final int SIGNATURE_FIELD_NUMBER = 9;
     private java.lang.Object signature_;
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     public boolean hasSignature() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     public java.lang.String getSignature() {
       java.lang.Object ref = signature_;
@@ -15931,7 +15633,7 @@ public final class ZMQSKCEReplicationProtos {
       }
     }
     /**
-     * <code>optional string signature = 13;</code>
+     * <code>optional string signature = 9;</code>
      */
     public com.google.protobuf.ByteString
         getSignatureBytes() {
@@ -15951,11 +15653,7 @@ public final class ZMQSKCEReplicationProtos {
       sid_ = 0L;
       did_ = 0L;
       pid_ = 0L;
-      startDate_ = 0L;
-      endDate_ = 0L;
-      certificateProfileName_ = "";
       policy_ = "";
-      version_ = 0L;
       status_ = "";
       notes_ = "";
       createDate_ = 0L;
@@ -15980,19 +15678,7 @@ public final class ZMQSKCEReplicationProtos {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasStartDate()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasCertificateProfileName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasPolicy()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasVersion()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -16021,34 +15707,22 @@ public final class ZMQSKCEReplicationProtos {
         output.writeInt64(3, pid_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt64(4, startDate_);
+        output.writeBytes(4, getPolicyBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt64(5, endDate_);
+        output.writeBytes(5, getStatusBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, getCertificateProfileNameBytes());
+        output.writeBytes(6, getNotesBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBytes(7, getPolicyBytes());
+        output.writeInt64(7, createDate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt64(8, version_);
+        output.writeInt64(8, modifyDate_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(9, getStatusBytes());
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeBytes(10, getNotesBytes());
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeInt64(11, createDate_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeInt64(12, modifyDate_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBytes(13, getSignatureBytes());
+        output.writeBytes(9, getSignatureBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -16073,43 +15747,27 @@ public final class ZMQSKCEReplicationProtos {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, startDate_);
+          .computeBytesSize(4, getPolicyBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(5, endDate_);
+          .computeBytesSize(5, getStatusBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, getCertificateProfileNameBytes());
+          .computeBytesSize(6, getNotesBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, getPolicyBytes());
+          .computeInt64Size(7, createDate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(8, version_);
+          .computeInt64Size(8, modifyDate_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(9, getStatusBytes());
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(10, getNotesBytes());
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(11, createDate_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(12, modifyDate_);
-      }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(13, getSignatureBytes());
+          .computeBytesSize(9, getSignatureBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16234,26 +15892,18 @@ public final class ZMQSKCEReplicationProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         pid_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
-        startDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        endDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        certificateProfileName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
         policy_ = "";
-        bitField0_ = (bitField0_ & ~0x00000040);
-        version_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000008);
         status_ = "";
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000010);
         notes_ = "";
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000020);
         createDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000040);
         modifyDate_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000080);
         signature_ = "";
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -16297,41 +15947,25 @@ public final class ZMQSKCEReplicationProtos {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.startDate_ = startDate_;
+        result.policy_ = policy_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.endDate_ = endDate_;
+        result.status_ = status_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.certificateProfileName_ = certificateProfileName_;
+        result.notes_ = notes_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.policy_ = policy_;
+        result.createDate_ = createDate_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.version_ = version_;
+        result.modifyDate_ = modifyDate_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.notes_ = notes_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.createDate_ = createDate_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.modifyDate_ = modifyDate_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
         }
         result.signature_ = signature_;
         result.bitField0_ = to_bitField0_;
@@ -16359,32 +15993,18 @@ public final class ZMQSKCEReplicationProtos {
         if (other.hasPid()) {
           setPid(other.getPid());
         }
-        if (other.hasStartDate()) {
-          setStartDate(other.getStartDate());
-        }
-        if (other.hasEndDate()) {
-          setEndDate(other.getEndDate());
-        }
-        if (other.hasCertificateProfileName()) {
-          bitField0_ |= 0x00000020;
-          certificateProfileName_ = other.certificateProfileName_;
-          onChanged();
-        }
         if (other.hasPolicy()) {
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000008;
           policy_ = other.policy_;
           onChanged();
         }
-        if (other.hasVersion()) {
-          setVersion(other.getVersion());
-        }
         if (other.hasStatus()) {
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000010;
           status_ = other.status_;
           onChanged();
         }
         if (other.hasNotes()) {
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000020;
           notes_ = other.notes_;
           onChanged();
         }
@@ -16395,7 +16015,7 @@ public final class ZMQSKCEReplicationProtos {
           setModifyDate(other.getModifyDate());
         }
         if (other.hasSignature()) {
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00000100;
           signature_ = other.signature_;
           onChanged();
         }
@@ -16416,19 +16036,7 @@ public final class ZMQSKCEReplicationProtos {
           
           return false;
         }
-        if (!hasStartDate()) {
-          
-          return false;
-        }
-        if (!hasCertificateProfileName()) {
-          
-          return false;
-        }
         if (!hasPolicy()) {
-          
-          return false;
-        }
-        if (!hasVersion()) {
           
           return false;
         }
@@ -16558,155 +16166,15 @@ public final class ZMQSKCEReplicationProtos {
         return this;
       }
 
-      private long startDate_ ;
+      private java.lang.Object policy_ = "";
       /**
-       * <code>required int64 start_date = 4;</code>
+       * <code>required string policy = 4;</code>
        */
-      public boolean hasStartDate() {
+      public boolean hasPolicy() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required int64 start_date = 4;</code>
-       */
-      public long getStartDate() {
-        return startDate_;
-      }
-      /**
-       * <code>required int64 start_date = 4;</code>
-       */
-      public Builder setStartDate(long value) {
-        bitField0_ |= 0x00000008;
-        startDate_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int64 start_date = 4;</code>
-       */
-      public Builder clearStartDate() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        startDate_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private long endDate_ ;
-      /**
-       * <code>optional int64 end_date = 5;</code>
-       */
-      public boolean hasEndDate() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int64 end_date = 5;</code>
-       */
-      public long getEndDate() {
-        return endDate_;
-      }
-      /**
-       * <code>optional int64 end_date = 5;</code>
-       */
-      public Builder setEndDate(long value) {
-        bitField0_ |= 0x00000010;
-        endDate_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 end_date = 5;</code>
-       */
-      public Builder clearEndDate() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        endDate_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object certificateProfileName_ = "";
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public boolean hasCertificateProfileName() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public java.lang.String getCertificateProfileName() {
-        java.lang.Object ref = certificateProfileName_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            certificateProfileName_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public com.google.protobuf.ByteString
-          getCertificateProfileNameBytes() {
-        java.lang.Object ref = certificateProfileName_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          certificateProfileName_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public Builder setCertificateProfileName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
-        certificateProfileName_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public Builder clearCertificateProfileName() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        certificateProfileName_ = getDefaultInstance().getCertificateProfileName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string certificate_profile_name = 6;</code>
-       */
-      public Builder setCertificateProfileNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
-        certificateProfileName_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object policy_ = "";
-      /**
-       * <code>required string policy = 7;</code>
-       */
-      public boolean hasPolicy() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>required string policy = 7;</code>
+       * <code>required string policy = 4;</code>
        */
       public java.lang.String getPolicy() {
         java.lang.Object ref = policy_;
@@ -16723,7 +16191,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string policy = 7;</code>
+       * <code>required string policy = 4;</code>
        */
       public com.google.protobuf.ByteString
           getPolicyBytes() {
@@ -16739,82 +16207,50 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string policy = 7;</code>
+       * <code>required string policy = 4;</code>
        */
       public Builder setPolicy(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000008;
         policy_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string policy = 7;</code>
+       * <code>required string policy = 4;</code>
        */
       public Builder clearPolicy() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000008);
         policy_ = getDefaultInstance().getPolicy();
         onChanged();
         return this;
       }
       /**
-       * <code>required string policy = 7;</code>
+       * <code>required string policy = 4;</code>
        */
       public Builder setPolicyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000008;
         policy_ = value;
-        onChanged();
-        return this;
-      }
-
-      private long version_ ;
-      /**
-       * <code>required int64 version = 8;</code>
-       */
-      public boolean hasVersion() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>required int64 version = 8;</code>
-       */
-      public long getVersion() {
-        return version_;
-      }
-      /**
-       * <code>required int64 version = 8;</code>
-       */
-      public Builder setVersion(long value) {
-        bitField0_ |= 0x00000080;
-        version_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int64 version = 8;</code>
-       */
-      public Builder clearVersion() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        version_ = 0L;
         onChanged();
         return this;
       }
 
       private java.lang.Object status_ = "";
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public boolean hasStatus() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public java.lang.String getStatus() {
         java.lang.Object ref = status_;
@@ -16831,7 +16267,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public com.google.protobuf.ByteString
           getStatusBytes() {
@@ -16847,36 +16283,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public Builder setStatus(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000010;
         status_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public Builder clearStatus() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000010);
         status_ = getDefaultInstance().getStatus();
         onChanged();
         return this;
       }
       /**
-       * <code>required string status = 9;</code>
+       * <code>required string status = 5;</code>
        */
       public Builder setStatusBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000010;
         status_ = value;
         onChanged();
         return this;
@@ -16884,13 +16320,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object notes_ = "";
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public boolean hasNotes() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public java.lang.String getNotes() {
         java.lang.Object ref = notes_;
@@ -16907,7 +16343,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public com.google.protobuf.ByteString
           getNotesBytes() {
@@ -16923,36 +16359,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public Builder setNotes(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000020;
         notes_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public Builder clearNotes() {
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000020);
         notes_ = getDefaultInstance().getNotes();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string notes = 10;</code>
+       * <code>optional string notes = 6;</code>
        */
       public Builder setNotesBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000020;
         notes_ = value;
         onChanged();
         return this;
@@ -16960,31 +16396,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long createDate_ ;
       /**
-       * <code>required int64 create_date = 11;</code>
+       * <code>required int64 create_date = 7;</code>
        */
       public boolean hasCreateDate() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required int64 create_date = 11;</code>
+       * <code>required int64 create_date = 7;</code>
        */
       public long getCreateDate() {
         return createDate_;
       }
       /**
-       * <code>required int64 create_date = 11;</code>
+       * <code>required int64 create_date = 7;</code>
        */
       public Builder setCreateDate(long value) {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000040;
         createDate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int64 create_date = 11;</code>
+       * <code>required int64 create_date = 7;</code>
        */
       public Builder clearCreateDate() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000040);
         createDate_ = 0L;
         onChanged();
         return this;
@@ -16992,31 +16428,31 @@ public final class ZMQSKCEReplicationProtos {
 
       private long modifyDate_ ;
       /**
-       * <code>optional int64 modify_date = 12;</code>
+       * <code>optional int64 modify_date = 8;</code>
        */
       public boolean hasModifyDate() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional int64 modify_date = 12;</code>
+       * <code>optional int64 modify_date = 8;</code>
        */
       public long getModifyDate() {
         return modifyDate_;
       }
       /**
-       * <code>optional int64 modify_date = 12;</code>
+       * <code>optional int64 modify_date = 8;</code>
        */
       public Builder setModifyDate(long value) {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00000080;
         modifyDate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 modify_date = 12;</code>
+       * <code>optional int64 modify_date = 8;</code>
        */
       public Builder clearModifyDate() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000080);
         modifyDate_ = 0L;
         onChanged();
         return this;
@@ -17024,13 +16460,13 @@ public final class ZMQSKCEReplicationProtos {
 
       private java.lang.Object signature_ = "";
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public boolean hasSignature() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public java.lang.String getSignature() {
         java.lang.Object ref = signature_;
@@ -17047,7 +16483,7 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public com.google.protobuf.ByteString
           getSignatureBytes() {
@@ -17063,36 +16499,36 @@ public final class ZMQSKCEReplicationProtos {
         }
       }
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public Builder setSignature(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000100;
         signature_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public Builder clearSignature() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000100);
         signature_ = getDefaultInstance().getSignature();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string signature = 13;</code>
+       * <code>optional string signature = 9;</code>
        */
       public Builder setSignatureBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000100;
         signature_ = value;
         onChanged();
         return this;
@@ -17107,6 +16543,898 @@ public final class ZMQSKCEReplicationProtos {
     }
 
     // @@protoc_insertion_point(class_scope:com.strongkey.skfs.messaging.FidoPolicies)
+  }
+
+  public interface ConfigurationsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.strongkey.skfs.messaging.Configurations)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required int64 did = 1;</code>
+     */
+    boolean hasDid();
+    /**
+     * <code>required int64 did = 1;</code>
+     */
+    long getDid();
+
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    boolean hasConfigKey();
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    java.lang.String getConfigKey();
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getConfigKeyBytes();
+
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    boolean hasConfigValue();
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    java.lang.String getConfigValue();
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getConfigValueBytes();
+
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    boolean hasNotes();
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    java.lang.String getNotes();
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getNotesBytes();
+  }
+  /**
+   * Protobuf type {@code com.strongkey.skfs.messaging.Configurations}
+   */
+  public static final class Configurations extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.strongkey.skfs.messaging.Configurations)
+      ConfigurationsOrBuilder {
+    // Use Configurations.newBuilder() to construct.
+    private Configurations(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Configurations(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Configurations defaultInstance;
+    public static Configurations getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Configurations getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Configurations(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              did_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              configKey_ = bs;
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              configValue_ = bs;
+              break;
+            }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              notes_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.internal_static_com_strongkey_skfs_messaging_Configurations_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.internal_static_com_strongkey_skfs_messaging_Configurations_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.class, com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Configurations> PARSER =
+        new com.google.protobuf.AbstractParser<Configurations>() {
+      public Configurations parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Configurations(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Configurations> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int DID_FIELD_NUMBER = 1;
+    private long did_;
+    /**
+     * <code>required int64 did = 1;</code>
+     */
+    public boolean hasDid() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int64 did = 1;</code>
+     */
+    public long getDid() {
+      return did_;
+    }
+
+    public static final int CONFIG_KEY_FIELD_NUMBER = 2;
+    private java.lang.Object configKey_;
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    public boolean hasConfigKey() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    public java.lang.String getConfigKey() {
+      java.lang.Object ref = configKey_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          configKey_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string config_key = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getConfigKeyBytes() {
+      java.lang.Object ref = configKey_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        configKey_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CONFIG_VALUE_FIELD_NUMBER = 3;
+    private java.lang.Object configValue_;
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    public boolean hasConfigValue() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    public java.lang.String getConfigValue() {
+      java.lang.Object ref = configValue_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          configValue_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string config_value = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getConfigValueBytes() {
+      java.lang.Object ref = configValue_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        configValue_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NOTES_FIELD_NUMBER = 4;
+    private java.lang.Object notes_;
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    public boolean hasNotes() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    public java.lang.String getNotes() {
+      java.lang.Object ref = notes_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          notes_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string notes = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNotesBytes() {
+      java.lang.Object ref = notes_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        notes_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      did_ = 0L;
+      configKey_ = "";
+      configValue_ = "";
+      notes_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasDid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasConfigKey()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasConfigValue()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, did_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getConfigKeyBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getConfigValueBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getNotesBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, did_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getConfigKeyBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getConfigValueBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getNotesBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.strongkey.skfs.messaging.Configurations}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.strongkey.skfs.messaging.Configurations)
+        com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.ConfigurationsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.internal_static_com_strongkey_skfs_messaging_Configurations_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.internal_static_com_strongkey_skfs_messaging_Configurations_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.class, com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.Builder.class);
+      }
+
+      // Construct using com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        did_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        configKey_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        configValue_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        notes_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.internal_static_com_strongkey_skfs_messaging_Configurations_descriptor;
+      }
+
+      public com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations getDefaultInstanceForType() {
+        return com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.getDefaultInstance();
+      }
+
+      public com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations build() {
+        com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations buildPartial() {
+        com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations result = new com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.did_ = did_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.configKey_ = configKey_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.configValue_ = configValue_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.notes_ = notes_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations) {
+          return mergeFrom((com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations other) {
+        if (other == com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations.getDefaultInstance()) return this;
+        if (other.hasDid()) {
+          setDid(other.getDid());
+        }
+        if (other.hasConfigKey()) {
+          bitField0_ |= 0x00000002;
+          configKey_ = other.configKey_;
+          onChanged();
+        }
+        if (other.hasConfigValue()) {
+          bitField0_ |= 0x00000004;
+          configValue_ = other.configValue_;
+          onChanged();
+        }
+        if (other.hasNotes()) {
+          bitField0_ |= 0x00000008;
+          notes_ = other.notes_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasDid()) {
+          
+          return false;
+        }
+        if (!hasConfigKey()) {
+          
+          return false;
+        }
+        if (!hasConfigValue()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.strongkey.skfs.messaging.ZMQSKCEReplicationProtos.Configurations) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private long did_ ;
+      /**
+       * <code>required int64 did = 1;</code>
+       */
+      public boolean hasDid() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int64 did = 1;</code>
+       */
+      public long getDid() {
+        return did_;
+      }
+      /**
+       * <code>required int64 did = 1;</code>
+       */
+      public Builder setDid(long value) {
+        bitField0_ |= 0x00000001;
+        did_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int64 did = 1;</code>
+       */
+      public Builder clearDid() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        did_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object configKey_ = "";
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public boolean hasConfigKey() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public java.lang.String getConfigKey() {
+        java.lang.Object ref = configKey_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            configKey_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getConfigKeyBytes() {
+        java.lang.Object ref = configKey_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          configKey_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public Builder setConfigKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        configKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public Builder clearConfigKey() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        configKey_ = getDefaultInstance().getConfigKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string config_key = 2;</code>
+       */
+      public Builder setConfigKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        configKey_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object configValue_ = "";
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public boolean hasConfigValue() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public java.lang.String getConfigValue() {
+        java.lang.Object ref = configValue_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            configValue_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getConfigValueBytes() {
+        java.lang.Object ref = configValue_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          configValue_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public Builder setConfigValue(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        configValue_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public Builder clearConfigValue() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        configValue_ = getDefaultInstance().getConfigValue();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string config_value = 3;</code>
+       */
+      public Builder setConfigValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        configValue_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object notes_ = "";
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public boolean hasNotes() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public java.lang.String getNotes() {
+        java.lang.Object ref = notes_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            notes_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNotesBytes() {
+        java.lang.Object ref = notes_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          notes_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public Builder setNotes(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        notes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public Builder clearNotes() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        notes_ = getDefaultInstance().getNotes();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string notes = 4;</code>
+       */
+      public Builder setNotesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        notes_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:com.strongkey.skfs.messaging.Configurations)
+    }
+
+    static {
+      defaultInstance = new Configurations(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:com.strongkey.skfs.messaging.Configurations)
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
@@ -17154,6 +17482,11 @@ public final class ZMQSKCEReplicationProtos {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_strongkey_skfs_messaging_FidoPolicies_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_strongkey_skfs_messaging_Configurations_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_strongkey_skfs_messaging_Configurations_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -17170,58 +17503,58 @@ public final class ZMQSKCEReplicationProtos {
       "\033encryption_certificate_uuid\030\006 \001(\t\022\033\n\023si" +
       "gning_certificate\030\007 \001(\t\022 \n\030signing_certi" +
       "ficate_uuid\030\010 \001(\t\022\026\n\016skce_signingdn\030\t \001(" +
-      "\t\022\022\n\nskfe_appid\030\n \001(\t\022\r\n\005notes\030\013 \001(\t\"\211\004\n" +
+      "\t\022\022\n\nskfe_appid\030\n \001(\t\022\r\n\005notes\030\013 \001(\t\"\373\003\n" +
       "\010FidoKeys\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\016\n\006u" +
       "serid\030\003 \001(\t\022\020\n\010username\030\004 \002(\t\022\014\n\004fkid\030\005 ",
       "\002(\003\022\021\n\tkeyhandle\030\006 \002(\t\022\r\n\005appid\030\007 \002(\t\022\021\n" +
-      "\tpublickey\030\010 \002(\t\022\020\n\010khdigest\030\t \001(\t\022\025\n\rkh" +
-      "digest_type\030\n \001(\t\022\022\n\ntransports\030\013 \001(\003\022\016\n" +
-      "\006attsid\030\014 \001(\003\022\016\n\006attdid\030\r \001(\003\022\016\n\006attcid\030" +
-      "\016 \001(\003\022\017\n\007counter\030\017 \002(\003\022\024\n\014fido_version\030\020" +
-      " \001(\t\022\025\n\rfido_protocol\030\021 \001(\t\022\016\n\006aaguid\030\022 " +
-      "\001(\t\022\035\n\025registration_settings\030\023 \001(\t\022%\n\035re" +
-      "gistration_settings_version\030\024 \001(\003\022\023\n\013cre" +
-      "ate_date\030\025 \002(\003\022\027\n\017create_location\030\026 \002(\t\022" +
-      "\023\n\013modify_date\030\027 \001(\003\022\027\n\017modify_location\030",
-      "\030 \001(\t\022\016\n\006status\030\031 \002(\t\022\021\n\tsignature\030\032 \001(\t" +
-      "\"\257\002\n\tFidoUsers\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003" +
-      "\022\020\n\010username\030\003 \002(\t\022\016\n\006userdn\030\004 \001(\t\022\031\n\021fi" +
-      "do_keys_enabled\030\005 \002(\t\022\035\n\025two_step_verifi" +
-      "cation\030\006 \002(\t\022\025\n\rprimary_email\030\007 \001(\t\022\031\n\021r" +
-      "egistered_emails\030\010 \001(\t\022\034\n\024primary_phone_" +
-      "number\030\t \001(\t\022 \n\030registered_phone_numbers" +
-      "\030\n \001(\t\022\027\n\017two_step_target\030\013 \001(\t\022\021\n\tsigna" +
-      "ture\030\014 \001(\t\022\016\n\006status\030\r \002(\t\"\356\002\n\017UserSessi" +
-      "onInfo\022\020\n\010username\030\001 \002(\t\022\023\n\013displayName\030",
-      "\002 \001(\t\022\016\n\006rpName\030\003 \001(\t\022\r\n\005nonce\030\004 \002(\t\022\r\n\005" +
-      "appid\030\005 \002(\t\022\023\n\013sessiontype\030\006 \002(\t\022\024\n\014crea" +
-      "tiondate\030\007 \002(\003\022\027\n\017user_public_key\030\010 \002(\t\022" +
-      "\014\n\004fkid\030\t \001(\003\022\014\n\004skid\030\n \001(\003\022\013\n\003sid\030\013 \001(\003" +
-      "\022\021\n\tsessionid\030\014 \001(\t\022\016\n\006mapkey\030\r \002(\t\022\016\n\006u" +
-      "serid\030\016 \001(\t\022\020\n\010usericon\030\017 \001(\t\022\030\n\020fidopol" +
-      "icymapkey\030\020 \001(\t\022\033\n\023userVerificationReq\030\021" +
-      " \001(\t\022\035\n\025attestationPreferance\030\022 \001(\t\"\032\n\tK" +
-      "eepAlive\022\r\n\005dummy\030\001 \002(\003\"\207\001\n\007Servers\022\013\n\003s" +
-      "id\030\001 \002(\003\022\014\n\004fqdn\030\002 \002(\t\022\016\n\006status\030\003 \002(\t\022\030",
-      "\n\020replication_role\030\004 \002(\t\022\032\n\022replication_" +
-      "status\030\005 \002(\t\022\014\n\004mask\030\006 \001(\t\022\r\n\005notes\030\007 \001(" +
-      "\t\"v\n\rServerDomains\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002" +
-      " \002(\003\022\025\n\rpseudo_number\030\003 \002(\t\022\016\n\006status\030\004 " +
-      "\002(\t\022\025\n\rmigrating_key\030\005 \001(\t\022\r\n\005notes\030\006 \001(" +
-      "\t\"\350\001\n\027AttestationCertificates\022\013\n\003sid\030\001 \002" +
-      "(\003\022\013\n\003did\030\002 \002(\003\022\016\n\006attcid\030\003 \002(\003\022\022\n\nparen" +
-      "t_sid\030\004 \001(\003\022\022\n\nparent_did\030\005 \001(\003\022\025\n\rparen" +
-      "t_attcid\030\006 \001(\003\022\023\n\013certificate\030\007 \002(\t\022\021\n\ti" +
-      "ssuer_dn\030\010 \002(\t\022\022\n\nsubject_dn\030\t \002(\t\022\025\n\rse",
-      "rial_number\030\n \002(\t\022\021\n\tsignature\030\013 \001(\t\"\372\001\n" +
-      "\014FidoPolicies\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022" +
-      "\013\n\003pid\030\003 \002(\003\022\022\n\nstart_date\030\004 \002(\003\022\020\n\010end_" +
-      "date\030\005 \001(\003\022 \n\030certificate_profile_name\030\006" +
-      " \002(\t\022\016\n\006policy\030\007 \002(\t\022\017\n\007version\030\010 \002(\003\022\016\n" +
-      "\006status\030\t \002(\t\022\r\n\005notes\030\n \001(\t\022\023\n\013create_d" +
-      "ate\030\013 \002(\003\022\023\n\013modify_date\030\014 \001(\003\022\021\n\tsignat" +
-      "ure\030\r \001(\tB8\n\034com.strongkey.skfs.messagin" +
-      "gB\030ZMQSKCEReplicationProtos"
+      "\tpublickey\030\010 \002(\t\022\022\n\ntransports\030\t \001(\003\022\016\n\006" +
+      "attsid\030\n \001(\003\022\016\n\006attdid\030\013 \001(\003\022\016\n\006attcid\030\014" +
+      " \001(\003\022\017\n\007counter\030\r \002(\003\022\024\n\014fido_version\030\016 " +
+      "\001(\t\022\025\n\rfido_protocol\030\017 \001(\t\022\016\n\006aaguid\030\020 \001" +
+      "(\t\022\035\n\025registration_settings\030\021 \001(\t\022%\n\035reg" +
+      "istration_settings_version\030\022 \001(\003\022\023\n\013crea" +
+      "te_date\030\023 \002(\003\022\027\n\017create_location\030\024 \002(\t\022\023" +
+      "\n\013modify_date\030\025 \001(\003\022\027\n\017modify_location\030\026" +
+      " \001(\t\022\016\n\006status\030\027 \002(\t\022\031\n\021signature_keytyp",
+      "e\030\030 \002(\t\022\021\n\tsignature\030\031 \001(\t\"\257\002\n\tFidoUsers" +
+      "\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\020\n\010username\030\003" +
+      " \002(\t\022\016\n\006userdn\030\004 \001(\t\022\031\n\021fido_keys_enable" +
+      "d\030\005 \002(\t\022\035\n\025two_step_verification\030\006 \002(\t\022\025" +
+      "\n\rprimary_email\030\007 \001(\t\022\031\n\021registered_emai" +
+      "ls\030\010 \001(\t\022\034\n\024primary_phone_number\030\t \001(\t\022 " +
+      "\n\030registered_phone_numbers\030\n \001(\t\022\027\n\017two_" +
+      "step_target\030\013 \001(\t\022\021\n\tsignature\030\014 \001(\t\022\016\n\006" +
+      "status\030\r \002(\t\"\356\002\n\017UserSessionInfo\022\020\n\010user" +
+      "name\030\001 \002(\t\022\023\n\013displayName\030\002 \001(\t\022\016\n\006rpNam",
+      "e\030\003 \001(\t\022\r\n\005nonce\030\004 \002(\t\022\r\n\005appid\030\005 \002(\t\022\023\n" +
+      "\013sessiontype\030\006 \002(\t\022\024\n\014creationdate\030\007 \002(\003" +
+      "\022\027\n\017user_public_key\030\010 \002(\t\022\014\n\004fkid\030\t \001(\003\022" +
+      "\014\n\004skid\030\n \001(\003\022\013\n\003sid\030\013 \001(\003\022\021\n\tsessionid\030" +
+      "\014 \001(\t\022\016\n\006mapkey\030\r \002(\t\022\016\n\006userid\030\016 \001(\t\022\020\n" +
+      "\010usericon\030\017 \001(\t\022\030\n\020fidopolicymapkey\030\020 \001(" +
+      "\t\022\033\n\023userVerificationReq\030\021 \001(\t\022\035\n\025attest" +
+      "ationPreferance\030\022 \001(\t\"\032\n\tKeepAlive\022\r\n\005du" +
+      "mmy\030\001 \002(\003\"\207\001\n\007Servers\022\013\n\003sid\030\001 \002(\003\022\014\n\004fq" +
+      "dn\030\002 \002(\t\022\016\n\006status\030\003 \002(\t\022\030\n\020replication_",
+      "role\030\004 \002(\t\022\032\n\022replication_status\030\005 \002(\t\022\014" +
+      "\n\004mask\030\006 \001(\t\022\r\n\005notes\030\007 \001(\t\"v\n\rServerDom" +
+      "ains\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\025\n\rpseudo" +
+      "_number\030\003 \002(\t\022\016\n\006status\030\004 \002(\t\022\025\n\rmigrati" +
+      "ng_key\030\005 \001(\t\022\r\n\005notes\030\006 \001(\t\"\350\001\n\027Attestat" +
+      "ionCertificates\022\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(" +
+      "\003\022\016\n\006attcid\030\003 \002(\003\022\022\n\nparent_sid\030\004 \001(\003\022\022\n" +
+      "\nparent_did\030\005 \001(\003\022\025\n\rparent_attcid\030\006 \001(\003" +
+      "\022\023\n\013certificate\030\007 \002(\t\022\021\n\tissuer_dn\030\010 \002(\t" +
+      "\022\022\n\nsubject_dn\030\t \002(\t\022\025\n\rserial_number\030\n ",
+      "\002(\t\022\021\n\tsignature\030\013 \001(\t\"\241\001\n\014FidoPolicies\022" +
+      "\013\n\003sid\030\001 \002(\003\022\013\n\003did\030\002 \002(\003\022\013\n\003pid\030\003 \002(\003\022\016" +
+      "\n\006policy\030\004 \002(\t\022\016\n\006status\030\005 \002(\t\022\r\n\005notes\030" +
+      "\006 \001(\t\022\023\n\013create_date\030\007 \002(\003\022\023\n\013modify_dat" +
+      "e\030\010 \001(\003\022\021\n\tsignature\030\t \001(\t\"V\n\016Configurat" +
+      "ions\022\013\n\003did\030\001 \002(\003\022\022\n\nconfig_key\030\002 \002(\t\022\024\n" +
+      "\014config_value\030\003 \002(\t\022\r\n\005notes\030\004 \001(\tB8\n\034co" +
+      "m.strongkey.skfs.messagingB\030ZMQSKCERepli" +
+      "cationProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -17246,7 +17579,7 @@ public final class ZMQSKCEReplicationProtos {
     internal_static_com_strongkey_skfs_messaging_FidoKeys_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_strongkey_skfs_messaging_FidoKeys_descriptor,
-        new java.lang.String[] { "Sid", "Did", "Userid", "Username", "Fkid", "Keyhandle", "Appid", "Publickey", "Khdigest", "KhdigestType", "Transports", "Attsid", "Attdid", "Attcid", "Counter", "FidoVersion", "FidoProtocol", "Aaguid", "RegistrationSettings", "RegistrationSettingsVersion", "CreateDate", "CreateLocation", "ModifyDate", "ModifyLocation", "Status", "Signature", });
+        new java.lang.String[] { "Sid", "Did", "Userid", "Username", "Fkid", "Keyhandle", "Appid", "Publickey", "Transports", "Attsid", "Attdid", "Attcid", "Counter", "FidoVersion", "FidoProtocol", "Aaguid", "RegistrationSettings", "RegistrationSettingsVersion", "CreateDate", "CreateLocation", "ModifyDate", "ModifyLocation", "Status", "SignatureKeytype", "Signature", });
     internal_static_com_strongkey_skfs_messaging_FidoUsers_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_com_strongkey_skfs_messaging_FidoUsers_fieldAccessorTable = new
@@ -17288,7 +17621,13 @@ public final class ZMQSKCEReplicationProtos {
     internal_static_com_strongkey_skfs_messaging_FidoPolicies_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_strongkey_skfs_messaging_FidoPolicies_descriptor,
-        new java.lang.String[] { "Sid", "Did", "Pid", "StartDate", "EndDate", "CertificateProfileName", "Policy", "Version", "Status", "Notes", "CreateDate", "ModifyDate", "Signature", });
+        new java.lang.String[] { "Sid", "Did", "Pid", "Policy", "Status", "Notes", "CreateDate", "ModifyDate", "Signature", });
+    internal_static_com_strongkey_skfs_messaging_Configurations_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_strongkey_skfs_messaging_Configurations_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_strongkey_skfs_messaging_Configurations_descriptor,
+        new java.lang.String[] { "Did", "ConfigKey", "ConfigValue", "Notes", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
