@@ -6,7 +6,7 @@ StrongKey's Certified FIDO2 Server, Community Edition is an open-source solution
 
 ![StrongKey FIDO Certificate](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2certified.png)
 
-![![StrongKey Android API](https://github.com/StrongKey/fido2/raw/master/docs/images/StrongKey+Android.png)](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android)
+![StrongKey Android API](https://github.com/StrongKey/fido2/raw/master/docs/images/StrongKey+Android.png)
 
 
 The following links provide some background on FIDO, the FIDO Alliance, and FIDO2:
