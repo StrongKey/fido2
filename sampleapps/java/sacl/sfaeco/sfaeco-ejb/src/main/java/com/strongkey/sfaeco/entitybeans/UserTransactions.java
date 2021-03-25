@@ -322,7 +322,11 @@ public class UserTransactions implements Serializable {
         job.add("createDate", this.getCreateDate().toString());
         job.add("modifyDate",this.getModifyDate().toString());
         job.add("status", this.getStatus());
-        job.add("signature", this.getSignature());
+        if(signature ==null){
+            job.addNull("signature");
+        }else{
+            job.add("signature", this.getSignature());            
+        }
         job.add("notes", this.getNotes());
         job.add("totalPrice", this.getTotalPrice());
         job.add("totalProducts", this.getTotalProducts());
