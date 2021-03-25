@@ -327,7 +327,11 @@ public class UserTransactions implements Serializable {
         }else{
             job.add("signature", this.getSignature());            
         }
-        job.add("notes", this.getNotes());
+        if(notes == null){
+            job.addNull("notes");
+        }else{
+            job.add("notes", this.getNotes());
+        }
         job.add("totalPrice", this.getTotalPrice());
         job.add("totalProducts", this.getTotalProducts());
         job.add("paymentBrand",this.getPaymentBrand());
