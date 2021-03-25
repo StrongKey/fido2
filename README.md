@@ -29,6 +29,8 @@ Sample code is provided with a brief explanation of what each sample does:
   * [SSO](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/): FIDO Enabled sample applications demonstrating SSO
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO Enabled sample android application and android client library to perform FIDO transactions
 
+![StrongKey Android Client Library](https://github.com/StrongKey/fido2/raw/master/docs/images/Strongkey-android.png)
+
 ## Sample Client
 StrongKey FIDO2 Server client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/master/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
 
