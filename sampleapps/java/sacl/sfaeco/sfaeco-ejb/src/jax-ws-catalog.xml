@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="https://demo4.strongkey.com//strongkeyliteWAR/EncryptionService?wsdl" uri="wsdl/demo4.strongkey.com/strongkeyliteWAR/EncryptionService.wsdl"/>
+    <system systemId="https://demo4.strongkey.com:443/strongkeyliteWAR/EncryptionService?xsd=1" uri="wsdl/demo4.strongkey.com_443/strongkeyliteWAR/EncryptionService.xsd_1.xsd"/>
+    <system systemId="https://sakasmb.noorhome.net:8181//strongkeyliteWAR/EncryptionService?wsdl" uri="wsdl/sakasmb.noorhome.net_8181/strongkeyliteWAR/EncryptionService.wsdl"/>
+    <system systemId="https://sakasmb.noorhome.net:8181/strongkeyliteWAR/EncryptionService?xsd=1" uri="wsdl/sakasmb.noorhome.net_8181/strongkeyliteWAR/EncryptionService.xsd_1.xsd"/>
+</catalog>

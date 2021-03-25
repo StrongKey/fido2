@@ -469,6 +469,10 @@ public class applianceConstants {
      * Parameter for Fido Policies entity bean
      */
     public static final int ENTITY_TYPE_FIDO_POLICIES = 105;
+    /**
+     * Parameter for Fido CONFIGURATIONS entity bean
+     */
+    public static final int ENTITY_TYPE_FIDO_CONFIGURATIONS = 106;
 
 //    /**
 //     * Lower limit for CDO Entity Types

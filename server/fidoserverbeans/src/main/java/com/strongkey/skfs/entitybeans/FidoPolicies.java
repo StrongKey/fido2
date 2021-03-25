@@ -33,10 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FidoPolicies.findByDid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.did = :did"),
     @NamedQuery(name = "FidoPolicies.findByPid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.pid = :pid"),
     @NamedQuery(name = "FidoPolicies.findBySidDidPid", query = "SELECT f FROM FidoPolicies f WHERE f.fidoPoliciesPK.sid = :sid and f.fidoPoliciesPK.did = :did and f.fidoPoliciesPK.pid = :pid"),
-    @NamedQuery(name = "FidoPolicies.findByStartDate", query = "SELECT f FROM FidoPolicies f WHERE f.startDate = :startDate"),
-    @NamedQuery(name = "FidoPolicies.findByEndDate", query = "SELECT f FROM FidoPolicies f WHERE f.endDate = :endDate"),
-    @NamedQuery(name = "FidoPolicies.findByCertificateProfileName", query = "SELECT f FROM FidoPolicies f WHERE f.certificateProfileName = :certificateProfileName"),
-    @NamedQuery(name = "FidoPolicies.findByVersion", query = "SELECT f FROM FidoPolicies f WHERE f.version = :version"),
     @NamedQuery(name = "FidoPolicies.findByStatus", query = "SELECT f FROM FidoPolicies f WHERE f.status = :status"),
     @NamedQuery(name = "FidoPolicies.findByNotes", query = "SELECT f FROM FidoPolicies f WHERE f.notes = :notes"),
     @NamedQuery(name = "FidoPolicies.findByCreateDate", query = "SELECT f FROM FidoPolicies f WHERE f.createDate = :createDate"),
@@ -48,29 +44,13 @@ public class FidoPolicies implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected FidoPoliciesPK fidoPoliciesPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "start_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
-    @Column(name = "end_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endDate;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "certificate_profile_name")
-    private String certificateProfileName;
+   
     @Basic(optional = false)
     @NotNull
     @Lob
     @Size(min = 1, max = 2147483647)
     @Column(name = "policy")
     private String policy;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "version")
-    private int version;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
@@ -98,14 +78,11 @@ public class FidoPolicies implements Serializable {
         this.fidoPoliciesPK = fidoPoliciesPK;
     }
 
-    public FidoPolicies(FidoPoliciesPK fidoPoliciesPK, Date startDate, String certificateProfileName, String policy, int version, String status, Date createDate) {
+    public FidoPolicies(FidoPoliciesPK fidoPoliciesPK, String policy, String status, Date createDate) {
         this.fidoPoliciesPK = fidoPoliciesPK;
-        this.startDate = startDate;
-        this.certificateProfileName = certificateProfileName;
         this.policy = policy;
-        this.version = version;
         this.status = status;
-        this.createDate = createDate;
+        this.createDate = new Date(createDate.getTime());
     }
 
     public FidoPolicies(short sid, short did, int pid) {
@@ -120,30 +97,6 @@ public class FidoPolicies implements Serializable {
         this.fidoPoliciesPK = fidoPoliciesPK;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getCertificateProfileName() {
-        return certificateProfileName;
-    }
-
-    public void setCertificateProfileName(String certificateProfileName) {
-        this.certificateProfileName = certificateProfileName;
-    }
-
     public String getPolicy() {
         return policy;
     }
@@ -152,13 +105,6 @@ public class FidoPolicies implements Serializable {
         this.policy = policy;
     }
 
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
 
     public String getStatus() {
         return status;
@@ -177,19 +123,22 @@ public class FidoPolicies implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return new Date(createDate.getTime());
     }
 
     public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+        this.createDate = new Date(createDate.getTime());
     }
 
     public Date getModifyDate() {
-        return modifyDate;
+        if (modifyDate == null) {
+            return null;
+        }
+        return new Date(modifyDate.getTime());
     }
 
     public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+        this.modifyDate = new Date(modifyDate.getTime());
     }
 
     public String getSignature() {
@@ -225,11 +174,6 @@ public class FidoPolicies implements Serializable {
         job.add("did", getFidoPoliciesPK().getDid());
         job.add("sid", getFidoPoliciesPK().getSid());
         job.add("pid", getFidoPoliciesPK().getPid());
-        job.add("startdate", getStartDate().getTime());
-        if (getEndDate() != null)
-            job.add("enddate", getEndDate().getTime());
-        job.add("name", getCertificateProfileName());
-        job.add("version", getVersion());
         job.add("status", getStatus());
         if (getNotes() != null)
             job.add("notes", getNotes());
@@ -244,13 +188,8 @@ public class FidoPolicies implements Serializable {
         job.add("did", getFidoPoliciesPK().getDid());
         job.add("sid", getFidoPoliciesPK().getSid());
         job.add("pid", getFidoPoliciesPK().getPid());
-        job.add("startdate", getStartDate().getTime());
-        if (getEndDate() != null)
-            job.add("enddate", getEndDate().getTime());
-        job.add("name", getCertificateProfileName());
         if (getPolicy() != null)
             job.add("policy", getPolicy());
-        job.add("version", getVersion());
         job.add("status", getStatus());
         if (getNotes() != null)
             job.add("notes", getNotes());
@@ -266,11 +205,7 @@ public class FidoPolicies implements Serializable {
         job.add("did", getFidoPoliciesPK().getDid());
         job.add("sid", getFidoPoliciesPK().getSid());
         job.add("pid", getFidoPoliciesPK().getPid());
-        job.add("startdate", getStartDate().getTime());
-        job.add("enddate", getEndDate().getTime());
-        job.add("name", getCertificateProfileName());
         job.add("policy", getPolicy());
-        job.add("version", getVersion());
         job.add("status", getStatus());
         job.add("notes", getNotes());
         job.add("createDate", getCreateDate().getTime());

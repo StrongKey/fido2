@@ -6,11 +6,11 @@
 */
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.requests.PatchFidoKeyRequest;
+import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.StringReader;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -67,11 +67,11 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
     @Override
     public SKCEReturnObject execute(Long did,
             String keyid,
-            PatchFidoKeyRequest fidokey) {
+            UpdateFidoKeyRequest fidokey) {
 
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5001"),
                 " EJB name=" + classname
                 + " did=" + did
                 + " keyid=" + keyid
@@ -82,36 +82,36 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
         //  input checks
         if (did == null || did < 1) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " did=" + did);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " did=" + did);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " did=" + did);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " did=" + did);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
         if (keyid == null || keyid.isEmpty()) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " keyid=" + keyid);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " keyid=" + keyid);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " keyid=" + keyid);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " keyid=" + keyid);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
         //  3. fetch status and metadata fields from payload
-        String status = fidokey.getStatus();
+        String status = fidokey.getPayload().getStatus();
         if (status == null || status.isEmpty()) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " status=" + status);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " status=" + status);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " status=" + status);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " status=" + status);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
-        String modifyloc = fidokey.getModify_location();
+        String modifyloc = fidokey.getPayload().getModify_location();
         if (modifyloc == null || modifyloc.isEmpty()) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " modify_location=" + modifyloc);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " modify_location=" + modifyloc);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " modify_location=" + modifyloc);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " modify_location=" + modifyloc);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
@@ -128,9 +128,9 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
             fkid_to_be_activated = Long.parseLong(mapvaluesplit[2].substring(userfkidhyphen + 1));
         } catch (Exception ex) {
             skcero.setErrorkey("FIDO-ERR-0029");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0029") + "Invalid keyid= " + keyid);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0029"), "Invalid keyid= " + keyid);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0029") + "Invalid keyid= " + keyid);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0029"), "Invalid keyid= " + keyid);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
@@ -139,17 +139,17 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
             //user is not authorized to deactivate this key
             //  throw an error and return.
             skcero.setErrorkey("FIDO-ERR-0035");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0035") + " username= " + fidouser);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0035"), " username= " + fidouser);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0035") + " username= " + fidouser);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0035"), " username= " + fidouser);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
         //  get the reg key id to be deleted based on the random id provided.
         if (fkid_to_be_activated >= 0) {
 
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5005"), "");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5005"), "");
             try {
                 //  if the fkid_to_be_activated is valid, delete the entry from the database
                 String jparesult = updatekeystatusbean.execute(sid_to_be_activated, did, fidouser, fkid_to_be_activated, modifyloc, status);
@@ -158,14 +158,14 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
                     jo = jr.readObject();
                 }
 
-                Boolean updatestatus = jo.getBoolean(skfsConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
+                Boolean updatestatus = jo.getBoolean(SKFSConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
                 if (!updatestatus) {
                     //  error deleting user key
                     //  throw an error and return.
                     skcero.setErrorkey("FIDO-ERR-0040");
-                    skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0040") + " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
-                    skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0040"), " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
-                    skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+                    skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0040") + " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
+                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0040"), " username= " + fidouser + "   randomid= " + fkid_to_be_activated);
+                    SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
                     return skcero;
                 }
 
@@ -173,16 +173,16 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
                 //  error activating user key
                 //  throw an error and return.
                 skcero.setErrorkey("FIDO-ERR-0029");
-                skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0029") + " username= " + fidouser + "   keyid= " + keyid);
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0029"), " username= " + fidouser + "   keyid= " + keyid);
-                skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+                skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0029") + " username= " + fidouser + "   keyid= " + keyid);
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0029"), " username= " + fidouser + "   keyid= " + keyid);
+                SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
                 return skcero;
             }
         }
 
-        if(fidokey.getDisplayname() != null && !fidokey.getDisplayname().trim().isEmpty()){
+        if(fidokey.getPayload().getDisplayname() != null && !fidokey.getPayload().getDisplayname().trim().isEmpty()){
             //update displayname for key
-            String updatednres = updateFIDO2dnejb.execute(sid_to_be_activated, did, fidouser, fkid_to_be_activated, modifyloc, fidokey.getDisplayname());
+            String updatednres = updateFIDO2dnejb.execute(sid_to_be_activated, did, fidouser, fkid_to_be_activated, modifyloc, fidokey.getPayload().getDisplayname());
             JsonObject jo;
                 try (JsonReader jr = Json.createReader(new StringReader(updatednres))) {
                     jo = jr.readObject();
@@ -191,9 +191,9 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
             Boolean updatename = jo.getBoolean("status");
             if(!updatename){
                 skcero.setErrorkey("FIDO-ERR-0039");
-                skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0039") + " username= " + fidouser + "   keyid= " + keyid);
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0039"), " username= " + fidouser + "   keyid= " + keyid);
-                skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+                skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0039") + " username= " + fidouser + "   keyid= " + keyid);
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0039"), " username= " + fidouser + "   keyid= " + keyid);
+                SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
                 return skcero;
             }
         }
@@ -201,8 +201,8 @@ public class u2fUpdateBean implements u2fUpdateBeanLocal {
         skcero.setReturnval("Successfully updated the key");
 
         //  log the exit and return
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5002"), classname);
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
         return skcero;
     }
 }

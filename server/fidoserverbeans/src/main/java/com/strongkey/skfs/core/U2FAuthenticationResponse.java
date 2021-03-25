@@ -8,10 +8,10 @@
 package com.strongkey.skfs.core;
 
 import com.strongkey.crypto.utility.cryptoCommon;
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -22,12 +22,12 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.logging.Level;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Derived class for U2F Authentication response that comes back to the FIDO
@@ -68,13 +68,13 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
 
         //  Input checks
         if (u2fversion == null || u2fversion.trim().isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " u2f version");
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " username");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), " u2f version");
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + " username");
         }
 
         if (authresponseJson == null || authresponseJson.trim().isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5001"), " authresponseJson");
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5001") + " authresponseJson");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), " authresponseJson");
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + " authresponseJson");
         }
 
         //  u2f protocol version specific processing.
@@ -86,15 +86,15 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
                 JsonObject jsonObject = jsonReader.readObject();
                 jsonReader.close();
 
-                this.browserdata = jsonObject.getString(skfsConstants.JSON_KEY_CLIENTDATA);
-                this.signdata = jsonObject.getString(skfsConstants.JSON_KEY_SIGNATUREDATA);
+                this.browserdata = jsonObject.getString(SKFSConstants.JSON_KEY_CLIENTDATA);
+                this.signdata = jsonObject.getString(SKFSConstants.JSON_KEY_SIGNATUREDATA);
                 this.challenge = challenge;
                 this.appid = appid;
             } catch (Exception ex) {
                 ex.printStackTrace();
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5011"),
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", SKFSCommon.getMessageProperty("FIDO-ERR-5011"),
                         ex.getLocalizedMessage());
-                throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5011") + ex.getLocalizedMessage());
+                throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5011") + ex.getLocalizedMessage());
             }
 
             //  Generate new browser data
@@ -104,15 +104,15 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
             //  in the Authresp
             System.out.println("BDCHALLENGE - CHALLENGE : "+ bd.getChallenge() + " - " + this.challenge);
             if (!bd.getChallenge().equals(this.challenge)) {
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5012"), "");
-                throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5012"));
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", SKFSCommon.getMessageProperty("FIDO-ERR-5012"), "");
+                throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5012"));
             }
 
             this.userpublickeybytes = userPublicKeyBytes;
 
         } else {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", skfsCommon.getMessageProperty("FIDO-ERR-5002"), " version passed=" + u2fversion);
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5002") + " version passed=" + u2fversion);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "U2FAuthenticationResponse", SKFSCommon.getMessageProperty("FIDO-ERR-5002"), " version passed=" + u2fversion);
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5002") + " version passed=" + u2fversion);
         }
     }
 
@@ -140,8 +140,8 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
      */
     public final JsonObject toJsonObject() {
         JsonObject jsonObj = Json.createObjectBuilder()
-                .add(skfsConstants.JSON_USER_COUNTER_SERVLET, this.counter)
-                .add(skfsConstants.JSON_USER_PRESENCE_SERVLET, this.usertouch)
+                .add(SKFSConstants.JSON_USER_COUNTER_SERVLET, this.counter)
+                .add(SKFSConstants.JSON_USER_PRESENCE_SERVLET, this.usertouch)
                 .build();
 
         return jsonObj;
@@ -167,13 +167,13 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
      * @throws SKFEException - In case of any error
      */
     public final boolean verify() throws SKFEException {
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "verify", skfsCommon.getMessageProperty("FIDO-MSG-5011"), "");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "verify", SKFSCommon.getMessageProperty("FIDO-MSG-5011"), "");
 
         try {
             return processAuthenticationData(this.signdata, this.browserdata, this.userpublickeybytes, appid);
         } catch (SKFEException ex) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "verify", skfsCommon.getMessageProperty("FIDO-ERR-5006"), ex.getLocalizedMessage());
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5006") + ex.getLocalizedMessage());
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "verify", SKFSCommon.getMessageProperty("FIDO-ERR-5006"), ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5006") + ex.getLocalizedMessage());
         }
     }
 
@@ -191,70 +191,70 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
             String browserData,
             String userPublicKeyB64,
             String appid) throws SKFEException {
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData", skfsCommon.getMessageProperty("FIDO-MSG-5013"), "");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData", SKFSCommon.getMessageProperty("FIDO-MSG-5013"), "");
 
         try {
-            byte[] signDataBytes = Base64.decodeBase64(signData);
+            byte[] signDataBytes = Base64.getUrlDecoder().decode(signData);
             int sdL = signDataBytes.length;
 
             //  userpresense byte
             this.usertouch = (int) signDataBytes[0];
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5026"), this.usertouch);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5026"), this.usertouch);
 
             //  counter
             int tot = 1;
-            byte[] counterValue = new byte[skfsConstants.COUNTER_VALUE_BYTES];
-            System.arraycopy(signDataBytes, tot, counterValue, 0, skfsConstants.COUNTER_VALUE_BYTES);
-            tot += skfsConstants.COUNTER_VALUE_BYTES;
-            this.counter = Integer.parseInt(Hex.encodeHexString(counterValue), 16);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5027"), this.counter);
+            byte[] counterValue = new byte[SKFSConstants.COUNTER_VALUE_BYTES];
+            System.arraycopy(signDataBytes, tot, counterValue, 0, SKFSConstants.COUNTER_VALUE_BYTES);
+            tot += SKFSConstants.COUNTER_VALUE_BYTES;
+            this.counter = Integer.parseInt(Hex.toHexString(counterValue), 16);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5027"), this.counter);
 
             //  signaturebytes
-            byte[] signatureBytes = new byte[sdL - 1 - skfsConstants.COUNTER_VALUE_BYTES];
+            byte[] signatureBytes = new byte[sdL - 1 - SKFSConstants.COUNTER_VALUE_BYTES];
             System.arraycopy(signDataBytes, tot, signatureBytes, 0, signatureBytes.length);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5019"),
-                    Hex.encodeHexString(signatureBytes));
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5019"),
+                    Hex.toHexString(signatureBytes));
 
             //  create the object that has been signed
             //  get challenge parameter
-            String bdhash = skfsCommon.getDigest(new String(Base64.decodeBase64(browserData), "UTF-8"), "SHA-256");
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5022"),
-                    Hex.encodeHexString(Base64.decodeBase64(bdhash)));
+            String bdhash = SKFSCommon.getDigest(new String(Base64.getUrlDecoder().decode(browserData), "UTF-8"), "SHA-256");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5022"),
+                    Hex.toHexString(Base64.getUrlDecoder().decode(bdhash)));
 
-            String appIDHash = skfsCommon.getDigest(appid, "SHA-256");
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5021"),
-                    Hex.encodeHexString(Base64.decodeBase64(appIDHash)));
+            String appIDHash = SKFSCommon.getDigest(appid, "SHA-256");
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5021"),
+                    Hex.toHexString(Base64.getUrlDecoder().decode(appIDHash)));
 
             String objectSigned = objectTBS(appIDHash, signDataBytes[0], this.counter, bdhash);
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-MSG-5023"),
-                    Hex.encodeHexString(Base64.decodeBase64(objectSigned)));
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-MSG-5023"),
+                    Hex.toHexString(Base64.getUrlDecoder().decode(objectSigned)));
 
             //  verify signature; return counter received and userpresence or null on error
             //  convert publickey[] to PublicKey
-            byte[] publickeyBytes = Base64.decodeBase64(userPublicKeyB64);
+            byte[] publickeyBytes = Base64.getUrlDecoder().decode(userPublicKeyB64);
             KeyFactory kf = KeyFactory.getInstance("ECDSA", "BCFIPS");
             X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publickeyBytes);
             PublicKey pub = kf.generatePublic(pubKeySpec);
             if (cryptoCommon.verifySignature(signatureBytes, pub, objectSigned)) {
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
-                        skfsCommon.getMessageProperty("FIDO-MSG-5024"), "");
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processAuthenticationData",
+                        SKFSCommon.getMessageProperty("FIDO-MSG-5024"), "");
                 return true;
             } else {
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processAuthenticationData",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5005"), "");
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processAuthenticationData",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5005"), "");
                 return false;
             }
         } catch (NumberFormatException | UnsupportedEncodingException | InvalidKeySpecException |
                 NoSuchAlgorithmException | NoSuchProviderException ex) {
 
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processAuthenticationData",
-                    skfsCommon.getMessageProperty("FIDO-ERR-5006"), ex.getLocalizedMessage());
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processAuthenticationData",
+                    SKFSCommon.getMessageProperty("FIDO-ERR-5006"), ex.getLocalizedMessage());
             throw new SKFEException(ex);
         }
     }
@@ -269,12 +269,12 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
      */
     public static String objectTBS(String appParam, byte userpresence, int counterValue, String challParam) {
 
-        byte[] appparam = Base64.decodeBase64(appParam);
+        byte[] appparam = Base64.getUrlDecoder().decode(appParam);
         int apL = appparam.length;
-        byte[] challparam = Base64.decodeBase64(challParam);
+        byte[] challparam = Base64.getUrlDecoder().decode(challParam);
         int cpL = challparam.length;
 
-        byte[] ob2sign = new byte[apL + 1 + skfsConstants.COUNTER_VALUE_BYTES + cpL];
+        byte[] ob2sign = new byte[apL + 1 + SKFSConstants.COUNTER_VALUE_BYTES + cpL];
         int tot = 0;
 
         System.arraycopy(appparam, 0, ob2sign, 0, apL);
@@ -286,7 +286,7 @@ public class U2FAuthenticationResponse extends U2FResponse implements Serializab
         System.arraycopy(challparam, 0, ob2sign, tot, cpL);
         tot += cpL;
 
-        return Base64.encodeBase64String(ob2sign);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(ob2sign);
     }
 
     /**

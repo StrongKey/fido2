@@ -24,16 +24,16 @@ public class skceMaps {
     /**
      * Map that stores the sessionid to a simple pojo (username and challenge)
      */
-    public static Map<String, UserSessionInfo> sessionMap = new ConcurrentSkipListMap<>();
-    public static SortedMap<String, FidoKeysInfo> FIDOkeysmap = new ConcurrentSkipListMap<>();
+    public final static Map<String, UserSessionInfo> sessionMap = new ConcurrentSkipListMap<>();
+    public final static SortedMap<String, FidoKeysInfo> FIDOkeysmap = new ConcurrentSkipListMap<>();
     /**
      * Map that stores the FIDO secret key
      */
-    public static Map<String, FIDOSecretKeyInfo> FSKMap = new ConcurrentHashMap<>();
+    public static final Map<String, FIDOSecretKeyInfo> FSKMap = new ConcurrentHashMap<>();
     /**
      * Map that stores FIDO policies
      */
-    public static Map<String, FidoPolicyMDS> FPMap = new ConcurrentHashMap<>();
+    public static final Map<String, FidoPolicyMDS> FPMap = new ConcurrentHashMap<>();
 
     static {
     }

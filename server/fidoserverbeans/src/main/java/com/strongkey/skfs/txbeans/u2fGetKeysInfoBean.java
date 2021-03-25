@@ -11,9 +11,9 @@ import com.strongkey.skce.pojos.FidoKeysInfo;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Iterator;
@@ -75,8 +75,8 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
             String username) {
 
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5001"),
                 " EJB name=" + classname
                 + " did=" + did
                 + " username=" + username);
@@ -86,25 +86,25 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
         //  input checks
         if (did == null || did < 1) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " did=" + did);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " did=" + did);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " did=" + did);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " did=" + did);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
         if (username == null || username.isEmpty()) {
             skcero.setErrorkey("FIDO-ERR-0002");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0002") + " username=" + username);
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username=" + username);
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0002") + " username=" + username);
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username=" + username);
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
         if (username.trim().length() > Integer.parseInt(applianceCommon.getApplianceConfigurationProperty("appliance.cfg.maxlen.256charstring"))) {
             skcero.setErrorkey("FIDO-ERR-0027");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0027") + " username should be limited to 256 characters");
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0027", " username should be limited to 256 characters");
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0027") + " username should be limited to 256 characters");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0027", " username should be limited to 256 characters");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
@@ -124,7 +124,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                         //  Create a json object out of this key information
                         String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
                         FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
-                        skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
+                        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
                         long modifytime = 0L;
                         if (key.getModifyDate() != null) {
                             modifytime = key.getModifyDate().getTime();
@@ -140,7 +140,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
 //                          String randomid = Base64.encodeBase64String(new SecureRandom().generateSeed(64));
                         String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
 //                        userkeypointerMap.put(randomid, String.valueOf(key.getFidoKeysPK().getSid()) + "-" + String.valueOf(key.getFidoKeysPK().getFkid()));
-                        String time_to_live = skfsCommon.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
+                        String time_to_live = SKFSCommon.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
                         if (time_to_live == null || time_to_live.isEmpty()) {
                             time_to_live = "300";
                         }
@@ -159,7 +159,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                         if (regSettings != null) {
                             byte[] regSettingsBytes = Base64.getUrlDecoder().decode(regSettings);
                             String regSettingsString = new String(regSettingsBytes, "UTF-8");
-                            String displayName = skfsCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
+                            String displayName = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
                             if (displayName != null) {
                                 keyJsonBuilder.add("displayName", displayName);
                             }
@@ -172,8 +172,8 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                     //  on a periodic basis by an independent job.
 //                    UserKeyPointers ukp = new UserKeyPointers(userkeypointerMap);
                     //  Add it to the map in Common.
-//                    skceMaps.getMapObj().put(skfsConstants.MAP_USER_KEY_POINTERS,username, ukp);
-//                    skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-0030"), "");
+//                    skceMaps.getMapObj().put(SKFSConstants.MAP_USER_KEY_POINTERS,username, ukp);
+//                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-0030"), "");
                 }
             }
 //            else {
@@ -181,9 +181,9 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
 //            }
         } catch (Exception ex) {
             skcero.setErrorkey("FIDO-ERR-0001");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0001") + " Could not parse user keys; " + ex.getLocalizedMessage());
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0001"), " Could not parse user keys; " + ex.getLocalizedMessage());
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + " Could not parse user keys; " + ex.getLocalizedMessage());
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0001"), " Could not parse user keys; " + ex.getLocalizedMessage());
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
@@ -195,9 +195,9 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                     build();
         } catch (Exception ex) {
             skcero.setErrorkey("FIDO-ERR-0001");
-            skcero.setErrormsg(skfsCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-0001"), ex.getLocalizedMessage());
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getLocalizedMessage());
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0001"), ex.getLocalizedMessage());
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             return skcero;
         }
 
@@ -205,8 +205,8 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
         skcero.setReturnval(keysJsonObject.toString());
 
         //  log the exit and return
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5002"), classname);
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
         return skcero;
     }
 }

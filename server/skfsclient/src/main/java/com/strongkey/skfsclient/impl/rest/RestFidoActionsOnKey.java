@@ -6,12 +6,10 @@
 */
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.strongkey.skfsclient.common.Constants;
-import com.strongkey.skfsclient.common.common;
 import com.strongkey.skfs.requests.DeregisterRequest;
 import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
+import com.strongkey.skfsclient.common.Constants;
+import com.strongkey.skfsclient.common.common;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,8 +71,8 @@ public class RestFidoActionsOnKey {
         update.setKeyid(keyid);
 
         // Prepare for POST call
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(update);
+        String json = update.toJsonObject().toString();
+        System.out.println(json);
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
 
@@ -86,7 +84,7 @@ public class RestFidoActionsOnKey {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-        String payloadHash = common.calculateSha256(ow.writeValueAsString(update.getPayload()));
+        String payloadHash = common.calculateSha256(update.getPayload().toJsonObject().toString());
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
         String requestToHmac = httpPost.getMethod() + "\n"
                 + payloadHash + "\n"
@@ -178,8 +176,7 @@ public class RestFidoActionsOnKey {
 
 
             // Prepare for POST call
-            ObjectWriter ow = new ObjectMapper().writer();
-            String json = ow.writeValueAsString(delete);
+            String json = delete.toJsonObject().toString();
             ContentType mimetype = ContentType.APPLICATION_JSON;
             StringEntity body = new StringEntity(json, mimetype);
 
@@ -191,7 +188,7 @@ public class RestFidoActionsOnKey {
 
             // Build HMAC and add headers
             if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-                String payloadHash = common.calculateSha256(ow.writeValueAsString(delete.getPayload()));
+                String payloadHash = common.calculateSha256(delete.getPayload().toJsonObject().toString());
                 String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
                 String requestToHmac = httpPost.getMethod() + "\n"
                         + payloadHash + "\n"

@@ -7,8 +7,8 @@
 
 package com.strongkey.skfs.fido.policyobjects;
 
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import javax.json.JsonObject;
 
 public class CounterPolicyOptions {
@@ -30,8 +30,8 @@ public class CounterPolicyOptions {
 
     public static CounterPolicyOptions parse(JsonObject counterJson) {
         return new CounterPolicyOptions.CounterPolicyOptionsBuilder(
-                skfsCommon.handleNonExistantJsonBoolean(counterJson, skfsConstants.POLICY_COUNTER_REQUIRECOUNTER),
-                skfsCommon.handleNonExistantJsonBoolean(counterJson, skfsConstants.POLICY_COUNTER_REQUIRECOUNTERINCREASE))
+                SKFSCommon.handleNonExistantJsonBoolean(counterJson, SKFSConstants.POLICY_COUNTER_REQUIRECOUNTER),
+                SKFSCommon.handleNonExistantJsonBoolean(counterJson, SKFSConstants.POLICY_COUNTER_REQUIRECOUNTERINCREASE))
                 .build();
     }
 

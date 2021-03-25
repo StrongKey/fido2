@@ -6,8 +6,6 @@
 */
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongauth.skfs.fido2.simulator.FIDO2AuthenticatorSimulator;
 import com.strongkey.skfs.requests.AuthenticationRequest;
 import com.strongkey.skfs.requests.PreauthenticationRequest;
@@ -73,14 +71,16 @@ public class RestFidoAuthenticate {
 
         // Build request payload
         preauth.setUsername(username);
-        preauth.setOptions(Constants.JSON_EMPTY);
+        preauth.setOptions(Constants.JSON_EMPTY_OPTIONS);
 
         // Prepare for POST call
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(preauth);
+        String json = preauth.toJsonObject().toString();
         ContentType mimetype = ContentType.APPLICATION_JSON;
         StringEntity body = new StringEntity(json, mimetype);
 
+        System.out.println("preauthjson = ");
+        System.out.println(json);
+        
         String resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_PRE_AUTHENTICATE_ENDPOINT;
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -89,7 +89,7 @@ public class RestFidoAuthenticate {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-            String payloadHash = common.calculateSha256(ow.writeValueAsString(preauth.getPayload()));
+            String payloadHash = common.calculateSha256(preauth.getPayload().toJsonObject().toString());
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
             String requestToHmac = httpPost.getMethod() + "\n"
                     + payloadHash + "\n"
@@ -168,6 +168,8 @@ public class RestFidoAuthenticate {
                     System.out.println(parser.getString());
                     break;
                 }
+                    default:
+                        break;
             }
         }
 
@@ -206,13 +208,15 @@ public class RestFidoAuthenticate {
                 .add("response", auth_inner_response) // inner response object
                 .add("type", input.getString("type"))
                 .build();
-        auth.setMetadata(auth_metadata.toString());
-        auth.setResponse(auth_response.toString());
+        auth.setMetadata(auth_metadata);
+        auth.setResponse(auth_response);
 
         // Prepare for POST call
-        json = ow.writeValueAsString(auth);
+        json = auth.toJsonObject().toString();
         body = new StringEntity(json, mimetype);
 
+        System.out.println("authjson = ");
+        System.out.println(json);
         resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_AUTHENTICATE_ENDPOINT;
 
         httpclient = HttpClients.createDefault();
@@ -221,7 +225,7 @@ public class RestFidoAuthenticate {
 
         // Build HMAC and add headers
         if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
-            String payloadHash = common.calculateSha256(ow.writeValueAsString(auth.getPayload()));
+            String payloadHash = common.calculateSha256(auth.getPayload().toJsonObject().toString());
             String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
             String requestToHmac = httpPost.getMethod() + "\n"
                     + payloadHash + "\n"
@@ -259,7 +263,7 @@ public class RestFidoAuthenticate {
                 case 400:
                 case 500:
                 default:
-                    System.out.println("Error during authorize : " + responseStatusLine.getStatusCode() + " " + result);
+                    System.out.println("Error during authorize : " + responseStatusLine.getStatusCode() + " " + authresponse);
                     return;
             }
         } finally {

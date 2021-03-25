@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 
 @Local
 public interface getFidoPolicyLocal {
-    public Response getPolicies(Long did, String sidpid, Boolean metadataonly);
+    public Response getPolicies(Long did, Long sid, Long pid, Boolean metadataonly);
 
     public FidoPolicies getbyPK(Long did, Long sid, Long pid);
 

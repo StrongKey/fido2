@@ -8,9 +8,9 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -120,7 +120,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         }
 
         Keyid.setFKid(fkid);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER,Level.INFO, skfsCommon.getMessageProperty("SKCE-MSG-1085"), "SID-FKID=" + ssid + "-" + fkid);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.INFO, SKFSCommon.getMessageProperty("SKCE-MSG-1085"), "SID-FKID=" + ssid + "-" + fkid);
 
         idmap.put(did, Keyid);
         return idmap.get(did);
@@ -151,7 +151,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         }
 
         Keyid.setPid(pid);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("SKCE-MSG-1085"), "SID-PID=" + ssid + "-" + pid);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, SKFSCommon.getMessageProperty("SKCE-MSG-1085"), "SID-PID=" + ssid + "-" + pid);
 
         pidmap.put(ssid, Keyid);
         return pidmap.get(ssid);
@@ -181,7 +181,7 @@ public class SequenceGeneratorBean implements SequenceGeneratorBeanLocal {
         }
 
         Certid.setAttcid(attcid);
-        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, skfsCommon.getMessageProperty("SKCE-MSG-1085"), "SID-ATTCID=" + ssid + "-" + attcid);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, SKFSCommon.getMessageProperty("SKCE-MSG-1085"), "SID-ATTCID=" + ssid + "-" + attcid);
 
         attcidmap.put(ssid, Certid);
         return attcidmap.get(ssid);

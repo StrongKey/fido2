@@ -7,18 +7,18 @@
 
 package com.strongkey.skfs.core;
 
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
 import com.strongkey.skfs.utilities.SKFEException;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.logging.Level;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * POJO that represents browser data
@@ -75,35 +75,35 @@ public class BrowserData implements Serializable {
         String browserdataJson = null;
 
         try {
-            browserdataJson = new String(Base64.decodeBase64(browserdataB64Encoded), "UTF-8");
+            browserdataJson = new String(Base64.getUrlDecoder().decode(browserdataB64Encoded), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5013"), ex.getLocalizedMessage());
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5013"), ex.getLocalizedMessage());
             throw new SKFEException(ex);
         }
 
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "processBrowserData",
-                        skfsCommon.getMessageProperty("FIDO-MSG-5028"), "");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "processBrowserData",
+                        SKFSCommon.getMessageProperty("FIDO-MSG-5028"), "");
         parseBrowserDataJson(browserdataJson);
 
-        if (requesttype == 0 && !this.requesttype.equals(skfsConstants.REGISTER_CLIENT_DATA_OPTYPE)) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5014"), this.requesttype);
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5014") + this.requesttype);
+        if (requesttype == 0 && !this.requesttype.equals(SKFSConstants.REGISTER_CLIENT_DATA_OPTYPE)) {
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5014"), this.requesttype);
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5014") + this.requesttype);
         }
 
-        if (requesttype == 1 && !this.requesttype.equals(skfsConstants.AUTHENTICATE_CLIENT_DATA_OPTYPE)) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5014"), this.requesttype);
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5014") + this.requesttype);
+        if (requesttype == 1 && !this.requesttype.equals(SKFSConstants.AUTHENTICATE_CLIENT_DATA_OPTYPE)) {
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5014"), this.requesttype);
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5014") + this.requesttype);
         }
 
         try {
-            byte[] challengebytes = Base64.decodeBase64(this.challenge);
+            Base64.getUrlDecoder().decode(this.challenge);
         } catch (Exception ex) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5015"), ex.getLocalizedMessage());
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5015") + ex);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "processBrowserData",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5015"), ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5015") + ex);
         }
     }
 
@@ -122,21 +122,21 @@ public class BrowserData implements Serializable {
             JsonObject jsonObject = jsonReader.readObject();
             jsonReader.close();
 
-            this.requesttype = jsonObject.getString(skfsConstants.JSON_KEY_REQUESTTYPE);
-            this.challenge = jsonObject.getString(skfsConstants.JSON_KEY_NONCE);
-            this.origin = jsonObject.getString(skfsConstants.JSON_KEY_SERVERORIGIN);
+            this.requesttype = jsonObject.getString(SKFSConstants.JSON_KEY_REQUESTTYPE);
+            this.challenge = jsonObject.getString(SKFSConstants.JSON_KEY_NONCE);
+            this.origin = jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
             try {
-                this.channelid = jsonObject.getString(skfsConstants.JSON_KEY_CHANNELID);
+                this.channelid = jsonObject.getString(SKFSConstants.JSON_KEY_CHANNELID);
             } catch (Exception ex) {
                 //do nothing, channel ID is optional
-                skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.WARNING, classname, "parseBrowserDataJson",
-                        skfsCommon.getMessageProperty("FIDO-WARN-5002"), " Channelid is optional; so proceeding ahead");
+                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.WARNING, classname, "parseBrowserDataJson",
+                        SKFSCommon.getMessageProperty("FIDO-WARN-5002"), " Channelid is optional; so proceeding ahead");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.SEVERE, classname, "parseBrowserDataJson",
-                        skfsCommon.getMessageProperty("FIDO-ERR-5011"), ex.getLocalizedMessage());
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDO-ERR-5011") + ex);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "parseBrowserDataJson",
+                        SKFSCommon.getMessageProperty("FIDO-ERR-5011"), ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-5011") + ex);
         }
     }
 

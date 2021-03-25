@@ -23,7 +23,7 @@ public class U2FResponse implements Serializable {
     /**
      * Supported versions for U2F protocol
      */
-    final String U2F_VERSION_V2 = "U2F_V2";
+    final static String U2F_VERSION_V2 = "U2F_V2";
 
     /**
      * Generic attributes

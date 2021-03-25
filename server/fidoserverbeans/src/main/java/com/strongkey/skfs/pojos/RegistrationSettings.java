@@ -7,7 +7,7 @@
 
 package com.strongkey.skfs.pojos;
 
-import com.strongkey.skfs.utilities.skfsCommon;
+import com.strongkey.skfs.utilities.SKFSCommon;
 import java.util.Base64;
 import javax.json.JsonObject;
 
@@ -62,7 +62,7 @@ public class RegistrationSettings {
 
     public static RegistrationSettings parse(String registrationSettings, Integer registrationVersion){
         String decodedrs = new String(Base64.getUrlDecoder().decode(registrationSettings));
-        JsonObject rsJson = skfsCommon.getJsonObjectFromString(decodedrs);
+        JsonObject rsJson = SKFSCommon.getJsonObjectFromString(decodedrs);
         return new RegistrationSettingsBuilder()
                 .setAlg((rsJson.getJsonNumber("ALG") == null)? null : rsJson.getJsonNumber("ALG").intValue())
                 .setKty((rsJson.getJsonNumber("KTY") == null)? null : rsJson.getJsonNumber("KTY").intValue())

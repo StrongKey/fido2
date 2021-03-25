@@ -25,7 +25,7 @@ package com.strongauth.skfs.fido2.artifacts;
 
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.util.encoders.Hex;
 
 public class FIDO2AuthenticatorData
 {
@@ -80,7 +80,7 @@ public class FIDO2AuthenticatorData
     }
 
     public int getCounterValueAsInt() {
-        return Integer.parseInt(Hex.encodeHexString(counterValue), 16);
+        return Integer.parseInt(Hex.toHexString(counterValue), 16);
     }
 
     public FIDO2AttestedCredentialData getAttCredData() {

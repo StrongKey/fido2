@@ -7,7 +7,7 @@
 
 package com.strongkey.fido2mds;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.strongkey.appliance.objects.JWT;
 import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.fido2mds.data.Storage;
@@ -16,7 +16,10 @@ import com.strongkey.fido2mds.structures.MetadataStatement;
 import com.strongkey.fido2mds.structures.MetadataTOC;
 import com.strongkey.fido2mds.structures.MetadataTOCPayload;
 import com.strongkey.fido2mds.structures.MetadataTOCPayloadEntry;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -36,12 +39,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.Base64Utils;
-import org.springframework.web.client.RestTemplate;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.stream.JsonParser;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.util.EntityUtils;
+//import org.springframework.core.io.DefaultResourceLoader;
+//import org.springframework.core.io.ResourceLoader;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+//import org.springframework.util.Base64Utils;
+//import org.springframework.web.client.RestTemplate;
 
 class MDSUrlService extends MDSService {
 
@@ -51,22 +66,24 @@ class MDSUrlService extends MDSService {
     private final String token;
     private final String namespace;
 
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
     private final MDSJwtVerifier jwtVerifier;
-    private ObjectMapper objectMapper;
+//    private ObjectMapper objectMapper;
+    private JsonObject jsonObject;
     private Storage storage;
 
     private static final String TOC_FILE = "mds_toc.ser";
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH = "classpath:metadata/certs/FAKERootFAKE.crt";
     private static final String PRODUCTION_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH = "classpath:metadata/certs/FIDOMetadataService.cer";
 
-    public MDSUrlService(String url, String token, ObjectMapper objectMapper, Storage storage) {
+    public MDSUrlService(String url, String token, JsonObject jsonObject, Storage storage) {
         super();
 
         this.url = url;
         this.token = token;
         this.storage = storage;
-        this.objectMapper = objectMapper;
+//        this.objectMapper = objectMapper;
+        this.jsonObject = jsonObject;
 
         String unique = "";
         try {
@@ -77,8 +94,9 @@ class MDSUrlService extends MDSService {
         }
         namespace = Base64.getUrlEncoder().withoutPadding().encodeToString(unique.getBytes());
 
-        HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
+//        HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+//        restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
+        
 
         //TODO remove hardcoded solution to use right cert for production MDS
         if(token != null){
@@ -145,16 +163,17 @@ class MDSUrlService extends MDSService {
     }
 
     private X509Certificate retriveRootX509Certificate(String rootCertificateClassPath){
-        try{
-            ResourceLoader resourceLoader = new DefaultResourceLoader();
-            return cryptoCommon.generateX509FromInputStream(resourceLoader
-                    .getResource(rootCertificateClassPath)
-                    .getInputStream());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new IllegalArgumentException(ex);
-        }
+//        try{
+//            ResourceLoader resourceLoader = new DefaultResourceLoader();
+//            return cryptoCommon.generateX509FromInputStream(resourceLoader
+//                    .getResource(rootCertificateClassPath)
+//                    .getInputStream());
+            return cryptoCommon.generateX509FromInputStream(this.getClass().getResourceAsStream(rootCertificateClassPath));
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new IllegalArgumentException(ex);
+//        }
     }
 
     private MetadataTOC retrieveMetadataTOC(boolean forceUpdate) throws CertificateException, NoSuchProviderException, UnsupportedEncodingException {
@@ -168,8 +187,32 @@ class MDSUrlService extends MDSService {
 
         if (data == null) {
             String fullUrl = addToken(url);
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(fullUrl, String.class);
-            data = responseEntity.getBody();
+//            ResponseEntity<String> responseEntity = restTemplate.getForEntity(fullUrl, String.class);
+//            data = responseEntity.getBody();
+//            try {
+//                CloseableHttpClient httpClient = HttpClients.createDefault();
+//                HttpGet httpGet = new HttpGet(fullUrl);
+//                CloseableHttpResponse response = httpClient.execute(httpGet);
+//                data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+//            } catch (Exception e) {
+//                Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, e);
+//            }
+
+            try {
+                HttpURLConnection httpURLConnection;
+                URL url = new URL(fullUrl);
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+                StringBuilder sb = new StringBuilder();
+                String output;
+                while ((output = br.readLine()) != null) {
+                    sb.append(output);
+                }
+                data = sb.toString();
+            } catch (Exception e) {
+                Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, e);
+            }
+            
             storage.saveData(namespace, TOC_FILE, data);
         }
         JWT jwt = new JWT(data);
@@ -181,11 +224,14 @@ class MDSUrlService extends MDSService {
         String payloadString = jwt.getBody().toString();
         System.out.println("Payload String: " + payloadString);
         MetadataTOCPayload payload = null;
-        try {
-            payload = objectMapper.readValue(payloadString, MetadataTOCPayload.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+//        try {
+//            payload = objectMapper.readValue(payloadString, MetadataTOCPayload.class);
+//        } catch (IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+        JsonReader jsonStringReader = Json.createReader(new StringReader(payloadString));
+        JsonObject jsonDecoded = jsonStringReader.readObject();
+        payload = new MetadataTOCPayload(jsonDecoded);
 
         toc.setPayload(payload);
         return toc;
@@ -204,8 +250,30 @@ class MDSUrlService extends MDSService {
             url = addToken(url);
             url = url.replaceAll("#", "%23");
             URI realURI = URI.create(url);
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(realURI, String.class);
-            data = responseEntity.getBody();
+//            ResponseEntity<String> responseEntity = restTemplate.getForEntity(realURI, String.class);
+//            data = responseEntity.getBody();
+//            try {
+//                CloseableHttpClient httpClient = HttpClients.createDefault();
+//                HttpGet httpGet = new HttpGet(realURI);
+//                CloseableHttpResponse response = httpClient.execute(httpGet);
+//                data = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+//            } catch (Exception e) {
+//                Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, e);
+//            }
+            try {
+                
+                HttpURLConnection httpURLConnection;
+                httpURLConnection = (HttpURLConnection) realURI.toURL().openConnection();
+                BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+                StringBuilder sb = new StringBuilder();
+                String output;
+                while ((output = br.readLine()) != null) {
+                    sb.append(output);
+                }
+                data = sb.toString();
+            } catch (Exception e) {
+                Logger.getLogger(MDSUrlService.class.getName()).log(Level.SEVERE, null, e);
+            }
 
             if(data == null){
                 logger.severe("Null hash.");
@@ -222,12 +290,15 @@ class MDSUrlService extends MDSService {
 
         String decoded;
         try {
-            decoded = new String(Base64Utils.decodeFromUrlSafeString(data), StandardCharsets.UTF_8);
+            decoded = new String(Base64.getUrlDecoder().decode(data), StandardCharsets.UTF_8);
         } catch (Exception e) {
             // TODO: known bug: test server does not base64 this info
             decoded = data;
         }
-        return objectMapper.readValue(decoded, MetadataStatement.class);
+//        return objectMapper.readValue(decoded, MetadataStatement.class);
+        JsonReader jsonStringReader = Json.createReader(new StringReader(decoded));
+        JsonObject jsonDecoded = jsonStringReader.readObject();
+        return new MetadataStatement(jsonDecoded);
 
     }
 

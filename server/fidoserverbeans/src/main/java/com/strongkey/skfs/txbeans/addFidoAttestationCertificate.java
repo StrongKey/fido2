@@ -12,9 +12,9 @@ import com.strongkey.skfs.entitybeans.AttestationCertificates;
 import com.strongkey.skfs.entitybeans.AttestationCertificatesPK;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -46,7 +46,7 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
     @Override
     public AttestationCertificatesPK execute(Long did, X509Certificate attCert,
             AttestationCertificatesPK parentPK) throws CertificateEncodingException, SKFEException{
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER, classname, "execute");
 
         Long sid = applianceCommon.getServerId();
 
@@ -54,7 +54,7 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
                         attCert.getIssuerDN().getName(), attCert.getSerialNumber().toString());
         if(dbcert != null){
             //already exists
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.INFO, "SKCE-ERR-8059", "");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "SKCE-ERR-8059", "");
             return dbcert.getAttestationCertificatesPK();
         }
 
@@ -68,7 +68,7 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
         attestationCertificate.setParentSid((parentPK != null)?parentPK.getSid():null);
         attestationCertificate.setParentDid((parentPK != null)?parentPK.getDid():null);
         attestationCertificate.setParentAttcid((parentPK != null)?parentPK.getAttcid():null);
-        attestationCertificate.setCertificate(Base64.getUrlEncoder().encodeToString(attCert.getEncoded()));
+        attestationCertificate.setCertificate(Base64.getUrlEncoder().withoutPadding().encodeToString(attCert.getEncoded()));
         attestationCertificate.setIssuerDn(attCert.getIssuerDN().getName());
 //        if(attCert.getSubjectDN().getName().length() == 0){
 //            attestationCertificate.setSubjectDn("Not Specified");
@@ -85,27 +85,29 @@ public class addFidoAttestationCertificate implements addFidoAttestationCertific
             em.flush();
             em.clear();
         } catch (ConstraintViolationException ex) {
-            ex.getConstraintViolations().stream().forEach(x -> skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+            ex.getConstraintViolations().stream().forEach(x -> SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     x.toString()));
-            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDOJPA-ERR-2006", ex.getLocalizedMessage());
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDOJPA-ERR-2006") + "Check server logs for details.");
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDOJPA-ERR-2006", ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDOJPA-ERR-2006") + "Check server logs for details.");
         }
 
         //TODO Replicate
         String primarykey = sid + "-" + did + "-" + attcid;
         try {
             if (applianceCommon.replicate()) {
-                String response = replObj.execute(applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES, applianceConstants.REPLICATION_OPERATION_ADD, primarykey, attestationCertificate);
-                if(response != null){
-                    throw new SKFEException(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + response);
+                if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
+                    String response = replObj.execute(applianceConstants.ENTITY_TYPE_ATTESTATION_CERTIFICATES, applianceConstants.REPLICATION_OPERATION_ADD, primarykey, attestationCertificate);
+                    if (response != null) {
+                        throw new SKFEException(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + response);
+                    }
                 }
             }
         } catch (Exception e) {
             sc.setRollbackOnly();
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
             throw new RuntimeException(e.getLocalizedMessage());
         }
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER, classname, "execute");
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER, classname, "execute");
 
         return attestationCertificatePK;
     }

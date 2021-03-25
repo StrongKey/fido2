@@ -13,4 +13,6 @@ import javax.json.JsonObject;
 @Local
 public interface generateFido2PreauthenticateChallengeLocal {
     public String execute(Long did, String username, JsonObject options, JsonObject extensions);
+    
+    public String executePreAuthorize(Long did, String username, String txid, String txpayload, JsonObject options, JsonObject extensions);
 }

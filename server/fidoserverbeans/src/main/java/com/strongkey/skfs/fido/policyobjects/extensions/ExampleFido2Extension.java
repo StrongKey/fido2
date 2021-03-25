@@ -6,7 +6,7 @@
 */
 package com.strongkey.skfs.fido.policyobjects.extensions;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import javax.json.JsonValue;
 
 public class ExampleFido2Extension implements Fido2AuthenticationExtension, Fido2RegistrationExtension {
@@ -17,7 +17,7 @@ public class ExampleFido2Extension implements Fido2AuthenticationExtension, Fido
 
     @Override
     public String getExtensionIdentifier() {
-        return skfsConstants.POLICY_EXTENSIONS_EXAMPLE;
+        return SKFSConstants.POLICY_EXTENSIONS_EXAMPLE;
     }
 
     @Override

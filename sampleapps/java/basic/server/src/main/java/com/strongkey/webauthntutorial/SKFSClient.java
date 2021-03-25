@@ -77,7 +77,7 @@ public class SKFSClient {
         JsonObjectBuilder payloadBuilder = Json.createObjectBuilder()
                 .add(Constants.SKFS_JSON_KEY_USERNAME, username)
                 .add(Constants.SKFS_JSON_KEY_DISPLAYNAME, displayName)
-                .add(Constants.SKFS_JSON_KEY_OPTIONS, getRegOptions().toString())
+                .add(Constants.SKFS_JSON_KEY_OPTIONS, getRegOptions())
                 .add("extensions", Constants.JSON_EMPTY);
         return callSKFSRestApi(
             APIURI + Constants.REST_SUFFIX + Constants.PREREGISTER_ENDPOINT,
@@ -94,14 +94,14 @@ public class SKFSClient {
                 authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTACHMENT, AUTHENTICATORATTACHMENT);
             }
             if(REQUIRERESIDENTKEY != null && !REQUIRERESIDENTKEY.isEmpty()){
-                authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, REQUIRERESIDENTKEY);
+                authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Boolean.valueOf(REQUIRERESIDENTKEY));
             }
             if(REG_USERVERIFICATION != null && !REG_USERVERIFICATION.isEmpty()){
                 authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_USERVERIFICATION, REG_USERVERIFICATION);
             }
             JsonObject authSelect = authSelectBuilder.build();
             if(!authSelect.isEmpty()){
-                regOptionBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTACHMENT, authSelect);
+                regOptionBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_AUTHSELECTION, authSelect);
             }
             if(ATTESTATION != null && !ATTESTATION.isEmpty()){
                 regOptionBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTESTATION, ATTESTATION);
@@ -127,8 +127,8 @@ public class SKFSClient {
                 .add("response", reg_inner_response) // inner response object
                 .add("type", signedResponse.getString("type")).build();
         JsonObjectBuilder payloadBuilder = Json.createObjectBuilder()
-                .add("response", reg_response.toString())
-                .add("metadata", reg_metadata.toString());
+                .add("publicKeyCredential", reg_response)
+                .add("strongkeyMetadata", reg_metadata);
         return callSKFSRestApi(
             APIURI + Constants.REST_SUFFIX + Constants.REGISTER_ENDPOINT,
             payloadBuilder);
@@ -138,7 +138,7 @@ public class SKFSClient {
     public static String preauthenticate(String username) {
         JsonObjectBuilder payloadBuilder = Json.createObjectBuilder()
                 .add(Constants.SKFS_JSON_KEY_USERNAME, username)
-                .add(Constants.SKFS_JSON_KEY_OPTIONS, getAuthOptions().toString());
+                .add(Constants.SKFS_JSON_KEY_OPTIONS, getAuthOptions());
         return callSKFSRestApi(
             APIURI + Constants.REST_SUFFIX + Constants.PREAUTHENTICATE_ENDPOINT,
             payloadBuilder);
@@ -177,8 +177,8 @@ public class SKFSClient {
                 .add("type", signedResponse.getString("type"))
                 .build();
         JsonObjectBuilder payloadBuilder = Json.createObjectBuilder()
-                .add("response", auth_response.toString())
-                .add("metadata", auth_metadata.toString());
+                .add("publicKeyCredential", auth_response)
+                .add("strongkeyMetadata", auth_metadata);
         return callSKFSRestApi(
             APIURI + Constants.REST_SUFFIX + Constants.AUTHENTICATE_ENDPOINT,
             payloadBuilder);

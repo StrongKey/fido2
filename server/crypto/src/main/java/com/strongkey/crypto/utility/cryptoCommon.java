@@ -13,20 +13,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.AlgorithmParameters;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -37,6 +42,8 @@ import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -46,8 +53,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.Mac;
@@ -56,6 +65,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.CryptoServicesRegistrar;
@@ -96,6 +106,10 @@ public final class cryptoCommon {
 
     // Location where StrongKey Lite is installed on this machine
     private static String cryptohome;
+    
+    private static KeyStore keystore;
+    
+     private static KeyStore jwtKeystore;
 
     /**
      * Private SortedMap of Configuration Maps. Each Configuration map * has the
@@ -106,6 +120,23 @@ public final class cryptoCommon {
      */
 
     private static SortedMap<Long, Map<String, String>> configmap = new ConcurrentSkipListMap<>();
+    private static SortedMap<String, PrivateKey> pvkeymap = new ConcurrentSkipListMap<>();
+    private static SortedMap<String, PublicKey> publickeymap = new ConcurrentSkipListMap<>();
+    private static ArrayList<PrivateKey> jwtpvkeylist = new ArrayList<>();
+    private static ArrayList<X509Certificate> jwtcertlist = new ArrayList<>();
+    private static ArrayList<PublicKey> jwtpublickeylist = new ArrayList<>();
+    private static SortedMap<String,BlockingQueue<List>> jwtsignqMap = new ConcurrentSkipListMap<>();
+    private static SortedMap<String,BlockingQueue<Signature>> jwtverifyqMap =  new ConcurrentSkipListMap<>();  //new LinkedBlockingQueue<Signature>();
+    private static SortedMap<String,X509Certificate> jwtCAcertMap =  new ConcurrentSkipListMap<>();
+    private static SortedMap<BigInteger,String>jwtcertserialmap =  new ConcurrentSkipListMap<>();
+    
+    private static Integer jwtthreads;
+    private static String jwtkeystorelocation;
+    private static Integer certPerServer;
+    private static String jwtpassword;
+    private static String jwttruststorelocation;
+    private static String jwtsigningalgorithm;
+        
 
     public static final int EC_POINTSIZE               = 32;
 
@@ -274,7 +305,8 @@ public final class cryptoCommon {
     /**
      * Creates a new instance of common
      */
-    public cryptoCommon() {
+    public cryptoCommon() throws CryptoException {
+       
     }
 
     /**
@@ -371,6 +403,391 @@ public final class cryptoCommon {
         return null;
     }
 
+    public static void loadVerificationKey(String did, String secret, String signingdn) throws CryptoException {
+        // Keystore location
+        String truststorelocation;
+        try {
+            if ((truststorelocation = cryptoCommon.getConfigurationProperty("crypto.cfg.property.signing.truststorelocation")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+        }
+
+        PublicKey pbk = null;
+        InputStream is = null;
+        try {
+            KeyStore truststore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            is = new FileInputStream(truststorelocation);
+            truststore.load(is, secret.toCharArray());
+            cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2521", truststorelocation);
+
+            // Print out certs in the truststore
+            String alias;
+            X500Name inputdn = new X500Name(signingdn);
+            cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2520", signingdn);
+            for (Enumeration<String> e = truststore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2522", alias);
+                X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
+                X500Name xcdn = new X500Name(cert.getSubjectX500Principal().getName());
+                cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2515", xcdn + " [" + alias + "]");
+
+                // Match using the X500Names
+                if (xcdn.equals(inputdn)) {
+                    cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2523", signingdn);
+                    boolean[] keyusage = cert.getKeyUsage();
+
+                    // Collect key-usages in a string buffer for logging
+                    java.io.StringWriter sw = new java.io.StringWriter();
+                    for (int i = 0; i < keyusage.length; i++) {
+                        sw.write("\nkeyusage[" + i + "]: " + keyusage[i]);
+                    }
+                    cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2517", sw.toString());
+
+                    // Now match for the signing bit
+                    if (keyusage[0]) {
+                        // If true, this is the certificate we want
+                        pbk = cert.getPublicKey();
+                        cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureVerificationKey", "CRYPTO-MSG-2524", signingdn + " [" + alias + "]");
+                        break;
+                    }
+                }
+            }
+
+            if(pbk!=null){
+                X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(pbk.getEncoded());
+//            KeyFactory kf = KeyFactory.getInstance("RSA");
+                KeyFactory kf = KeyFactory.getInstance("EC");
+
+                PublicKey pKey = kf.generatePublic(X509publicKey);
+                publickeymap.put(did, pKey);
+            }
+            
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | InvalidKeySpecException | IOException | NullPointerException ex) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureVerificationKey", "CRYPTO-ERR-2507", ex.getLocalizedMessage());
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2507", ex.getLocalizedMessage()));
+        }
+        finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(cryptoCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    
+    public static void loadSigningKey(String did, String secret, String signingdn) throws CryptoException {
+        String keystoreurl;
+
+        try {
+            if ((keystoreurl = cryptoCommon.getConfigurationProperty("crypto.cfg.property.signing.keystorelocation")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.keystorelocation");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureSigningKey", "CRYPTO-ERR-2505", "crypto.cfg.property.signing.keystorelocation");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.signing.truststorelocation"));
+        }
+
+        InputStream is = null;
+        try {
+            keystore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            is = new FileInputStream(keystoreurl);
+            keystore.load(is, secret.toCharArray());
+        
+
+            // get the private key
+            // Convert signingdn to an BouncyCastle X500Name-compatible DN
+            X509Certificate cert;               // X509 Certificate object
+            PrivateKey pvk = null;
+                     // RSA Private key object
+            boolean[] keyusage;
+            X500Name xsdn = new X500Name(signingdn);
+
+            // Print out certs in the keystore
+            String alias;
+            cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2520", signingdn);
+            for (Enumeration<String> e = keystore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2514", alias);
+                if (!alias.endsWith(".cert")) {
+                    continue;
+                }
+                cert = (X509Certificate) keystore.getCertificate(alias);
+                X500Name xcdn = new X500Name(cert.getSubjectX500Principal().getName());
+                cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2515", xcdn + " [" + alias + "]");
+
+                // First match the subject DN
+                if (xcdn.equals(xsdn)) {
+                    cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2516", signingdn);
+                    keyusage = cert.getKeyUsage();
+
+                    // Collect key-usages in a string buffer for logging
+                    StringWriter sw = new java.io.StringWriter();
+                    for (int i = 0; i < keyusage.length; i++) {
+                        sw.write("\nkeyusage[" + i + "]: " + keyusage[i]);
+                    }
+                    cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2517", sw.toString());
+
+                    // Now match for the signing bit
+                    if (keyusage[0]) {
+                        // If true, this is the certificate we want
+                        String pvkalias = alias.substring(0, alias.indexOf(".")); // Get rid of the .cert in alias
+                        pvk = ((KeyStore.PrivateKeyEntry) keystore.getEntry(pvkalias, new KeyStore.PasswordProtection(secret.toCharArray()))).getPrivateKey();
+                        cryptoCommon.logp(Level.FINE, classname, "getXMLSignatureSigningKey", "CRYPTO-MSG-2518", signingdn + " [" + alias + "]");
+                        break;
+                    }
+                }
+            }
+            if (pvk != null) {
+                PKCS8EncodedKeySpec X509privateKey = new PKCS8EncodedKeySpec(pvk.getEncoded());
+//            KeyFactory kf = KeyFactory.getInstance("RSA");
+                KeyFactory kf = KeyFactory.getInstance("EC");
+
+                PrivateKey pKey = kf.generatePrivate(X509privateKey);
+                pvkeymap.put(did, pKey);
+            }
+            
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException ex) {
+            ex.printStackTrace();
+            cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureSigningKey", "CRYPTO-ERR-2506", ex.getLocalizedMessage());
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2506", ex.getLocalizedMessage()));
+        } catch (CertificateException | UnrecoverableEntryException | InvalidKeySpecException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                if(is!=null)
+                    is.close();
+            } catch (IOException ex) {
+                Logger.getLogger(cryptoCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+       
+    public static void loadJWTCACert(String did) throws CryptoException {
+       
+        if(jwttruststorelocation==null || jwtpassword==null || 
+                jwtthreads==null || jwtkeystorelocation==null ||
+                jwtsigningalgorithm==null){
+            loadJWTProperties();
+        }
+        
+
+        InputStream is = null;
+        try {
+            KeyStore truststore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            is = new FileInputStream(jwttruststorelocation);
+            truststore.load(is, jwtpassword.toCharArray());
+            cryptoCommon.logp(Level.FINE, classname, "getJWTSignatureVerificationKeys", "CRYPTO-MSG-2521", jwttruststorelocation);
+            // Print out certs in the truststore
+            String alias;
+            for (Enumeration<String> e = truststore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                cryptoCommon.logp(Level.FINE, classname, "getJWTSignatureVerificationKeys", "CRYPTO-MSG-2522", alias);
+                if(alias.equals("jwtCA-"+did)){
+                    X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
+                    jwtCAcertMap.put(did,cert);
+              }       
+            }      
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException | NullPointerException ex) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getXMLSignatureVerificationKey", "CRYPTO-ERR-2507", ex.getLocalizedMessage());
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2507", ex.getLocalizedMessage()));
+        }
+        finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(cryptoCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+     public static void loadJWTVerifyKeys(String did, String sid) throws CryptoException {
+        
+        if(jwttruststorelocation==null || jwtpassword==null || 
+                jwtthreads==null || jwtkeystorelocation==null ||
+                jwtsigningalgorithm==null){
+            loadJWTProperties();
+        }
+        
+       
+
+        InputStream ist = null;
+        try {
+            KeyStore truststore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            ist = new FileInputStream(jwttruststorelocation);
+            truststore.load(ist, jwtpassword.toCharArray());
+            //load each certificate
+            String alias;
+            for (Enumeration<String> e = truststore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                cryptoCommon.logp(Level.FINE, classname, "getJWTSignatureVerificationKeys", "CRYPTO-MSG-2522", alias);
+                String[] aliasSplit = alias.split("-");
+                //check if jwtsigningcert 
+                if(aliasSplit[0].equals("jwtsigningcert")){
+                    X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
+                    BlockingQueue<Signature> jwtsignq = new LinkedBlockingQueue<Signature>();
+                    for (int i = 0; i < (jwtthreads/3); i++) {
+                        try {
+                            Signature s = Signature.getInstance(jwtsigningalgorithm);
+                            s.initVerify(cert.getPublicKey());
+                            jwtsignq.put(s);                          
+                        } catch (NoSuchAlgorithmException | InvalidKeyException  ex) {
+                            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2506", ex.getLocalizedMessage()));
+                        }
+                        
+                     }
+                    jwtverifyqMap.put(alias,jwtsignq);
+                    jwtcertserialmap.put(cert.getSerialNumber(),alias);
+                }
+              }
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException | InterruptedException ex) {
+            ex.printStackTrace();
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTSignatureSigningKeys", "CRYPTO-ERR-2506", ex.getLocalizedMessage());
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2506", ex.getLocalizedMessage()));
+        } catch (CertificateException  ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                if(ist!=null)
+                    ist.close();
+            } catch (IOException ex) {
+                Logger.getLogger(cryptoCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public static void loadJWTSigningKeys(String did, String sid) throws CryptoException{
+        
+        if(jwttruststorelocation==null || jwtpassword==null || 
+                jwtthreads==null || jwtkeystorelocation==null ||
+                jwtsigningalgorithm==null){
+            loadJWTProperties();
+        }
+       
+
+        InputStream is = null;
+        InputStream ist = null;
+        try {
+            jwtKeystore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            is = new FileInputStream(jwtkeystorelocation);
+            jwtKeystore.load(is, jwtpassword.toCharArray());    
+            //load each certificate
+            String alias;
+            for (Enumeration<String> e = jwtKeystore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                cryptoCommon.logp(Level.FINE, classname, "getJWTSignatureVerificationKeys", "CRYPTO-MSG-2522", alias);
+                String[] aliasSplit = alias.split("-");
+                //check for did and sid 
+                if(aliasSplit[0].equals("jwtsigningcert")){
+                    String[] idSplit = aliasSplit[1].split("\\.");
+                    if( idSplit[0].equals(sid) && idSplit[1].equals(did)){
+                        PrivateKey pvk = ((KeyStore.PrivateKeyEntry) jwtKeystore.getEntry(alias, new KeyStore.PasswordProtection(jwtpassword.toCharArray()))).getPrivateKey();
+                        PKCS8EncodedKeySpec X509privateKey = new PKCS8EncodedKeySpec(pvk.getEncoded());
+                        KeyFactory kf = KeyFactory.getInstance("EC");
+                        PrivateKey pKey = kf.generatePrivate(X509privateKey);
+                        jwtpvkeylist.add(pKey);
+                        X509Certificate cert = (X509Certificate) jwtKeystore.getCertificate(alias);
+                        jwtcertlist.add(cert);
+                    }
+                }
+              }
+            // Setup signing instances
+            int pvki = 0;
+            BlockingQueue<List> jwtsignq = new LinkedBlockingQueue<List>();
+            for (int i = 0; i < jwtthreads; i++) {
+                try {
+                    Signature s = Signature.getInstance(jwtsigningalgorithm);
+                    s.initSign(jwtpvkeylist.get(pvki));
+                    List<Object> list = new ArrayList<Object>();
+                    list.add(s);
+                    list.add(jwtcertlist.get(pvki));
+                    jwtsignq.put(list);
+
+                } catch (NoSuchAlgorithmException | InvalidKeyException  ex) {
+                    throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2506", ex.getLocalizedMessage()));
+                }
+                pvki++;
+                if(pvki >= certPerServer){
+                    pvki=0;
+                } 
+             }
+             jwtsignqMap.put(did, jwtsignq);
+        } catch (KeyStoreException | InvalidKeySpecException | NoSuchAlgorithmException | UnrecoverableEntryException | IOException |  InterruptedException  ex) {
+            ex.printStackTrace();
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTSignatureSigningKeys", "CRYPTO-ERR-2506", ex.getLocalizedMessage());
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2506", ex.getLocalizedMessage()));
+        } catch (CertificateException  ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                if(is!=null)
+                    is.close();
+            } catch (IOException ex) {
+                Logger.getLogger(cryptoCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    public static PrivateKey getPvKey(String did)
+    {
+        return pvkeymap.get(did);
+    }
+    
+    public static PublicKey getPublicKey(String did)
+    {
+        return publickeymap.get(did);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<Object> takeJWTSignList(String did) throws InterruptedException
+    {
+        return jwtsignqMap.get(did).take();
+    }
+    public static void putJWTSignList(String did, List<Object> signer) throws InterruptedException
+    {
+        jwtsignqMap.get(did).put(signer);
+    }
+    public static String getJwtSignAlgorithm(){
+        return jwtsigningalgorithm;
+    }
+    
+    public static Signature takeJWTVerify(String alias) throws InterruptedException
+    {
+        return jwtverifyqMap.get(alias).take();
+    }
+    public static void putJWTVerify(String alias, Signature verifier) throws InterruptedException
+    {
+        jwtverifyqMap.get(alias).put(verifier);
+    }
+    public static X509Certificate getJWTCAcert(String did){
+        cryptoCommon.logp(Level.FINE, classname, "getJWTSignatureVerificationKeys", "CRYPTO-MSG-2522", "#################"+jwtCAcertMap);
+
+        return jwtCAcertMap.get(did);
+    }
+    public static SortedMap<BigInteger,String> getJWTSerialAliasMap(){
+        return jwtcertserialmap;
+    }
+    
+    
+    
+    
     /**
      * Method to verify attestation certificate
      *
@@ -382,7 +799,7 @@ public final class cryptoCommon {
         PublicKey attcertPublicKey = attestationCertificate.getPublicKey();
         byte[] attPublicKey = attcertPublicKey.getEncoded();
         SubjectPublicKeyInfo spki = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(attPublicKey));
-        spki.getAlgorithm();
+//        spki.getAlgorithm();
 
         //  get algorithm from the AlgorithmIdentifier refer to RFC 5480
         AlgorithmIdentifier sigAlgId = spki.getAlgorithm();
@@ -688,7 +1105,62 @@ public final class cryptoCommon {
     public static SecureRandom getSecureRandom() {
         return FIPS_DRBG;
     }
-
+    private static void loadJWTProperties() throws CryptoException{
+        try {
+            if ((jwttruststorelocation = cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.truststorelocation")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation"));
+        }
+        try {
+            if ((jwtpassword = cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.password")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.password");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.password"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.password");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.password"));
+        }
+         try {
+            if ((jwtthreads = Integer.parseInt(cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.threads"))) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.threads");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.threads"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.threads");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.threads"));
+        }
+        try {
+            if ((jwtkeystorelocation = cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.keystorelocation")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.keystorelocation");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.keystorelocation"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.keystorelocation");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.keystorelocation"));
+        }
+        try {
+            if ((jwtsigningalgorithm = cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.algorithm")) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.algorithm");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.algorithm"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.algorithm");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.algorithm"));
+        }
+        try {
+            if ((certPerServer = Integer.parseInt(cryptoCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.certsperserver"))) == null) {
+                cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.certsperserver");
+                throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.certsperserver"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            cryptoCommon.logp(Level.SEVERE, classname, "getJWTKeys", "CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.certsperserver");
+            throw new CryptoException(cryptoCommon.getMessageWithParam("CRYPTO-ERR-2505", "crypto.cfg.property.jwtsigning.certsperserver"));
+        }
+    }
     private static void setupMaxLenMap() {
         logger.entering(classname, "setupMaxLenMap");
 
@@ -757,4 +1229,7 @@ public final class cryptoCommon {
 
         logger.exiting(classname, "setupMaxLenMap");
     }
+    
+    
+    
 }

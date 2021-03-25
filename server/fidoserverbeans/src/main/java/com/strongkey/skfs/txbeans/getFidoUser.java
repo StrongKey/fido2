@@ -11,9 +11,9 @@ import com.strongkey.crypto.interfaces.initCryptoModule;
 import com.strongkey.crypto.utility.CryptoException;
 import com.strongkey.skfs.entitybeans.FidoUsers;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class getFidoUser implements getFidoUserLocal {
      */
     private final String classname = this.getClass().getName();
 
-    final private String SIGN_SUFFIX = skfsCommon.getConfigurationProperty("skfs.cfg.property.signsuffix");
+    final private String SIGN_SUFFIX = SKFSCommon.getConfigurationProperty("skfs.cfg.property.signsuffix");
 
     /**
      * Persistence context for derby
@@ -48,7 +48,7 @@ public class getFidoUser implements getFidoUserLocal {
     getDomainsBeanLocal getdomejb;
 
     @Override
-    public FidoUsers GetByUsername(Long did, String username) throws SKFEException {
+    public FidoUsers getByUsername(Long did, String username) throws SKFEException {
         try {
             TypedQuery<FidoUsers> q = em.createNamedQuery("FidoUsers.findByDidUsername", FidoUsers.class);
             q.setHint("javax.persistence.cache.storeMode", "REFRESH");
@@ -67,13 +67,13 @@ public class getFidoUser implements getFidoUserLocal {
     private void verifyDBRecordSignature(Long did, FidoUsers FidoUser)
             throws SKFEException {
         if (FidoUser != null) {
-            if (skfsCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.verify")
+            if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.verify")
                     .equalsIgnoreCase("true")) {
                 Domains d = getdomejb.byDid(did);
-                String standalone = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
+                String standalone = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.fidoengine");
                 String signingKeystorePassword = "";
                 if (standalone.equalsIgnoreCase("true")) {
-                    signingKeystorePassword = skfsCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
+                    signingKeystorePassword = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
                 }
 
                 String documentid = FidoUser.getFidoUsersPK().getSid()
@@ -98,17 +98,17 @@ public class getFidoUser implements getFidoUserLocal {
                 //  verify row level signature
                 boolean verified = false;
                 try {
-                    verified = initCryptoModule.getCryptoModule().verifyDBRow(did.toString(), writer.toString(), d.getSkceSigningdn(), Boolean.valueOf(standalone), signingKeystorePassword, FidoUser.getSignature());
+                    verified = initCryptoModule.getCryptoModule().verifyDBRow(did.toString(), writer.toString(), d.getSkceSigningdn(), Boolean.valueOf(standalone), signingKeystorePassword, "RSA", FidoUser.getSignature());
                 } catch (CryptoException ex) {
                     Logger.getLogger(getFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (!verified) {
-                    skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
+                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
                             "SKCE-ERR-5001", "er sid-did-erqid="
                             + FidoUser.getFidoUsersPK().getSid()
                             + "-" + FidoUser.getFidoUsersPK().getDid()
                             + "-" + FidoUser.getFidoUsersPK().getUsername());
-                    throw new SKFEException(skfsCommon.getMessageProperty("SKCE-ERR-5001")
+                    throw new SKFEException(SKFSCommon.getMessageProperty("SKCE-ERR-5001")
                             + "FidoUser sid-did-erqid="
                             + FidoUser.getFidoUsersPK().getSid()
                             + "-" + FidoUser.getFidoUsersPK().getDid()
@@ -116,9 +116,9 @@ public class getFidoUser implements getFidoUserLocal {
                 }
             }
         } else {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
                     "FIDOJPA-ERR-1001", " er object");
-            throw new SKFEException(skfsCommon.getMessageProperty("FIDOJPA-ERR-1001") + " fk object");
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " fk object");
         }
     }
 }

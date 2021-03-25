@@ -6,6 +6,9 @@
 */
 package com.strongkey.skfsclient.common;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 public class Constants {
 
     // WSDL suffixes
@@ -16,12 +19,21 @@ public class Constants {
     public static final String REST_PRE_REGISTER_ENDPOINT = "/preregister";
     public static final String REST_REGISTER_ENDPOINT = "/register";
     public static final String REST_PRE_AUTHENTICATE_ENDPOINT = "/preauthenticate";
+    public static final String REST_PRE_AUTHORIZE_ENDPOINT = "/preauthorize";
     public static final String REST_AUTHENTICATE_ENDPOINT = "/authenticate";
+    public static final String REST_AUTHOTIZE_ENDPOINT = "/authorize";
     public static final String REST_GETKEYSINFO_ENDPOINT = "/getkeysinfo";
     public static final String REST_UPDATE_ENDPOINT = "/updatekeyinfo";
     public static final String REST_DEREGISTER_ENDPOINT = "/deregister";
     public static final String REST_PING_ENDPOINT = "/ping";
-
+    public static final String REST_GET_POLICY = "/getpolicy";
+    public static final String REST_PATCH_POLICY = "/updatepolicy";
+    public static final String REST_CREATE_POLICY = "/addpolicy";
+    public static final String REST_DELETE_POLICY = "/deletepolicy";
+    public static final String REST_GET_CONFIGURATION_ENDPOINT = "/getconfiguration";
+    public static final String REST_UPDATE_CONFIGURATION_ENDPOINT = "/updateconfiguration";
+    public static final String REST_DELETE_CONFIGURATION_ENDPOINT = "/deleteconfiguration";
+    
     //Unchanged operation endpoints
     public static final String CREATE_POLICY_ENDPOINT = "/fidopolicies";
     public static final String DELETE_POLICY_ENDPOINT = "/fidopolicies";
@@ -30,14 +42,18 @@ public class Constants {
 
     public static final String COMMANDS_REGISTER = "R";
     public static final String COMMANDS_AUTHENTICATE = "A";
+    public static final String COMMANDS_AUTHORIZE = "AZ";
     public static final String COMMANDS_GETKEYSINFO = "G";
     public static final String COMMANDS_UPDATE = "U";
     public static final String COMMANDS_DEREGISTER = "D";
     public static final String COMMANDS_PING = "P";
-//    public static final String COMMANDS_CREATE_POLICY = "CP";
-//    public static final String COMMANDS_DELETE_POLICY = "DP";
-//    public static final String COMMANDS_PATCH_POLICY = "PP";
-//    public static final String COMMANDS_GET_POLICY = "GP";
+    public static final String COMMANDS_CREATE_POLICY = "CP";
+    public static final String COMMANDS_DELETE_POLICY = "DP";
+    public static final String COMMANDS_PATCH_POLICY = "PP";
+    public static final String COMMANDS_GET_POLICY = "GP";
+    public static final String COMMANDS_GET_CONFIGURATION = "GC";
+    public static final String COMMANDS_UPDATE_CONFIGURATION = "UC";
+    public static final String COMMANDS_DELETE_CONFIGURATION = "DC";
 
     public static final String JSON_KEY_SERVLET_INPUT_USERNAME = "username";
     public static final String JSON_KEY_SERVLET_INPUT_REQUEST = "request";
@@ -50,8 +66,10 @@ public class Constants {
     public static final String PROTOCOL_SOAP = "SOAP";
     public static final String AUTHORIZATION_HMAC = "HMAC";
     public static final String AUTHORIZATION_PASSWORD = "PASSWORD";
-    public static final String JSON_ATTESTATION_DIRECT = "{\"attestation\":\"direct\"}";
+//    public static final String JSON_ATTESTATION_DIRECT = "{\"attestation\":\"direct\"}";
+    public static final JsonObject JSON_ATTESTATION_DIRECT = Json.createObjectBuilder().add("attestation", "direct").build();
     public static final String JSON_EMPTY = "{}";
+    public static final JsonObject JSON_EMPTY_OPTIONS = Json.createObjectBuilder().build();
 
     public static class WebAuthn {
 

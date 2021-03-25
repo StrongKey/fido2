@@ -9,8 +9,8 @@ package com.strongkey.skfs.fido2;
 
 public abstract class FIDO2KeyObject {
 
-    int alg;
-    int kty;
+    long alg;
+    long kty;
     static final int CRV_LABEL = -1;
     static final int X_LABEL = -2;
     static final int Y_LABEL = -3;
@@ -19,11 +19,11 @@ public abstract class FIDO2KeyObject {
     static final int KTY_LABEL = 1;
     static final int ALG_LABEL = 3;
 
-    public int getAlg() {
+    public long getAlg() {
         return alg;
     }
 
-    public int getKty() {
+    public long getKty() {
         return kty;
     }
 

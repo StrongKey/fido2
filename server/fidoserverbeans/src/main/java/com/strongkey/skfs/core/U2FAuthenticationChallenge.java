@@ -7,9 +7,9 @@
 
 package com.strongkey.skfs.core;
 
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.io.Serializable;
 import java.util.logging.Level;
 import javax.json.Json;
@@ -55,7 +55,7 @@ public class U2FAuthenticationChallenge extends U2FChallenge implements Serializ
         keyhandle = keyhandlefromDB;
         appid = appidfromDB;
         transports = transport_list;
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "U2FAuthenticationChallenge", skfsCommon.getMessageProperty("FIDO-MSG-5004"), "");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "U2FAuthenticationChallenge", SKFSCommon.getMessageProperty("FIDO-MSG-5004"), "");
     }
 
     /**
@@ -95,16 +95,16 @@ public class U2FAuthenticationChallenge extends U2FChallenge implements Serializ
         JsonObject jsonObj;
         if (appid.equalsIgnoreCase(appidfromfile)) {
             jsonObj = Json.createObjectBuilder()
-                    .add(skfsConstants.JSON_USER_KEY_HANDLE_SERVLET, this.keyhandle)
-                    .add(skfsConstants.JSON_KEY_TRANSPORT, transports)
-                    .add(skfsConstants.JSON_KEY_VERSION, version)
+                    .add(SKFSConstants.JSON_USER_KEY_HANDLE_SERVLET, this.keyhandle)
+                    .add(SKFSConstants.JSON_KEY_TRANSPORT, transports)
+                    .add(SKFSConstants.JSON_KEY_VERSION, version)
                     .build();
         } else {
             jsonObj = Json.createObjectBuilder()
-                    .add(skfsConstants.JSON_USER_KEY_HANDLE_SERVLET, this.keyhandle)
-                    .add(skfsConstants.JSON_KEY_TRANSPORT, transports)
-                    .add(skfsConstants.JSON_KEY_VERSION, version)
-                    .add(skfsConstants.JSON_KEY_APP_ID, appid)
+                    .add(SKFSConstants.JSON_USER_KEY_HANDLE_SERVLET, this.keyhandle)
+                    .add(SKFSConstants.JSON_KEY_TRANSPORT, transports)
+                    .add(SKFSConstants.JSON_KEY_VERSION, version)
+                    .add(SKFSConstants.JSON_KEY_APP_ID, appid)
                     .build();
         }
 

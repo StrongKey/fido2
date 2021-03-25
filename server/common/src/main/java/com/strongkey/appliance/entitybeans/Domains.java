@@ -197,7 +197,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
             strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, classname, "setDid", "APPL-ERR-1003", "DID");
             throw new IllegalArgumentException("APPL-ERR-1003: DID");
         }
-        tmpLong = did.longValue();
+        tmpLong = did;
         // DID is negative, zero or larger than 9223372036854775807
         if ((tmpLong < 1) || (tmpLong > Long.MAX_VALUE)) {
             strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.WARNING, classname, "setDid", "APPL-ERR-1007", "DID=" + tmpLong);

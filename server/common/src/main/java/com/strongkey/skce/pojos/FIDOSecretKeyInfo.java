@@ -34,11 +34,18 @@ public class FIDOSecretKeyInfo {
     }
 
     public Date getCreationdate() {
-        return creationdate;
+        if(creationdate == null){
+            return null;
+        }
+        return new Date(creationdate.getTime());
     }
 
     public void setCreationdate(Date creationdate) {
-        this.creationdate = creationdate;
+        if(creationdate == null){
+            this.creationdate = null;
+        }else{
+            this.creationdate = new Date(creationdate.getTime());    
+        }
     }
 
     public int getSid() {

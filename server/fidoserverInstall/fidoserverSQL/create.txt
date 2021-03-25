@@ -21,6 +21,7 @@ source servers.sql
 source fido_keys.sql
 source fido_users.sql
 source fido_policies.sql
+source configurations.sql
 source attestation_certificates.sql
 source replication.sql
 

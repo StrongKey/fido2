@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License, as published by the Free
+ * Software Foundation and available at
+ * http://www.fsf.org/licensing/licenses/lgpl.html, version 2.1.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Copyright (c) 2001-2020 StrongAuth, Inc. (d/b/a StrongKey)
+ *
+ * **********************************************
+ *
+ *  888b    888          888
+ *  8888b   888          888
+ *  88888b  888          888
+ *  888Y88b 888  .d88b.  888888  .d88b.  .d8888b
+ *  888 Y88b888 d88""88b 888    d8P  Y8b 88K
+ *  888  Y88888 888  888 888    88888888 "Y8888b.
+ *  888   Y8888 Y88..88P Y88b.  Y8b.          X88
+ *  888    Y888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * **********************************************
+ *
+ * Drawer navigation header layout
+ */
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/strongkey_lightblue_side_nav_bar"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/nav_header_desc"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        app:srcCompat="@drawable/strongkey_logo_vertical_darkusb_very_small" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="@string/nav_header_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_header_subtitle"
+        android:textColor="@color/colorPrimaryDark"/>
+
+</LinearLayout>

@@ -15,6 +15,6 @@ import javax.ws.rs.core.Response;
 public interface updateFidoPolicyLocal {
 
     public Response execute(Long did,
-                         String sidpid,
+                         Long sid, Long pid,
                          PatchFidoPolicyRequest request);
 }

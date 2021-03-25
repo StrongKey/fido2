@@ -18,7 +18,7 @@ public class ApplicationConfig extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(SKFSServlet.class,
+        return new HashSet<>(Arrays.asList(SKFSServlet.class,FidoAdminServlet.class,
                 CrossOriginResourceSharingFilter.class));
     }
 }

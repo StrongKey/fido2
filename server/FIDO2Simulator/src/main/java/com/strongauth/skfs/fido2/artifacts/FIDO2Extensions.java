@@ -23,11 +23,6 @@
 
 package com.strongauth.skfs.fido2.artifacts;
 
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.fasterxml.jackson.dataformat.cbor.CBORParser;
 import java.io.IOException;
 import java.util.Map;
 
@@ -38,15 +33,7 @@ public class FIDO2Extensions
     // Decode and return length of extension(s)
     public int decodeExtensions(byte[] extensionBytes) throws IOException
     {
-        CBORFactory cbf = new CBORFactory();
-        CBORParser cbp = cbf.createParser(extensionBytes);
-        extensionMap = (new ObjectMapper(cbf)).readValue(cbp, new TypeReference<Map<String, Object>>() {});
-        int numRemainingBytes = 0;
-        JsonToken leftoverCBORToken;
-        while ((leftoverCBORToken = cbp.nextToken()) != null) {
-            numRemainingBytes += leftoverCBORToken.asByteArray().length;
-        }
-        return extensionBytes.length - numRemainingBytes;
+        return extensionBytes.length - 0;
     }
 
     // Return a specific extension object

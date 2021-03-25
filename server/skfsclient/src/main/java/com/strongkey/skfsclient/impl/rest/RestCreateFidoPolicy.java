@@ -7,13 +7,11 @@
 
 package com.strongkey.skfsclient.impl.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
-import com.strongkey.skfs.requests.CreateFidoPolicyRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.json.JsonObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,52 +26,79 @@ public class RestCreateFidoPolicy {
 
     public static void create(String REST_URI,
                             String did,
-                            String accesskey,
-                            String secretkey,
-                            Long startdate,
-                            Long enddate,
-                            String certificateProfileName,
-                            Integer version,
+                            String authtype,
+                            String credential1,
+                            String credential2,
                             String status,
                             String notes,
                             String policy) throws Exception
     {
 
         String apiversion = "2.0";
+        /*
+            * authtype    -> |HMAC     |PASSWORD   |
+            *                |---------|-----------|
+            * credential1 -> |accesskey|svcusername|
+            * credential2 -> |secretkey|svcpassword|
+         */
+        if (!authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC) && !authtype.equalsIgnoreCase(Constants.AUTHORIZATION_PASSWORD)) {
+            System.out.println("Invalid Authentication Type...\n");
+            return;
+        }
 
-        CreateFidoPolicyRequest cfpr = new CreateFidoPolicyRequest();
-        cfpr.setStartDate(startdate);
-        if (enddate != null)
-            cfpr.setEndDate(enddate);
-        cfpr.setCertificateProfileName(certificateProfileName);
-        cfpr.setVersion(version);
-        cfpr.setStatus(status);
-        cfpr.setNotes(notes);
-        cfpr.setPolicy(policy);
-        ObjectWriter ow = new ObjectMapper().writer();
-        String json = ow.writeValueAsString(cfpr);
+        System.out.println("REST Create policy test with " + authtype);
+        System.out.println("*******************************");
 
+        JsonObject svcinfo;
+
+        if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+            svcinfo = javax.json.Json.createObjectBuilder()
+                    .add("did", Long.valueOf(did))
+                    .add("protocol", "FIDO2_0")
+                    .add("authtype", Constants.AUTHORIZATION_HMAC)
+                    .build();
+        } else {
+            svcinfo = javax.json.Json.createObjectBuilder()
+                    .add("did", Long.valueOf(did))
+                    .add("protocol", "FIDO2_0")
+                    .add("authtype", Constants.AUTHORIZATION_PASSWORD)
+                    .add("svcusername", credential1)
+                    .add("svcpassword", credential2)
+                    .build();
+        }
+    JsonObject payload = javax.json.Json.createObjectBuilder()
+                .add("notes", notes)
+                .add("policy", policy)
+                .add("status", status)
+                .build();
+
+        JsonObject data = javax.json.Json.createObjectBuilder()
+                .add("svcinfo", svcinfo)
+                .add("payload", payload)
+                .build();
+        
         ContentType mimetype = ContentType.APPLICATION_JSON;
-        StringEntity body = new StringEntity(json, mimetype);
+        StringEntity dataStringEntity = new StringEntity(data.toString(), mimetype);
 
         String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
-        String contentSHA = common.calculateSha256(json);
-
-        String resourceLoc = REST_URI + Constants.REST_SUFFIX + did + Constants.CREATE_POLICY_ENDPOINT;
+        String payloadHash = common.calculateSha256(payload.toString());
+        String resourceLoc = REST_URI + Constants.REST_SUFFIX + Constants.REST_CREATE_POLICY;
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(resourceLoc);
-        httpPost.setEntity(body);
+        httpPost.setEntity(dataStringEntity);
         String requestToHmac = httpPost.getMethod() + "\n"
-                + contentSHA + "\n"
+                + payloadHash + "\n"
                 + mimetype.getMimeType() + "\n"
                 + currentDate + "\n"
                 + apiversion + "\n"
                 + httpPost.getURI().getPath();
 
-        String hmac = common.calculateHMAC(secretkey, requestToHmac);
-        httpPost.addHeader("Authorization", "HMAC " + accesskey + ":" + hmac);
-        httpPost.addHeader("strongkey-content-sha256", contentSHA);
+        if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {  
+                String hmac = common.calculateHMAC(credential2, requestToHmac);
+                httpPost.addHeader("Authorization", "HMAC " + credential1 + ":" + hmac);
+        }
+        httpPost.addHeader("strongkey-content-sha256", payloadHash);
         httpPost.addHeader("Content-Type", mimetype.getMimeType());
         httpPost.addHeader("Date", currentDate);
         httpPost.addHeader("strongkey-api-version", apiversion);

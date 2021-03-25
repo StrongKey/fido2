@@ -1,0 +1,216 @@
+-- MariaDB dump 10.18  Distrib 10.5.8-MariaDB, for Linux (x86_64)
+--
+-- Host: localhost    Database: sfa
+-- ------------------------------------------------------
+-- Server version	10.5.8-MariaDB-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `merchants`
+--
+
+DROP TABLE IF EXISTS `merchants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `merchants` (
+  `did` smallint(5) unsigned NOT NULL,
+  `merchant_id` smallint(5) unsigned NOT NULL,
+  `merchant_name` varchar(256) NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modify_date` datetime DEFAULT NULL,
+  `notes` varchar(2048) DEFAULT NULL,
+  `signature` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`did`,`merchant_id`),
+  UNIQUE KEY `did` (`did`,`merchant_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `merchants`
+--
+
+LOCK TABLES `merchants` WRITE;
+/*!40000 ALTER TABLE `merchants` DISABLE KEYS */;
+INSERT INTO `merchants` VALUES (1,1,'StrongKey','2021-03-18 14:13:41',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `merchants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_transactions`
+--
+
+DROP TABLE IF EXISTS `user_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_transactions` (
+  `did` smallint(5) unsigned NOT NULL,
+  `sid` tinyint(3) unsigned NOT NULL,
+  `uid` bigint(20) unsigned NOT NULL,
+  `utxid` bigint(20) unsigned NOT NULL,
+  `merchant_id` smallint(5) unsigned DEFAULT NULL,
+  `total_products` tinyint(3) unsigned DEFAULT NULL,
+  `total_price` int(10) unsigned DEFAULT NULL,
+  `payment_brand` varchar(32) DEFAULT NULL,
+  `payment_card_number` varchar(32) DEFAULT NULL,
+  `currency` varchar(8) DEFAULT NULL,
+  `txtime` bigint(20) unsigned DEFAULT NULL,
+  `txid` varchar(32) NOT NULL,
+  `txpayload` varchar(2048) DEFAULT NULL,
+  `nonce` varchar(128) DEFAULT NULL,
+  `challenge` varchar(256) DEFAULT NULL,
+  `status` enum('Canceled','Failed','Inflight','Succeeded','Unauthorized','Other') NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modify_date` datetime DEFAULT NULL,
+  `notes` varchar(2048) DEFAULT NULL,
+  `signature` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`did`,`sid`,`uid`,`utxid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_transactions`
+--
+
+LOCK TABLES `user_transactions` WRITE;
+/*!40000 ALTER TABLE `user_transactions` DISABLE KEYS */;
+INSERT INTO `user_transactions` VALUES (1,1,1,1,1,1,100,'PaymentBrand 1','123443212233','rupee',22,'1','payload 1','nonce 1','challenge 1','Inflight','2021-08-12 11:04:33','2021-08-12 11:04:33','First note','Signature'),(2,2,2,2,2,2,200,'PaymentBrand 2','123443212233','dollar',11,'2','payload 2','nonce 2','challenge 2','Succeeded','2021-08-12 11:04:33','2021-08-12 11:04:33','Second note','Signature 2');
+/*!40000 ALTER TABLE `user_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `did` smallint(5) unsigned NOT NULL,
+  `sid` tinyint(3) unsigned NOT NULL,
+  `uid` bigint(20) unsigned NOT NULL,
+  `username` varchar(32) NOT NULL,
+  `credentialid` varchar(64) DEFAULT NULL,
+  `given_name` varchar(512) NOT NULL,
+  `family_name` varchar(64) NOT NULL,
+  `email_address` varchar(128) NOT NULL,
+  `mobile_number` varchar(32) NOT NULL,
+  `enrollment_date` datetime DEFAULT NULL,
+  `status` enum('Active','Inactive','Registered','Other') NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modify_date` datetime DEFAULT NULL,
+  `notes` varchar(2048) DEFAULT NULL,
+  `signature` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`did`,`sid`,`uid`),
+  UNIQUE KEY `did` (`did`,`username`),
+  UNIQUE KEY `did_2` (`did`,`email_address`),
+  UNIQUE KEY `did_3` (`did`,`mobile_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,1,1,'Puneet','cred id','Puneet','K','pk@gmail.com','999333444999','2021-03-02 11:04:23','Active','2021-03-02 11:04:23','2021-03-02 11:04:23','notes','signature'),(2,2,2,'John','cred id 2','John','Doe','johndoe@gmail.com','999333444999','2021-03-02 11:04:23','Inactive','2021-03-02 11:04:23','2021-03-02 11:04:23','notes 2','signature 2');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `utx_fido_authenticator_references`
+--
+
+DROP TABLE IF EXISTS `utx_fido_authenticator_references`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `utx_fido_authenticator_references` (
+  `did` smallint(5) unsigned NOT NULL,
+  `sid` tinyint(3) unsigned NOT NULL,
+  `uid` bigint(20) unsigned NOT NULL,
+  `utxid` bigint(20) unsigned NOT NULL,
+  `farid` bigint(20) unsigned NOT NULL,
+  `protocol` enum('FIDO2_0') NOT NULL,
+  `fidoid` varchar(512) NOT NULL,
+  `rawid` varchar(512) NOT NULL,
+  `user_handle` varchar(512) DEFAULT NULL,
+  `rpid` varchar(256) NOT NULL,
+  `authenticator_data` varchar(128) NOT NULL,
+  `client_data_json` varchar(256) NOT NULL,
+  `aaguid` varchar(128) NOT NULL,
+  `auth_time` datetime NOT NULL,
+  `up` tinyint(1) NOT NULL,
+  `uv` tinyint(1) NOT NULL,
+  `used_for_this_transaction` tinyint(1) NOT NULL,
+  `signing_key_type` enum('RSA','ECDSA') NOT NULL,
+  `signing_key_algorithm` enum('SHA1withRSA','SHA256withRSA','SHA384withRSA','SHA512withRSA','SHA256withRSAandMGF1','SHA384withRSAandMGF1','SHA512withRSAandMGF1','SHA256withECDSA','SHA384withECDSA','SHA512withECDSA','NONEwithECDSA','SHA256withEDDSA') NOT NULL,
+  `signer_public_key` varchar(512) NOT NULL,
+  `fido_signature` varchar(256) NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `signature` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`did`,`sid`,`uid`,`utxid`,`farid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `utx_fido_authenticator_references`
+--
+
+LOCK TABLES `utx_fido_authenticator_references` WRITE;
+/*!40000 ALTER TABLE `utx_fido_authenticator_references` DISABLE KEYS */;
+INSERT INTO `utx_fido_authenticator_references` VALUES (1,1,1,1,1,'FIDO2_0','demo fidoid','demo rawid','demo user_handle','demo rpid','demo authenticator_data','demo client','demo aaguid','2021-03-16 11:21:22',1,0,1,'RSA','SHA1withRSA','signer public key 1','demo fido signature','2021-03-16 11:23:00','demo signature'),(2,2,2,2,2,'FIDO2_0','demo fidoid 2','demo rawid 2','demo user_handle 2','demo rpid 2','demo authenticator_data 2','demo client 2','demo aaguid 2','2021-03-16 11:21:22',1,0,1,'RSA','SHA1withRSA','signer public key 2','demo fido signature 2','2021-03-16 11:23:00','demo signature 2'),(2,3,2,2,2,'FIDO2_0','demo fidoid 3','demo rawid 3','demo user_handle 3','demo rpid 3','demo authenticator_data 3','demo client 3','demo aaguid 3','2021-03-16 11:21:22',1,0,1,'RSA','SHA1withRSA','signer public key 3','demo fido signature 3','2021-03-16 11:23:00','demo signature 3');
+/*!40000 ALTER TABLE `utx_fido_authenticator_references` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `utx_products`
+--
+
+DROP TABLE IF EXISTS `utx_products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `utx_products` (
+  `did` smallint(5) unsigned NOT NULL,
+  `sid` tinyint(3) unsigned NOT NULL,
+  `uid` bigint(20) unsigned NOT NULL,
+  `utxid` bigint(20) unsigned NOT NULL,
+  `product_id` tinyint(3) unsigned NOT NULL,
+  `product_name` varchar(128) NOT NULL,
+  `product_price` int(11) NOT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `modify_date` datetime DEFAULT NULL,
+  `notes` varchar(2048) DEFAULT NULL,
+  `signature` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`did`,`sid`,`uid`,`utxid`,`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `utx_products`
+--
+
+LOCK TABLES `utx_products` WRITE;
+/*!40000 ALTER TABLE `utx_products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `utx_products` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-03-23 12:26:40

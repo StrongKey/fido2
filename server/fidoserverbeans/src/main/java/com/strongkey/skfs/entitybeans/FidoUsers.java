@@ -7,6 +7,8 @@
 package com.strongkey.skfs.entitybeans;
 
 import java.io.Serializable;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -215,6 +217,39 @@ public class FidoUsers implements Serializable {
         return true;
     }
 
+    public String toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("sid", this.getFidoUsersPK().getSid());
+        job.add("did", this.getFidoUsersPK().getDid());
+        job.add("username", this.getFidoUsersPK().getUsername());
+        if (this.userdn != null) {
+            job.add("userdn", this.getUserdn());
+        }
+        if (this.fidoKeysEnabled != null) {
+            job.add("fidoKeysEnabled", this.getFidoKeysEnabled());
+        }
+        if (this.twoStepVerification != null) {
+            job.add("twoStepVerification", this.getTwoStepVerification());
+        }
+        if (this.primaryEmail != null) {
+            job.add("primaryEmail", this.getPrimaryEmail());
+        }
+        if (this.registeredEmails != null) {
+            job.add("registeredEmails", this.getRegisteredEmails());
+        }
+        if (this.primaryPhoneNumber != null) {
+            job.add("primaryPhoneNumber", this.getPrimaryPhoneNumber());
+        }
+        if (this.registeredPhoneNumbers != null) {
+            job.add("registeredPhoneNumbers", this.getRegisteredPhoneNumbers());
+        }
+        if (this.twoStepTarget != null) {
+            job.add("twoStepTarget", this.getTwoStepTarget());
+        }
+        job.add("status", this.status);
+        return job.build().toString();
+    }
+    
     @Override
     public String toString() {
         return "FidoUsers[ fidoUsersPK=" + fidoUsersPK + " ]";

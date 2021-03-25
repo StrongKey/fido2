@@ -25,8 +25,6 @@
  */
 package com.strongkey.skfsclient.impl.soap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongauth.skfs.fido2.simulator.FIDO2AuthenticatorSimulator;
 import com.strongkey.skfs.soapstubs.*;
 import com.strongkey.skfsclient.common.Constants;
@@ -93,7 +91,6 @@ public class SoapFidoRegister {
             System.out.println("SOAP Registration test with " + authtype);
             System.out.println("*******************************");
 
-            ObjectWriter ow = new ObjectMapper().writer();
 
             // Build payload
             Payload payloadObj = new Payload();
@@ -101,8 +98,8 @@ public class SoapFidoRegister {
             payloadObj.setDisplayname(username + "_dn");
             payloadObj.setOptions(Constants.JSON_ATTESTATION_DIRECT);
             payloadObj.setExtensions(Constants.JSON_EMPTY);
-            String payload = ow.writeValueAsString(payloadObj);
-            String payloadHash = common.calculateSha256(new ObjectMapper().writer().writeValueAsString(payloadObj));
+            String payload = payloadObj.toJsonObject().toString();
+            String payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 
             String resourceLoc = SOAP_URI + Constants.SKFS_WSDL_SUFFIX;
 
@@ -184,6 +181,8 @@ public class SoapFidoRegister {
                         System.out.println(parser.getString());
                         break;
                     }
+                    default:
+                        break;
                 }
             }
             System.out.println("\nFinished Generating Registration Response.");
@@ -207,10 +206,10 @@ public class SoapFidoRegister {
                 .build();
 
             payloadObj = new Payload();
-            payloadObj.setMetadata(reg_metadata.toString());
-            payloadObj.setResponse(reg_response.toString());
-            payload = ow.writeValueAsString(payloadObj);
-            payloadHash = common.calculateSha256(new ObjectMapper().writer().writeValueAsString(payloadObj));
+            payloadObj.setMetadata(reg_metadata);
+            payloadObj.setResponse(reg_response);
+            payload = payloadObj.toJsonObject().toString();
+            payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 
             // Build HMAC
             currentDate = System.currentTimeMillis();

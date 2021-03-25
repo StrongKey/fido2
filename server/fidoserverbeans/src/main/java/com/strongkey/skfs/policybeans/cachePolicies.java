@@ -7,13 +7,13 @@
 
 package com.strongkey.skfs.policybeans;
 
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skce.pojos.MDSClient;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
 import com.strongkey.skfs.entitybeans.FidoPoliciesPK;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.fido2mds.MDS;
@@ -39,23 +39,17 @@ public class cachePolicies {
             try{
                 FidoPolicyObject fidoPolicyObject = FidoPolicyObject.parse(
                         fp.getPolicy(),
-                        fp.getVersion(),
                         (long) fpPK.getDid(),
                         (long) fpPK.getSid(),
-                        (long) fpPK.getPid(),
-                        fp.getStartDate(),
-                        fp.getEndDate());
+                        (long) fpPK.getPid());
 
                 MDSClient mds = null;
-                if(fidoPolicyObject.getMdsOptions() != null){
-                    mds = new MDS(fidoPolicyObject.getMdsOptions().getEndpoints());
-                }
 
                 String mapkey = fpPK.getSid() + "-" + fpPK.getDid() + "-" + fpPK.getPid();
-                skceMaps.getMapObj().put(skfsConstants.MAP_FIDO_POLICIES, mapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
+                skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_POLICIES, mapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
             }
             catch(SKFEException ex){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "SKCE-ERR-1000", "Unable to cache policy: " + ex);
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "SKCE-ERR-1000", "Unable to cache policy: " + ex);
             }
         }
 

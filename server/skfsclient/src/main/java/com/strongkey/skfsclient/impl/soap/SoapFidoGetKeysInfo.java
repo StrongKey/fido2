@@ -25,10 +25,8 @@
  */
 package com.strongkey.skfsclient.impl.soap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfs.soapstubs.*;
+import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.Payload;
 import com.strongkey.skfsclient.common.common;
 import java.io.StringReader;
@@ -87,13 +85,11 @@ public class SoapFidoGetKeysInfo {
             System.out.println("SOAP Get user keys information test with " + authtype);
             System.out.println("******************************************");
 
-            ObjectWriter ow = new ObjectMapper().writer();
-
             // Build payload
             Payload payloadObj = new Payload();
             payloadObj.setUsername(username);
-            String payload = ow.writeValueAsString(payloadObj);
-            String payloadHash = common.calculateSha256(new ObjectMapper().writer().writeValueAsString(payloadObj));
+            String payload = payloadObj.toJsonObject().toString();
+            String payloadHash = common.calculateSha256(payload);
 
             String resourceLoc = SOAP_URI + Constants.SKFS_WSDL_SUFFIX;
 

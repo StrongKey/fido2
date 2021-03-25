@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.strongkey_sfaeco-ejb_jar_1.0PU" transaction-type="JTA">
+    <jta-data-source>jdbc/sfa</jta-data-source>
+    <!--class>com.strongkey.sfaeco.entitybeans.RegisteredDevicesView</class-->
+    <class>com.strongkey.sfaeco.entitybeans.Users</class>
+    <class>com.strongkey.sfaeco.entitybeans.UserTransactions</class>
+    <class>com.strongkey.sfaeco.entitybeans.UtxProducts</class>
+    <class>com.strongkey.sfaeco.entitybeans.UtxFidoAuthenticationReferences</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <!--properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/sfaeco"/>
+      <property name="javax.persistence.jdbc.user" value="sfaeco"/>
+      <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="AbracaDabra"/>
+    </properties-->
+  </persistence-unit>
+</persistence>

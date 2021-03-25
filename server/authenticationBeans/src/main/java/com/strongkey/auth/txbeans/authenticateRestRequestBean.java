@@ -7,9 +7,6 @@
 
 package com.strongkey.auth.txbeans;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceInputChecks;
 import com.strongkey.appliance.utilities.strongkeyLogger;
@@ -82,15 +79,7 @@ public class authenticateRestRequestBean implements authenticateRestRequestBeanL
             String contentSHA  = request.getHeader("strongkey-content-sha256");
             contenttype = request.getHeader("Content-Type");
 
-            ObjectWriter ow = new ObjectMapper().writer();
-            String json;
-            try {
-                json = ow.writeValueAsString(requestbody);
-            } catch (JsonProcessingException ex) {
-                strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.SEVERE, classname, "execute", "APPL-ERR-1042", "");
-                return false;
-            }
-
+            String json = (String) requestbody;
             System.out.println("json = " + json);
             generatedSHA = cryptoCommon.calculateHash(json, "SHA-256");
 

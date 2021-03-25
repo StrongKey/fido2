@@ -25,8 +25,6 @@
  */
 package com.strongkey.skfsclient.impl.soap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.strongauth.skfs.fido2.simulator.FIDO2AuthenticatorSimulator;
 import com.strongkey.skfs.soapstubs.*;
 import com.strongkey.skfsclient.common.Constants;
@@ -90,17 +88,14 @@ public class SoapFidoAuthenticate  {
 
             System.out.println("SOAP Authentication test with " + authtype);
             System.out.println("*******************************");
-
-            ObjectWriter ow = new ObjectMapper().writer();
-
             // Build payload
             Payload payloadObj = new Payload();
             payloadObj.setUsername(username);
             payloadObj.setDisplayname(username + "_dn");
             payloadObj.setOptions(Constants.JSON_ATTESTATION_DIRECT);
             payloadObj.setExtensions(Constants.JSON_EMPTY);
-            String payload = ow.writeValueAsString(payloadObj);
-            String payloadHash = common.calculateSha256(new ObjectMapper().writer().writeValueAsString(payloadObj));
+            String payload = payloadObj.toJsonObject().toString();
+            String payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 
 
             String resourceLoc = SOAP_URI + Constants.SKFS_WSDL_SUFFIX;
@@ -183,6 +178,8 @@ public class SoapFidoAuthenticate  {
                         System.out.println(parser.getString());
                         break;
                     }
+                    default:
+                        break;
                 }
             }
             System.out.println("\nFinished Generating Authentication Response.");
@@ -207,10 +204,10 @@ public class SoapFidoAuthenticate  {
                 .build();
 
             payloadObj = new Payload();
-            payloadObj.setMetadata(auth_metadata.toString());
-            payloadObj.setResponse(auth_response.toString());
-            payload = ow.writeValueAsString(payloadObj);
-            payloadHash = common.calculateSha256(new ObjectMapper().writer().writeValueAsString(payloadObj));
+            payloadObj.setMetadata(auth_metadata);
+            payloadObj.setResponse(auth_response);
+            payload = payloadObj.toJsonObject().toString();
+            payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 
             // Build HMAC
             currentDate = System.currentTimeMillis();

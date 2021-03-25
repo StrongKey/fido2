@@ -8,9 +8,9 @@ package com.strongkey.skfs.fido2;
 
 import com.strongkey.appliance.objects.JWT;
 import com.strongkey.skce.utilities.PKIXChainValidation;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -50,18 +50,22 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
     @Override
     public void decodeAttestationStatement(Object attStmt) {
         Map<String, Object> attStmtObjectMap = (Map<String, Object>) attStmt;
-        for (String key : attStmtObjectMap.keySet()) {
+//        for (String key : attStmtObjectMap.keySet()) {
+        for (Map.Entry<String,Object> entry : attStmtObjectMap.entrySet()) {
+            String key = entry.getKey();
             switch (key) {
                 case "ver":
-                    version = (String) attStmtObjectMap.get(key);
+                    version = (String) entry.getValue();
                     break;
                 case "response":
-                    response = (byte[]) attStmtObjectMap.get(key);
+                    response = (byte[]) entry.getValue();
                     try {
                         jwt = new JWT(new String(response, "UTF-8"));
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(AndroidSafetynetAttestationStatement.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    break;
+                default :
                     break;
             }
         }
@@ -76,7 +80,7 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
             if (timestampMs == null //timestampMS is missing
                     || timestampMs.longValue() > now.getTime() + (30 * 1000)        //timestampMS is in the future (some hardcoded buffer)  (TODO fix hardcode)
                     || timestampMs.longValue() < now.getTime() - (60 * 1000)) {     //timestampMS is older than 1 minute
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT time stamp = " + timestampMs.longValue() + ", current time = " + now.getTime());
                 throw new IllegalArgumentException("JWT has invalid timestampMs");
             }
@@ -97,7 +101,7 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
                 byte[] certBytes = decoder.decode(x5c.getString(i, null));
                 ByteArrayInputStream instr = new ByteArrayInputStream(certBytes);
                 X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(instr);
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "certificate number " + i + " = " + certificate);
                 if(i == x5c.size() - 1){
                     rootCert = certificate;
@@ -118,23 +122,23 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
 
             //Verify JWT signature
             if (!jwt.verifySignature(certchain.get(0).getPublicKey())) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT Signature verification failed!");
                 return false;
             }
 
             //Verify that response is a valid SafetyNet response of version ver.
             if(version == null || version.isEmpty()){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "AndroidSafetynet missing version information");
                 return false;
             }
 
             //Verify that the nonce in the response is identical to the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
             String nonce = jwt.getBody().getString("nonce", null);
-            if(nonce == null || !Arrays.equals(decoder.decode(nonce), skfsCommon.getDigestBytes(concatenateArrays(authData.getAuthDataDecoded(),
-                    skfsCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256")), "SHA256"))){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+            if(nonce == null || !Arrays.equals(decoder.decode(nonce), SKFSCommon.getDigestBytes(concatenateArrays(authData.getAuthDataDecoded(),
+                    SKFSCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256")), "SHA256"))){
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT has incorrect nonce");
                 return false;
             }
@@ -142,14 +146,14 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
             //Verify that the attestation certificate is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
             String cn = getFirstCN(certchain.get(0).getSubjectDN().getName());
             if(cn == null || !cn.equals("attest.android.com")){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT attestation certificate does not match the specification");
                 return false;
             }
 
             //Verify that the ctsProfileMatch attribute in the payload of response is true.
             if(!jwt.getBody().getBoolean("ctsProfileMatch", false)){
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT attestation ctsProfileMatch does not match the specification");
                 return false;
             }

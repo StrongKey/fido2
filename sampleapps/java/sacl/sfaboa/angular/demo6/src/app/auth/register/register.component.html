@@ -1,0 +1,42 @@
+<!-- named login-1 but using login-2 template -->
+<div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--signin m-login--2 m-login-2--skin-3" id="m_login" style="background-image: url(./assets/app/media/img//bg/background.jpg);">
+	<div class="m-grid__item m-grid__item--fluid	m-login__wrapper">
+		<div class="m-login__container">
+			<div class="m-login__logo" style="margin: 0 auto 3rem auto;">
+				<a>
+					<img style="height: 25%; width: 25%;" src="./assets/app/media/img//logo/logo.png">
+				</a>
+			</div>
+			<div class="m-login__signin">
+				<div class="m-login__head">
+					<h3 class="m-login__title">
+						Sign Up
+					</h3>
+				</div>
+				<form (ngSubmit)="f.form.valid && register()" #f="ngForm" class="m-login__form m-form" action="">
+					<ng-template #alertSignup></ng-template>
+
+					<div class="form-group m-form__group">
+						<input class="form-control m-input" type="text" placeholder="Username" name="username" [(ngModel)]="user.username" #usernameDOM="ngModel" style="color: #004054; background: #eef3f5; border-color: #00c4d9" required>
+					</div>
+					<div class="form-group m-form__group">
+						<input class="form-control m-input" type="text" placeholder="Display Name" name="displayName" [(ngModel)]="user.displayName" #displayNameDOM="ngModel" style="color: #004054; background: #eef3f5; border-color: #00c4d9" required>
+					</div>
+					<div class="form-row">
+						<div class="form-group m-form__group col-md-6 firstname">
+							<input class="form-control m-input" type="text" placeholder="First Name" name="firstname" [(ngModel)]="user.firstName" #firstnameDOM="ngModel" style="color: #004054; background: #eef3f5; border-color: #00c4d9" required>
+						</div>
+						<div class="form-group m-form__group col-md-6 lastname">
+							<input class="form-control m-input" type="text" placeholder="Last Name" name="lastname" [(ngModel)]="user.lastName" #lastnameDOM="ngModel" style="color: #004054; background: #eef3f5; border-color: #00c4d9" required>
+						</div>
+					</div>
+					<div class="m-login__form-action">
+						<button [disabled]="loading" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_register_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn" style="background-color: #004054; border-color: #00c4d9; box-shadow: 0 5px 10px 2px rgba(0,196,217,.19)!important;">
+							Sign Up
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

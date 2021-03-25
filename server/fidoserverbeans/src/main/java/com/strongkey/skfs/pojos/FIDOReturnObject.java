@@ -7,7 +7,7 @@
 
 package com.strongkey.skfs.pojos;
 
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import javax.json.Json;
 import javax.json.JsonObject;
 
@@ -67,7 +67,7 @@ public class FIDOReturnObject {
         JsonObject responseJSON ;
 
         responseJSON = Json.createObjectBuilder()
-        .add(skfsConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, response)
+        .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, response)
         .build();
 
         if ( responseJSON != null )

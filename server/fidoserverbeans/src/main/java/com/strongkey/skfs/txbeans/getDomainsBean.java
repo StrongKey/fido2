@@ -7,9 +7,9 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.entitybeans.Domains;
-import com.strongkey.skfs.utilities.skfsLogger;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import java.util.Collection;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
@@ -52,13 +52,13 @@ public class getDomainsBean implements getDomainsBeanLocal {
      */
     @Override
     public Collection<Domains> getAll() {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "getAll");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "getAll", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "getAll");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "getAll", SKFSCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.getAll)");
         try {
             return (Collection<Domains>) em.createNamedQuery("Domains.findAll").getResultList();
         } catch (NoResultException ex) {
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "findAll");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "findAll");
             return null;
         }
     }
@@ -87,14 +87,14 @@ public class getDomainsBean implements getDomainsBeanLocal {
      */
     @Override
     public Domains byDid(final Long did) {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byDid");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "byDid");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", SKFSCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.findByDid)");
         try {
             return (Domains) em.createNamedQuery("Domains.findByDid")
                     .setParameter("did", did).getSingleResult();
         } catch (NoResultException ex) {
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "byDid");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "byDid");
             return null;
         }
     }
@@ -107,8 +107,8 @@ public class getDomainsBean implements getDomainsBeanLocal {
      */
     @Override
     public boolean domainExists(final Long did) {
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "byDid");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", skfsCommon.getMessageProperty("SKCE-MSG-1023"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "byDid");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "byDid", SKFSCommon.getMessageProperty("SKCE-MSG-1023"),
                 "createNamedQuery(Domains.findByDid)");
         try {
             if(em.createNamedQuery("Domains.findByDid")
@@ -117,7 +117,7 @@ public class getDomainsBean implements getDomainsBeanLocal {
                 return true;
             }
         } catch (NoResultException ex) {
-            skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "byDid");
+            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "byDid");
         }
         return false;
     }

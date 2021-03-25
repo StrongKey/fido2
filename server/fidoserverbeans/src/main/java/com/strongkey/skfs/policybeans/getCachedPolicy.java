@@ -11,7 +11,7 @@ package com.strongkey.skfs.policybeans;
 import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
 import java.util.Collection;
@@ -43,7 +43,7 @@ public class getCachedPolicy implements getCachedPolicyLocal {
 
     @Override
     public FidoPolicyObject getMapKey(String policyMapKey) {
-        return (FidoPolicyObject) skceMaps.getMapObj().get(skfsConstants.MAP_FIDO_POLICIES, policyMapKey);
+        return (FidoPolicyObject) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_POLICIES, policyMapKey);
     }
 
 
@@ -55,7 +55,7 @@ public class getCachedPolicy implements getCachedPolicyLocal {
         //Only check policies from the listed domain, that have started, and whose end_date has not passed
         Date currentDate = new Date();
         Collection<FidoPolicyObject> fpCol
-                = ((Collection<FidoPolicyObject>) skceMaps.getMapObj().values(skfsConstants.MAP_FIDO_POLICIES))
+                = ((Collection<FidoPolicyObject>) skceMaps.getMapObj().values(SKFSConstants.MAP_FIDO_POLICIES))
                 .stream()
                 .filter(fp -> fp.getDid().equals(did))
                 .filter(fp -> fp.getStartDate().before(currentDate))

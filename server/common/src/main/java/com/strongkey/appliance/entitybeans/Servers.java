@@ -167,7 +167,7 @@ Y88b  d88P Y88..88P 888  888      X88 Y88b.  888     Y88b 888 Y88b.    Y88b.  Y8
      **/
     /*********************************************************************/
     public Long getSid() {
-        strongkeyLogger.entering(applianceConstants.APPLIANCE_LOGGER, classname, "getSid");
+        //strongkeyLogger.entering(applianceConstants.APPLIANCE_LOGGER, classname, "getSid");
         return sid;
     }
 

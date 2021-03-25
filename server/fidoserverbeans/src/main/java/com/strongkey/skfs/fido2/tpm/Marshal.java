@@ -7,8 +7,8 @@
 package com.strongkey.skfs.fido2.tpm;
 
 import com.strongkey.skce.utilities.TPMConstants;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
@@ -59,7 +59,7 @@ public class Marshal {
                 byte[] byteArray = ((byte[]) obj);
                 outBuffer[i] = byteArray;
             } else {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Marshal Object failure!!");
                 outBuffer[i] = new byte[0];
                 continue;

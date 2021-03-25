@@ -7,11 +7,11 @@
 
 package com.strongkey.fido2mds;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.strongkey.skce.pojos.MDSClient;
-import com.strongkey.skce.pojos.MDSEndpoint;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.strongkey.fido2mds.data.MemoryStorage;
 import com.strongkey.fido2mds.data.Storage;
 import com.strongkey.fido2mds.structures.AuthenticatorStatus;
@@ -19,10 +19,10 @@ import com.strongkey.fido2mds.structures.EcdaaTrustAnchor;
 import com.strongkey.fido2mds.structures.MetadataStatement;
 import com.strongkey.fido2mds.structures.MetadataTOCPayloadEntry;
 import com.strongkey.fido2mds.structures.StatusReport;
+import com.strongkey.skce.pojos.MDSClient;
+import com.strongkey.skce.pojos.MDSEndpoint;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -35,17 +35,18 @@ import javax.json.JsonObjectBuilder;
 public class MDS implements MDSClient {
 
     private List<MDSService> mdsList;
-    private ObjectMapper objectMapper;
+//    private ObjectMapper objectMapper;
+    private JsonObject jsonObject;
     private Storage storage;
 
     public MDS(List<MDSEndpoint> endpoints){
         storage = new MemoryStorage();
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+//        objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule());
         mdsList = endpoints.stream()
-                .map(x -> new MDSUrlService(x.getUrl(), x.getToken(), objectMapper, storage))
+                .map(x -> new MDSUrlService(x.getUrl(), x.getToken(), jsonObject, storage))
                 .collect(Collectors.toList());
-        mdsList.add(new MDSResourceMetadataService(objectMapper));
+        mdsList.add(new MDSResourceMetadataService(jsonObject));
         refresh();
     }
 
@@ -91,7 +92,6 @@ public class MDS implements MDSClient {
         mdsList = newList;
     }
 
-    @Override
     @Lock(LockType.READ)
     public JsonObject getTrustAnchors(String aaguid, List<String> allowedStatusList) {
         JsonObjectBuilder ret = Json.createObjectBuilder();
@@ -137,11 +137,12 @@ public class MDS implements MDSClient {
                 if (ecdaaTrustAnchors != null) {
                     JsonArrayBuilder trustAnchors = Json.createArrayBuilder();
                     for (EcdaaTrustAnchor t : ecdaaTrustAnchors) {
-                        try {
-                            trustAnchors.add(objectMapper.writeValueAsString(t));
-                        } catch (JsonProcessingException ex) {
-                            Logger.getLogger(MDS.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+//                        try {
+//                            trustAnchors.add(objectMapper.writeValueAsString(t));
+//                        } catch (JsonProcessingException ex) {
+//                            Logger.getLogger(MDS.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+                        trustAnchors.add(t.toJsonObject().toString());
                     }
                     ret.add("ecdaaTrustAnchors", trustAnchors);
                 }
@@ -154,6 +155,10 @@ public class MDS implements MDSClient {
         }
         ret.add("errors", errors);
         return ret.build();
+    }
+
+    public JsonObject getTrustAnchors(String aaguid) {
+        return getTrustAnchors(aaguid, new ArrayList<String>());
     }
 }
 

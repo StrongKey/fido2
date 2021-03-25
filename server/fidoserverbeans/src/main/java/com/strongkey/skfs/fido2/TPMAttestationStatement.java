@@ -8,6 +8,7 @@
 package com.strongkey.skfs.fido2;
 
 import com.strongkey.crypto.utility.cryptoCommon;
+import com.strongkey.skce.utilities.TPMConstants;
 import com.strongkey.skfs.fido2.tpm.Marshal;
 import com.strongkey.skfs.fido2.tpm.TPMAttest;
 import com.strongkey.skfs.fido2.tpm.TPMECCParameters;
@@ -15,10 +16,9 @@ import com.strongkey.skfs.fido2.tpm.TPMECCUnique;
 import com.strongkey.skfs.fido2.tpm.TPMPublicData;
 import com.strongkey.skfs.fido2.tpm.TPMRSAParameters;
 import com.strongkey.skfs.fido2.tpm.TPMRSAUnique;
-import com.strongkey.skce.utilities.TPMConstants;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
+import org.bouncycastle.util.encoders.Hex;
 
 public class TPMAttestationStatement implements FIDO2AttestationStatement {
 
@@ -60,7 +61,9 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
     @Override
     public void decodeAttestationStatement(Object attestationStmt) {
         Map<String, Object> attStmtObjectMap = (Map<String, Object>) attestationStmt;
-        for (String key : attStmtObjectMap.keySet()) {
+//        for (String key : attStmtObjectMap.keySet()) {
+        for (Map.Entry<String,Object> entry : attStmtObjectMap.entrySet()) {
+            String key = entry.getKey();
             switch (key) {
                 case "sig":
                     signature = (byte[]) attStmtObjectMap.get(key);
@@ -83,6 +86,8 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 case "alg":
                     alg = (Integer) attStmtObjectMap.get(key);
                     break;
+                default:
+                    break;
             }
         }
 
@@ -93,7 +98,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
 
     @Override
     public Boolean verifySignature(String browserDataBase64, FIDO2AuthenticatorData authData) {
-        List<X509Certificate> certchain = new ArrayList<>();
+//        List<X509Certificate> certchain = new ArrayList<>();
 
         try {
             //Verify that the public key specified by the parameters and unique fields of pubArea is identical
@@ -104,23 +109,23 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     tpmExponent = (tpmExponent == 0) ? 65537 : 0; //"When zero, indicates that the exponent is the default of 2^16 + 1"
                     int authenticatorDataExponent = getIntFromByteArray(((RSAKeyObject) authData.getAttCredData().getFko()).getE());
                     if (tpmExponent != authenticatorDataExponent) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation Exponent mismatch: " + tpmExponent + " != " + authenticatorDataExponent);
                         return false;
                     }
                     byte[] tpmMod = ((TPMRSAUnique) pubArea.getUnique()).getData();
                     byte[] authenticatorDataMod = ((RSAKeyObject) authData.getAttCredData().getFko()).getN();
                     if (!Arrays.equals(tpmMod, authenticatorDataMod)) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation Mod mismatch");
                         return false;
                     }
                     break;
                 case TPMConstants.TPM_ALG_ECC:
-                    String tpmCurve = skfsCommon.getStringFromTPMECCCurveID(((TPMECCParameters) pubArea.getParameters()).getCurveID());
-                    String authenticatorDataCurve = skfsCommon.getCurveFromFIDOECCCurveID(((ECKeyObject) authData.getAttCredData().getFko()).getCrv());
+                    String tpmCurve = SKFSCommon.getStringFromTPMECCCurveID(((TPMECCParameters) pubArea.getParameters()).getCurveID());
+                    String authenticatorDataCurve = SKFSCommon.getCurveFromFIDOECCCurveID(((ECKeyObject) authData.getAttCredData().getFko()).getCrv());
                     if (!tpmCurve.equals(authenticatorDataCurve)) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation Elliptic Curve mismatch");
                         return false;
                     }
@@ -130,40 +135,40 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     byte[] authenticatorDataY = ((ECKeyObject) authData.getAttCredData().getFko()).getY();
                     if (!Arrays.equals(tpmX, authenticatorDataX)
                             || !Arrays.equals(tpmY, authenticatorDataY)) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation Public point mismatch");
                         return false;
                     }
                     break;
                 default:
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation Unsupported Algorithm");
                     return false;
             }
 
             //Concatenate authenticatorData and clientDataHash to form attToBeSigned.
-            byte[] attToBeSigned = concatenateArrays(authData.getAuthDataDecoded(), skfsCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256"));
+            byte[] attToBeSigned = concatenateArrays(authData.getAuthDataDecoded(), SKFSCommon.getDigestBytes(Base64.getDecoder().decode(browserDataBase64), "SHA256"));
 
             //Validate that certInfo is valid:
             //Verify that magic is set to TPM_GENERATED_VALUE.
             if (certInfo.getMagic() != TPMConstants.TPM_GENERATED_VALUE) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation certInfo magic is not set to the correct value");
                 return false;
             }
 
             //Verify that type is set to TPM_ST_ATTEST_CERTIFY.
             if (certInfo.getType() != TPMConstants.TPM_ST_ATTEST_CERTIFY) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                                 "TPM Attestation certInfo type is not set to the correct value");
                 return false;
             }
 
             //Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
             byte[] tpmExtraData = certInfo.getExtraData().getData();
-            byte[] hashAttToBeSigned = skfsCommon.getDigestBytes(attToBeSigned, skfsCommon.getHashAlgFromIANACOSEAlg(alg));
+            byte[] hashAttToBeSigned = SKFSCommon.getDigestBytes(attToBeSigned, SKFSCommon.getHashAlgFromIANACOSEAlg(alg));
             if (!Arrays.equals(tpmExtraData, hashAttToBeSigned)) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "TPM Attestation certInfo extraData is not set to the correct value");
                 return false;
             }
@@ -174,13 +179,13 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
             byte[] attestedName = certInfo.getAttested().getName().getData();
             short nameAlg = Marshal.stream16ToShort(attestedName);   //https://github.com/fido-alliance/conformance-tools-issues/issues/396
             byte[] pubAreaData = pubArea.getData();
-            byte[] pubAreaName = concatenateArrays(Marshal.shortToStream(nameAlg), skfsCommon.getDigestBytes(pubAreaData, skfsCommon.getHashAlgFromTPMAlg(nameAlg)));
+            byte[] pubAreaName = concatenateArrays(Marshal.shortToStream(nameAlg), SKFSCommon.getDigestBytes(pubAreaData, SKFSCommon.getHashAlgFromTPMAlg(nameAlg)));
             if (!Arrays.equals(attestedName, pubAreaName)) {
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                        "attestedName: " + bytesToHexString(attestedName, attestedName.length));
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                        "pubAreaName: " + bytesToHexString(pubAreaName, pubAreaName.length));
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                        "attestedName: " + Hex.toHexString(attestedName));
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                        "pubAreaName: " + Hex.toHexString(pubAreaName));
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "certInfo attested is not set to the correct value");
                 return false;
             }
@@ -189,34 +194,34 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
             if (x5c != null) {
                 //Verify the sig is a valid signature over certInfo using the attestation public key in x5c with the algorithm specified in alg.
 
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         x5c.size());
                 Iterator x5cItr = x5c.iterator();
                 CertificateFactory certFactory = CertificateFactory.getInstance("X.509", "BCFIPS");
                 byte[] certByte = (byte[]) x5cItr.next();
                 X509Certificate certificate = null;
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         "x5c base64 java: " + java.util.Base64.getEncoder().encodeToString(certByte));
                 InputStream instr = new ByteArrayInputStream(certByte);
                 X509Certificate attCert = (X509Certificate) certFactory.generateCertificate(instr);
 
-                certchain.add(attCert);
+//                certchain.add(attCert);
                 while (x5cItr.hasNext()) {
                     certByte = (byte[]) x5cItr.next();
                     instr = new ByteArrayInputStream(certByte);
                     certificate = (X509Certificate) certFactory.generateCertificate(instr);
-                    certchain.add(certificate);
+//                    certchain.add(certificate);
                 }
 
                 PublicKey certPublicKey = attCert.getPublicKey();
-                skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         certPublicKey.getAlgorithm());
 
                 byte[] signedBytes = certInfo.marshalData();
 
-                boolean isValidSignature = cryptoCommon.verifySignature(signature, certPublicKey, signedBytes, skfsCommon.getAlgFromIANACOSEAlg(alg));
+                boolean isValidSignature = cryptoCommon.verifySignature(signature, certPublicKey, signedBytes, SKFSCommon.getAlgFromIANACOSEAlg(alg));
                 if (!isValidSignature) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "Failed to verify TPM signature");
                     return false;
                 }
@@ -226,14 +231,14 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 //TPM attestation certificate MUST have the following fields/extensions:
                 //  Version MUST be set to 3.
                 if (attCert.getVersion() != 3) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "TPM attestation statement cetificate has an invalid version: " + attCert.getVersion());
                     return false;
                 }
 
                 //  Subject field MUST be set to empty.
                 if (!attCert.getSubjectDN().getName().isEmpty()) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "TPM attestation statement cetificate has an invalid subject: " + attCert.getSubjectDN().getName());
                     return false;
                 }
@@ -244,7 +249,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 //      critical if subjust is empty..."
                 Collection<List<?>> subjectAlternativeNames = attCert.getSubjectAlternativeNames();
                 if (subjectAlternativeNames == null) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "TPM attestation statement cetificate has an invalid subjectAlternativeNames: null");
                     return false;
                 }
@@ -253,9 +258,9 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
 
                 //Need to parse names from list (TODO needs to be refactored)
                 for (List<?> nameList : subjectAlternativeNames) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         "Name: " + nameList.get(0));
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                         "Value: " + nameList.get(1));
                     int subjectAltNameType = (Integer) nameList.get(0);
                     if (subjectAltNameType == 4) {
@@ -263,9 +268,9 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                         String[] names = namesString.split("\\+");
                         for (String name : names) {
                             String[] namePair = name.split("\\=");
-                            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                                     "name key: " + namePair[0]);
-                            skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                                     "name value: " + namePair[1]);
                             sanMap.put(namePair[0], namePair[1]);
                         }
@@ -273,19 +278,19 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 }
 
                 if (!sanMap.containsKey("2.23.133.2.1")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM attestation statement cetificate has an invalid subjectAlternativeNames: Missing Manufacturer");
                     return false;
                 }
 
                 if (!sanMap.containsKey("2.23.133.2.2")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM attestation statement cetificate has an invalid subjectAlternativeNames: Missing Model");
                     return false;
                 }
 
                 if (!sanMap.containsKey("2.23.133.2.3")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM attestation statement cetificate has an invalid subjectAlternativeNames: Missing Version");
                     return false;
                 }
@@ -293,14 +298,14 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 //  The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
                 List<String> keyUsage = attCert.getExtendedKeyUsage();
                 if (!keyUsage.contains("2.23.133.8.3")) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM attestation statement cetificate: missing extended key usage");
                     return false;
                 }
 
                 //The Basic Constraints extension MUST have the CA component set to false.
                 if (attCert.getBasicConstraints() != -1) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM attestation statement cetificate: Invalid Basic Constraints");
                     return false;
                 }
@@ -308,10 +313,10 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                 //If x5c contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
                 byte[] certAaguid = attCert.getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
                 if (certAaguid != null) {
-                    skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                            "Certificate contains aauid = " + bytesToHexString(certAaguid, certAaguid.length));
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
+                            "Certificate contains aauid = " + Hex.toHexString(certAaguid));
                     if (!Arrays.equals(certAaguid, authData.getAttCredData().getAaguid())) {
-                        skfsLogger.log(skfsConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                             "TPM x5c's aaguid does not match");
                         return false;
                     }
@@ -362,17 +367,6 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
         System.arraycopy(array1, 0, result, 0, array1.length);
         System.arraycopy(array2, 0, result, array1.length, array2.length);
         return result;
-    }
-
-    private static String bytesToHexString(byte[] rawBytes, int num) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < num; i++) {
-            if (i % 16 == 0) {
-                sb.append('\n');
-            }
-            sb.append(String.format("%02x ", rawBytes[i]));
-        }
-        return sb.toString();
     }
 
     @Override

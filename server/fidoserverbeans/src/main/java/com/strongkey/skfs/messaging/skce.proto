@@ -33,24 +33,23 @@ message FidoKeys
     required string             keyhandle = 6;
     required string             appid = 7;
     required string             publickey = 8;
-    optional string             khdigest = 9;
-    optional string             khdigest_type = 10;
-    optional int64              transports = 11;
-    optional int64              attsid = 12;
-    optional int64              attdid = 13;
-    optional int64              attcid = 14;
-    required int64              counter = 15;
-    optional string             fido_version = 16;
-    optional string             fido_protocol = 17;
-    optional string             aaguid = 18;
-    optional string             registration_settings = 19;
-    optional int64              registration_settings_version = 20;
-    required int64              create_date = 21;
-    required string             create_location = 22;
-    optional int64              modify_date = 23;
-    optional string             modify_location = 24;
-    required string             status = 25;
-    optional string             signature = 26;
+    optional int64              transports = 9;
+    optional int64              attsid = 10;
+    optional int64              attdid = 11;
+    optional int64              attcid = 12;
+    required int64              counter = 13;
+    optional string             fido_version = 14;
+    optional string             fido_protocol = 15;
+    optional string             aaguid = 16;
+    optional string             registration_settings = 17;
+    optional int64              registration_settings_version = 18;
+    required int64              create_date = 19;
+    required string             create_location = 20;
+    optional int64              modify_date = 21;
+    optional string             modify_location = 22;
+    required string             status = 23;
+    required string             signature_keytype = 24;
+    optional string             signature = 25;
 }
 
 message FidoUsers
@@ -150,14 +149,34 @@ message FidoPolicies
     required int64              sid = 1;
     required int64              did = 2;
     required int64              pid = 3;
-    required int64              start_date = 4;
-    optional int64              end_date = 5;
-    required string             certificate_profile_name = 6;
-    required string             policy = 7;
-    required int64              version = 8;
-    required string             status = 9;
-    optional string             notes = 10;
-    required int64              create_date = 11;
-    optional int64              modify_date = 12;
-    optional string             signature = 13;
+    required string             policy = 4;
+    required string             status = 5;
+    optional string             notes = 6;
+    required int64              create_date = 7;
+    optional int64              modify_date = 8;
+    optional string             signature = 9;
+}
+
+/**
+ * CONFIGURATIONS
+ */
+
+message Configurations
+{
+    required int64              did = 1;
+    required string             config_key = 2;
+    required string             config_value = 3;
+    optional string             notes = 4;
+}
+
+/**
+ * CONFIGURATIONS
+ */
+
+message Configurations
+{
+    required int64              did = 1;
+    required string             config_key = 2;
+    required string             config_value = 3;
+    optional string             notes = 4;
 }

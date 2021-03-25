@@ -7,6 +7,10 @@
 
 package com.strongkey.fido2mds.structures;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 public class AAGUID {
     private String AAGUID;
     
@@ -20,5 +24,11 @@ public class AAGUID {
 
     public void setAAGUID(String AAGUID) {
         this.AAGUID = AAGUID;
+    }
+    
+    public JsonObject toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        if (this.AAGUID != null) job.add("AAGUID", AAGUID);
+        return job.build();
     }
 }

@@ -7,10 +7,10 @@
 
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.core.U2FAuthenticationResponse;
 import com.strongkey.skfs.utilities.FEreturn;
 import java.util.logging.Level;
@@ -54,8 +54,8 @@ public class u2fAuthenticateBean implements u2fAuthenticateBeanLocal {
                             String appid) throws SKFEException {
 
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5001"),
                         " EJB name=" + classname +
                         " did=" + did +
                         " protocol=" + protocol +
@@ -66,20 +66,20 @@ public class u2fAuthenticateBean implements u2fAuthenticateBeanLocal {
 
         //  Input checks
         if (protocol == null || protocol.isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-5001"), protocol);
-            fr.append(skfsCommon.getMessageProperty("FIDO-ERR-5001") + "protocol=" + protocol);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), protocol);
+            fr.append(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + "protocol=" + protocol);
             return fr;
         }
 
         if (authresponseJson == null || authresponseJson.isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-5001"), authresponseJson);
-            fr.append(skfsCommon.getMessageProperty("FIDO-ERR-5001") + "authentication response=" + authresponseJson);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), authresponseJson);
+            fr.append(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + "authentication response=" + authresponseJson);
             return fr;
         }
 
         if (userpublickey == null || userpublickey.isEmpty()) {
-            skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-ERR-5001"), userpublickey);
-            fr.append(skfsCommon.getMessageProperty("FIDO-ERR-5001") + "userpublickey=" + userpublickey);
+            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-5001"), userpublickey);
+            fr.append(SKFSCommon.getMessageProperty("FIDO-ERR-5001") + "userpublickey=" + userpublickey);
             return fr;
         }
 
@@ -90,8 +90,8 @@ public class u2fAuthenticateBean implements u2fAuthenticateBeanLocal {
         }
 
         //  log the exit and return
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), classname);
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5002"), classname);
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
         return fr;
     }
 }

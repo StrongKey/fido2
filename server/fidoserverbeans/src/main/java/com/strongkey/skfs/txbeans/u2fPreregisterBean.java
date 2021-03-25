@@ -7,10 +7,10 @@
 
 package com.strongkey.skfs.txbeans;
 
-import com.strongkey.skfs.utilities.skfsLogger;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skfs.utilities.SKFEException;
-import com.strongkey.skfs.utilities.skfsCommon;
-import com.strongkey.skfs.utilities.skfsConstants;
+import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.core.U2FRegistrationChallenge;
 import com.strongkey.skfs.utilities.FEreturn;
 import java.util.logging.Level;
@@ -58,8 +58,8 @@ public class u2fPreregisterBean implements u2fPreregisterBeanLocal {
                             String username) throws SKFEException  {
 
         //  Log the entry and inputs
-        skfsLogger.entering(skfsConstants.SKFE_LOGGER,classname, "execute");
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5001"),
+        SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5001"),
                         " EJB name=" + classname +
                         " did=" + did +
                         " protocol=" + protocol +
@@ -70,8 +70,8 @@ public class u2fPreregisterBean implements u2fPreregisterBeanLocal {
         fer.setResponse(new U2FRegistrationChallenge(protocol, username));
 
         //  log the exit and return
-        skfsLogger.logp(skfsConstants.SKFE_LOGGER,Level.FINE, classname, "execute", skfsCommon.getMessageProperty("FIDO-MSG-5002"), "");
-        skfsLogger.exiting(skfsConstants.SKFE_LOGGER,classname, "execute");
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-5002"), "");
+        SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
         return fer;
     }
 }

@@ -1,0 +1,207 @@
+<!-- <h1 mat-dialog-title>Favorite Animal</h1>
+<div mat-dialog-content>
+  My favorite animal is: -->
+  <!-- ul>
+    <li>
+
+    </li>
+    <li>
+      <sh5an *ngIf="data.animal === 'unicorn'">&#10003;</span> Unicorn
+    </li>
+    <li>
+      <span *ngIf="data.animal === 'lion'">&#10003;</span> Lion
+    </li>
+  </ul> -->
+<mat-dialog-content class="mat-typography">
+  <mat-card class="card-style " [@.disabled]="disableAnimation">      
+        <mat-card-title>Additional Information for the selected transaction </mat-card-title>
+<!--                 <mat-card-subtitle>{{createDate}} </mat-card-subtitle>
+ -->           
+                <mat-accordion>
+                 <mat-card-content class="card-content-space">
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          User Transactions
+                        </mat-panel-title>
+                        <!-- <mat-panel-description>
+                          Click to Expand
+                        </mat-panel-description> -->
+                      </mat-expansion-panel-header>
+
+                      
+                      
+                  <div class="card-content-style">
+                    <h5>Domain ID</h5>
+                    <h5 class="modal-value-color">{{singleTransaction.did}}</h5>
+                  </div>
+                  <div class="card-content-style">
+                    <h5>User ID</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.uid}}</h5>
+                  </div>
+                  <div class="card-content-style">
+                    <h5>User Transaction ID</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.utxid}}</h5>
+                  </div>
+                   <div class="card-content-style">
+                    <h5>Status</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.status}}</h5>
+                  </div>
+                  <div class="card-content-style">
+                    <h5>Create Date</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.createDate}}</h5>
+                  </div>
+                   <div class="card-content-style">
+                    <h5>Modify Date</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.modifyDate}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Signature</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.signature}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Notes</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.notes}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Total Price</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.totalPrice}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Total Products</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.totalProducts}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Payment Brand</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.paymentBrand}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Payment Card Number</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.paymentCardNumber}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Currency</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.currency}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Transaction Time</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.txtime}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Transaction Id</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.txid}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Transaction Payload</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.txpayload}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Nonce</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.nonce}}</h5>
+                  </div> <div class="card-content-style">
+                    <h5>Challenge</h5>
+                    <h5 class="modal-value-color" >{{singleTransaction.challenge}}</h5>
+                  </div> 
+                  </mat-expansion-panel>
+
+                  
+                    <div *ngFor= "let utx of singleTransaction.utxfidoauthreferences; index as i">
+                      <mat-expansion-panel>
+                    <mat-expansion-panel-header class="indent-class">
+                      <mat-panel-title>
+                        FIDOAuthenticatorReferences {{i+1}}
+                      </mat-panel-title>
+                     <!--  <mat-panel-description>
+                        Click to expand
+                      </mat-panel-description> -->
+                    </mat-expansion-panel-header>
+                    <div class="card-content-style">
+                    <h5>FIDO Authenticator Id</h5>
+                    <h5 class="modal-value-color" >{{utx.farid}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Protocol</h5>
+                    <h5 class="modal-value-color" >{{utx.protocol}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Fido Id</h5>
+                    <h5 class="modal-value-color" >{{utx.fidoId}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Raw Id</h5>
+                    <h5 class="modal-value-color" >{{utx.rawId}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>User Handle</h5>
+                    <h5 class="modal-value-color" >{{utx.userHandle}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>RP Id</h5>
+                    <h5 class="modal-value-color" >{{utx.rpId}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Authenticator Data </h5>
+                    <h5 class="modal-value-color" >{{utx.authenticatorData}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Client Data Json</h5>
+                    <h5 class="modal-value-color" >{{utx.clientDataJson}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Aaguid</h5>
+                    <h5 class="modal-value-color" >{{utx.aaguid}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Auth Time</h5>
+                    <h5 class="modal-value-color" >{{utx.authTime}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>UP</h5>
+                    <h5 class="modal-value-color" >{{utx.up}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>UV</h5>
+                    <h5 class="modal-value-color" >{{utx.uv}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Used For This Transaction</h5>
+                    <h5 class="modal-value-color" >{{utx.usedForThisTransaction}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Signing Key Type</h5>
+                    <h5 class="modal-value-color" >{{utx.signingKeyType}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Signing Key Algorithm</h5>
+                    <h5 class="modal-value-color" >{{utx.signingKeyAlgorithm}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Signer Public Key</h5>
+                    <h5 class="modal-value-color" >{{utx.signerPublicKey}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Fido Signature</h5>
+                    <h5 class="modal-value-color" >{{utx.fidoSignature}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Create Date</h5>
+                    <h5 class="modal-value-color" >{{utx.createDate}}</h5>
+                  </div> 
+                  <div class="card-content-style">
+                    <h5>Signature</h5>
+                    <h5 class="modal-value-color" >{{utx.signature}}</h5>
+                  </div> 
+                  </mat-expansion-panel>
+
+                  </div>
+              
+<!--                   <pre>{{data | json}}</pre>
+ -->                </mat-card-content>
+                <mat-card-actions>
+                  <button (click) = "simulate3ds()" mat-raised-button color="primary">Simulate 3ds</button>
+                </mat-card-actions>
+                </mat-accordion>
+
+      </mat-card>
+  </mat-dialog-content>
+  <div class="m-page-loader m-page-loader--base m-page-loader--non-block" style="margin-left: -80px; margin-top: -20px;">
+  <div class="m-blockui">
+    <span>
+      Please wait...
+    </span>
+    <span>
+      <div class="m-loader m-loader--brand"></div>
+    </span>
+  </div>
+</div>
+<!-- </div> -->
+  
