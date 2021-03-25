@@ -47,14 +47,16 @@ import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.logging.Level;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.json.JsonObject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 /**
  * SOAP based web services that serve FIDO U2F protocol based functionality.
@@ -63,8 +65,9 @@ import javax.ws.rs.core.Response;
 @WebService(serviceName = "soap")
 public class SKFSServlet {
 
-    @Context
-    private HttpServletRequest request;
+//    @Context
+//    private HttpServletRequest request;
+    @Resource WebServiceContext context;
 
     @EJB
     u2fServletHelperBeanLocal u2fHelper ;
@@ -508,6 +511,8 @@ public class SKFSServlet {
             authreq.setResponse(authpayload.getJsonObject("publicKeyCredential"));
         }
 
+        HttpServletRequest request = (HttpServletRequest)context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
+        System.out.println("IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost());
         String agent = request.getHeader("User-Agent");
         //Example for getting cip
         String cip = request.getRemoteAddr();
