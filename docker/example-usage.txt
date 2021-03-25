@@ -1,0 +1,36 @@
+###############################################################
+# /**
+# * Copyright StrongAuth, Inc. All Rights Reserved.
+# *
+# * Use of this source code is governed by the GNU Lesser General Public License v2.1
+# * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+# */
+###############################################################
+
+Build image:
+$> [sudo] docker build -t skfs .
+
+Configure settings:
+$> vi base64-input.sh
+
+Get base64 input for container:
+$> ./base64-input.sh
+
+Run image in container:
+$> [sudo] docker run -dit -h fido01.strongkey.com -p 8181:8181 -p 4848:4848 --memory="8g" --cpus="2.0" skfs <base64-input>
+Example:
+$> docker run -dit -h fido01.strongkey.com -p 8181:8181 -p 4848:4848 --memory="8g" --cpus="2.0" skfs Zmlkby1kb2NrZXIuY2x1c3Rlci1jOWl5Y3R4Y2p5Z3QudXMtd2VzdC0xLnJkcy5hbWF6b25hd3MuY29tO2FkbWluO0FiY2QxMjM0ITtsZGFwOi8vMy4yMzYuMjAzLjEyMTozODk7QUQ7QWRtaW5pc3RyYXRvckBzdHJvbmdrZXkuY29tO2RuZSghblBDaVZKO2NuPTssb3U9dXNlcnMsb3U9djIsb3U9U0tDRSxvdT1TdHJvbmdBdXRoLG91PUFwcGxpY2F0aW9ucyxkYz1zdHJvbmdrZXksZGM9Y29tO2RjPXN0cm9uZ2tleSxkYz1jb207LG91PWdyb3VwcyxvdT12MixvdT1TS0NFLG91PVN0cm9uZ0F1dGgsb3U9QXBwbGljYXRpb25zLGRjPXN0cm9uZ2tleSxkYz1jb20K
+
+Get bash terminal in container:
+$> [sudo] docker exec -it <CONTAINER-ID> /bin/bash
+
+Find container ID:
+$> [sudo] docker container ls
+
+
+Clustering:
+For more clustering instructions, see steps in base64-input-config.sh
+When clustering, make sure to open the ports 7001-7003 on the container when running it for replication to work properly:
+$> [sudo] docker run -it -h fido02.strongkey.com -p 8181:8181 -p 4848:4848 -p 7001-7003:7001-7003 skfs <base64-input>
+Example:
+$> [sudo] docker run -it -h fido02.strongkey.com -p 8181:8181 -p 4848:4848 -p 7001-7003:7001-7003 skfs Zmlkby1kb2NrZXIuY2x1c3Rlci1jOWl5Y3R4Y2p5Z3QudXMtd2VzdC0xLnJkcy5hbWF6b25hd3MuY29tO2FkbWluO0FiY2QxMjM0ITtsZGFwOi8vMy4yMzYuMjAzLjEyMTozODk7QUQ7QWRtaW5pc3RyYXRvckBzdHJvbmdrZXkuY29tO2RuZSghblBDaVZKO2NuPTssb3U9dXNlcnMsb3U9djIsb3U9U0tDRSxvdT1TdHJvbmdBdXRoLG91PUFwcGxpY2F0aW9ucyxkYz1zdHJvbmdrZXksZGM9Y29tO2RjPXN0cm9uZ2tleSxkYz1jb207LG91PWdyb3VwcyxvdT12MixvdT1TS0NFLG91PVN0cm9uZ0F1dGgsb3U9QXBwbGljYXRpb25zLGRjPXN0cm9uZ2tleSxkYz1jb207NTQuMTgzLjIxMy4xIGZpZG8wMS5zdHJvbmdrZXkuY29tJTE4LjE0NC4zNC4yNDggZmlkbzAyLnN0cm9uZ2tleS5jb207Mgo=
