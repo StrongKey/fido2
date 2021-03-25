@@ -73,7 +73,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
         String userAgent, clientIP;
         String wsresponse = "", logs = "", errmsg = "";
-        String userHandle ="", jwt = null;
+        String userHandle ="", jwt = "";
         JsonObject txdetail = null;
         JsonArray FIDOAuthRefs = null;
         SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-2001", "AuthResponse : " + authresponse);
