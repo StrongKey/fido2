@@ -10,7 +10,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 ## Sample Cluster Configuration
 
-![StrongKey FIDO2 Server Clustering](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2cluster.png)
+![StrongKey FIDO2 Server Clustering](https://github.com/StrongKey/fido2/raw/master/docs/images/FIDO_cluster.png)
 
 ## Prerequisites
 
