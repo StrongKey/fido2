@@ -1,4 +1,4 @@
-﻿# StrongKey FIDO Server (SKFS), Community Edition for Linux
+# StrongKey FIDO Server (SKFS), Community Edition for Linux
 
 ## Cluster Installation
 
@@ -21,7 +21,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 **NOTE:** This document assumes you are setting up this cluster with all nodes connected to a single ethernet switch. If your intent is to do a more realistic test, you should plan on using VMs with multiple network interfaces connected to different switches to isolate traffic to the appropriate segments as you might except in a more real-world environment.
 
 
-## How To Setup the Cluster
+## Setting up the Cluster
 
 1. Using the installation steps [here](../docs/Installation_Guide_Linux.md), install and configure the two FIDO2 Server VMs **as if they were individual FIDO2 Servers, but do NOT install any web applications to test out the FIDO2 Server at this point**; we will do this later.
 2. For each server **determine the FQDN and assign it a unique Server ID**. A _Server id (SID)_ is a numeric value that uniquely identifies a node within the cluster. Conventionally, StrongKey cluster SIDs begin with the numeral **1** and continue incrementally for each node in the cluster. In the current setup, the following values are used:
