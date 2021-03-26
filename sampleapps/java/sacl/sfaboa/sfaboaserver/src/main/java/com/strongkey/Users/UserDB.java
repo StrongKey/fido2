@@ -124,7 +124,7 @@ public class UserDB implements UserDBLocal {
         job.add("givenName", firstName);
         job.add("familyName", lastName);
         job.add("email", email);
-        job.add("userMobileNumber", "000-000-0000");
+        job.add("userMobileNumber", Long.toString(new Date().getTime()));
         String resp = addUserRemote.remoteExecute(Short.parseShort(Configurations.getConfigurationProperty("sfaboa.cfg.property.did")), null, job.build().toString(), "SFABOA-AU-" + new Date().getTime());
         System.out.println(resp);
     }
