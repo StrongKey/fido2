@@ -6,7 +6,7 @@ The FIDO(R) Certified StrongKey FIDO Server(SKFS), Community Edition is an open-
 
 ![StrongKey FIDO Certificate](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2certified.png)
 
-[![StrongKey Android API](https://github.com/StrongKey/fido2/raw/master/docs/images/StrongKey+Android.png)](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android)
+[![StrongKey Android API](https://github.com/StrongKey/fido2/blob/master/docs/images/StrongKey+Android=Protection.png)](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android)
 
 
 The following links provide some background on FIDO, the FIDO Alliance, and FIDO2:
