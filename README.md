@@ -43,6 +43,11 @@ The _skfsclient_ uses a FIDO2 simulator instead of an actual authenticator to de
 ## Contributing
 If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
 
+## Archives
+Older SKFS versions can be located [here](https://github.com/StrongKey/fido2/releases).
+
+
+
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](LICENSE).
 
