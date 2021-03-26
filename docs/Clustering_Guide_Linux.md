@@ -2,9 +2,9 @@
 
 ## Cluster Installation
 
-StrongKey's FIDO Server can be clustered with multiple nodes to deliver high availability (HA) across a local area network (LAN) and/or disaster recovery (DR) on a wide area network (WAN). No additonal software is required to enable these features because StrongKey has enabled this capability as a **standard** feature in its FIDO2 Server. Furthermore, with multiple nodes processing FIDO2 transactions at the same time, the SKFS cluster can deliver higher throughput to multiple web applications that use this server. This document guides you through setting up an SKFS cluster with two nodes, as depicted in the image below.
+StrongKey FIDO Server can be clustered with multiple nodes to deliver high availability (HA) across a local area network (LAN) and/or disaster recovery (DR) on a wide area network (WAN). No additonal software is required to enable these features because StrongKey has enabled this capability as a **standard** feature in SKFS. Furthermore, with multiple nodes processing FIDO2 transactions at the same time, the SKFS cluster can deliver higher throughput to multiple web applications that use this server. This document guides you through setting up an SKFS cluster with two nodes, as depicted in the image below.
 
-**The clustering capability in SKFS only applies to the FIDO2 capability**. Web applications that use SKFS must make their own arrangements to deliver HA and/or DR independent of SKFS. The sample application used here to demonstrate FIDO2 clustering will, itself, not be highly available, but demonstrates that the web application can use either or both SKFS instances in this HA configuration.
+**The clustering capability in SKFS only applies to the FIDO2 capability**. Web applications that use SKFS must make their own arrangements to deliver HA and/or DR independent of SKFS. The sample application used here to demonstrate FIDO2 clustering will, itself, not be highly available, but demonstrates that the web application can use either or both SKFS nodes in this HA configuration.
 
 While it is possible to add more than two nodes to the cluster, IT architects will recognize that there is a trade-off with N-way replication designs&mdash;the more nodes in such a configuration, the higher the resource requirements on each node to manage fail-safe replication, which can reduce the overall throughput after a certain point. Each site will have to do its own testing to determine where the throughput curve flattens out. However, if you have truly large-scale deployments in mind, please contact us to see how we can help.
 
@@ -16,7 +16,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 1. **Two (2)** virtual machines (VMs) for the FIDO2 Servers, running the current version of CentOS Linux 7.x, with fully qualified domain names (FQDN) and internet protocol (IP) addresses
 2. **One (1)** virtual machine for the load-balancer, running HAProxy version 1.5.18 software on the current version of CentOS Linux 7.x with an FQDN and an IP address
-3. **One (1)** virtual machine for the StrongKey sample Proof-of-Concept web-application from this Github repository, also running on the current version of CentOS Linux 7.x with an FQDN and an IP address
+3. **One (1)** virtual machine for the StrongKey sample Proof-of-Concept web application from this GitHub repository, also running on the current version of CentOS Linux 7.x with an FQDN and an IP address
 
 **NOTE:** This document assumes you are setting up this cluster with all nodes connected to a single ethernet switch. If your intent is to do a more realistic test, you should plan on using VMs with multiple network interfaces connected to different switches to isolate traffic to the appropriate segments as you might except in a more real-world environment.
 
@@ -52,19 +52,19 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 		shell> systemctl restart firewalld
 
-	e. Logout from the _root_ account.
+	e. **Logout** from the _root_ account.
 4.  As the **_strongkey_ user**, perform the following on every SKFS node to be clustered:
 	
-	a. Login to the server as _strongkey_ (the default password is _ShaZam123_).
+	a. **Login** to the server as _strongkey_ (the default password is _ShaZam123_).
 	
-	b. Using a text editor, edit the configuration properties of the SKFS node; if the specified file is empty add these properties:
+	b. Using a text editor, **edit the configuration properties** of the SKFS node; if the specified file is empty add these properties:
 	
 		shell> vi /usr/local/strongkey/appliance/etc/appliance-configuration.properties
 		
 		appliance.cfg.property.serverid=<server-id> (set the value to the corresponding SID of the current node)
 		appliance.cfg.property.replicate=true (should be set to true)
 		
-	c. Using the **_mysql_** client, login to the MariaDB database that was installed as part of the SKFS installation. The default password for the _skfsdbuser_ is _AbracaDabra_.
+	c. Using the MySQL client, **login to the MariaDB database** that was installed as part of the SKFS installation. The default password for the _skfsdbuser_ is _AbracaDabra_.
 
 		shell> mysql -u skfsdbuser -p skfs
 	
@@ -91,14 +91,14 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 		shell> sudo service glassfishd restart
 		
-	i. **Repeat *Steps 3 and 4*** on the remaining StrongKey FIDO2 Server nodes of this cluster.
+	i. **Repeat *Steps 3 and 4*** on the remaining SKFS nodes of this cluster.
 	
 
 ## Install HAProxy Load Balancer
 
-High availability (HA) is enabled for applications by inserting a _load balancer_ between components of the infrastructure, such as between the web application and the two SKFS instances of this configuration. The load balancer determines which target server is available to receive application connections, and distributes application requests to the appropriate target server.
+High availability (HA) is enabled for applications by inserting a _load balancer_ between components of the infrastructure, such as between the web application and the two SKFS nodes of this configuration. The load balancer determines which target server is available to receive application connections, and distributes application requests to the appropriate target server.
 
-StrongKey's FIDO Server has been tested with the open-source HAProxy load balancer, part of the standard CentOS Linux distribution. It is conceivable that SKFS will work with other load balancers; please contact us to discuss your needs.
+SKFS has been tested with the open-source HAProxy load balancer, part of the standard CentOS Linux distribution. It is conceivable that SKFS will work with other load balancers; please contact us to discuss your needs.
 
 To install and configure HAProxy for use with the SKFS cluster, follow the steps below:
 
@@ -153,7 +153,7 @@ h. **Restart HAProxy**:
  
     shell> service haproxy restart
     
-i. **Verify HAProxy is functioning** as expected by accessing the URL in the browser. If it is functioning correctly, it will redirect you to one of the configured SKFS instances.
+i. **Verify HAProxy is functioning** as expected by accessing the URL in the browser. If it is functioning correctly, it will redirect you to one of the configured SKFS nodes.
 
     https://<fidoserver.mydomain.com_>
     
@@ -206,11 +206,11 @@ Following are several methods to simulate failures of an SKFS node within the cl
  1. Remove the ethernet cable from one of the SKFS nodes.
  2. Shut down the Payara Applicatiion Server on one of the SKFS nodes.
  3. Close port 8181 by disabling the firewall rule that accepts connections on SKFS.
- 4. Modify the configuration of HAProxy on the load balancer to remove one of the SKFS instances.
+ 4. Modify the configuration of HAProxy on the load balancer to remove one of the SKFS nodes.
 
-__NOTE:__ Because of the complexity of the FIDO2 protocols as well as its implementation in SKFS, some _in-flight_ FIDO2 registrations and/or authentications may see failures due to the simulated outage (as might occur in a real-world environment). Application architects should consider how they might choose to address these failures within their web applications&mdash;the PoC was designed to demonstrate simple FIDO2 transactions and not a specific business application and, hence, does not handle these failures as gracefully as might be desired.
+__NOTE:__ Because of the complexity of the FIDO2 protocols as well as its implementation in SKFS, some _in-flight_ FIDO2 registrations and/or authentications may see failures due to the simulated outage (as might occur in a real-world environment). Application architects should consider how they might choose to address these failures within their web applications&mdash;the PoC was designed to demonstrate simple FIDO2 transactions and not a specific business application, and hence does not handle these failures as gracefully as might be desired.
 
-StrongKey definitely appreciates feedback on how it might improve SKFS to better serve this community's needs. Please feel free to provide feedback through the forum on Github. Thank you.
+StrongKey definitely appreciates feedback on how it might improve SKFS to better serve this community's needs. Please feel free to provide feedback through the forum on GitHub. Thank you.
 
 ## Removal
 
