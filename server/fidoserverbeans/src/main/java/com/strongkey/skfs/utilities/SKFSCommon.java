@@ -807,7 +807,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         }
     }
 
-    public static String getHashAlgFromIANACOSEAlg(int alg) {
+    public static String getHashAlgFromIANACOSEAlg(long alg) {
         if (alg == -65535) {
             return "SHA-1";
         } else if (alg == -257) {

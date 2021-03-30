@@ -51,7 +51,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
     private ArrayList x5c = null;
     private TPMAttest certInfo;
     private TPMPublicData pubArea;
-    private int alg;
+    private long alg;
     private final String attestationType = "attca"; //TODO implement ECDAA when the specification is finished
 
     static {
@@ -84,7 +84,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     pubArea = TPMPublicData.unmarshal((byte[]) attStmtObjectMap.get(key));
                     break;
                 case "alg":
-                    alg = (Integer) attStmtObjectMap.get(key);
+                    alg = (long) attStmtObjectMap.get(key);
                     break;
                 default:
                     break;
@@ -265,7 +265,7 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     int subjectAltNameType = (Integer) nameList.get(0);
                     if (subjectAltNameType == 4) {
                         String namesString = (String) nameList.get(1);
-                        String[] names = namesString.split("\\+");
+                        String[] names = namesString.split("\\,");
                         for (String name : names) {
                             String[] namePair = name.split("\\=");
                             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",

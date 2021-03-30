@@ -39,9 +39,9 @@ public class RSAKeyObject extends FIDO2KeyObject {
         CborDecoder m_stream = new CborDecoder(m_is);
         
         long len = m_stream.readMapLength();
-         Map<String, Object> pkObjectMap = new HashMap<>();
+         Map<Object, Object> pkObjectMap = new HashMap<>();
             for (long i = 0; len < 0 || i < len; i++) {
-                String key = (String) SKFSCommon.readGenericItem(m_stream);
+                Object key = SKFSCommon.readGenericItem(m_stream);
                 if (len < 0 && (key == null)) {
                     // break read...
                     break;
@@ -51,16 +51,16 @@ public class RSAKeyObject extends FIDO2KeyObject {
             }
 
 //        for (String key : pkObjectMap.keySet()) {
-        for (Map.Entry<String,Object> entry : pkObjectMap.entrySet()) {
-            String key = entry.getKey();
+        for (Map.Entry<Object,Object> entry : pkObjectMap.entrySet()) {
+            Object key = entry.getKey();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "key : " + key + ", Value : " + pkObjectMap.get(key).toString());
-            switch (key) {
+            switch (Long.toString((long)key)) {
                 case "1":
-                    kty = (int) pkObjectMap.get(key);
+                    kty = (long) pkObjectMap.get(key);
                     break;
                 case "3":
-                    alg = (int) pkObjectMap.get(key);
+                    alg = (long) pkObjectMap.get(key);
                     break;
                 case "-1":
                     n = (byte[]) pkObjectMap.get(key);
