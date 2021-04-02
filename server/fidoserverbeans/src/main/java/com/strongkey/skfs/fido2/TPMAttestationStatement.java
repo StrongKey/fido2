@@ -266,6 +266,9 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
                     if (subjectAltNameType == 4) {
                         String namesString = (String) nameList.get(1);
                         String[] names = namesString.split("\\,");
+                        if(names.length < 3){
+                            names = namesString.split("\\+");
+                        }
                         for (String name : names) {
                             String[] namePair = name.split("\\=");
                             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
