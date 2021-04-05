@@ -358,8 +358,6 @@ public class getFidoKeys implements getFidoKeysLocal {
                     signingDN = d.getSkceSigningdn();
                 }
 
-                System.out.println("fidokeys signature object: " + input);
-
                 //  verify row level signature
                 boolean verified = false;
                 try {

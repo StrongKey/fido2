@@ -27,7 +27,11 @@ import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skfs.utilities.SKIllegalArgumentException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertPath;
@@ -42,6 +46,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.JsonArray;
@@ -50,6 +55,7 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.util.encoders.Base64;
 
 @Stateless
 public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPolicyLocal {
@@ -64,6 +70,7 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             FidoPolicyMDSObject fidoPolicyMDS = getpolicybean.getByMapKey(userInfo.getPolicyMapKey());
             FidoPolicyObject fidoPolicy = fidoPolicyMDS.getFp();
 
+            verifyRPID(fidoPolicy, attObject, clientJson);
             verifyCryptographyOptions(fidoPolicy, clientJson, attObject, fidoPolicy.getVersion());
             verifyAuthenticatorTrust(fidoPolicy.getAllowedAAGUIDs(), clientJson, attObject);
             verifyRegistration(fidoPolicy, clientJson, attObject,
@@ -112,6 +119,54 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
             throw new SKFEException("Rejected Authenticator: AAGUID: " + aaguid);
         }
            
+    }
+    
+    private void verifyRPID(FidoPolicyObject fidoPolicy, FIDO2AttestationObject attObject, JsonObject clientJson) throws SKFEException{
+        try {
+            if (fidoPolicy == null) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "No policy found");
+                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0009") + "No policy found"));
+            }
+
+            String originfromCD = clientJson.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
+            URI originURI = new URI(originfromCD);
+            String rpId = fidoPolicy.getRpOptions().getId();
+            String rpidServletExtracted;
+            if (rpId == null) {
+                rpidServletExtracted = originURI.getHost();
+            } else {
+                System.out.println("rpidhashfrompolicy = " + Base64.toBase64String(SKFSCommon.getDigestBytes(rpId, "SHA256")));
+                //check if the origin received is rpid+1 if not then reject it
+                if (originfromCD.startsWith("android")) {
+                    rpidServletExtracted = rpId;
+                } else {
+                    String originwithoutSchemePort;
+                    if (originfromCD.startsWith("https")) {
+                        originwithoutSchemePort = originfromCD.substring(8).split(":")[0];
+                    } else {
+                        //reject it
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                + " RPID Hash invalid'"));
+                    }
+                    String origin2 = originwithoutSchemePort.replace(rpId, "");
+                    if (origin2.split("\\.").length > 1) {
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                + " RPID Hash invalid'"));
+                    }
+                    rpidServletExtracted = rpId;
+                }
+            }
+            if (!Base64.toBase64String(attObject.getAuthData().getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                        + " RPID Hash invalid - Does not match policy '"+ rpidServletExtracted +"'"));
+            }
+        } catch (URISyntaxException | NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
+            Logger.getLogger(verifyFido2RegistrationPolicy.class.getName()).log(Level.SEVERE, null, ex);
+            throw new SKFEException(ex.getLocalizedMessage());
+        }
     }
     
     //TODO move private functions to be public functions of PolicyOption Objects
