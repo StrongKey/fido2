@@ -151,15 +151,15 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
                     }
                     String origin2 = originwithoutSchemePort.replace(rpId, "");
                     if (origin2.split("\\.").length > 1) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid - Does not match policy '"+ rpId +"'");
                         throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                + " RPID Hash invalid'"));
+                                + " RPID Hash invalid - Does not match policy '"+ rpId +"'"));
                     }
                     rpidServletExtracted = rpId;
                 }
             }
             if (!Base64.toBase64String(attObject.getAuthData().getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid - Does not match policy '"+ rpidServletExtracted +"'");
                 throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
                         + " RPID Hash invalid - Does not match policy '"+ rpidServletExtracted +"'"));
             }
