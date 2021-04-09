@@ -172,7 +172,6 @@ public class FidoKeys implements Serializable {
     @Column(name = "status")
     private String status;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 5)
     @Column(name = "signature_keytype")
     private String signatureKeytype;
