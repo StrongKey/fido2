@@ -456,7 +456,7 @@ EOFMYCNF
                 done
                 echo done
 
-                $MARIA_HOME/bin/mysql -u root mysql -e "set password for 'root'@localhost=password('BigKahuna');
+                $MARIA_HOME/bin/mysql -u root mysql -e "set password for 'root'@localhost=password('$MYSQL_ROOT_PASSWORD');
                                                             delete from mysql.db where host = '%';
                                                             delete from mysql.user where user = '';
                                                             flush privileges;"
