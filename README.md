@@ -15,12 +15,12 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * [What is FIDO?](https://fidoalliance.org/what-is-fido/)
 * [The FIDO2 Project](https://fidoalliance.org/fido2/)
 
-## Installation
-* Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download SKFS and get it running as a stand-alone server.
-* Follow [the clustering instructions](docs/Clustering_Guide_Linux.md) to download SKFS and get it running as a cluster.
+## Documentation
 
-## Upgrade
-Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of SKFS to the latest.
+* [SKFS Administration Guide](https://github.com/StrongKey/fido2/blob/master/docs/SKFS_Administration_Guide.pdf): Full Installation/Upgrade, Configuration, and Administration Guide in PDF format
+* [Installation instructions](docs/Installation_Guide_Linux.md): Download SKFS and get it running as a stand-alone server
+* [Clustering instructions](docs/Clustering_Guide_Linux.md): Download SKFS and get it running as a cluster
+* [Upgrade instructions](docs/Upgrade_Guide_Linux.md): Upgrade SKFS to the latest version
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
@@ -45,8 +45,6 @@ If you would like to contribute to the FIDO2 Server, Community Edition project, 
 
 ## Archives
 Older SKFS versions can be located [here](https://github.com/StrongKey/fido2/releases).
-
-
 
 ## Licensing
 This project is currently licensed under the [GNU Lesser General Public License v2.1](LICENSE).
