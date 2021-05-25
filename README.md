@@ -38,7 +38,7 @@ SKFS client offers examples of the various API calls using different available m
 The _skfsclient_ uses a FIDO2 simulator instead of an actual authenticator to demonstrate the web services on the command line. Feel free to download the [simulator source code](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator) for your own use.
 
 ## API docs
-[Interactive OpenAPI documentation for SKFS](https://strongkey.github.io/fido2/)
+[Interactive OpenAPI documentation for SKFS](https://demo4.strongkey.com/getstarted/#/openapi/fido)
 
 ## Contributing
 If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
