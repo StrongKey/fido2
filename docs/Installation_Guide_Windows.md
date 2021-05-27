@@ -1,4 +1,4 @@
-#### StrongKey FIDO2 Server, Community Edition for Windows
+#### StrongKey FIDO Server (SKFS), Community Edition for Windows
 
 ## Prerequisites
 
@@ -11,8 +11,8 @@
 -  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
 
 -  **Install and configure OpenJDK with the steps below**:
-    - Download AdoptOpenJDK from https://adoptopenjdk.net.
-    - Select the OpenJDK 8 (LTS) Version and the HotSpot JVM options then download the latest release.
+    - Download AdoptOpenJDK from https://adoptopenjdk.net
+    - Select the OpenJDK 8 (LTS) version and the HotSpot JVM options then download the latest release
     - Run the installer and ensure the following options are selected for installation:
         - *Set JAVA_HOME variable*
         - *JavaSoft (Oracle) registry*
@@ -69,7 +69,7 @@
     curl -k https://localhost:8181/api/application.wadl
     ```
 
-8. To test this installation of the FIDO2 Server, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
+8. To test this installation of SKFS, check out the [Basic Java Sample application](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic).
 
 __NOTE__: Both the signing and secret keys in the keystore use default values and should be changed after installation is completed. The keystore and the trustore are located under the _/usr/local/strongkey/skfs/keystores_ directory. Run the following command from _usr/local/strongkey/keymanager_ to see the usage and syntax for the keymanager tool, then change them both:
     
@@ -78,7 +78,7 @@ __NOTE__: Both the signing and secret keys in the keystore use default values an
 
 ## Removal
 
-To uninstall StrongKey FIDO2 Server, run the following command from the folder where the distribution was extracted:
+To uninstall SKFS, run the following command from the folder where the distribution was extracted:
 
     ```sh
     sudo ./cleanup.sh
