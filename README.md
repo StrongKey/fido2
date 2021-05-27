@@ -2,7 +2,7 @@
 # README
 
 ## Overview
-The FIDO(R) Certified StrongKey FIDO Server(SKFS), Community Edition is an open-source solution designed for DIY coders who want passwordless FIDO2 logins for any application. Download the code and integrate it with your own web login, or study the OpenAPI documentation and contribute with your own code submissions.
+The FIDO(R) Certified StrongKey FIDO Server (SKFS), Community Edition is an open-source solution designed for DIY coders who want passwordless FIDO2 logins for any application. Download the code and integrate it with your own web login, or study the OpenAPI documentation and contribute with your own code submissions.
 
 ![StrongKey FIDO Certificate](https://github.com/StrongKey/fido2/raw/master/docs/images/fido2certified.png)
 
@@ -41,7 +41,7 @@ The _skfsclient_ uses a FIDO2 simulator instead of an actual authenticator to de
 [Interactive OpenAPI documentation for SKFS](https://demo4.strongkey.com/getstarted/#/openapi/fido)
 
 ## Contributing
-If you would like to contribute to the FIDO2 Server, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
+If you would like to contribute to the SKFS, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).
 
 ## Archives
 Older SKFS versions can be located [here](https://github.com/StrongKey/fido2/releases).
