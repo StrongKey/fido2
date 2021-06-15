@@ -12,7 +12,7 @@
 
 -  A **fully qualified public domain name (FQDN)**. It is very important to have a hostname that is at least _top-level domain (TLD)_+1 (i.e., [acme.com](http://acme.com), [example.org](http://example.org), etc); otherwise FIDO2 functionality may not work.
 
--  The installation script instlls Payara running HTTPS on port 8181, so make sure all firewall rules allow that port to be accessed.
+-  The installation script installs Payara running HTTPS on port 8181, so make sure all firewall rules allow that port to be accessed.
 
 -  SKFS must be installed before the sample service provider web application and sample WebAuthn Java client.
 
