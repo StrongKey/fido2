@@ -1,4 +1,4 @@
-#### StrongKey FIDO Server (SKFS), Community Edition for Linux
+#### StrongKey FIDO Server (SKFS), Community Edition Installation Guide (Linux)
 
 ## Prerequisites
 
