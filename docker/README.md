@@ -1,7 +1,7 @@
 
 # StrongKey FIDO Server (SKFS), Community Edition, Dockerized
 ## Overview:
-This branch contains a Dockerized version of the FIDO(R) Certified StrongKey FIDO2 Server (SKFS), Community Edition. This implementation allows for the creation of a FIDO2 server within a container, which allows for the ability to be deployed in any environment. This README will focus on the Docker portion of SKFS; please refer to the main [README](https://github.com/StrongKey/fido2) for anything related to the FIDO side of the server.
+This branch contains a Dockerized version of the FIDO(R) Certified [StrongKey FIDO Server (SKFS), Community Edition](https://github.com/StrongKey/fido2). This implementation allows for the creation of a FIDO2 server within a container, which allows for the ability to be deployed in any environment. This README will focus on the Docker portion of SKFS; please refer to the main [README](https://github.com/StrongKey/fido2) for anything related to the FIDO side of the server.
 
 ## Prerequisites: Host machine/VM
 Docker must be installed and enabled to build and use the SKFS image.
