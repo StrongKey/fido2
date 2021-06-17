@@ -1,5 +1,5 @@
 # Basic Java Sample Application
-This project is a basic service provider web application written in Java to work with [StrongKey FIDO2 Server (SKFS)](https://github.com/StrongKey/fido2), Community Edition. This project also includes sample JavaScript files providing a basic user interface to test FIDO2 registration and authentication.
+This project is a basic service provider web application written in Java to work with [StrongKey FIDO Server (SKFS)](https://github.com/StrongKey/fido2), Community Edition. This project also includes sample JavaScript files providing a basic user interface to test FIDO2 registration and authentication.
 
 ## Prerequisites
 
