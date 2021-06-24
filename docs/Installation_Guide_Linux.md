@@ -34,16 +34,16 @@
     shell> sudo apt install wget
      ```
 
-3.  **Download** the binary distribution file [fido2server-v4.4.0-dist.tgz](https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.0-dist.tgz).
+3.  **Download** the binary distribution file [fido2server-v4.4.1-dist.tgz](https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.1-dist.tgz).
 
     ```
-    shell> wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.0-dist.tgz
+    shell> wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.1-dist.tgz
     ```
 
 4.  **Extract the downloaded file to the current directory**:
 
     ```
-    shell> tar xvzf fido2server-v4.4.0-dist.tgz
+    shell> tar xvzf fido2server-v4.4.1-dist.tgz
     ```
 5. Be sure the machine's **FQDN is set as its hostname**. This is necessary to properly configure the self-signed certificate for the API. Verify using the following command:
 
