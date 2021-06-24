@@ -21,21 +21,21 @@ This project is a basic service provider web application written in Java to work
     webauthntutorial.cfg.property.apiuri=https://$(hostname):8181
     ```
 
-4. __Download__ the service provider web application _.war_ file [basicserver.war](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war).
+4. __Download__ the service provider web application _.war_ file [basicdemo.war](https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicdemo.war).
 
     ```sh
-    wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicserver.war
+    wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/basic/basicdemo.war
     ```
 
 5. __Undeploy the old__ version and __deploy the new__ _.war_ file to Payara.
 
     ```sh
     payara5/glassfish/bin/asadmin undeploy basicserver
-    payara5/glassfish/bin/asadmin deploy basicserver.war
+    payara5/glassfish/bin/asadmin deploy basicdemo.war
     ```
 
 6. Test that the servlet is running. __Execute the following cURL command__ and confirm that the API _Web Application Definition Language (WADL)_ file comes back in response.
 
     ```sh
-    curl -k https://localhost:8181/basicserver/fido2/application.wadl
+    curl -k https://localhost:8181/basicdemo/fido2/application.wadl
     ```
