@@ -375,7 +375,37 @@ public class addFidoKeys implements addFidoKeysLocal {
                 newKey.setSignatureKeytype("EC");
                 newKey.setSignature(signedxml);
             }
+        } else{
+            newKey.setSignatureKeytype("EC");
         }
+        
+//        System.out.println("*********************");
+//        System.out.println(newKey.getFidoKeysPK().getSid());
+//        System.out.println(newKey.getFidoKeysPK().getDid());
+//        System.out.println(newKey.getFidoKeysPK().getUsername());
+//        System.out.println(newKey.getFidoKeysPK().getFkid());
+//        System.out.println(newKey.getUserid());
+//        System.out.println(newKey.getKeyhandle());
+//        System.out.println(newKey.getAppid());
+//        System.out.println(newKey.getPublickey());
+//        System.out.println(newKey.getTransports());
+//        System.out.println(newKey.getAttsid());
+//        System.out.println(newKey.getAttdid());
+//        System.out.println(newKey.getAttcid());
+//        System.out.println(newKey.getCounter());
+//        System.out.println(newKey.getFidoVersion());
+//        System.out.println(newKey.getFidoProtocol());
+//        System.out.println(newKey.getAaguid());
+//        System.out.println(newKey.getRegistrationSettings());
+//        System.out.println(newKey.getRegistrationSettingsVersion());
+//        System.out.println(newKey.getCreateDate());
+//        System.out.println(newKey.getCreateLocation());
+//        System.out.println(newKey.getModifyDate());
+//        System.out.println(newKey.getModifyLocation());
+//        System.out.println(newKey.getStatus());
+//        System.out.println(newKey.getSignatureKeytype());
+//        System.out.println(newKey.getSignature());
+//        System.out.println("*********************");
 
         em.persist(newKey);
         em.flush();

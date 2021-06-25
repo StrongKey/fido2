@@ -94,7 +94,7 @@ public class SKFSClient {
                 authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTACHMENT, AUTHENTICATORATTACHMENT);
             }
             if(REQUIRERESIDENTKEY != null && !REQUIRERESIDENTKEY.isEmpty()){
-                authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Boolean.valueOf(REQUIRERESIDENTKEY));
+                authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, REQUIRERESIDENTKEY);
             }
             if(REG_USERVERIFICATION != null && !REG_USERVERIFICATION.isEmpty()){
                 authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_USERVERIFICATION, REG_USERVERIFICATION);

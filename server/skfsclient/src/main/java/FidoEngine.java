@@ -49,7 +49,8 @@ public class FidoEngine {
                      + "       java -jar skfsclient.jar GP <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <metatdataonly> <sid> <pid>\n"
                      + "       java -jar skfsclient.jar GC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ]\n"
                      + "       java -jar skfsclient.jar UC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey> <configvalue> [<notes>]\n"
-                     + "       java -jar skfsclient.jar DC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey>\n\n"
+                     + "       java -jar skfsclient.jar DC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey>\n"
+                     + "       java -jar skfsclient.jar UU <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <oldusername> <newusername>\n\n"
                      + "Acceptable Values:\n"
                      + "         hostport            : host and port to access the fido \n"
                      + "                                 SOAP & REST format : http://<FQDN>:<non-ssl-portnumber> or \n"
@@ -87,7 +88,9 @@ public class FidoEngine {
                      + "         pid                 : Policy ID: Policy identifier returned by creating a policy.\n"
                      + "         metadataonly        : Boolean. If true, returns only the metadata of the policy. If false, returns the metadata + the policy JSON.\n"
                      + "         configkey           : Configuration identifier of server setting.\n"
-                     + "         configvalue         : Value connected to configuration identifier.\n";
+                     + "         configvalue         : Value connected to configuration identifier.\n"
+                     + "         oldusername         : Existing username for a user.\n"
+                     + "         newusername         : New username for a user.\n";
 
         // Used for R, A, G, U, D, P commands only
         String command;
@@ -109,6 +112,8 @@ public class FidoEngine {
         String configvalue;
         String notes;
         String verifyAuthz;
+        String oldusername;
+        String newusername;
 
         try {
             if (args.length == 0) {
@@ -264,6 +269,10 @@ public class FidoEngine {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
 
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
                         RestCreateFidoPolicy.create(args[1], args[2], args[4], args[5], args[6], args[7], args[8], args[9]);
@@ -278,6 +287,10 @@ public class FidoEngine {
                 case Constants.COMMANDS_PATCH_POLICY:
                     if (args.length != 12) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
                         break;
                     }
 
@@ -296,7 +309,10 @@ public class FidoEngine {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
-
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
                         RestFidoActionsOnPolicy.delete(args[1], args[2], args[4], args[5], args[6],args[7],args[8]);
                     } else {
@@ -313,7 +329,10 @@ public class FidoEngine {
                         break;
                     }
                     String metadataonly = args[7];
-
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
                         RestFidoGetPolicyInfo.getPolicyInfo(hostport, args[2], authtype, credential1, credential2, metadataonly, args[8], args[9]);
                     } else {
@@ -327,6 +346,10 @@ public class FidoEngine {
                 case Constants.COMMANDS_GET_CONFIGURATION:
                     if (args.length != 7) {
                         System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
                         break;
                     }
 
@@ -353,6 +376,10 @@ public class FidoEngine {
                     } else {
                         notes   = "";
                     }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
 
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
                         RestFidoActionsOnConfiguration.update(hostport, did, authtype, credential1, credential2, configkey, configvalue, notes);
@@ -369,6 +396,10 @@ public class FidoEngine {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
                     configkey   = args[7];
 
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
@@ -381,6 +412,26 @@ public class FidoEngine {
                     System.out.println("\nDone with Delete Configuration!\n");
                     break;
 
+                case Constants.COMMANDS_UPDATE_USERNAME:
+                    if (args.length != 9) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
+                    oldusername = args[7];
+                    newusername = args[8];
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoActionsOnKey.updateUsername(hostport, did, authtype, credential1, credential2, oldusername, newusername);
+                    } else {
+//                        SoapFidoActionsOnConfiguration.delete(hostport, did, authtype, credential1, credential2, configkey);
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Update Username!\n");
+                    break;
                 default:
                     System.out.println("Invalid Command...\n" + usage);
             }

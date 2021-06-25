@@ -774,5 +774,9 @@ public class SKFSServlet {
         }
         return null;
     }
-
+    
+    public Response adminauthenticatehelper(String input, HttpServletRequest request) {
+        this.request = request;
+        return authenticate(input);
+    }
 }

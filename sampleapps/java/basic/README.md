@@ -13,7 +13,7 @@ For more information on the originating jargon and related terms, visit the Inte
 - The definition of service provider is in the [second paragraph of 1.1. Background](https://tools.ietf.org/html/rfc3647#section-1.1), described as "relying parties."
 
 ## Installation
-Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download and install the latest basic server sample.
+Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download and install the latest basic demo sample.
 
 ## Upgrade
-Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of basicserver to the latest.
+Follow [the upgrade instructions](docs/Upgrade_Guide_Linux.md) to upgrade your current version of basic demo to the latest.

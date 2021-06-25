@@ -12,6 +12,9 @@
 
 ##########################################
 ##########################################
+# Fido Server Info
+FIDOSERVER_VERSION=4.4.1
+
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
 MARIA_ROOT_PASSWORD=BigKahuna
@@ -20,6 +23,7 @@ MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
 XMXSIZE=512m
 BUFFERPOOLSIZE=512m
 
+# JWT
 RPID=strongkey.com
 JWT_DN='CN=StrongKey KeyAppliance,O=StrongKey'
 JWT_DURATION=30
@@ -64,6 +68,7 @@ OPENDJTGT=OpenDJ-3.0.0
 OPENDJ_HOME=$STRONGKEY_HOME/$OPENDJTGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SKCE_BASE_LDIF=skce-base.ldif
+ALLOW_USERNAME_CHANGE=false
 
 function check_exists {
 for ARG in "$@"
@@ -101,6 +106,7 @@ echo -n "Installing required linux packages (openjdk, unzip, libaio, ncurses-com
 echo -n "The installer will skip packages that do not apply or are already installed. "
 if [[ ! -z $YUM_CMD ]]; then
     yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+    yum downgrade java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9 java-1.8.0-openjdk-headless-1.8.0.282.b08-1.el7_9 java-1.8.0-openjdk-devel-1.8.0.282.b08-1.el7_9 -y >/dev/null 2>&1
     systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
     apt-get update >/dev/null 2>&1
@@ -483,14 +489,19 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 
 	touch $STRONGKEY_HOME/crypto/etc/crypto-configuration.properties
 	echo "crypto.cfg.property.jwtsigning.certsperserver=$JWT_CERTS_PER_SERVER" >> $STRONGKEY_HOME/crypto/etc/crypto-configuration.properties
+	chown -R strongkey:strongkey $STRONGKEY_HOME/crypto
 
 	echo "appliance.cfg.property.serverid=1" > $STRONGKEY_HOME/appliance/etc/appliance-configuration.properties
 	echo "appliance.cfg.property.enableddomains.ccspin=$CCS_DOMAINS" >> $STRONGKEY_HOME/appliance/etc/appliance-configuration.properties
 	echo "appliance.cfg.property.replicate=false" >> $STRONGKEY_HOME/appliance/etc/appliance-configuration.properties
-	chown -R strongkey $STRONGKEY_HOME/appliance
-
-	chown strongkey:strongkey $STRONGKEY_HOME/crypto/etc/crypto-configuration.properties
-
+	chown -R strongkey:strongkey $STRONGKEY_HOME/appliance
+	
+	echo "skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
+	
+	mkdir -p $STRONGKEY_HOME/fido
+	touch $STRONGKEY_HOME/fido/VersionFidoServer-$FIDOSERVER_VERSION
+	chown -R strongkey:strongkey $STRONGKEY_HOME/fido
 fi
 
 service glassfishd start
@@ -526,7 +537,13 @@ fi
 $GLASSFISH_HOME/bin/asadmin delete-jvm-options $($GLASSFISH_HOME/bin/asadmin list-jvm-options | sed -n '/\(-XX:NewRatio\|-XX:MaxPermSize\|-XX:PermSize\|-client\|-Xmx\|-Xms\)/p' | sed 's|:|\\\\:|' | tr '\n' ':')
 $GLASSFISH_HOME/bin/asadmin create-jvm-options -Djtss.tcs.ini.file=$STRONGKEY_HOME/lib/jtss_tcs.ini:-Djtss.tsp.ini.file=$STRONGKEY_HOME/lib/jtss_tsp.ini:-Xmx${XMXSIZE}:-Xms${XMXSIZE}:-Djdk.tls.ephemeralDHKeySize=2048:-Dproduct.name="":-XX\\:-DisableExplicitGC
 
+
+
 if [ $INSTALL_FIDO = 'Y' ]; then
+
+	# Create URL for first time setup
+	install_date_millis=$(date +%s%3N)
+	$MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -e "insert into configurations values(1, 'skfs.cfg.property.install.date.hash', '$(echo $(hostname)$install_date_millis | md5sum | cut -d ' ' -f 1)', 'Hash created during install to aid in first time setup');"
 
 cat > $GLASSFISH_HOME/domains/domain1/docroot/app.json <<- EOFAPPJSON
 {
@@ -554,12 +571,15 @@ EOFAPPJSON
 	$SKFS_SOFTWARE/keygen-jwt.sh $JWT_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $JWT_CERTS_PER_SERVER $SAKA_DID $JWT_KEYSTORE_PASS $JWT_KEY_VALIDITY
 	chown strongkey:strongkey $SKFS_HOME/keystores/jwtsigningtruststore.bcfks $SKFS_HOME/keystores/jwtsigningkeystore.bcfks
 
-	chown strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
+	chown strongkey:strongkey $GLASSFISH_HOME/domains/domain1/docroot/app.json
 	echo -n "Deploying StrongKey FidoServer ... "
 	cp $SKFS_SOFTWARE/fidoserver.ear /tmp
 	$GLASSFISH_HOME/bin/asadmin deploy /tmp/fidoserver.ear
 	rm /tmp/fidoserver.ear
 
 fi
+
+# Future build
+#echo "Please visit: https://$(hostname):8181/#/setup/$(echo $(hostname)$install_date_millis | md5sum | cut -d ' ' -f 1) for first time setup"
 
 echo "Done!"

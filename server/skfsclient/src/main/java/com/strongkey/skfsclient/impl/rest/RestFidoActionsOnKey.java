@@ -134,6 +134,112 @@ public class RestFidoActionsOnKey {
         System.out.println("\nUpdate key test complete.");
         System.out.println("******************************************");
     }
+    
+    public static void updateUsername(String hostport,
+                            int did,
+                            String authtype,
+                            String credential1,
+                            String credential2,
+                            String oldusername,
+                            String newusername) throws Exception
+    {
+        /*
+        * authtype    -> |HMAC     |PASSWORD   |
+        *                |---------|-----------|
+        * credential1 -> |accesskey|svcusername|
+        * credential2 -> |secretkey|svcpassword|
+        */
+        if (!authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC) && !authtype.equalsIgnoreCase(Constants.AUTHORIZATION_PASSWORD)) {
+            System.out.println("Invalid Authentication Type...\n");
+            return;
+        }
+
+        System.out.println("REST Update key test with " + authtype);
+        System.out.println("******************************************");
+
+        // Build request
+        UpdateFidoKeyRequest update = new UpdateFidoKeyRequest();
+
+        // Build request svcinfo
+        update.getSVCInfo().setDid(did);
+        update.getSVCInfo().setProtocol(Constants.PROTOCOL_FIDO);
+        if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+            update.getSVCInfo().setAuthtype(Constants.AUTHORIZATION_HMAC);
+        } else {
+            update.getSVCInfo().setAuthtype(Constants.AUTHORIZATION_PASSWORD);
+            update.getSVCInfo().setSVCUsername(credential1);
+            update.getSVCInfo().setSVCPassword(credential2);
+        }
+
+        // Build request payload
+        update.setOldUsername(oldusername);
+        update.setModifyLocation("Cupertino");
+        update.setNewUsername(newusername);
+
+        // Prepare for POST call
+        String json = update.toJsonObject().toString();
+        System.out.println(json);
+        ContentType mimetype = ContentType.APPLICATION_JSON;
+        StringEntity body = new StringEntity(json, mimetype);
+
+        String resourceLoc = hostport + Constants.REST_SUFFIX + Constants.REST_UPDATE_USERNAME;
+
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(resourceLoc);
+        httpPost.setEntity(body);
+
+        // Build HMAC and add headers
+        if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+        String payloadHash = common.calculateSha256(update.getPayload().toJsonObject().toString());
+        String currentDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z").format(new Date());
+        String requestToHmac = httpPost.getMethod() + "\n"
+                + payloadHash + "\n"
+                + mimetype.getMimeType() + "\n"
+                + currentDate + "\n"
+                + Constants.API_VERSION + "\n"
+                + httpPost.getURI().getPath();
+            String hmac = common.calculateHMAC(credential2, requestToHmac);
+            httpPost.addHeader("Authorization", "HMAC " + credential1 + ":" + hmac);
+            httpPost.addHeader("strongkey-content-sha256", payloadHash);
+            httpPost.addHeader("Date", currentDate);
+            httpPost.addHeader("strongkey-api-version", Constants.API_VERSION);
+        }
+        httpPost.addHeader("Content-Type", mimetype.getMimeType());
+
+        System.out.println("\nCalling update @ " + resourceLoc);
+        CloseableHttpResponse response = httpclient.execute(httpPost);
+        String result;
+        try {
+            StatusLine responseStatusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
+            result = EntityUtils.toString(entity);
+            EntityUtils.consume(entity);
+
+            switch (responseStatusLine.getStatusCode()) {
+                case 200:
+                    break;
+                case 401:
+                    System.out.println("Error during update username : 401 HMAC Authentication Failed");
+                    return;
+                case 404:
+                    System.out.println("Error during update username : 404 Resource not found");
+                    return;
+                case 400:
+                case 500:
+                default:
+                    System.out.println("Error during update username : " + responseStatusLine.getStatusCode() + " " + result);
+                    return;
+            }
+
+        } finally {
+            response.close();
+        }
+
+        System.out.println(" Response : " + result);
+
+        System.out.println("\nUpdate username test complete.");
+        System.out.println("******************************************");
+    }
 
     public static void deregister(String hostport,
                                 int did,

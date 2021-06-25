@@ -379,6 +379,12 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                         throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
                                 + " RPID Hash invalid'"));
                     }
+                    if (!originwithoutSchemePort.endsWith(rpId)) {
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                + " RPID Hash invalid'"));
+                    }
+                    
                     String origin2 = originwithoutSchemePort.replace(rpId, "");
                     if (origin2.split("\\.").length > 1) {
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");

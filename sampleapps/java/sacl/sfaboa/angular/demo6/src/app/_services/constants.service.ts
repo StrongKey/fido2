@@ -46,8 +46,8 @@ export class ConstantsService {
 
     // the URL of the application
     public static baseURL: string = window.location.protocol + "//" + window.location.hostname;
-    public static sfaURL: string = `${window.location.protocol}//${window.location.hostname}:8181/sfaeco-web/rest`;
-    public static profileURL: string= `${window.location.protocol}//${window.location.hostname}:8181/kma/#/profile`;
+    public static sfaURL: string = `${window.location.protocol}//${window.location.hostname}/sfaeco-web/rest`;
+    public static profileURL: string= `${window.location.protocol}//${window.location.hostname}/kma/#/profile`;
     //"https://rsa-demo02.strongkey.com:8181/sfaeco-web/rest"
 
 }
