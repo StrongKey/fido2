@@ -36,9 +36,22 @@ JWT_DID="${args[16]}"
 JWT_KEYSTORE_PASS="${args[17]}"
 JWT_KEY_VALIDITY="${args[18]}"
 
+# SKFS Default Vars
+FIDOSERVER_VERSION=4.4.1
+ALLOW_USERNAME_CHANGE=false
+
+
 # Start glassfish
 echo "Starting glassfish..."
 $GLASSFISH_HOME/bin/asadmin start-domain || { echo 'Failed to start domain' ; exit 1; }
+
+# Configure SKFS
+mkdir -p $STRONGKEY_HOME/fido
+touch $STRONGKEY_HOME/fido/VersionFidoServer-$FIDOSERVER_VERSION
+
+cat >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties <<- EOFSKFSCONF
+skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE
+EOFSKFSCONF
 
 # Configure AD
 echo "Configuring Active Directory..."
