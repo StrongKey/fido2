@@ -177,7 +177,7 @@ if [[ -z $($MYSQL_HOME/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_
 fi
 
 # 4.3.0 upgrade finished, start upgrade to 4.4
-if [[ ! -z $($MYSQL_HOME/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "show index from fido_keys where column_name='fkid';") ]]; then
+if [ ! -f $STRONGKEY_HOME/skfs/keystores/jwtsigningtruststore.bcfks ]; then
         echo "Upgrading to 4.4"
 
 	mkdir -p $STRONGKEY_HOME/upgrading
