@@ -1,4 +1,4 @@
-#### StrongKey FIDO2 Server, Community Edition for Linux
+#### StrongKey FIDO Server (SKFS), Community Edition for Linux
 
 ## Upgrade
 
