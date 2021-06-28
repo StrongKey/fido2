@@ -1,6 +1,6 @@
 # StrongKey FIDO Server (SKFS), Community Edition for Linux
 
-## Cluster Installation
+## Clustered Installation
 
 StrongKey FIDO Server can be clustered with multiple nodes to deliver high availability (HA) across a local area network (LAN) and/or disaster recovery (DR) on a wide area network (WAN). No additonal software is required to enable these features because StrongKey has enabled this capability as a **standard** feature in SKFS. Furthermore, with multiple nodes processing FIDO2 transactions at the same time, the SKFS cluster can deliver higher throughput to multiple web applications that use this server. This document guides you through setting up an SKFS cluster with two nodes, as depicted in the image below.
 
