@@ -2,7 +2,7 @@
 
 ## Clustered Installation
 
-StrongKey FIDO Server can be clustered with multiple nodes to deliver high availability (HA) across a local area network (LAN) and/or disaster recovery (DR) on a wide area network (WAN). No additonal software is required to enable these features because StrongKey has enabled this capability as a **standard** feature in SKFS. Furthermore, with multiple nodes processing FIDO2 transactions at the same time, the SKFS cluster can deliver higher throughput to multiple web applications that use this server. This document guides you through setting up an SKFS cluster with two nodes, as depicted in the image below.
+StrongKey FIDO Server can be clustered with multiple nodes to deliver _high availability (HA)_ across a _local area network (LAN)_ and/or _disaster recovery (DR)_ on a _wide area network (WAN)_. No additonal software is required to enable these features because StrongKey has enabled this capability as a **standard** feature in SKFS. Furthermore, with multiple nodes processing FIDO2 transactions at the same time, the SKFS cluster can deliver higher throughput to multiple web applications that use this server. This document guides you through setting up an SKFS cluster with two nodes, as depicted in the image below.
 
 **The clustering capability in SKFS only applies to the FIDO2 capability**. Web applications that use SKFS must make their own arrangements to deliver HA and/or DR independent of SKFS. The sample application used here to demonstrate FIDO2 clustering will, itself, not be highly available, but demonstrates that the web application can use either or both SKFS nodes in this HA configuration.
 
@@ -14,17 +14,17 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 ## Prerequisites
 
-1. **Two (2)** virtual machines (VMs) for the FIDO2 Servers, running the current version of CentOS Linux 7.x, with fully qualified domain names (FQDN) and internet protocol (IP) addresses
-2. **One (1)** virtual machine for the load-balancer, running HAProxy version 1.5.18 software on the current version of CentOS Linux 7.x with an FQDN and an IP address
-3. **One (1)** virtual machine for the StrongKey sample Proof-of-Concept web application from this GitHub repository, also running on the current version of CentOS Linux 7.x with an FQDN and an IP address
+1. **Two (2)** _virtual machines (VMs)_ for the FIDO2 Servers, running the current version of CentOS Linux 7.x, with _fully qualified domain names (FQDN)_ and _internet protocol (IP)_ addresses
+2. **One (1)** VM for the load-balancer, running HAProxy version 1.5.18 software on the current version of CentOS Linux 7.x with an FQDN and an IP address
+3. **One (1)** VM for the StrongKey sample Proof-of-Concept web application from this GitHub repository, also running on the current version of CentOS Linux 7.x with an FQDN and an IP address
 
 **NOTE:** This document assumes you are setting up this cluster with all nodes connected to a single ethernet switch. If your intent is to do a more realistic test, you should plan on using VMs with multiple network interfaces connected to different switches to isolate traffic to the appropriate segments as you might except in a more real-world environment.
 
 
-## Setting up the Cluster
+## Cluster Setup
 
 1. Using the installation steps [here](../docs/Installation_Guide_Linux.md), install and configure the two FIDO2 Server VMs **as if they were individual FIDO2 Servers, but do NOT install any web applications to test out the FIDO2 Server at this point**; we will do this later.
-2. For each server **determine the FQDN and assign it a unique Server ID**. A _Server id (SID)_ is a numeric value that uniquely identifies a node within the cluster. Conventionally, StrongKey cluster SIDs begin with the numeral **1** and continue incrementally for each node in the cluster. In the current setup, the following values are used:
+2. For each server **determine the FQDN and assign it a unique Server ID**. A _Server ID (SID)_ is a numeric value that uniquely identifies a node within the cluster. Conventionally, StrongKey cluster SIDs begin with the numeral **1** and continue incrementally for each node in the cluster. In the current setup, the following values are used:
 	
 	|  SID  |  FQDN  |
 	|  --  |  --  |
@@ -37,12 +37,12 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 	
 	b. If DNS **is configured**, make sure that it is configured for **forward and reverse** lookups&mdash;meaning that it should be possible to resolve the IP address using the FQDN, as well as resolve the FQDN using the IP address doing a reverse lookup. Without the reverse resolution, services in the Payara application server configuration will not work correctly.
 	
-	If Domain Name Service (DNS) **is not configured**, add the following entries to the **_/etc/hosts_** file to identify the cluster nodes. Use a text editor such as _vi_ to modify the _/etc/hosts_ file. For the two-node cluster, add the following to the end of the _hosts_ file, substituting the _strongkey.com_ domain name for your own environment:
+	If _Domain Name Service (DNS)_ **is not configured**, add the following entries to the **_/etc/hosts_** file to identify the cluster nodes. Use a text editor such as _vi_ to modify the _/etc/hosts_ file. For the two-node cluster, add the following to the end of the _hosts_ file, substituting the _strongkey.com_ domain name for your own environment:
 		
 		<ip-fidoserver1>	fidoserver1.strongkey.com fidoserver1
 		<ip-fidoserver2>	fidoserver2.strongkey.com fidoserver2
 	
-	c. **Modify the firewall** configuration to open ports 7001, 7002, and 7003 to accept connections between _just the FIDO2 Servers_ to enable multi-way replication. Run the following command once for each cluster node's IP address (substituting for \<ip-target-fidoserver\>). 
+	c. **Modify the firewall** configuration to open ports 7001, 7002, and 7003 to accept connections between _just the FIDO2 Servers_ to enable multi-way replication. Run the following command once for each cluster node's IP address (substituting for _\<ip-target-fidoserver\>_). 
 	
 	**Do _not_ execute this command for the IP address of the cluster node on which you are executing the command itself**. It is not necessary to open the node's ports on the firewall for itself since the replication module in the FIDO2 Server does not need to replicate to itself.
 	
@@ -82,7 +82,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
         
         mysql> exit
 		
- 	g. **Import the self-signed certificates** generated as part of the SKFS installation into the Payara Application Server's truststore&mdash;this is necessary to ensure that replication between the SKFS nodes occurs over a trusted Transport Layer Security (TLS) connection. Execute the _certimport.sh_ script included in the _/usr/local/strongkey/bin_ directory to import the certificate.
+ 	g. **Import the self-signed certificates** generated as part of the SKFS installation into the Payara Application Server's truststore&mdash;this is necessary to ensure that replication between the SKFS nodes occurs over a trusted _Transport Layer Security (TLS)_ connection. Execute the _certimport.sh_ script included in the _/usr/local/strongkey/bin_ directory to import the certificate.
 	 
 	 	shell> /usr/local/strongkey/bin/certimport.sh fidoserver1.strongkey.com -kGLASSFISH
 	 	shell> /usr/local/strongkey/bin/certimport.sh fidoserver2.strongkey.com -kGLASSFISH
@@ -96,7 +96,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 
 ## Install HAProxy Load Balancer
 
-High availability (HA) is enabled for applications by inserting a _load balancer_ between components of the infrastructure, such as between the web application and the two SKFS nodes of this configuration. The load balancer determines which target server is available to receive application connections, and distributes application requests to the appropriate target server.
+HA is enabled for applications by inserting a _load balancer_ between components of the infrastructure, such as between the web application and the two SKFS nodes of this configuration. The load balancer determines which target server is available to receive application connections, and distributes application requests to the appropriate target server.
 
 SKFS has been tested with the open-source HAProxy load balancer, part of the standard CentOS Linux distribution. It is conceivable that SKFS will work with other load balancers; please contact us to discuss your needs.
 
@@ -171,7 +171,7 @@ If it is set to _enforcing_, change it to _permissive_ by running the following 
     shell> setenforce 0
 
 
-## Testing the FIDO2 Server Cluster with a Sample Web Application
+## Testing the SKFS Cluster with a Sample Web Application
 
 To test the cluster with a sample web application, provision the fourth VM to install the sample application and follow the steps [here](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc) to install the **StrongKey Proof of Concept (PoC) Java Application**. When installing the PoC application, make sure that you **follow the steps to NOT install it with SKFS on the VM**; because you already have an SKFS cluster setup following this document, there is no need for an additional SKFS.
 
@@ -199,11 +199,11 @@ e. Open a browser to the appropriate URL to **access the PoC application** on th
 
     https://<PoC-VM-FQDN>:8181
 
-## Simulating Node Failures in the FIDO2 Server Cluster
+## Simulating Node Failures in the SKFS Cluster
 
 Following are several methods to simulate failures of an SKFS node within the cluster for verification purposes:
 
- 1. Remove the ethernet cable from one of the SKFS nodes.
+ 1. Remove the Ethernet cable from one of the SKFS nodes.
  2. Shut down the Payara Applicatiion Server on one of the SKFS nodes.
  3. Close port 8181 by disabling the firewall rule that accepts connections on SKFS.
  4. Modify the configuration of HAProxy on the load balancer to remove one of the SKFS nodes.
