@@ -78,7 +78,7 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
             JsonNumber timestampMs = jwt.getBody().getJsonNumber("timestampMs");
             Date now = new Date();
             if (timestampMs == null //timestampMS is missing
-                    || timestampMs.longValue() > now.getTime() + (30 * 1000)        //timestampMS is in the future (some hardcoded buffer)  (TODO fix hardcode)
+                    || timestampMs.longValue() > now.getTime() + (60 * 1000)        //timestampMS is in the future (some hardcoded buffer)  (TODO fix hardcode)
                     || timestampMs.longValue() < now.getTime() - (60 * 1000)) {     //timestampMS is older than 1 minute
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0015",
                         "JWT time stamp = " + timestampMs.longValue() + ", current time = " + now.getTime());

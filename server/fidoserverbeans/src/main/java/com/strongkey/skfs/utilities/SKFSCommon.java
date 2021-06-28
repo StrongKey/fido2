@@ -863,8 +863,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             case "eddsa":
                 return -8;
             case "ecdsa-p256k-sha256":
-                return -43;       //TODO remove this note when number is officially decided
-
+                return -47;
             default:
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
                         "Unsupported Algorithm: " + alg);
@@ -1258,5 +1257,4 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
         return null; // to keep compiler happy...
     }
-
 }

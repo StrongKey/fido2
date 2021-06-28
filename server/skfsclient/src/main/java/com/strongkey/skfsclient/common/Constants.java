@@ -24,6 +24,7 @@ public class Constants {
     public static final String REST_AUTHOTIZE_ENDPOINT = "/authorize";
     public static final String REST_GETKEYSINFO_ENDPOINT = "/getkeysinfo";
     public static final String REST_UPDATE_ENDPOINT = "/updatekeyinfo";
+    public static final String REST_UPDATE_USERNAME = "/updateusername";
     public static final String REST_DEREGISTER_ENDPOINT = "/deregister";
     public static final String REST_PING_ENDPOINT = "/ping";
     public static final String REST_GET_POLICY = "/getpolicy";
@@ -54,6 +55,7 @@ public class Constants {
     public static final String COMMANDS_GET_CONFIGURATION = "GC";
     public static final String COMMANDS_UPDATE_CONFIGURATION = "UC";
     public static final String COMMANDS_DELETE_CONFIGURATION = "DC";
+    public static final String COMMANDS_UPDATE_USERNAME = "UU";
 
     public static final String JSON_KEY_SERVLET_INPUT_USERNAME = "username";
     public static final String JSON_KEY_SERVLET_INPUT_REQUEST = "request";

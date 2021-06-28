@@ -49,7 +49,16 @@ public class UpdateFidoKeyRequest {
     public void setKeyid(String keyid) {
         payload.setKeyid(keyid);
     }
+    
+    public void setOldUsername(String oldusername) {
+        payload.setOldusername(oldusername);
+    }
+    
+    public void setNewUsername(String newusername) {
+        payload.setNewusername(newusername);
+    }
 
+    
     public JsonObject toJsonObject() {
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("svcinfo", svcinfo.toJsonObject());

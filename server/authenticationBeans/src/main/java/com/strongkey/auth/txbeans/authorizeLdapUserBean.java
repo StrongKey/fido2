@@ -172,7 +172,6 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_AUTHZ)) {
                 group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoauthzgroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_ADMIN)) {
-                // Removekey Group
                 group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoadmingroup")+groupdnsuffix;
             } 
             else {

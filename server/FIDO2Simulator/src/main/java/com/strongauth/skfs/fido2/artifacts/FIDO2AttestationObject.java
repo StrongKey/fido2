@@ -178,11 +178,11 @@ public class FIDO2AttestationObject {
             byte[] encodedAttObject = baos.toByteArray();
             byte[] encodedAttObject2 = baos2.toByteArray();
             
-            System.out.println("********************");
-            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject));
-            System.out.println("");
-            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject2));
-            System.out.println("********************");
+//            System.out.println("********************");
+//            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject));
+//            System.out.println("");
+//            System.out.println(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject2));
+//            System.out.println("********************");
             
             return java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(encodedAttObject2);
 

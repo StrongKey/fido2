@@ -645,7 +645,9 @@ Y8b d88P
     
       @Override
     public String getUserTransations() {
-        return getUserTxs.getAll();
+        String response =getUserTxs.getAll();
+          System.out.println("Response = " + response);
+          return response;
     }
     
     

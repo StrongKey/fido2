@@ -314,7 +314,7 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
                          }
                      } else if(intent=="authentication"){
 
-                       if(response.Response.toString() == "{\"Response\":\"\"}"){
+                      if(response.Response.toString().includes("Successfully processed sign response")){
                          window.location.replace(window.location.protocol + "//" + window.location.host + "/dashboard");
                        } else {
                          alert(response.Response);
@@ -451,11 +451,12 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 	-  **Copy** this snippet of code (between the LLLL... lines) and **paste** between the LLLL lines in _routes.js_. Here we add include the HTTPS module and the constants file that will be used to call the FIDO2SERVER.
 
 
-			//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-			const https = require('https');
-			const CONSTANTS = require('./constants');
-
-			//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+  			    //LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+  			    const https = require('https');
+  			    const CONSTANTS = require('./constants');
+            var useragent = require('express-useragent');
+            router.use(useragent.express());
+  			    //LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 
 	-  **Copy** this snippet of code (between the MMMM... lines) and **paste** between the MMMM lines in _routes.js_, replacing the existing content in the JavaScript file. Replace the _/loginSubmit_ post listener _/registerSubmit_ with _/getChallenge_ and _/submitChallengeResponse_ listeners. The _/getChallenge_ listener is used to request challenges from the FIDO2SERVER to send to the APPCLIENT for registration and authentication. The _/submitChallengeResponse_ listener is used to send the responses received from the FIDO2 Token, sent by the APPCLIENT, to the FIDO2SERVER.
 
@@ -583,7 +584,8 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
                version: CONSTANTS.METADATA_VERSION,
                last_used_location: CONSTANTS.METADATA_LOCATION,
                username: username,
-               origin: "https://"+reqOrigin
+               origin: "https://"+reqOrigin,
+              clientUserAgent: req.useragent.source
                };
                var responseJSON =   {
                id: credResponse.id,

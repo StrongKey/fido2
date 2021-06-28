@@ -4,7 +4,7 @@ body {
 }
 
 h1 {
-  font-size: 28px; 
+  font-size: 28px;
   font-weight: 300;
   color: #888;
   text-align: left;
@@ -24,27 +24,37 @@ a {
   text-decoration: none;
   font-weight: 600;
 }
-  
+
 a:hover {
   text-decoration: underline;
 }
-  
+
 #main {
   display: flex;
   justify-content: center;
-  flex-direction: column;  
+  flex-direction: column;
   padding: 5%;
   background-image: url(../img/cyansmoke.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
-  
+
 .login_logo {
   float: right;
   text-align: right;
   height: 64px;
-  width: 90px;
+   min-width: 90px;
+  /*width: 90px;*/
   padding-top: 3px;
+      grid-row: 1;
+    grid-column: 2;
+}
+.header-container{
+    display: grid;
+}
+.title-container{
+    grid-row: 1;
+    grid-column: 1;
 }
 
 .login_logo img {
@@ -60,7 +70,7 @@ a:hover {
 .dimmed {
   opacity: 0.4;
 }
- 
+
 h1.strongkey-heading {
   font-weight: 800;
 }
@@ -74,7 +84,7 @@ h1.fido2-heading {
   border: solid 1px #ccc;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.9);
-  width: 280px; 
+  min-width: 280px;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 300;
@@ -102,15 +112,15 @@ h1.fido2-heading {
 }
 
 #authHeadingPanel img {
-  display: inline-block; 
-  opacity: 0.8; 
+  display: inline-block;
+  opacity: 0.8;
   vertical-align: middle;
 }
 
 #authHeadingPanel h2 {
-  display: inline-block; 
-  vertical-align: middle; 
-  margin-left: 5px; 
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
   padding: 0;
 }
 
@@ -130,14 +140,14 @@ button.met {
   padding-top: 10px;
 }
 
-input.met::placeholder { 
+input.met::placeholder {
   color: rgb(0, 64, 84);
-  opacity: 1; 
+  opacity: 1;
 }
 
-input.met::placeholder:disabled { 
+input.met::placeholder:disabled {
   color: #888;
-  opacity: 1; 
+  opacity: 1;
 }
 
 input.pad {
@@ -170,7 +180,7 @@ input.met:focus {
 }
 
 input.met[type="text"] {
-  background-color: #e9faff; 
+  background-color: #e9faff;
   border-bottom-color: rgb(0, 196, 217);
   border-radius: 5px;
   border-width: 1px;
@@ -296,4 +306,48 @@ span.fido-data-value {
 
 #cssMsg {
   display: none;
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+border: solid 1px #ccc;
+border-radius: 5px;
+background-color: #E8F9FE;
+font-family: Montserrat, Arial, Helvetica, sans-serif;
+font-size: 14px;
+ visibility: hidden;
+ color: #003e54;
+ text-align: center;
+ border-radius: 2px;
+ padding: 16px;
+ position: fixed;
+ z-index: 1;
+ top: 15px;
+ white-space: pre-line;
+}
+
+#snackbar.show {
+ visibility: visible;
+ -webkit-animation: fadein 0.5s;
+ animation: fadein 0.5s;
+}
+
+@-webkit-keyframes fadein {
+ from {top: 0; opacity: 0;}
+ to {top: 15px; opacity: 1;}
+}
+
+@keyframes fadein {
+ from {top: 0; opacity: 0;}
+ to {top: 15px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+ from {top: 15px; opacity: 1;}
+ to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+ from {top: 15px; opacity: 1;}
+ to {top: 0; opacity: 0;}
 }

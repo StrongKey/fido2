@@ -17,6 +17,8 @@ import javax.json.JsonObjectBuilder;
 public class Payload {
 
     private String username;
+    private String oldusername;
+    private String newusername;
     private String status;
     private String modify_location;
     private String displayname;
@@ -124,11 +126,34 @@ public class Payload {
     public void setTxpayload(String txpayload) {
         this.txpayload = txpayload;
     }
+
+    public String getOldusername() {
+        return oldusername;
+    }
+
+    public void setOldusername(String oldusername) {
+        this.oldusername = oldusername;
+    }
+
+    public String getNewusername() {
+        return newusername;
+    }
+
+    public void setNewusername(String newusername) {
+        this.newusername = newusername;
+    }
+    
     
     public JsonObject toJsonObject() {
         JsonObjectBuilder job = Json.createObjectBuilder();
         if (this.username != null) {
             job.add("username", username);
+        }
+        if (this.oldusername != null) {
+            job.add("oldusername", oldusername);
+        }
+        if (this.newusername != null) {
+            job.add("newusername", newusername);
         }
         if (this.txid != null) {
             job.add("txid", txid);

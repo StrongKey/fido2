@@ -305,7 +305,8 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         // Use RP requested options, assuming the policy allows.
         if(rpRequestedAuthSelect != null){
             String rpRequestedAttachment = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT, null);
-            Boolean rpRequestedRequireResidentKey = SKFSCommon.handleNonExistantJsonBoolean(rpRequestedAuthSelect, SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
+//            Boolean rpRequestedRequireResidentKey = SKFSCommon.handleNonExistantJsonBoolean(rpRequestedAuthSelect, SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
+            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);;
             String rpRequestedUserVerification = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null);
 
             if(regOp.getAuthenticatorAttachment().contains(rpRequestedAttachment)){
@@ -316,7 +317,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
             }
 
             if (rpRequestedRequireResidentKey != null) {
-                if (regOp.getRequireResidentKey().contains(Boolean.toString(rpRequestedRequireResidentKey))) {
+                if (regOp.getRequireResidentKey().contains(rpRequestedRequireResidentKey)) {
                     authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, rpRequestedRequireResidentKey);
                 } else {
                     throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY);

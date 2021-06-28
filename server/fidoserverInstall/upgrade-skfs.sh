@@ -13,6 +13,8 @@
 
 . /etc/skfsrc
 
+CURRENT_SKFS_BUILDNO=$(ls -1 $STRONGKEY_HOME/fido/Version* 2> /dev/null | sed -r 's|.*VersionFidoServer-||')
+
 SCRIPT_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SOFTWARE_HOME=/usr/local/software
 STRONGKEY_HOME=/usr/local/strongkey
@@ -38,6 +40,8 @@ JWT_CERTS_PER_SERVER=3
 JWT_KEYSTORE_PASS=Abcd1234!
 JWT_KEY_VALIDITY=365
 SAKA_DID=1
+
+ALLOW_USERNAME_CHANGE=false
 
 LATEST_SKFS_BUILD=fidoserver.ear
 
@@ -104,14 +108,14 @@ if [ ! -f $SCRIPT_HOME/$DBCLIENT ]; then
 	echo "Successful"
 fi
 
-# Check if upgrading to 4.3.0 is necessary
-if [[ -z $($STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "show index from fido_keys where column_name='fkid';") ]]; then
-        echo "Upgrading to 4.3.0 (Prerequisite for other upgrades)..."
+# Undeploy SKFS
+echo
+echo "Undeploying old skfs build..."
+$GLASSFISH_HOME/bin/asadmin --user admin --passwordfile /tmp/password undeploy fidoserver
 
-	# Undeploy SKFS
-	echo
-	echo "Undeploying old skfs build..."
-	$GLASSFISH_HOME/bin/asadmin --user admin --passwordfile /tmp/password undeploy fidoserver
+# Check if upgrading to 4.3.0 is necessary
+if [[ -z $($MYSQL_HOME/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "show index from fido_keys where column_name='fkid';") ]]; then
+        echo "Upgrading to 4.3.0 (Prerequisite for other upgrades)..."
 
 	# Stop Glassfish
 	echo
@@ -173,11 +177,9 @@ if [[ -z $($STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MAR
 fi
 
 # 4.3.0 upgrade finished, start upgrade to 4.4
-if [[ ! -z $($STRONGKEY_HOME/$MARIATGT/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "show index from fido_keys where column_name='fkid';") ]]; then
+if [[ ! -z $($MYSQL_HOME/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "show index from fido_keys where column_name='fkid';") ]]; then
         echo "Upgrading to 4.4"
 
-
-	$GLASSFISH_HOME/bin/asadmin --user admin --passwordfile /tmp/password undeploy fidoserver
 	mkdir -p $STRONGKEY_HOME/upgrading
 	cp -r $SCRIPT_HOME/keymanager $STRONGKEY_HOME
 	cp -r $SCRIPT_HOME/skfsclient $STRONGKEY_HOME
@@ -469,8 +471,19 @@ EOFMYCNF
                 service mysqld start
         fi
 
-	# Use fidoserver 4.3.1
+	# Use newer fidoserver version
 	cp $SCRIPT_HOME/fidoserver.ear /tmp
+fi
+
+# 4.4.0 upgrade finished, start upgrade to 4.4.1
+# Introduction of version file found in $STRONGKEY_HOME/fido
+if [ -z "$CURRENT_SKFS_BUILDNO" ]; then
+	echo "skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
+
+	mkdir -p $STRONGKEY_HOME/fido
+        touch $STRONGKEY_HOME/fido/VersionFidoServer-4.4.1
+        chown -R strongkey:strongkey $STRONGKEY_HOME/fido
 fi
 
 # Start Glassfish
@@ -487,7 +500,7 @@ echo "Deploying new skfs build..."
 
 check_exists "$SCRIPT_HOME/$LATEST_SKFS_BUILD"
 
-#cp $SCRIPT_HOME/$LATEST_SKFS_BUILD /tmp
+cp $SCRIPT_HOME/$LATEST_SKFS_BUILD /tmp
 # Deploy SKFS
 $GLASSFISH_HOME/bin/asadmin --user admin --passwordfile /tmp/password deploy /tmp/$LATEST_SKFS_BUILD
 

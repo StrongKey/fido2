@@ -38,8 +38,8 @@ export class SharedService {
     }
 
   getIsLoggedInFromServer() {
-        // let restURL = ConstantsService.baseURL + ":8181/poc/fido2/isLoggedIn";
-        let restURL = ConstantsService.baseURL + ":8181/sfakma/fido2/isLoggedIn";
+        // let restURL = ConstantsService.baseURL + "/poc/fido2/isLoggedIn";
+        let restURL = ConstantsService.baseURL + "/sfakma/fido2/isLoggedIn";
 
         var headers_object = new HttpHeaders().set("Authorization", `Bearer ${localStorage.getItem("jwt_payload")}`);
 

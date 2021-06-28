@@ -48,9 +48,6 @@ cp $fidoserver/fidoserverEAR/target/fidoserver.ear $fidoserver/fidoserverInstall
 mkdir $fidoserver/fidoserverInstall/keymanager
 cp -R $fidoserver/keymanager/target/dist/* $fidoserver/fidoserverInstall/keymanager
 
-#mkdir $fidoserver/fidoserverInstall/apiclient
-#cp -R $fidoserver/apiclient/target/dist/* $fidoserver/fidoserverInstall/apiclient
-
 mkdir $fidoserver/fidoserverInstall/skfsclient
 cp -R $fidoserver/skfsclient/target/dist/* $fidoserver/fidoserverInstall/skfsclient
 
@@ -64,6 +61,5 @@ echo "Success!"
 
 rm -f $fidoserver/fidoserverInstall/fidoserver.ear
 rm -rf $fidoserver/fidoserverInstall/keymanager
-rm -rf $fidoserver/fidoserverInstall/apiclient
 rm -rf $fidoserver/fidoserverInstall/skfsclient
 exit 0

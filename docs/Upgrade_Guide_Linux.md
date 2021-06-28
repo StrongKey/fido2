@@ -1,19 +1,19 @@
-#### StrongKey FIDO2 Server, Community Edition for Linux
+#### StrongKey FIDO Server (SKFS), Community Edition for Linux
 
 ## Upgrade
 
 1. Open a terminal and **change directory** to the target download folder.
 
-2.  **Download** the binary distribution file [fido2server-v4.4.0-dist.tgz](https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.0-dist.tgz).
+2.  **Download** the binary distribution file [fido2server-v4.4.1-dist.tgz](https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.1-dist.tgz).
 
     ```
-    shell> wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.0-dist.tgz
+    shell> wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.1-dist.tgz
     ```
 
 3.  **Extract the downloaded file to the current directory**:
 
     ```
-    shell> tar xvzf fido2server-v4.4.0-dist.tgz
+    shell> tar xvzf fido2server-v4.4.1-dist.tgz
     ```
     
 4.  **Execute** the _upgrade-skfs.sh_ script as follows:

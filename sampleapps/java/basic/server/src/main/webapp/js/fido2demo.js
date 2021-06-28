@@ -9,7 +9,7 @@
 // ECMAScript 6 class
 class FidoTutorial {
     constructor() {
-        this.server = '/basicserver/fido2/';
+        this.server = '/basicdemo/fido2/';
         this.initErrMap();
     }
 
@@ -25,6 +25,8 @@ class FidoTutorial {
 
     // wire up the widgets
     initActions() {
+        
+        
         $('#regSubmit').click(() => {
             this.submitRegForm();
         });
@@ -33,7 +35,7 @@ class FidoTutorial {
             this.submitAuthForm();
         });
 
-        $('#regUsername,#regDisplayName').keypress((e) => {
+        $('#regUsername').keypress((e) => {
             if (e && e.keyCode == 13) {
                 this.submitRegForm();
             }
@@ -63,11 +65,42 @@ class FidoTutorial {
         });
 
         $('#showRegPanel').click(() => {
+          // Get the snackbar DIV
+          var sb = document.getElementById("snackbar");
+          //This tells the user if they have a platform authenticator. 
+          //This is important so the user can be notified if they must use
+          //A security key or not.
+          //https://www.w3.org/TR/webauthn-2/#sctn-isUserVerifyingPlatformAuthenticatorAvailable
+          PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+              .then(function (uvpaAvailable) {
+                  // If there is not a user-verifying platform authenticator
+                  if (!uvpaAvailable) {
+                      sb.innerHTML = "Your computer/mobile device cannot store FIDO platform keys locally with this browser.\n You MUST have an external Security Key to register.";
+                  } else {
+                      sb.innerHTML = "Yay! Your computer/mobile device CAN store FIDO platform keys locally with this browser.\n However, you can ALSO use an external Security Key to register as a primary key or in addition to your platform key.";
+                  }
+                //resizing the notification to align dynamically  
+                if (window.innerWidth < 700){
+                    document.getElementById('snackbar').setAttribute("style","left: 50%;width:280px;margin-left: -156px;");
+                } else {
+                    var sbwidth = document.getElementById("snackbar").offsetWidth;
+                    var dbmargin = (sbwidth/2);
+                    document.getElementById('snackbar').setAttribute("style","left: 50%;margin-left: -"+dbmargin+"px;"); 
+                }
+       
+                
+                  // Add the "show" class to DIV
+                  sb.className = "show";
+
+              });
             this.registering = true;
             this.updateView();
         });
 
         $('#showAuthPanel').click(() => {
+            // Get the snackbar DIV
+            var sb = document.getElementById("snackbar");
+            sb.className = sb.className.replace("show", "");
             this.registering = false;
             this.updateView();
         });
@@ -98,16 +131,18 @@ class FidoTutorial {
         this.setVisible('#authPanel', !showRegPanel);
         this.setVisible('#regPanel', showRegPanel);
 
-        // dim cipher the octopus when user isn't logged in
+        // dim cipher the octopus when user isn't logged in 
         if (this.loggedIn) {
             $('.login_logo').removeClass('dimmed');
+            document.getElementById('regDisplayName').setAttribute("style","display: inline;");
         }
         else {
             $('.login_logo').addClass('dimmed');
+            document.getElementById('regDisplayName').setAttribute("style","display: none;");
         }
 
         // show username under logo when logged in
-        $('#loginUsername').text(this.elide(this.username, 12) || '');
+        $('#loginUsername').text(this.username || '');
         $('.login_logo').css('text-align', this.loggedIn ? 'center' : 'end');
         $('.login_logo img').css('width', this.loggedIn ? '42px' : '58px');
 
@@ -127,6 +162,9 @@ class FidoTutorial {
 
         $('#metadataContent').css('visibility', this.debugPanelVisible ? 'visible' : 'hidden');
         $('#metadataContent').empty().append(this.fidoData || '');
+        
+
+        
     }
 
     // update session status in model and update UI
@@ -152,7 +190,7 @@ class FidoTutorial {
         if (!this.loggedIn) {
             this.post('preregister', {
                 'username': $('#regUsername').val(),
-                'displayName': $('#regDisplayName').val()
+                'displayName': (!this.loggedIn ? 'Initial_Key' : $('#regDisplayName').val())
             })
                 .done(resp => {
                     this.register(resp.Response);
@@ -259,20 +297,29 @@ class FidoTutorial {
     // user verification, key attestation, or resident key (where the username and secret key are stored
     // in memory on the FIDO2 key).
     register(preregResponse) {
+
+
+
         let that = this;
 
         // Convert base64url fields to ArrayBuffer format [verify].
+        // We convert the base64 encoded preregister response to the credential creation dictionary format.
+        // Credential creation dictionary definition: https://www.w3.org/TR/webauthn-2/#dictionary-makecredentialoptions
         let challengeBuffer = this.preregToBuffer(preregResponse);
 
         // Browser passes challenge fields to WebAuthn API, which tells relevant FIDO2 authenticators
         // to generate a new set of public key credentials.
+        // Step 2 of Registering a New Credential: https://www.w3.org/TR/webauthn-2/#sctn-registering-a-new-credential
         let credentialsContainer = window.navigator;
         credentialsContainer.credentials.create({ publicKey: challengeBuffer.Response })
             .then(credResp => {
                 // convert response to base64url
+                // The response returned by the authentictor must be converted to
+                // a format that can be sent via web services
+                // authenticator response definition: https://www.w3.org/TR/webauthn-2/#authenticatorattestationresponse
                 let credResponse = this.preregResponseToBase64(credResp);
 
-                // update debugging panel
+                // update debugging panel 
                 this.displayFIDOData(credResponse);
 
                 // If authenticator returns signed response, pass to FIDO2 server using register call.
@@ -310,15 +357,21 @@ class FidoTutorial {
         }
         else {
             // Convert base64url fields to ArrayBuffer format.
+            // We convert the base64 encoded preregister response to the assertion generation dictionary format
+            // Assertion generation dictionary definition: https://www.w3.org/TR/webauthn-2/#dictionary-assertion-options
             let challengeBuffer = this.preauthToBuffer(preauthResponse);
 
             // Browser passes challenge fields to WebAuthn API, which asks FIDO2 authenticators
             // to sign the challenge if they own a key pair associated with that user's account.
+            // https://www.w3.org/TR/credential-management-1/#dom-credentialscontainer-get
             let credentialsContainer;
             credentialsContainer = window.navigator;
             credentialsContainer.credentials.get({ publicKey: challengeBuffer.Response })
                 .then(credResp => {
                     // convert response to base64url
+                    // The response returned by the authentictor must be converted to
+                    // a format that can be sent via web services
+                    // Response definition: https://www.w3.org/TR/webauthn-2/#iface-authenticatorassertionresponse
                     let credResponse = that.preauthResponseToBase64(credResp);
 
                     // update debugging panel
@@ -340,6 +393,8 @@ class FidoTutorial {
     // conversions between base64url and ArrayBuffer as specified by the WebAuthn API
 
     preregToBuffer(input) {
+        // We convert the base64 encoded preregister response to the credential creation dictionary format
+        // Credential creation dictionary definition: https://www.w3.org/TR/webauthn-2/#dictionary-makecredentialoptions
         input = JSON.parse(input);
         input.Response.challenge = base64url.decode(input.Response.challenge);
         input.Response.user.id = base64url.decode(input.Response.user.id);
@@ -350,10 +405,13 @@ class FidoTutorial {
                 input.Response.excludeCredentials[i].id = base64url.decode(input.Response.excludeCredentials[i].id);
             }
         }
+        input.Response.timeout = 60000;
         return input;
     }
 
     preauthToBuffer(input) {
+        // We convert the base64 encoded preregister response to the assertion generation dictionary format
+        // Assertion generation dictionary definition: https://www.w3.org/TR/webauthn-2/#dictionary-assertion-options
         input = JSON.parse(input);
         input.Response.challenge = base64url.decode(input.Response.challenge);
 
@@ -366,6 +424,9 @@ class FidoTutorial {
         return input;
     }
 
+    // The response returned by the authentictor must be converted to
+    // a format that can be sent via web services
+    // authenticator response definition: https://www.w3.org/TR/webauthn-2/#authenticatorattestationresponse
     preregResponseToBase64(input) {
         let copyOfDataResponse = {};
         copyOfDataResponse.id = input.id;
@@ -376,7 +437,9 @@ class FidoTutorial {
         copyOfDataResponse.type = input.type;
         return copyOfDataResponse;
     }
-
+    // The response returned by the authentictor must be converted to
+    // a format that can be sent via web services
+    // Response definition: https://www.w3.org/TR/webauthn-2/#iface-authenticatorassertionresponse
     preauthResponseToBase64(input) {
         let copyOfDataResponse = {};
         copyOfDataResponse.id = input.id;
@@ -393,6 +456,9 @@ class FidoTutorial {
     onRegResult(regResponse) {
         let responseJSON = JSON.parse(JSON.stringify(regResponse));
         if (responseJSON.Response === 'Successfully processed registration response') {
+            // Get the snackbar DIV
+            var sb = document.getElementById("snackbar");
+            sb.className = sb.className.replace("show", "");
             this.clearModel();
             this.queryLoggedIn();
         }
@@ -500,3 +566,9 @@ if (supportedBrowser) {
         app.initComponents();
     }, 1));
 }
+
+
+
+
+
+

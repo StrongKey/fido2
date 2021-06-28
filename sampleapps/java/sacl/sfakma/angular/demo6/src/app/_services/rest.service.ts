@@ -7,8 +7,8 @@ import { ConstantsService } from './constants.service';
 
 @Injectable()
 export class RestService {
-    // private pocURL = ConstantsService.baseURL + ":8181/poc/fido2";
-    private pocURL = ConstantsService.baseURL + ":8181/sfakma/fido2";
+    // private pocURL = ConstantsService.baseURL + "/poc/fido2";
+    private pocURL = ConstantsService.baseURL + "/sfakma/fido2";
     private fidoHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     constructor(private http: HttpClient, private _router: Router, private sharedService: SharedService) {
         this.fidoHeaders.append('Cache-Control', 'no-cache, no-store, must-revalidate');
