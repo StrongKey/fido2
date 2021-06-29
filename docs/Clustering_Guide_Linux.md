@@ -93,6 +93,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 		
 	i. **Repeat *Steps 3 and 4*** on the remaining SKFS nodes of this cluster.
 	
+	**NOTE:** So all SKFS instances are using the same JWT keys, **copy the JWT keys from the first server** to replace the keys on the other servers.
 
 ## Install HAProxy Load Balancer
 
