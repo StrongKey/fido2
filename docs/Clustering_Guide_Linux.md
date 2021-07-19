@@ -78,7 +78,7 @@ While it is possible to add more than two nodes to the cluster, IT architects wi
 		mysql> insert into SERVERS values (1, 'fidoserver1.strongkey.com', 'Active', 'Both', 'Active', null, null);
 		mysql> insert into SERVERS values (2, 'fidoserver2.strongkey.com', 'Active', 'Both', 'Active', null, null);
 	
-	f. **Logout of the _mysql_ client**:
+	f. **Logout of the _MySQL_ client**:
         
         mysql> exit
 		
