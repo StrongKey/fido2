@@ -37,9 +37,9 @@ Install any version 10.x.x or higher of _Node.js_ from the following link:
 2.  **Download** the latest Windows Installer.
 3.  **Run the installer** and follow the prompts.  
 4.  To install _SQLite_, **browse** to [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html).
-5.  Under _Precompiled Binaries for Windows_, **download** the .zip that starts with “[sqlite-tools-win32-x86](https://www.sqlite.org/2020/sqlite-tools-win32-x86-3310100.zip)...”
+5.  Under _Precompiled Binaries for Windows_, **download** the _.zip_ that starts with “[sqlite-tools-win32-x86](https://www.sqlite.org/2020/sqlite-tools-win32-x86-3310100.zip)...”
      **NOTE:** Windows users will need to have installed a compression/unpacking application such as [7-zip](https://www.7-zip.org/download.html), [WinZip](https://www.winzip.com/landing/download-winzip-v1.html?gclid=EAIaIQobChMIrcqqxM-B6QIVCxgMCh29kQ57EAAYASAAEgLg-PD_BwE), etc.
-6.  **Extract** the .zip file to the desired path.
+6.  **Extract** the _.zip_ file to the desired path.
 7.  **Edit the Windows PATH variable** to include the extracted folder that contains the sqlite3 executable.
 
 **Mac OS**
