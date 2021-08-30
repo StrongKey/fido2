@@ -87,6 +87,7 @@ dn: cn=FIDOUsers,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: FIDOUsers
+uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 
 dn: cn=Services,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 objectClass: groupOfUniqueNames
@@ -143,39 +144,28 @@ objectClass: person
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: top
-objectClass: fidoinetorgperson
-FIDOKeysEnabled: false
-TwoStepVerification: false
 givenName: encryptonly
 cn: encryptonly
 sn: encryptonly
 userPassword: {SSHA}Fcvg/GnlTnXcb3XEDgZtk2Pp2EPUky+lqD0pqg==
-did: 1
 
 dn: cn=decryptonly,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 objectClass: person
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: top
-objectClass: fidoinetorgperson
-FIDOKeysEnabled: false
-TwoStepVerification: false
 givenName: decryptonly
 cn: decryptonly
 sn: decryptonly
 userPassword: {SSHA}NLa0poMDolYAQjP2fgTJPt7FcrbmElSEhK5wdA==
-did: 1
 
 dn: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 objectClass: person
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: top
-objectClass: fidoinetorgperson
 userPassword: {SSHA}5iDDXtncAL2xxGIvlQQU8Duq0Aa+ETm2qZNPoQ==
-FIDOKeysEnabled: false
-TwoStepVerification: false
-did: 1
 cn: encryptdecrypt
 sn: encryptdecrypt
+
 

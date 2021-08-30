@@ -38,4 +38,3 @@ objectClass: organizationalUnit
 objectClass: top
 description: OU node for groups of version 2.0 of the SKCE Application
 ou: groups
-

@@ -21,11 +21,14 @@ service mysqld restart
 service mysqld stop
 service glassfishd stop
 
-if [ -f /etc/rc.d/init.d/opendjd ]; then
-        echo "Uninstalling OpenDJ..." | tee -a $LOGNAME
-        service opendjd stop
-        chkconfig --del opendjd
-        rm /etc/rc.d/init.d/opendjd
+if [ -d /etc/openldap ]; then
+        echo "Uninstalling OpenLDAP..." | tee -a $LOGNAME
+	systemctl stop slapd
+	systemctl disable slapd
+	yum -y remove openldap-servers openldap-clients >/dev/null 2>&1
+	rm -rf /var/lib/ldap
+	userdel ldap
+	rm -rf /etc/openldap
 fi
 
 echo "Restoring original system files..." | tee -a $LOGNAME

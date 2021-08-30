@@ -14,7 +14,6 @@ import com.strongkey.appliance.utilities.applianceCommon;
 import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.appliance.utilities.applianceMaps;
 import com.strongkey.appliance.utilities.strongkeyLogger;
-import com.strongkey.fido2mds.MDS;
 import com.strongkey.skce.pojos.MDSClient;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.txbeans.persistSKCEObjectRemote;
@@ -34,14 +33,12 @@ import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKIllegalArgumentException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
-import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -121,7 +118,11 @@ public class persistSKCEObject implements persistSKCEObjectLocal, persistSKCEObj
                         if(fkproto.hasModifyDate()) fidokeys.setModifyDate(new Date(fkproto.getModifyDate()));
                         if(fkproto.hasModifyLocation()) fidokeys.setModifyLocation(fkproto.getModifyLocation());
                         if(fkproto.hasSignature()) fidokeys.setSignature(fkproto.getSignature());
-                        if(fkproto.hasSignatureKeytype()) fidokeys.setSignatureKeytype(fkproto.getSignatureKeytype());
+                        if(fkproto.hasSignatureKeytype()){
+                            fidokeys.setSignatureKeytype(fkproto.getSignatureKeytype());
+                        }else{
+                            fidokeys.setSignatureKeytype("RSA");
+                        }
                         if(fkproto.hasTransports()) fidokeys.setTransports((short)fkproto.getTransports());
                         if(fkproto.hasAttsid()) fidokeys.setAttsid((short)fkproto.getAttsid());
                         if(fkproto.hasAttdid()) fidokeys.setAttdid((short)fkproto.getAttdid());

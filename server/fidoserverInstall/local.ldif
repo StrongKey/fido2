@@ -1,0 +1,27 @@
+dn: cn=local,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: local
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.1 NAME 'TwoStepVerification' DESC 'Stores yes/no based on if two step verification is enabled or not.' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.4 NAME 'PrimaryPhone' DESC 'Stores the primary phone number to be used for 2 Step Verification' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.3 NAME 'RegisteredPhoneNumbers' DESC 'Stores all the phone numbers registered by user for 2 Step Verification' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.7 NAME 'Defaulttarget' DESC 'Stores the primary email to be used for 2 Step Verification' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.2 NAME 'FIDOKeysEnabled' DESC 'Stores Yes/no based on if the user has any keys enabled or not' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.5 NAME 'RegisteredEmailAddresses' DESC 'Stores all the email addresses registered by user for 2 Step Verification' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.4.1.1.6 NAME 'PrimaryEmail' DESC 'Stores the primary email to be used for 2 Step Verification' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.5.1.1.1 NAME 'did' DESC 'Stores domainId to which the user belong to' EQUALITY integerMatch ORDERING integerOrderingMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.5.1.1.2 NAME 'domainName' DESC 'Stores the name of the domain' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+#
+olcAttributeTypes: ( 1.3.6.1.4.1.10514.4512.5.1.1.3 NAME 'domainDescription' DESC 'Stores description for the domain' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 USAGE userApplications )
+#
+olcObjectClasses: ( 1.3.6.1.4.1.10514.4512.5.1.1 NAME 'encryptionDomain' SUP organizationalUnit STRUCTURAL MUST ( did $ domainName) MAY ( domainDescription ) X-ORIGIN 'StrongAuth Specific' )
+#
+olcObjectClasses: ( 1.3.6.1.4.1.10514.4512.4.1.1 NAME 'fidoinetorgperson' SUP inetOrgPerson STRUCTURAL MUST ( FIDOKeysEnabled $ TwoStepVerification $ did ) MAY ( PrimaryEmail $ RegisteredEmailAddresses $ PrimaryPhone $ RegisteredPhoneNumbers $ Defaulttarget ) )

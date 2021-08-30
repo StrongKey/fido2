@@ -151,6 +151,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                                 .add("randomid_ttl_seconds", time_to_live)
                                 .add("fidoProtocol", key.getFidoProtocol())
                                 .add("fidoVersion", key.getFidoVersion())
+                                .add("credentialId", key.getKeyhandle())
                                 .add("createLocation", key.getCreateLocation())
                                 .add("createDate", key.getCreateDate().getTime())
                                 .add("lastusedLocation", modifyloc)
@@ -162,6 +163,10 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                             String displayName = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
                             if (displayName != null) {
                                 keyJsonBuilder.add("displayName", displayName);
+                            }
+                            String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
+                            if (displayName != null) {
+                                keyJsonBuilder.add("attestationFormat", attestationFormat);
                             }
                         }
                         keysArrayBuilder.add(keyJsonBuilder.build());

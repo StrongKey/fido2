@@ -20,7 +20,7 @@ mkdir jwttmp
 
 #CA private key and cert
 openssl ecparam -name secp521r1 -genkey -noout -out jwttmp/CA-key.$DID.pem 
-openssl req -new -key jwttmp/CA-key.$DID.pem -x509 -days 1825 -out jwttmp/CA-cert.$DID.pem -subj "$DN/CN=JWT CA" 
+openssl req -new -key jwttmp/CA-key.$DID.pem -x509 -days 1825 -out jwttmp/CA-cert.$DID.pem -subj "$DN/CN=JWT CA $DID" 
 
 #packing private CA key and CA cert in p12
 openssl pkcs12 -export -in jwttmp/CA-cert.$DID.pem -inkey jwttmp/CA-key.$DID.pem -passin pass:$KEY_PASS -name jwtCA.$DID -out jwttmp/jwtCA.$DID.p12 -passout pass:$KEY_PASS
