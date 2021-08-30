@@ -83,7 +83,7 @@ Here is a list of operations as well as a brief description of each argument.
 
 4. **Update key information** for a specific key using REST and HMAC authorization. In this call you will be able to set the display name and deactivate or reactivate a specific FIDO key.
 
-        > java -jar skfsclient.jar G https://[FQDN]:8181 1 REST HMAC 162a5684336fa6e7 7edd81de1baab6ebcc76ebe3e38f41f4 1-1-testuser-171 new-display-name Active
+        > java -jar skfsclient.jar U https://[FQDN]:8181 1 REST HMAC 162a5684336fa6e7 7edd81de1baab6ebcc76ebe3e38f41f4 1-1-testuser-171 new-display-name Active
 
 5. **De-register (delete) a specific key** using REST and HMAC authorization.
 
@@ -108,7 +108,7 @@ Here is a list of operations as well as a brief description of each argument.
 
 10. **Update key information** for a specific key using REST and PASSWORD authorization. In this call you will be able to set the display name and deactivate or reactivate a specific FIDO key.
 
-        > java -jar skfsclient.jar G https://[FQDN]:8181 1 REST PASSWORD svcfidouser Abcd1234! 1-1-testuser-171 new-display-name Active
+        > java -jar skfsclient.jar U https://[FQDN]:8181 1 REST PASSWORD svcfidouser Abcd1234! 1-1-testuser-171 new-display-name Active
 
 11. **De-register (delete) a specific key** using REST and PASSWORD authorization.
 
@@ -132,7 +132,7 @@ Here is a list of operations as well as a brief description of each argument.
 
 16. **Update key information for a specific key** using SOAP and HMAC authorization. In this call you will be able to set the display name and deactivate or reactivate a specific FIDO key.
 
-        > java -jar skfsclient.jar G https://[FQDN]:8181 1 REST HMAC 162a5684336fa6e7 7edd81de1baab6ebcc76ebe3e38f41f4 1-1-testuser-171 new-display-name Active
+        > java -jar skfsclient.jar U https://[FQDN]:8181 1 REST HMAC 162a5684336fa6e7 7edd81de1baab6ebcc76ebe3e38f41f4 1-1-testuser-171 new-display-name Active
 
 17. **De-register (delete) a specific key** using SOAP and HMAC authorization.
 
@@ -157,7 +157,7 @@ Here is a list of operations as well as a brief description of each argument.
 
 4. **Update key information for a specific key** using SOAP and PASSWORD authorization. In this call you will be able to set the display name and deactivate or reactivate a specific FIDO key.
 
-        > java -jar skfsclient.jar G https://[FQDN]:8181 1 REST PASSWORD svcfidouser Abcd1234! 1-1-testuser-171 new-display-name Active
+        > java -jar skfsclient.jar U https://[FQDN]:8181 1 REST PASSWORD svcfidouser Abcd1234! 1-1-testuser-171 new-display-name Active
 
 5. **De-register (delete) a specific key** using SOAP and PASSWORD authorization.
 
