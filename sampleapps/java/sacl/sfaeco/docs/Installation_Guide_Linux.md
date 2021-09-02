@@ -22,7 +22,7 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
 ## Installation Instructions on a Server with a FIDO2 Server on a SEPARATE Server
 
 1. If installing this sample application **on a separate server**, StrongKey's software stack must be installed to make it work. Follow these steps to do so:
-    * **Complete Steps 1&ndash;5** of the [FIDO server installation instructions](../../../docs/Installation_Guide_Linux.md) but come back here after completing *Step 5*
+    * **Complete Steps 1&ndash;5** of the [FIDO server installation instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-standalone) but come back here after completing *Step 5*
     * **Edit** the *install-skfs.sh* script in a text editor; on the line where you see **INSTALL_FIDO=Y** change the value of **Y** to **N**
     * **Run** the script *install-skfs.sh*
 
@@ -82,7 +82,7 @@ While this web application can show you how to use W3C's WebAuthn (a subset of t
     
 ## Removal
 
-To uninstall the service provider sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://github.com/StrongKey/fido2/blob/master/docs/Installation_Guide_Linux.md#removal). Removing SKFS also removes the sample service provider web application and sample WebAuthn client.
+To uninstall the service provider sample web application, follow the uninstall instructions in the [FIDO2 Server, Community Edition Installation Guide](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-removal). Removing SKFS also removes the sample service provider web application and sample WebAuthn client.
 If this SFABOA was installed on top of SKFS, the cleanup script will erase SKFS as well. If this was a standalone install, the cleanup script will only remove the SFABOA application.
 
 ## Contributing to the Sample Service Provider Web Application 
