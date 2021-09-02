@@ -20,12 +20,24 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * [What is FIDO?](https://fidoalliance.org/what-is-fido/)
 * [The FIDO2 Project](https://fidoalliance.org/fido2/)
 
-## Documentation
+## [Documentation](https://docs.strongkey.com/)
 
-* [SKFS Administration Guide](https://github.com/StrongKey/fido2/blob/master/docs/SKFS_Administration_Guide.pdf): Full Installation/Upgrade, Configuration, and Administration Guide in PDF format
-* [Installation instructions](docs/Installation_Guide_Linux.md): Download SKFS and get it running as a stand-alone server
-* [Clustering instructions](docs/Clustering_Guide_Linux.md): Download SKFS and get it running as a cluster
-* [Upgrade instructions](docs/Upgrade_Guide_Linux.md): Upgrade SKFS to the latest version
+For the latest version:
+* [Installation instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-standalone): Download SKFS and get it running as a stand-alone server
+** [Clustering instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-clustered): Download SKFS and get it running as a cluster
+** [Dockerized instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-dockerized)
+** [Upgrade instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-upgrading): Upgrade SKFS to the latest version*
+* [Administration](https://docs.strongkey.com/index.php/skfs-home/skfs-administration)
+** [Operations](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-operations)
+** [Security](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security)
+** [Policy](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-policy)
+** [Testing](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-test-v3-api)
+* [Application Development](https://docs.strongkey.com/index.php/skfs-home/skfs-developers)
+** [Registration](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-initial-registration) and [Authentication](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-authentication) step-by-step breakdown with code examples
+** Two SKFS v3 API choices: [REST](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-rest) and [SOAP](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-soap)
+* [Usage](https://docs.strongkey.com/index.php/skfs-home/skfs-usage): How to register and authenticate using SKFS
+* [Troubleshooting](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting) Error messages and Known Issues
+* [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with KA 3.x and moving forward
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
