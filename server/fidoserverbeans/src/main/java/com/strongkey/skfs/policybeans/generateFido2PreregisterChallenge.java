@@ -260,13 +260,16 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         else {
             allowedRSASignatures = cryptoOp.getAllowedRSASignatures();
         }
-        //TODO fix this hardcoded assuption that EC is preferred over RSA
-        for (String alg : allowedRSASignatures) {
-            JsonObject publicKeyCredential = Json.createObjectBuilder()
-                    .add(SKFSConstants.FIDO2_ATTR_TYPE, "public-key") //TODO fix this hardcoded assumption
-                    .add(SKFSConstants.FIDO2_ATTR_ALG, SKFSCommon.getIANACOSEAlgFromPolicyAlg(alg))
-                    .build();
-            publicKeyBuilder.add(publicKeyCredential);
+
+//TODO fix this hardcoded assuption that EC is preferred over RSA
+        if (!cryptoOp.getAllowedRSASignatures().contains("none")) {
+            for (String alg : allowedRSASignatures) {
+                JsonObject publicKeyCredential = Json.createObjectBuilder()
+                        .add(SKFSConstants.FIDO2_ATTR_TYPE, "public-key") //TODO fix this hardcoded assumption
+                        .add(SKFSConstants.FIDO2_ATTR_ALG, SKFSCommon.getIANACOSEAlgFromPolicyAlg(alg))
+                        .build();
+                publicKeyBuilder.add(publicKeyCredential);
+            }
         }
         return publicKeyBuilder.build();
     }
