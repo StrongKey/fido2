@@ -36,7 +36,9 @@ For the latest version:
   * [Registration](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-initial-registration) and [Authentication](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-authentication) step-by-step breakdown with code examples
   * Two SKFS v3 API choices: [REST](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-rest) and [SOAP](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-soap)
 * [Usage](https://docs.strongkey.com/index.php/skfs-home/skfs-usage): How users register and authenticate with SKFS
-* [Troubleshooting](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting) Error messages and Known Issues
+* Troubleshooting
+  * [Error messages](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-error-codes-and-their-meanings)
+  * [Known Issues](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-solutions-for-known-issues)
 * [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with KA 3.x and moving forward
 
 ## Sample Applications
