@@ -31,7 +31,7 @@ For the latest version:
   * [Operations](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-operations)
   * [Security](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security)
   * [Policy](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-policy)
-  * [Testing](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-test-v3-api)
+  * [Testing](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli)
 * [Application Development](https://docs.strongkey.com/index.php/skfs-home/skfs-developers)
   * [Registration](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-initial-registration) and [Authentication](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-authentication) step-by-step breakdown with code examples
   * Two SKFS v3 API choices: [REST](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-rest) and [SOAP](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-soap)
