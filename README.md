@@ -24,9 +24,9 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 
 For the latest version:
 * [Installation instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-standalone): Download SKFS and get it running as a stand-alone server
-** [Clustering instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-clustered): Download SKFS and get it running as a cluster
-** [Dockerized instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-dockerized)
-** [Upgrade instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-upgrading): Upgrade SKFS to the latest version*
+  * [Clustering instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-clustered): Download SKFS and get it running as a cluster
+  * [Dockerized instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-dockerized)
+  * [Upgrade instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-upgrading): Upgrade SKFS to the latest version*
 * [Administration](https://docs.strongkey.com/index.php/skfs-home/skfs-administration)
 ** [Operations](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-operations)
 ** [Security](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security)
