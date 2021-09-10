@@ -138,6 +138,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
      * 'Error' : String, with error message incase something went wrong. Will be
      * empty if successful.
      */
+    
     @Override
     public Response preregister(Long did, PreregistrationRequest preregistration) {
 
@@ -337,9 +338,14 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             String response;
             try {
                 response = fido2preregbean.execute(did, preregistration.getPayload().getUsername(), preregistration.getPayload().getDisplayname(), jsonOptions, jsonExtensions);
-            } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
             }
+//            catch (IllegalArgumentException | SKIllegalArgumentException ex) {
+//                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+//            }
             out = new Date();
             long rt = out.getTime() - in.getTime();
             //  4. Log output and return

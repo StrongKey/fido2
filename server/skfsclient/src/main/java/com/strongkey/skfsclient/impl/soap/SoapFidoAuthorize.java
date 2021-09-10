@@ -46,15 +46,17 @@ import org.apache.http.entity.StringEntity;
 
 public class SoapFidoAuthorize  {
 
-    public static void authorizr(String SOAP_URI,
+    public static void authorize(String SOAP_URI,
                                     int did,
                                     String authtype,
                                     String credential1,
                                     String credential2,
                                     String username,
+                                    String txid,
                                     String txpayload,
                                     String origin,
-                                    int auth_counter)
+                                    int auth_counter,
+                                    String verify)
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -92,6 +94,8 @@ public class SoapFidoAuthorize  {
             // Build payload
             Payload payloadObj = new Payload();
             payloadObj.setUsername(username);
+            payloadObj.setTxid(txid);
+            payloadObj.setTxpayload(txpayload);
             payloadObj.setDisplayname(username + "_dn");
             payloadObj.setOptions(Constants.JSON_ATTESTATION_DIRECT);
             payloadObj.setExtensions(Constants.JSON_EMPTY);
@@ -143,7 +147,7 @@ public class SoapFidoAuthorize  {
 
             //  Make pre-authenticate call
             System.out.println("\nCalling preauthenticate @ " + SOAP_URI + Constants.SKFS_WSDL_SUFFIX);
-            String response = port.preauthenticate(svcinfo, payload);
+            String response = port.preauthorize(svcinfo, payload);
             System.out.println(" Response : " + response);
 
             //  Build a json object out of response
@@ -207,6 +211,8 @@ public class SoapFidoAuthorize  {
             payloadObj = new Payload();
             payloadObj.setMetadata(auth_metadata);
             payloadObj.setResponse(auth_response);
+            payloadObj.setTxid(txid);
+            payloadObj.setTxpayload(txpayload);
             payload = payloadObj.toJsonObject().toString();
             payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 
@@ -247,7 +253,7 @@ public class SoapFidoAuthorize  {
 
             //  Make authenticate call
             System.out.println("\nCalling authenticate @ " + SOAP_URI + Constants.SKFS_WSDL_SUFFIX);
-            String regresponse = port.authenticate(svcinfo, payload);
+            String regresponse = port.authorize(svcinfo, payload);
             System.out.println(" Response   : " + regresponse);
 
             System.out.println("\n Authentication Complete.");

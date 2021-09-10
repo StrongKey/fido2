@@ -13,4 +13,4 @@ StrongKey has released this project to the open-source community to address thes
 While this web application can show you how to use W3C's WebAuthn (a subset of the FIDO2 specification) JavaScript, it is also intended to demonstrate how to use FIDO2 protocols with SKFS to enable strong authentication.
 
 ## Installation
-Follow [the installation instructions](docs/Installation_Guide_Linux.md) to download and install the latest proof of concept application.
+Follow [the installation instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-standalone) to download and install the latest proof of concept application.

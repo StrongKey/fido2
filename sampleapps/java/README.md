@@ -8,7 +8,7 @@ Sample code is provided with a brief explanation of what each sample does:
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
 
 ## Sample Client
-SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/master/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
+SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli/skfs-v3-api-usage) for commands to test FIDO2 functionality against your sandbox.
 
 The skfsclient uses a FIDO2 simulator instead of an actual Authenticator to demonstrate the web services on the command line. Feel free to download the [simulator source code](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator) for your own use.
 

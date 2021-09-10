@@ -25,8 +25,8 @@
  */
 package com.strongkey.skfsclient.impl.soap;
 
-import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfs.soapstubs.*;
+import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -48,6 +48,10 @@ public class SoapFidoPing {
                                     String credential1,
                                     String credential2)
     {
+                System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+        System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
+        System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dump", "true");
+        System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
         /*
         * authtype    -> |HMAC     |PASSWORD   |
         *                |---------|-----------|

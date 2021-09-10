@@ -295,10 +295,10 @@ public class getFidoKeys implements getFidoKeysLocal {
                     signingKeystorePassword = SKFSCommon.getConfigurationProperty("skfs.cfg.property.standalone.signingkeystore.password");
                 }
 
-                String input = "";
+                String rsainput = "", ecinput="";
                 String signingDN = "";
-                if (fk.getSignatureKeytype().equalsIgnoreCase("RSA")) {
-                    String documentid = fk.getFidoKeysPK().getSid()
+                String signatureType = fk.getSignatureKeytype();
+                String documentid = fk.getFidoKeysPK().getSid()
                             + "-" + fk.getFidoKeysPK().getDid()
                             + "-" + fk.getFidoKeysPK().getUsername()
                             + "-" + fk.getFidoKeysPK().getFkid();
@@ -348,16 +348,22 @@ public class getFidoKeys implements getFidoKeysLocal {
                         marshaller = jaxbContext.createMarshaller();
                         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         marshaller.marshal(fkv1, writer);
-                        input = writer.toString();
+                        rsainput = writer.toString();
                     } catch (JAXBException ex) {
                         Logger.getLogger(getFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
+                    ecinput = fk.toJsonObject();
+                    String input ="";
+                if (signatureType.equalsIgnoreCase("RSA")) {
+                    input = rsainput;
                     signingDN = "CN=SKFS Signing Key,OU=DID 1,OU=SKFS Signing Certificate 1,O=StrongKey";
-                }else{
-                    input = fk.toJsonObject();
+                } else {
+                    input = ecinput;
                     signingDN = d.getSkceSigningdn();
                 }
 
+                
                 //  verify row level signature
                 boolean verified = false;
                 try {
@@ -367,18 +373,28 @@ public class getFidoKeys implements getFidoKeysLocal {
                     Logger.getLogger(getFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (!verified) {
-                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
-                            "SKCE-ERR-5001", "er sid-did-erqid="
-                            + fk.getFidoKeysPK().getSid()
-                            + "-" + fk.getFidoKeysPK().getDid()
-                            + "-" + fk.getFidoKeysPK().getUsername()
-                            + "-" + fk.getFidoKeysPK().getFkid());
-                    throw new SKFEException(SKFSCommon.getMessageProperty("SKCE-ERR-5001")
-                            + "fk sid-did-erqid="
-                            + fk.getFidoKeysPK().getSid()
-                            + "-" + fk.getFidoKeysPK().getDid()
-                            + "-" + fk.getFidoKeysPK().getUsername()
-                            + "-" + fk.getFidoKeysPK().getFkid());
+                    if (signatureType.equalsIgnoreCase("EC")) {
+                        input = rsainput;
+                        try {
+                            verified = initCryptoModule.getCryptoModule().verifyDBRow(did.toString(), input, signingDN, Boolean.valueOf(standalone), signingKeystorePassword, fk.getSignatureKeytype(), fk.getSignature());
+                        } catch (CryptoException ex) {
+                            Logger.getLogger(getFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    if (!verified) {
+                        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "verifyDBRecordSignature",
+                                "SKCE-ERR-5001", "er sid-did-erqid="
+                                + fk.getFidoKeysPK().getSid()
+                                + "-" + fk.getFidoKeysPK().getDid()
+                                + "-" + fk.getFidoKeysPK().getUsername()
+                                + "-" + fk.getFidoKeysPK().getFkid());
+                        throw new SKFEException(SKFSCommon.getMessageProperty("SKCE-ERR-5001")
+                                + "fk sid-did-erqid="
+                                + fk.getFidoKeysPK().getSid()
+                                + "-" + fk.getFidoKeysPK().getDid()
+                                + "-" + fk.getFidoKeysPK().getUsername()
+                                + "-" + fk.getFidoKeysPK().getFkid());
+                    }
                 }
             }
         } else {

@@ -2,7 +2,7 @@
 
 Here you can find tutorials for the various SKFS components. Check out the ones that apply to you, follow the instructions, and you'll be off and FIDO-ing in no time.
 
-* Follow [the instructions](node/SKFS_Tutorial.md) to go through a tutorial based on NodeJS & SQLite
+* Follow [these instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-tutorial/skfs-node-js) to go through a tutorial based on NodeJS & SQLite
 
 ## Contributing
 If you would like to contribute to the SKFS, Community Edition project, please read [CONTRIBUTING.md](CONTRIBUTING.md), then sign and return the [Contributor License Agreement (CLA)](https://cla-assistant.io/StrongKey/fido2).

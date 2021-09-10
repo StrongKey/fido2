@@ -13,7 +13,7 @@
 ##########################################
 ##########################################
 # Fido Server Info
-FIDOSERVER_VERSION=4.4.1
+FIDOSERVER_VERSION=4.4.2
 
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
@@ -37,7 +37,7 @@ JWT_KEY_VALIDITY=365
 
 # Flags to indicate if a module should be installed
 INSTALL_GLASSFISH=Y
-INSTALL_OPENDJ=Y
+INSTALL_OPENLDAP=Y
 INSTALL_MARIA=Y
 INSTALL_FIDO=Y
 
@@ -46,10 +46,9 @@ GLASSFISH=payara-5.2020.7.zip
 JEMALLOC=jemalloc-3.6.0-1.el7.x86_64.rpm
 MARIA=mariadb-10.5.8-linux-x86_64.tar.gz
 MARIACONJAR=mariadb-java-client-2.2.6.jar
-OPENDJ=OpenDJ-3.0.0.zip
 # End Required Distributables
 
-SERVICE_LDAP_BIND_PASS=Abcd1234!
+OPENLDAP_PASS=Abcd1234!
 SERVICE_LDAP_BASEDN='dc=strongauth,dc=com'
 SAKA_DID=1
 SERVICE_LDAP_SVCUSER_PASS=Abcd1234!
@@ -63,9 +62,6 @@ GLASSFISH_CONFIG=$GLASSFISH_HOME/domains/domain1/config
 MARIAVER=mariadb-10.5.8-linux-x86_64
 MARIATGT=mariadb-10.5.8
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
-OPENDJVER=opendj
-OPENDJTGT=OpenDJ-3.0.0
-OPENDJ_HOME=$STRONGKEY_HOME/$OPENDJTGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SKCE_BASE_LDIF=skce-base.ldif
 ALLOW_USERNAME_CHANGE=false
@@ -105,17 +101,20 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 echo -n "Installing required linux packages (openjdk, unzip, libaio, ncurses-compat-libs[only applicable for Amazon Linux], rng-tools, curl) ... "
 echo -n "The installer will skip packages that do not apply or are already installed. "
 if [[ ! -z $YUM_CMD ]]; then
-    yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
-    yum downgrade java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9 java-1.8.0-openjdk-headless-1.8.0.282.b08-1.el7_9 java-1.8.0-openjdk-devel-1.8.0.282.b08-1.el7_9 -y >/dev/null 2>&1
-    systemctl restart rngd
+	yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+	if [ $INSTALL_OPENLDAP = 'Y' ]; then
+		yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+		yum -y reinstall openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+	fi
+	systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
-    apt-get update >/dev/null 2>&1
-    apt install unzip libncurses5 libaio1 dbus openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
-    # modify rng tools to use dev urandom as the vm may not have a harware random number generator
-    if ! grep -q "^HRNGDEVICE=/dev/urandom" /etc/default/rng-tools ; then
-            echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tools
-    fi
-    systemctl restart rng-tools
+	apt-get update >/dev/null 2>&1
+	apt install unzip libncurses5 libaio1 dbus openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
+	# modify rng tools to use dev urandom as the vm may not have a harware random number generator
+	if ! grep -q "^HRNGDEVICE=/dev/urandom" /etc/default/rng-tools ; then
+		echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tools
+	fi
+	systemctl restart rng-tools
 else
    echo "error can't install packages"
    exit 1;
@@ -153,13 +152,6 @@ fi
 if [ ! -f $SKFS_SOFTWARE/$JEMALLOC ]; then
         echo -n "Downloading Jemalloc ... "
         wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/j/jemalloc-3.6.0-1.el7.x86_64.rpm -q
-        echo "Successful"
-fi
-
-
-if [ ! -f $SKFS_SOFTWARE/$OPENDJ ]; then
-        echo -n "Downloading OpenDJ ... "
-        wget https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/OpenDJ-3.0.0.zip -q
         echo "Successful"
 fi
 
@@ -219,9 +211,8 @@ EOFSUDOERS
 cat > /etc/skfsrc << EOFSKFSRC
     export GLASSFISH_HOME=$GLASSFISH_HOME
         export MYSQL_HOME=$MARIA_HOME
-        export OPENDJ_HOME=$OPENDJ_HOME
    export STRONGKEY_HOME=$STRONGKEY_HOME
-              export PATH=\$OPENDJ_HOME/bin:\$GLASSFISH_HOME/bin:\$MYSQL_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
+              export PATH=\$GLASSFISH_HOME/bin:\$MYSQL_HOME/bin:\$STRONGKEY_HOME/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin
 
 alias str='cd $STRONGKEY_HOME'
 alias dist='cd $STRONGKEY_HOME/dist'
@@ -239,7 +230,7 @@ else
 fi
 
 # Make needed directories
-mkdir -p $STRONGKEY_HOME/certs $STRONGKEY_HOME/Desktop $STRONGKEY_HOME/dbdumps $STRONGKEY_HOME/lib $STRONGKEY_HOME/bin $STRONGKEY_HOME/appliance/etc $STRONGKEY_HOME/crypto/etc $SKFS_HOME/etc $SKFS_HOME/keystores
+mkdir -p $STRONGKEY_HOME/certs $STRONGKEY_HOME/Desktop $STRONGKEY_HOME/dbdumps $STRONGKEY_HOME/lib $STRONGKEY_HOME/bin $STRONGKEY_HOME/appliance/etc $STRONGKEY_HOME/crypto/etc $SKFS_HOME/etc $SKFS_HOME/keystores $STRONGKEY_HOME/skce/etc/
 
 ##### Install Fido #####
 cp $SKFS_SOFTWARE/certimport.sh $STRONGKEY_HOME/bin
@@ -368,84 +359,60 @@ if [ $INSTALL_GLASSFISH = 'Y' ]; then
         echo "Successful"
 fi
 
-if [ $INSTALL_OPENDJ = 'Y' ]; then
-        echo -n "Installing OpenDJ... "
-        if [ $SHOWALL ]; then
-                unzip $SKFS_SOFTWARE/$OPENDJ -d $STRONGKEY_HOME
-        else
-                unzip $SKFS_SOFTWARE/$OPENDJ -d $STRONGKEY_HOME > /dev/null
-        fi
-
-        mv $STRONGKEY_HOME/$OPENDJVER $OPENDJ_HOME
-
-        cp $SKFS_SOFTWARE/99-user.ldif $OPENDJ_HOME/template/config/schema
-
-        export "OPENDJ_JAVA_HOME=$JAVA_HOME"
-        if [ $SHOWALL ]; then
-                $OPENDJ_HOME/setup --cli --acceptLicense --no-prompt \
-                                   --ldifFile $SKFS_SOFTWARE/$SKCE_BASE_LDIF \
-                                   --rootUserPassword $SERVICE_LDAP_BIND_PASS \
-                                   --baseDN $SERVICE_LDAP_BASEDN \
-                                   --hostname $(hostname) \
-                                   --ldapPort 1389 \
-                                   --doNotStart
-        else
-                $OPENDJ_HOME/setup --cli --acceptLicense --no-prompt \
-                                   --ldifFile $SKFS_SOFTWARE/$SKCE_BASE_LDIF \
-                                   --rootUserPassword $SERVICE_LDAP_BIND_PASS \
-                                   --baseDN $SERVICE_LDAP_BASEDN \
-                                   --hostname $(hostname) \
-                                   --ldapPort 1389 \
-                                   --doNotStart \
-                                   --quiet
-        fi
-
-
-        sed -i '/^control-panel/s|$| -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true|' $OPENDJ_HOME/config/java.properties
-        $OPENDJ_HOME/bin/dsjavaproperties >/dev/null
-
-        cp $SKFS_SOFTWARE/opendjd /etc/init.d/
-        chmod 755 /etc/init.d/opendjd
-        /lib/systemd/systemd-sysv-install enable opendjd
-        echo "Successful"
-fi
-
 ##### Change ownership of files #####
 chown -R strongkey:strongkey $STRONGKEY_HOME
 
-##### Start OpenDJ #####
-if [ $INSTALL_OPENDJ = 'Y' ]; then
-        service opendjd restart
-        sleep 10;
-        $OPENDJ_HOME/bin/dsconfig set-global-configuration-prop \
-                                  --hostname $(hostname) \
-                                  --port 4444 \
-                                  --bindDN "cn=Directory Manager" \
-                                  --bindPassword "$SERVICE_LDAP_BIND_PASS" \
-                                  --set check-schema:false \
-                                  --trustAll \
-                                  --no-prompt
+##### Start OpenLDAP #####
+if [ $INSTALL_OPENLDAP = 'Y' ]; then
+	systemctl start slapd
+	systemctl enable slapd >/dev/null 2>&1
+
+	OLDAPPASS=$(slappasswd -h {SSHA} -s $OPENLDAP_PASS)
+
+	sed -i "s|^olcRootPW: $|olcRootPW: $OLDAPPASS|" $SKFS_SOFTWARE/ldaprootpassword.ldif
+	sed -i "s|^olcRootPW: $|olcRootPW: $OLDAPPASS|" $SKFS_SOFTWARE/db.ldif
+	
 fi
 
-##### Adding default opendj users #####
-SLDNAME=${SERVICE_LDAP_BASEDN%%,dc*}
-sed -r "s|dc=strongauth,dc=com|$SERVICE_LDAP_BASEDN|
-        s|dc: strongauth|dc: ${SLDNAME#dc=}|
-        s|did: .*|did: ${SAKA_DID}|
-        s|did=[0-9]+,|did=${SAKA_DID},|
-        s|^ou: [0-9]+|ou: ${SAKA_DID}|
-        s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
-        s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKCE_LDIF > /tmp/skce.ldif
+##### Configure OpenLDAP #####
+if [ $INSTALL_OPENLDAP = 'Y' ]; then
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ldaprootpassword.ldif >/dev/null 2>&1
+	/bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SKFS_SOFTWARE/db.ldif >/dev/null 2>&1
+	/bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SKFS_SOFTWARE/monitor.ldif >/dev/null 2>&1
 
-echo -n "Importing default users... "
-$OPENDJ_HOME/bin/ldapmodify --filename /tmp/skce.ldif \
-                             --hostName $(hostname) \
-                             --port 1389 \
-                             --bindDN 'cn=Directory Manager' \
-                             --bindPassword "$SERVICE_LDAP_BIND_PASS" \
-                             --trustAll \
-                             --noPropertiesFile \
-                             --defaultAdd >/dev/null
+	cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+	chown ldap:ldap /var/lib/ldap/*
+
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif >/dev/null 2>&1
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif >/dev/null 2>&1
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif >/dev/null 2>&1
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/core.ldif >/dev/null 2>&1
+
+	/bin/ldapadd -x -w $OPENLDAP_PASS -D "cn=Manager,dc=strongauth,dc=com" -f $SKFS_SOFTWARE/$SKCE_BASE_LDIF
+
+	cp $SKFS_SOFTWARE/local.ldif /etc/openldap/schema/
+	/bin/ldapadd -x -H ldapi:/// -D "cn=config" -w $OPENLDAP_PASS -f /etc/openldap/schema/local.ldif
+	sleep 5
+
+	SLDNAME=${SERVICE_LDAP_BASEDN%%,dc*}
+	sed -r "s|dc=strongauth,dc=com|$SERVICE_LDAP_BASEDN|
+		s|dc: strongauth|dc: ${SLDNAME#dc=}|
+		s|did: .*|did: ${SAKA_DID}|
+		s|did=[0-9]+,|did=${SAKA_DID},|
+		s|^ou: [0-9]+|ou: ${SAKA_DID}|
+		s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
+		s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKCE_LDIF > /tmp/skce.ldif
+
+	/bin/ldapadd -x -w $OPENLDAP_PASS -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skce.ldif
+
+	/bin/ldapmodify -Y external -H ldapi:/// -f add_slapdlog.ldif >/dev/null 2>&1
+	systemctl force-reload slapd >/dev/null 2>&1
+	cp $SKFS_SOFTWARE/10-slapd.conf /etc/rsyslog.d/
+	service rsyslog restart
+
+	echo "ldape.cfg.property.service.ce.ldap.ldapurl=ldap://localhost:389" > /usr/local/strongkey/skce/etc/skce-configuration.properties
+	chown -R strongkey:strongkey $STRONGKEY_HOME/skce
+fi
 
 echo "Successful"
 

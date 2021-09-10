@@ -19,6 +19,7 @@ import com.strongkey.skfsclient.impl.rest.RestFidoPing;
 import com.strongkey.skfsclient.impl.rest.RestFidoRegister;
 import com.strongkey.skfsclient.impl.soap.SoapFidoActionsOnKey;
 import com.strongkey.skfsclient.impl.soap.SoapFidoAuthenticate;
+import com.strongkey.skfsclient.impl.soap.SoapFidoAuthorize;
 import com.strongkey.skfsclient.impl.soap.SoapFidoGetKeysInfo;
 import com.strongkey.skfsclient.impl.soap.SoapFidoPing;
 import com.strongkey.skfsclient.impl.soap.SoapFidoRegister;
@@ -192,8 +193,7 @@ public class FidoEngine {
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
                         RestFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz);
                     } else {
-                        System.out.println("\nNot yet Implemented!\n");
-//                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
+                        SoapFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz);
                     }
 
                     System.out.println("\nDone with Authenticate!\n");

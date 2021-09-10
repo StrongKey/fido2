@@ -20,12 +20,26 @@ The following links provide some background on FIDO, the FIDO Alliance, and FIDO
 * [What is FIDO?](https://fidoalliance.org/what-is-fido/)
 * [The FIDO2 Project](https://fidoalliance.org/fido2/)
 
-## Documentation
+## [Documentation](https://docs.strongkey.com/)
 
-* [SKFS Administration Guide](https://github.com/StrongKey/fido2/blob/master/docs/SKFS_Administration_Guide.pdf): Full Installation/Upgrade, Configuration, and Administration Guide in PDF format
-* [Installation instructions](docs/Installation_Guide_Linux.md): Download SKFS and get it running as a stand-alone server
-* [Clustering instructions](docs/Clustering_Guide_Linux.md): Download SKFS and get it running as a cluster
-* [Upgrade instructions](docs/Upgrade_Guide_Linux.md): Upgrade SKFS to the latest version
+For the latest version:
+* [Installation instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-standalone): Download SKFS and get it running as a stand-alone server
+  * [Clustering instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-clustered): Download SKFS and get it running as a cluster
+  * [Dockerized instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-installation-dockerized): Deploy SKFS in a container
+  * [Upgrade instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-installation/skfs-upgrading): Upgrade SKFS to the latest version*
+* [Administration](https://docs.strongkey.com/index.php/skfs-home/skfs-administration)
+  * [Operations](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-operations)
+  * [Security](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security)
+  * [Policy](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-policy)
+  * [Testing](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli)
+* [Application Development](https://docs.strongkey.com/index.php/skfs-home/skfs-developers)
+  * [Registration](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-initial-registration) and [Authentication](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-authentication) step-by-step breakdown with code examples
+  * Two SKFS v3 API choices: [REST](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-rest) and [SOAP](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-soap)
+* [Usage](https://docs.strongkey.com/index.php/skfs-home/skfs-usage): How users register and authenticate with SKFS
+* Troubleshooting
+  * [Error messages](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-error-codes-and-their-meanings)
+  * [Known Issues](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-solutions-for-known-issues)
+* [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with KA 3.x and moving forward
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
@@ -38,7 +52,7 @@ Sample code is provided with a brief explanation of what each sample does:
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO-enabled sample Android application and Android client library to perform FIDO transactions
 
 ## Sample Client
-SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://github.com/StrongKey/fido2/blob/master/server/skfsclient/skfsclient.md) for commands to test FIDO2 functionality against your sandbox.
+SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli) for commands to test FIDO2 functionality against your sandbox.
 
 The _skfsclient_ uses a FIDO2 simulator instead of an actual authenticator to demonstrate the web services on the command line. Feel free to download the [simulator source code](https://github.com/StrongKey/fido2/tree/master/server/FIDO2Simulator) for your own use.
 

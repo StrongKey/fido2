@@ -380,7 +380,7 @@ EOFAPPJSON
                 $STRONGKEY_HOME/mariadb-10.2.30/bin/mysqldump -u root -p$MYSQL_ROOT_PASSWORD skfs > skfs_backup.sql
                 service mysqld stop
                 /lib/systemd/systemd-sysv-install disable mysqld
-                rm /etc/my.cnf
+		mv /etc/my.cnf /etc/my.cnf.old
                 rm /etc/init.d/mysqld
                 if [ "$ROLLBACK" == 'N' ]; then
                 	rm -rf $STRONGKEY_HOME/mariadb-10.2.30
@@ -400,6 +400,7 @@ EOFAPPJSON
                 
                 DBSIZE=10M
                 SERVER_BINLOG=$STRONGKEY_HOME/$MARIATGT/binlog/skfs-binary-log
+		BUFFERPOOLSIZE=$(grep -oP '(?<=innodb_buffer_pool_size)[A-Za-z0-9 _=]+' /etc/my.cnf.old | cut -d '=' -f 2 | grep -oP [A-Za-z0-9]+)
 
                 cat > /etc/my.cnf <<-EOFMYCNF
 [client]
@@ -473,18 +474,81 @@ EOFMYCNF
 
 	# Use newer fidoserver version
 	cp $SCRIPT_HOME/fidoserver.ear /tmp
-fi
+fi # End of 4.4.0 Upgrade
 
 # 4.4.0 upgrade finished, start upgrade to 4.4.1
 # Introduction of version file found in $STRONGKEY_HOME/fido
 if [ -z "$CURRENT_SKFS_BUILDNO" ]; then
+	echo "Upgrading to 4.4.1"
 	echo "skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
 
 	mkdir -p $STRONGKEY_HOME/fido
         touch $STRONGKEY_HOME/fido/VersionFidoServer-4.4.1
         chown -R strongkey:strongkey $STRONGKEY_HOME/fido
-fi
+fi # End of 4.4.1 Upgrade
+
+# 4.4.1 upgrade finished, start upgrade to 4.4.2
+if [[ $CURRENT_SKFS_BUILDNO < "4.4.2" ]]; then
+	echo "Upgrading to 4.4.2"
+
+	# Extract OpenDJ ldif
+	service opendjd stop
+        export-ldif --includeBranch "dc=strongauth,dc=com" --backendID userRoot --ldifFile $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif -e entryUUID -e createTimestamp -e pwdChangedTime -e creatorsName -i uniqueMember -i ou -i domainName -i description -i did -i givenName -i userPassword -i uid -i cn -i sn
+	sed -i '/cn: FIDOUsers/i uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+	sed -i '/fidoinetorgperson/d' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+	sed -i '/did:/{$!N;/\n.*userPassword/!P;D}' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+	
+	# Install OpenLDAP
+	yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+        yum -y reinstall openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+	
+	# Start OpenLDAP
+	systemctl start slapd
+        systemctl enable slapd >/dev/null 2>&1
+
+        OLDAPPASS=$(slappasswd -h {SSHA} -s $SERVICE_LDAP_BIND_PASS)
+
+        sed -i "s|^olcRootPW: $|olcRootPW: $OLDAPPASS|" $SCRIPT_HOME/ldaprootpassword.ldif
+        sed -i "s|^olcRootPW: $|olcRootPW: $OLDAPPASS|" $SCRIPT_HOME/db.ldif
+
+	# Configure OpenLDAP
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f $SCRIPT_HOME/ldaprootpassword.ldif >/dev/null 2>&1
+        /bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SCRIPT_HOME/db.ldif >/dev/null 2>&1
+        /bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SCRIPT_HOME/monitor.ldif >/dev/null 2>&1
+
+        cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+        chown ldap:ldap /var/lib/ldap/*
+	
+	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif >/dev/null 2>&1
+        /bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif >/dev/null 2>&1
+        /bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif >/dev/null 2>&1
+        /bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/core.ldif >/dev/null 2>&1
+
+        cp $SCRIPT_HOME/local.ldif /etc/openldap/schema/
+        /bin/ldapadd -x -H ldapi:/// -D "cn=config" -w $SERVICE_LDAP_BIND_PASS -f /etc/openldap/schema/local.ldif
+        sleep 5
+	
+        /bin/ldapadd -x -w $SERVICE_LDAP_BIND_PASS -D "cn=Manager,dc=strongauth,dc=com" -f $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+
+        /bin/ldapmodify -Y external -H ldapi:/// -f add_slapdlog.ldif >/dev/null 2>&1
+        systemctl force-reload slapd >/dev/null 2>&1
+        cp $SCRIPT_HOME/10-slapd.conf /etc/rsyslog.d/
+        service rsyslog restart
+
+	# Stop OpenDJ from startup
+	systemctl stop opendjd
+	systemctl disable opendjd
+
+	mkdir -p $STRONGKEY_HOME/skce/etc
+        echo "ldape.cfg.property.service.ce.ldap.ldapurl=ldap://localhost:389" >> /usr/local/strongkey/skce/etc/skce-configuration.properties
+        chown -R strongkey:strongkey $STRONGKEY_HOME/skce
+
+	# Remove OpenDJ from PATH
+	sed -i 's|$OPENDJ_HOME/bin:||' /etc/skfsrc
+	
+	mv $STRONGKEY_HOME/fido/VersionFidoServer-4.4.1 $STRONGKEY_HOME/fido/VersionFidoServer-4.4.2
+fi # End of 4.4.2 Upgrade
 
 # Start Glassfish
 echo
