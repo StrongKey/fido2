@@ -11,16 +11,16 @@ A step by step instructions on how to get a development env running
 su - strongkey
 ```
 
-2. __Download__ the web application distribution for the FIDO server [poc-ui-dist.tar.gz](./poc-ui-dist.tar.gz).
+2. __Download__ the web application distribution for the FIDO server [policy-ui-dist.tar.gz](./policy-ui-dist.tar.gz).
 ```
-wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/poc-ui-dist.tar.gz
+wget https://github.com/StrongKey/fido2/raw/master/sampleapps/java/poc/angular/policy-ui-dist.tar.gz
 ```
 
 
 3. __Extract__ the downloaded file.
 
 ```
-tar xvzf poc-ui-dist.tar.gz
+tar xvzf policy-ui-dist.tar.gz
 ```
 
 4. __Copy__ all the files to the Payara docroot.
