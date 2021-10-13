@@ -53,7 +53,8 @@ public class SoapFidoAuthenticate  {
                                     String credential2,
                                     String username,
                                     String origin,
-                                    int auth_counter)
+                                    int auth_counter,
+                                    String crossOrigin)
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -161,7 +162,12 @@ public class SoapFidoAuthenticate  {
 //            System.out.println(origin);
 //            System.out.println(resJsonObj.toString());
 //            System.out.println("******************************");
-            JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2AuthenticationResponse(resJsonObj.getJsonArray("allowCredentials").getJsonObject(0).getString("id"), resJsonObj.toString(), origin, "packed", auth_counter, true);
+            Boolean co = Boolean.FALSE;
+            if (crossOrigin.equalsIgnoreCase("true") || crossOrigin.equalsIgnoreCase("yes")) {
+                co = Boolean.TRUE;
+            }
+            JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2AuthenticationResponse(resJsonObj.getJsonArray("allowCredentials").getJsonObject(0).getString("id"),
+                    resJsonObj.toString(), origin, "packed", auth_counter, true, co);
             System.out.println("Simulator Response : ");
 
             StringReader regresreader = new StringReader(input.toString());

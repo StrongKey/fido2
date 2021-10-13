@@ -126,7 +126,8 @@ public class FIDO2AuthenticatorSimulator
             String origin,
             String format,
             String attestationType,
-            boolean goodsignature)
+            boolean goodsignature,
+            boolean crossOrigin)
         throws
             NoSuchAlgorithmException, NoSuchProviderException,
             UnsupportedEncodingException, KeyStoreException, IOException,
@@ -165,7 +166,7 @@ public class FIDO2AuthenticatorSimulator
 
         // Create the ClientData object
         byte flags = Common.getFlag(Constants.REGISTRATION_FLAGS);
-        ClientData cd = new ClientData("webauthn.create", challenge, origin);
+        ClientData cd = new ClientData("webauthn.create", challenge, origin, crossOrigin);
         String cds = cd.toJsonString();
 
         // Generate the challenge parameter (SHA-256 digest of nonce)
@@ -260,7 +261,8 @@ public class FIDO2AuthenticatorSimulator
             String origin,
             String format,
             int counter,
-            boolean goodsignature
+            boolean goodsignature,
+            boolean crossOrigin
     ) throws KeyStoreException, IOException, FileNotFoundException,
             NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException,
             NoSuchProviderException, InvalidKeyException, SignatureException,
@@ -287,7 +289,7 @@ public class FIDO2AuthenticatorSimulator
         
         
         /* Build clientDataJson. */
-        ClientData cd = new ClientData("webauthn.get", nonce, origin);
+        ClientData cd = new ClientData("webauthn.get", nonce, origin, crossOrigin);
         String cds = cd.toJsonString();
 
         /* Step 10. Create the almighty AUTHDATA (without attestedCredentialData). */

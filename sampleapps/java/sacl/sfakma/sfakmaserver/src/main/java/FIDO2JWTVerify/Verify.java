@@ -81,7 +81,7 @@ public class Verify {
         requiredPayload.add("exp");
         requiredPayload.add("cip");
         requiredPayload.add("agent");
-        requiredPayload.add("uname");
+        requiredPayload.add("sub");
 
         String[] jwtb64split = jwtb64.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -91,7 +91,10 @@ public class Verify {
                 .add("signature", jwtb64split[2])
                 .build();
         jwtsigningalgorithm = jwt.getJsonObject("protected").getString("alg");
-
+        //TODO: when JWTCreate Implements coversion for all algorithm names implmenent conversions here
+        if(jwtsigningalgorithm.equalsIgnoreCase("ES256")){
+            jwtsigningalgorithm = "SHA256withECDSA";
+        }
         try {
             // Setup FIPS Provider
             Security.addProvider(new BouncyCastleFipsProvider());
@@ -149,19 +152,18 @@ public class Verify {
             JsonObject payloadJson = getJsonObjectFromString(plaintext);
             //Check validity of all entities in payload
             if (plaintext.contains("exp")) {
-                String expDateString = payloadJson.getString("exp");
-                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                Date expDate = new SimpleDateFormat(pattern).parse(expDateString);
+                Long expDateString = payloadJson.getJsonNumber("exp").longValue();
+                Date expDate = new Date(expDateString);
                 Date currentDate = new Date();
                 if (currentDate.after(expDate)) {
                     System.err.println("past jwt expiration");
                     return false;
                 }
             }
-            if (plaintext.contains("uname")) {
-                String uname = payloadJson.getString("uname");
+            if (plaintext.contains("sub")) {
+                String uname = payloadJson.getString("sub");
                 if (!uname.equals(username)) {
-                    System.err.println("payload uname does not match: " + uname);
+                    System.err.println("payload sub does not match: " + uname);
                     return false;
                 }
             }
@@ -189,7 +191,7 @@ public class Verify {
             }
             return true;
         } catch ( IOException|NoSuchAlgorithmException | InvalidAlgorithmParameterException
-                | SignatureException | CertificateException | CertPathValidatorException | ParseException ex) {
+                | SignatureException | CertificateException | CertPathValidatorException  ex) {
             System.err.println(ex);
         }
         return false;

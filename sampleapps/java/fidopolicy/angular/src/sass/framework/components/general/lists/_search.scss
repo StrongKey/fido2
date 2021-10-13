@@ -1,0 +1,218 @@
+//
+//** Search Result
+//
+
+//== Component base
+@mixin m-build-component--list-search-base($config) {
+    .m-list-search {
+        &.m-list-search--has-result {
+            // dropdown body
+            .m-dropdown__body {
+                display: block;
+            }
+        
+            // separator line
+            .m-dropdown__header {
+                &:after {
+                    display: block;
+                    height: 1px;
+                    content: "";
+                    position: relative;
+                    top: array-get($config, form, separator, offset);
+                }
+            }
+        } 
+
+        .m-dropdown__body {
+            display: none;
+        }       
+
+        .m-list-search__form {
+            position: relative;
+            display: block;
+            padding: array-get($config, form, self, padding);
+
+            .m-list-search__form-wrapper {
+                width: 100%;
+                height: 100%;
+                display: table;
+                table-layout: fixed;    
+
+                .m-list-search__form-input-wrapper {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+
+                .m-list-search__form-input {
+                    @include reset-input();
+                    width: 100%;
+                    font-size: get-font-size(regular);
+                    padding: array-get($config, form, input, padding);
+                    display: block;
+                }
+
+                .m-list-search__form-icon-close {   
+                    text-align: right;
+                    display: table-cell;
+                    vertical-align: middle;
+                    line-height: 0 !important;
+                    cursor: pointer;
+                    font-size: get-font-size(icon, '-');
+                    width: array-get($config, form, icon, close, width);     
+                    padding: array-get($config, form, icon, close, padding);  
+                }
+            }
+
+            &.m-loader:before {
+                top: array-get($config, form, spinner, top);  
+                right: array-get($config, form, spinner, right);  
+            }
+        }     
+
+        // separator
+        .m-list-search__results {
+            .m-list-search__result-separator {
+                display: block;
+                margin: array-get($config, results, separator, margin, default);
+
+                &.m-list-search__result-separator--fit {
+                    margin: array-get($config, results, separator, margin, fit);
+                }
+            }
+
+            .m-list-search__result-category {
+                display: block;
+                padding: array-get($config, results, results, category, self, padding);
+                margin: array-get($config, results, category, self, margin);
+                font-weight: get-font-weight(boldest);   
+                font-size: get-font-size(regular);
+                text-transform: uppercase;
+
+                &.m-list-search__result-category--first {
+                    margin-top: 0;    
+                }
+            }
+
+            .m-list-search__result-msg {
+                display: block;
+                padding: array-get($config, results, message, self, padding);
+                font-weight: get-font-weight(bold); 
+                font-size: get-font-size(regular, '+');
+            }
+
+            .m-list-search__result-item {
+                display: table;                
+                width: 100%;
+                padding: array-get($config, results, item, self, padding);
+                outline: none;
+
+                &:hover {
+                    text-decoration: none;
+                }
+
+                .m-list-search__result-item-pic {
+                    width: array-get($config, results, item, pic, self, width);
+                    display: table-cell;
+                    vertical-align: middle;
+                    text-align: left;
+                    margin: 0 auto;
+
+                    img {
+                        display: block;
+                        vertical-align: middle;
+                        max-width: array-get($config, results, item, pic, img, max-width) !important;
+                    }                     
+                }
+
+                .m-list-search__result-item-icon {                     
+                    display: table-cell;                                        
+                    vertical-align: middle; 
+                    font-size: get-font-size(regular);                      
+
+                    &:before {
+                        line-height: 0;
+                        vertical-align: middle;
+                    }
+
+                    width: array-get($config, results, item, icon, width);
+                    font-size: get-font-size(icon, '-');                            
+                }
+
+                .m-list-search__result-item-text {                             
+                    display: table-cell;                                        
+                    vertical-align: middle; 
+                    font-size: get-font-size(regular);                                        
+                }                
+            }
+        }       
+    }
+}
+
+//== Component skin
+@mixin m-build-component--list-search-skin($config, $skin) {
+
+    @include component-skin(m-list-search, $skin) {
+        // separator line
+        .m-dropdown__header {
+            &:after {
+                background-color: get-color($skin, panel);
+            }
+        }
+
+        // search form
+        .m-list-search__form {
+            .m-list-search__form-input {
+                color: get-color($skin, regular);          
+                @include input-placeholder(get-color($skin, regular, '-'));
+            }
+
+            // icon close
+            .m-list-search__form-icon-close {
+                color: get-color($skin, icon); 
+            }
+        }
+        
+        // search results
+        .m-list-search__results {
+            .m-list-search__result-separator {
+                border-bottom: get-color($skin, panel);
+            }
+
+            // message
+            .m-list-search__result-message {
+                color: get-color($skin, regular, '--');
+            }
+
+            // category
+            .m-list-search__result-category {
+                color: get-brand-color();
+            }
+
+            // item
+            .m-list-search__result-item { 
+                // item text
+                .m-list-search__result-item-text {                              
+                    color: get-color($skin, regular, '--');
+                }                
+
+                // item hover
+                &:hover {
+                    // item text
+                    .m-list-search__result-item-text {                              
+                        color: get-brand-color();
+                    }                     
+                }
+            }
+        }
+    }
+}
+ 
+
+//== Build Component Base
+@include m-build-component--list-search-base( array-get($m--lists, search ) ); 
+
+//== Build Component - Light Skin
+@include m-build-component--list-search-skin( array-get($m--lists, search ), light );
+
+//== Build Component - Dark Skin
+@include m-build-component--list-search-skin( array-get($m--lists, search ), dark );

@@ -1,0 +1,53 @@
+//
+//** Widget 20 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget26-base() {
+    .m-widget26 { 
+        //position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .m-widget26__number {
+            font-size: 2.5rem;
+            font-weight: get-font-weight(boldest);
+
+            > small {
+                margin-top: 0.3rem;
+                display: block;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(bold);
+            }
+        }
+
+        .m-widget26__chart {
+            overflow: hidden;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }   
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget26-skin() {
+    $skin: get-default-skin(); 
+
+    .m-widget26 {
+        .m-widget26__number {
+            color: get-color($skin, regular);     
+
+            > small {
+                color: get-color($skin, muted);    
+            }  
+        } 
+    }        
+}
+
+//== Build Component Base
+@include m-build-component--widget26-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget26-skin();

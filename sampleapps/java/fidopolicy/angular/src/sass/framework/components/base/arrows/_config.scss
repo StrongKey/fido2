@@ -1,0 +1,77 @@
+$m-smooth-arrows: (
+	// icon codes
+	icon: (
+		top: '\f1b2',
+		bottom: '\f1b1',
+		left: '\f1b3',
+		right: '\f1b4'
+	),
+
+	// icon sizes
+	size: (
+		// default size
+		default: (
+			// bottom placement
+			bottom: (
+				font-size: 40px,
+				height: 11px,
+				offset: 11px,
+				offset-ie: 13px
+			),
+
+			// top placement
+			top: (
+				font-size: 40px,
+				height: 10px,
+				offset: 9px,
+				offset-ie: 11px
+			),
+
+			// right placement
+			right: (
+				font-size: 40px,
+				width: 10px,
+				offset: 9px
+			),
+
+			// right placement
+			left: (
+				font-size: 40px,
+				width: 10px,
+				offset: 9px
+			)
+		),
+		// large size
+		large: (
+			// bottom placement
+			bottom: (
+				font-size: 60px,
+				height: 16px,
+				offset: 13px,
+				offset-ie: 26px
+			),
+
+			// top placement
+			top: (
+				font-size: 60px,
+				height: 16px,
+				offset: 13px,
+				offset-ie: 16px
+			),
+
+			// right placement
+			right: (
+				font-size: 60px,
+				width: 16px,
+				offset: 13px
+			),
+
+			// right placement
+			left: (
+				font-size: 60px,
+				width: 16px,
+				offset: 13px
+			)
+		)
+	)	
+);

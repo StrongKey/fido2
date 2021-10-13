@@ -150,13 +150,31 @@ public class getFidoKeys implements getFidoKeysLocal {
      * @return - Returns a Key identified by the fkid parameter.
      */
     @Override
-    public FidoKeys getByfkid(Short sid, Long did, String username, Long fkid) throws SKFEException {
+    public FidoKeys getByUsernamefkid(Short sid, Long did, String username, Long fkid) throws SKFEException {
+        try {
+            Query q = em.createNamedQuery("FidoKeys.findBySidDidUsernameFkid");
+            q.setHint("javax.persistence.cache.storeMode", "REFRESH");
+            q.setParameter("fkid", fkid);
+            q.setParameter("did", did);
+            q.setParameter("username", username);
+            q.setParameter("sid", sid);
+            FidoKeys rk = (FidoKeys) q.getSingleResult();
+            if (rk != null) {
+                verifyDBRecordSignature(did, rk);
+            }
+            return rk;
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+    
+    @Override
+    public FidoKeys getByfkid(Short sid, Long did, Long fkid) throws SKFEException {
         try {
             Query q = em.createNamedQuery("FidoKeys.findBySidDidFkid");
             q.setHint("javax.persistence.cache.storeMode", "REFRESH");
             q.setParameter("fkid", fkid);
             q.setParameter("did", did);
-            q.setParameter("username", username);
             q.setParameter("sid", sid);
             FidoKeys rk = (FidoKeys) q.getSingleResult();
             if (rk != null) {

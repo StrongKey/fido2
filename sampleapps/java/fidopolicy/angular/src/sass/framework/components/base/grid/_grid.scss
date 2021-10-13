@@ -1,0 +1,133 @@
+//
+//** Grid Layout
+//
+
+@mixin m--build-grid($mode) {
+	$mode-class: '';
+	$mode-dir: '';
+
+	// Grid mode
+	@if ($mode == general) {
+		$mode-class: ":not(.m-grid--desktop):not(.m-grid--desktop-and-tablet):not(.m-grid--tablet):not(.m-grid--tablet-and-mobile):not(.m-grid--mobile)";
+	} @else {
+		$mode-class: ".m-grid--" + $mode;
+		$mode-dir: "-" + $mode;
+	}
+
+	//== Horizontal grid
+	.m-grid.m-grid--hor#{$mode-dir}#{$mode-class} {	
+		display: flex;
+		flex-direction: column;
+
+		&.m-grid--root {
+			flex: 1;
+			-ms-flex: 1 0 0px; // IE10-11 fix
+		}
+
+		> .m-grid__item {
+			flex: none;
+			
+			&.m-grid__item--fluid {
+				flex: 1 0 auto;
+				//-ms-flex: 1 0 0px;  // IE10-11 fix
+			}
+		}
+
+		// flex ordering
+		@for $i from 1 through 12 {
+			> .m-grid__item.m-grid__item--order-#{$mode}-#{$i} {
+				order: $i;
+			}
+		}
+	}
+
+	//== Vertical grid
+	.m-grid.m-grid--ver#{$mode-dir}#{$mode-class} {	
+		display: flex;
+		flex-direction: row;
+
+		&.m-grid--root {
+			flex: 1;
+			-ms-flex: 1 0 0px;  // IE10-11 fix
+		}
+
+		> .m-grid__item {
+			flex: 0 0 auto;
+
+			&.m-grid__item--fluid {
+				flex: 1 auto; 
+				-ms-flex: 1 0 0px;  // IE10-11 fix
+				min-width: 0;
+
+				@include hack-ie8-11 {
+					min-width: none;  // IE10-11 fix
+				}				
+			}
+		}
+
+		// flex ordering
+		@for $i from 1 through 12 {
+			> .m-grid__item.m-grid__item--order-#{$mode}-#{$i} {
+				order: $i;
+			}
+		}
+	}	
+
+	//== Grid item order
+	.m-grid {
+		// horizontal items aligment
+		&.m-grid--center {
+			justify-content: center;
+		}		
+
+		// vertical item alignment
+		> .m-grid__item {		
+			&.m-grid__item--top {
+				align-self: flex-start;
+			}
+
+			&.m-grid__item--middle {
+				align-self: center;
+			}
+
+			&.m-grid__item--bottom {
+				align-self: flex-end;
+			}
+		}
+
+		// flex ordering
+		@for $i from 1 through 12 {
+			> .m-grid__item.m-grid__item--order-#{$i} {
+				order: $i;
+			}
+		}
+	}
+}
+
+//== General Mode
+@include m--build-grid(general);
+
+//== Desktop Mode
+@include desktop {
+	@include m--build-grid(desktop);
+}
+
+//== Desktop & Tablet Modes
+@include desktop-and-tablet {
+	@include m--build-grid(desktop-and-tablet);
+}
+
+//== Tablet Mode
+@include tablet {
+	@include m--build-grid(tablet);
+}
+
+//== Tablet & Mobile Modes
+@include tablet-and-mobile {
+	@include m--build-grid(tablet-and-mobile);
+}
+
+//== Mobile Mode
+@include mobile {
+	@include m--build-grid(mobile);
+}

@@ -1,0 +1,149 @@
+//
+//** Asides Configs
+//
+
+$m-config-aside: (		
+	//== Left Aside
+	aside-left: (
+		// aside itself
+		self: (
+			// default layout
+			default: (
+				width: $m-aside-left-width,
+				bg-color: (
+					dark: #2c2e3e,
+					light: #ffffff
+				)
+			),
+			offcanvas: (
+				// for tablet and mobile
+				tablet-and-mobile: (
+					zindex: 1001,
+					direction: left,
+					transition:	all .3s ease,
+					width: $m-aside-left-width,
+					close: (
+						layout: (
+							size: 25px,
+							font-size: 1.4rem
+						),
+						skins: (
+							dark: (
+								icon: (
+									default: #968ad4,
+									hover: #ffffff
+								),
+								bg: (
+									default: #323446,
+									hover: get-brand-color()
+								)
+							),
+							light: (
+								icon: (
+									default: lighten(#5e6383, 10%),
+									hover: #ffffff
+								),
+								bg: (
+									default: darken(#f8f8fb, 3%),
+									hover: get-brand-color()
+								)
+							)
+						)
+					)
+				)
+			),
+			// fixed mode
+			fixed: (
+				zindex: 98,
+				scroller: (
+					right: 5px,
+					color: (
+						dark: lighten(#2c2e3e, 24%),
+						light: darken(#ffffff, 15%)
+					)
+				)
+			),		
+			// minimize mode
+			minimize: (
+				width: $m-aside-left-width-minimize,
+				transition:	width 0.2s ease
+			),					
+			// hidden mode
+			hide: (
+				transition:	none
+			)					
+		)
+	),
+
+	//== Right Aside
+	aside-right: (
+		// aside itself
+		self: (
+			width: 230px,
+			shadow: -5px 0 30px -12px rgba(#000, 0.1),
+			bg-color: #fff,
+			padding: (
+				desktop: 30px,
+				mobile: 20px
+			),
+			margin: (
+				desktop: 30px,
+				mobile: 20px
+			)
+		)
+	),
+	
+	//== Horizontal Menu Sidebar For Mobile 
+	aside-header-menu-mobile: (
+		// aside itself
+		self: (
+			// default mode
+			default: (
+				width: $m-aside-left-width,
+				bg-color: (
+					dark: #2c2e3e,
+					light: #ffffff
+				)
+			),
+			// fixed mode
+			fixed: (
+				zindex: 100
+			),
+			// offcanvas
+			offcanvas: (
+				zindex: 1001,
+				direction: right,
+				transition:	all .3s ease,
+				width: $m-aside-left-width,
+				close: (
+					layout: (
+						size: 25px,
+						font-size: 1.4rem
+					),
+					skins: (
+						dark: (
+							icon: (
+								default: #968ad4,
+								hover: #ffffff
+							),
+							bg: (
+								default: #323446,
+								hover: get-brand-color()
+							)
+						),
+						light: (
+							icon: (
+								default: lighten(#5e6383, 10%),
+								hover: #ffffff
+							),
+							bg: (
+								default: darken(#f8f8fb, 3%),
+								hover: get-brand-color()
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+);

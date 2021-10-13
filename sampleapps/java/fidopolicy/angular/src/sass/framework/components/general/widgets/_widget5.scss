@@ -1,0 +1,176 @@
+//
+//** List Widget 5 Profit Component
+//
+
+//== Component Base
+@mixin m-build-component--widget5-base() {
+    .m-widget5 {         
+        .m-widget5__item {
+            display: table;             
+            width: 100%;
+            margin-bottom:1.43rem;
+            padding-bottom: 1.57rem;
+            
+            .m-widget5__content {
+                display:table-cell;
+                vertical-align: top; 
+
+                .m-widget5__pic {                       
+                    display:table-cell;                
+                    width:5rem;
+
+                    > img {
+                        width: 8.6rem;                     
+                    }
+                }
+
+                .m-widget5__section {
+                    display: table-cell;
+                    vertical-align: top; 
+                    padding-left: 1.43rem;
+                    padding-top: 0.3rem;  
+
+                    .m-widget5__title {
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(bolder);   
+                    } 
+                    .m-widget5__desc {
+                        font-size: get-font-size(regular, '-');
+                        font-weight: get-font-weight(regular);
+                    }
+                     
+                    .m-widget5__info {
+                        margin-top: 0.71rem;
+                        font-size: get-font-size(regular);
+                        font-weight: get-font-weight(regular);
+                        .m-widget5__author{                       
+                            
+                        }
+                        .m-widget5__info-author {                        
+                            font-weight: get-font-weight(bolder); 
+                            margin-right: 0.71rem;    
+                        }
+                        .m-widget5__info-label {
+
+                        }
+                        .m-widget5__info-date {                         
+                            font-weight: get-font-weight(bolder);   
+                        }
+                    }               
+                }
+
+                .m-widget5__stats1 {          
+                    text-align: right;
+                    display: inline-block;
+                    padding-top: 1.07rem;                 
+                    vertical-align: top;                 
+                             
+                    .m-widget5__number {
+                        font-size: get-font-size(regular, '++++');
+                        font-weight: get-font-weight(boldest);
+                    } 
+
+                    .m-widget5__sales {
+                        font-size: get-font-size(regular);
+                        font-weight: get-font-weight(regular);
+                         
+                    }                           
+                }
+
+                .m-widget5__stats2 {          
+                    text-align: right;
+                    display: inline-block;
+                    width: 6rem;                        
+                    padding-top: 1.07rem;                                  
+                    vertical-align: top;                   
+
+                    .m-widget5__number {
+                        font-size: get-font-size(regular, '++++');
+                        font-weight: get-font-weight(boldest);
+                    }                 
+
+                    .m-widget5__votes {
+                        font-size: get-font-size(regular);
+                        font-weight: get-font-weight(regular);
+                        
+                    } 
+                }   
+
+                &:last-child {
+                    float: right;
+                }                                   
+            }               
+        }             
+    } 
+
+    @include mobile() {
+        .m-widget5 {
+            .m-widget5__item {
+                display: table;                
+
+                .m-widget5__content {
+                    width: 100%;
+                    display: block;                
+                }                 
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--widget5-skin() {
+    $skin: get-default-skin();    
+
+   .m-widget5 {           
+        .m-widget5__item {
+
+            .m-widget5__title {
+                color: get-color($skin, regular, '++');
+            }
+            .m-widget5__desc {
+                color: get-color($skin, regular, '-');
+            }
+            
+            .m-widget5__author{                       
+                color: get-color($skin, regular, '-');        
+            } 
+
+            .m-widget5__info-label {
+                color: get-color($skin, regular, '-');  
+            }
+            .m-widget5__stats1 {
+                .m-widget5__number {
+                    color: get-color($skin, regular, '-');  
+                }
+
+                .m-widget5__sales {
+                    color: get-color($skin, regular, '-');   
+                }                  
+            }
+
+            .m-widget5__stats2 {
+
+                .m-widget5__number {
+                    color: get-color($skin, regular, '-');  
+                } 
+                .m-widget5__votes {
+                    color: get-color($skin, regular, '-');   
+                }                  
+            }
+            
+
+            // widget border 
+            border-bottom: 0.07rem dashed get-color($skin, panel);
+             
+            &:last-child {
+                border-bottom: 0;
+            } 
+        }        
+    }    
+}
+
+//== Build Component Base
+@include m-build-component--widget5-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget5-skin();

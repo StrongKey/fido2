@@ -322,7 +322,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             return Response.ok().entity(response).build();
         } else {
             JsonObject jsonOptions = null;
-            if (preregistration.getPayload().getOptions() != null && !preregistration.getPayload().getOptions().isEmpty()) {
+            if (preregistration.getPayload().getOptions() != null) {// !preregistration.getPayload().getOptions().isEmpty()) {
                 StringReader stringreader = new StringReader(preregistration.getPayload().getOptions().toString());
                 JsonReader jsonreader = Json.createReader(stringreader);
                 jsonOptions = jsonreader.readObject();
@@ -558,7 +558,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 while (it.hasNext()) {
                     FidoKeys key = (FidoKeys) it.next();
                     if (key != null) {
-                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
+                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
                         FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
                         skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
                         keyhandles[i] = decryptKH(key.getKeyhandle());
@@ -727,6 +727,12 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
 
         if (preauthorize.getPayload().getUsername().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
             return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " username").build();
+        }
+        if (preauthorize.getPayload().getTxid().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " txid").build();
+        }
+        if ( preauthorize.getPayload().getTxpayload().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.10000charstring")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " Txpayload").build();
         }
 
         String responseJSON;
@@ -974,12 +980,12 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                         }
                         //  Persist sign counter info & the user presence bytes to the database - TBD
                         FidoKeys key = null;
-                        FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + username + "-" + regkeyid);
+                        FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + regkeyid);
                         if (fkinfo != null) {
                             key = fkinfo.getFk();
                         }
                         if (key == null) {
-                            key = getkeybean.getByfkid(serverid, did, username, regkeyid);
+                            key = getkeybean.getByfkid(serverid, did, regkeyid);
                         }
                         if (key != null) {
                             int oldCounter = key.getCounter();
@@ -1000,7 +1006,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                                 }
                             }
                             //  update the sign counter value in the database with the new counter value.
-                            String jparesult = updatekeybean.execute(serverid, did, username, regkeyid, newCounter, modifyloc);
+                            String jparesult = updatekeybean.execute(serverid, did, regkeyid, newCounter, modifyloc);
                             JsonObject jo;
                             try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                                 jo = jr.readObject();
@@ -1073,6 +1079,13 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         if (authentication.getPayload().getMetadata() == null || authentication.getPayload().getMetadata().isEmpty()) {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
             return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0017"))).build();
+        }
+        
+        if (authentication.getPayload().getTxid().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " txid").build();
+        }
+        if ( authentication.getPayload().getTxpayload().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.10000charstring")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " Txpayload").build();
         }
 
         //  4. Finish authentication
@@ -1175,7 +1188,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             return Response.status(Response.Status.BAD_REQUEST).entity(responseJSON).build();
         } else {
             // Build the output
-            String response = "Successfully deleted user registered security key";
+            String response = "Successfully deleted";
             responseJSON = SKFSCommon.buildReturn(response);
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
         }

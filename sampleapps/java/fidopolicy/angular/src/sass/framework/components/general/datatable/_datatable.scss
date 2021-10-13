@@ -1,0 +1,851 @@
+//
+//** "Datatable" Component
+//
+
+//==== Component Mixins ====//
+
+
+
+//== Component Base
+@mixin m-build-component--datatable-base() {
+	.m-datatable {
+		display: none;
+	}
+
+	.m-datatable.m-datatable--default {
+		display: block;
+
+		//== Base
+		> .m-datatable__table {
+			border-collapse: collapse;
+			overflow: hidden;
+			display: none;
+			min-height: 300px;
+
+			> .m-datatable__head,
+			> .m-datatable__body,
+			> .m-datatable__foot {
+				visibility: hidden;
+				display: block;
+
+				.m-datatable__row {
+					width: 100%;
+
+					> .m-datatable__cell {
+						//== Row cell base
+						vertical-align: middle;
+						padding: 11px 10px;
+						font-size: get-font-size(regular);
+
+						i {
+							font-size: get-font-size(icon);
+						}
+
+						&:last-child {
+							//border-right: 0;
+						}
+
+						&.m-datatable__cell--left {
+							text-align: left;
+							> span {
+								text-align: left;
+							}
+						}
+
+						&.m-datatable__cell--right {
+							text-align: right;
+							> span {
+								text-align: right;
+								> i {
+									right: 0;
+								}
+							}
+						}
+
+						&.m-datatable__cell--center {
+							text-align: center;
+							> span {
+								text-align: center;
+							}
+						}
+
+						&.m-datatable__cell--sort {
+							cursor: pointer;
+						}
+
+						&.m-datatable__cell--resizing {
+							cursor: col-resize;
+						}
+
+						> span {
+							display: block;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+
+						//== Row checkbox
+						&.m-datatable__cell--check {
+							> span {
+								overflow: visible;
+
+								> .m-checkbox {
+									top: 2px;
+									padding: 0;
+									margin: 0 0 0 0;
+								}
+							}
+						}
+
+						//== Row details 
+						&.m-datatable__toggle--detail {
+							> .m-datatable__toggle-detail {
+								display: inline-block;
+								text-align: right;
+							}
+						}
+
+						//== Cell dropdown menu
+						.dropdown {
+							display: inline-block;
+
+							.dropdown-menu {
+								margin-top: 0.5rem;
+							}
+
+							&.dropup {
+								.dropdown-menu {
+									margin-top: auto;
+									margin-bottom: 0.5rem;
+								}
+							}
+
+							.dropdown-menu.dropdown-menu-right {
+								margin-right: -0.8rem;
+							}
+
+							.dropdown-menu.dropdown-menu-left {
+								margin-left: -0.8rem;
+							}
+						}
+					}
+				}
+
+				> .m-datatable__lock {
+					border: 0;
+				}
+			}
+
+			> .m-datatable__head,
+			> .m-datatable__foot {
+				.m-datatable__row {
+					> .m-datatable__cell {
+						font-weight: get-font-weight(boldest);
+						vertical-align: middle;
+					}
+				}
+			}
+
+			> .m-datatable__head {
+				.m-datatable__row {
+					> .m-datatable__cell {
+						padding: 16px 10px;
+
+						> span {
+							> i {
+								display: inline-block;
+								position: relative;
+								right: -10px;
+								line-height: 0;
+								vertical-align: middle;
+								font-size: 1.1rem;
+							}
+						}
+					}
+				}
+			}
+
+			> .m-datatable__body {
+				.m-datatable__row {
+					> .m-datatable__cell {
+						font-weight: get-font-weight(regular);
+
+						&.m-datatable__cell--check {
+							> span {
+								> .m-checkbox {
+									top: 1px;
+								}
+							}
+						}
+					}
+				}
+
+				.m-datatable__row-detail {
+					.m-datatable__detail {
+						padding: 0 0 10px 42px;
+
+						.m-datatable__row {
+							display: table-row;
+
+							> .m-datatable__cell {
+								padding: 5px 10px;
+								text-align: left;
+								vertical-align: top;
+
+								&:first-child {									
+									font-size: get-font-size(regular);
+									font-weight: get-font-weight(bolder);
+								}
+
+								&:last-child {
+									font-weight: get-font-weight(regular);
+									padding-left: 20px;
+								}
+							}
+						}	
+					}
+				}
+			}
+		}
+
+		//== Error message
+		&.m-datatable--error {
+			.m-datatable__body {
+				padding: 30px;
+				text-align: center;
+
+				.m-datatable__error {
+
+				}
+			}
+		}
+
+		//== Lock state
+		&.m-datatable--lock {
+			> .m-datatable__table {
+				> .m-datatable__head,
+				> .m-datatable__body,
+				> .m-datatable__foot {
+					> .m-datatable__lock {
+						display: inline-block;
+						position: relative;
+						vertical-align: top;
+						overflow: hidden;
+					}
+				}
+			}
+		}
+
+		//== Loaded state
+		&.m-datatable--loaded {
+			display: block;
+
+			> .m-datatable__table {
+				display: block;
+
+				> .m-datatable__head,
+				> .m-datatable__body,
+				> .m-datatable__foot {
+					visibility: visible;
+					display: block;
+					position: relative;
+
+					.m-datatable__row {
+						display: table;
+						table-layout: initial;
+
+						> .m-datatable__cell {
+							display: table-cell;
+						}
+					}
+				}
+			}
+		}
+
+		//== Subtable
+		&.m-datatable--subtable {
+			> .m-datatable__table {
+				> .m-datatable__head,
+				> .m-datatable__body,
+				> .m-datatable__foot {
+					.m-datatable__row {
+						width: 100%;
+					}
+
+					.m-datatable__toggle-subtable {
+						> i {
+							line-height: 0;
+							font-size: get-font-size(icon);
+						}
+
+						&:hover {
+							text-decoration: none;
+						}
+					}
+
+					.m-datatable__row-subtable {
+						display: table;
+						width: 100%;
+
+						> .m-datatable__subtable {
+							padding: 20px;
+						}
+					}
+				}
+			}
+		}
+
+		//== Scrollable state
+		&.m-datatable--scroll {
+			> .m-datatable__table {
+				display: block;
+
+				> .m-datatable__head,
+				> .m-datatable__body,
+				> .m-datatable__foot {
+				}
+
+				> .m-datatable__head,
+				> .m-datatable__foot {
+					overflow: hidden;
+
+					.m-datatable__row {
+						position: relative;
+					}
+				}
+
+				> .m-datatable__body {
+					overflow: hidden;
+				}
+			}
+		}
+
+		//== Pagination
+		$page-size: 2.25rem;
+
+		> .m-datatable__pager {
+			margin-top: 20px;
+
+			&.m-datatable__pager--top {
+				margin-bottom: 20px;
+			}
+
+			> .m-datatable__pager-nav {
+				margin: 10px 0 0 0;
+				padding: 0;
+				display: inline-block;
+
+				> li {
+					padding: 0;
+					margin-right: 5px;
+					display: inline-block;
+
+					&:last-child {
+						margin-right: 0;
+					}
+
+					> .m-datatable__pager-link {
+						cursor: pointer;
+						display: inline-block;
+						height: $page-size;
+						min-width: $page-size;
+						vertical-align: middle;
+						padding: 0.5rem;
+						@include border-radius(50%);
+
+						@include not-rounded {
+							@include border-radius(0);
+						}
+
+						text-align: center;
+						position: relative;
+						@include vertical-horizontal-center-flexbox();
+						font-size: 1rem;
+						line-height: 1rem;
+						font-weight: get-font-weight(bold);
+
+						> i {
+							font-size: 1rem;
+							text-align: center;
+							display: inline-block;
+						}
+
+						&.m-datatable__pager-link--more-prev,
+						&.m-datatable__pager-link--more-next {
+							font-weight: get-font-weight(boldest);
+						}
+					}
+
+					> .m-pager-input {
+						height: $page-size;
+						width: 3.5rem;
+						text-align: center;
+
+						@include rounded {
+							@include border-radius(15px, '!important');
+						}
+					}
+				}
+			}
+
+			> .m-datatable__pager-info {
+				float: right;
+				margin-top: 10px;
+
+				.m-datatable__pager-size {
+					margin-right: 10px;
+
+					.btn.dropdown-toggle {
+						@include border-radius(20px, '!important');
+						height: $page-size;
+						padding: 0.45rem 1rem;
+
+						@include not-rounded {
+							@include border-radius(0, '!important');
+						}
+					}
+
+					.dropdown-menu.inner > li.selected > a span.check-mark {
+						margin-top: -0.6rem;
+					}
+				}
+
+				.m-datatable__pager-detail {
+				}
+			}
+		}
+
+		//== Row sub table
+		&.m-datatable--subtable {
+			.m-datatable__subtable {
+				> .m-datatable {
+					> .m-datatable__pager {
+						margin: 0;
+						padding: 0 20px 10px 20px;
+					}
+				}
+			}
+		}
+	}
+
+	@include mobile {
+		.m-datatable.m-datatable--default {
+			> .m-datatable__pager {
+				> .m-datatable__pager-info {
+					float: none;
+					display: block;
+					margin: 10px 0 0 0;
+				}
+			}
+		}
+	}
+}
+
+//== Component Skin
+@mixin m-build-component--datatable-skin() {
+	$skin: get-default-skin();
+
+	.m-datatable {
+		//== Base color
+		$base_color: #f4f3f8;
+
+		//== Table
+		$base_bg: #fff;
+
+		//== Head
+		$head_cell_bg: $base_color;
+		$head_cell_color: get-color($skin, regular);
+		$head_cell_icon_color: get-brand-color('++');
+
+		//== Checkbox
+		$checkbox_bg: darken($base_color, 5%);
+		$checkbox_checked_bg: get-brand-color();
+
+		//== Row colors
+		$row-even: lighten($base-color, 2%);
+		$row-hover: lighten($base-color, 1%);
+		$row-active: lighten($base-color, 1%);
+
+		//== Body cell
+		$body_cell_font_color: get-color($skin, regular);
+
+		//== Lock table shadow
+		$lock-shadow: 0px 0px 17px 5px rgba(113, 106, 202, 0.14);
+
+		//== Subtable
+		$subtable_toggle_icon: get-brand-color();
+		$subtable_expanded: darken($base-color, 2%);
+		$subtable_pager_pagel: $base-color;
+		$subtable_shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+
+		//== Scrollable
+		$scrollbar_color: get-color($skin, panel, '+++++');
+		$scrollbar_on_drag_color: get-color($skin, panel, '+++++');
+
+		//== Pagination colors
+		$page-default: darken($base-color, 3%);
+		$page-default-font: get-color($skin, regular, '---');
+		$page-hover: get-brand-color();
+		$page-hover-font: get-brand-inverse-color();
+		$page-active: get-brand-color();
+		$page-active-font: get-brand-inverse-color();
+
+		$page-info: darken($base-color, 3%);
+		$page-info-font: get-color($skin, regular, '+');
+		$page-info-hover: get-brand-color();
+		$page-info-hover-font: get-brand-inverse-color();
+
+		//== Base Table
+		> .m-datatable__table {
+			background-color: $base_bg;
+
+			//== General
+			> .m-datatable__head,
+			> .m-datatable__body,
+			> .m-datatable__foot {
+				> .m-datatable__lock {
+					&.m-datatable__lock--left {
+						z-index: 1;
+						@include shadow($lock-shadow);
+					}
+
+					&.m-datatable__lock--right {
+						@include shadow($lock-shadow);
+					}
+
+					&.m-datatable__lock--scroll {
+						position: relative;
+					}
+				}
+
+				.m-datatable__row {
+					> .m-datatable__cell {
+						.m-checkbox.m-checkbox--solid > span {
+							background: $checkbox_bg;
+						}
+
+						.m-checkbox.m-checkbox--solid > input:checked ~ span {
+							background: $checkbox_checked_bg;
+						}
+					}
+				}
+			}
+
+			//== Head & Foot
+			> .m-datatable__head,
+			> .m-datatable__foot {
+				.m-datatable__row {
+					> .m-datatable__cell {
+						background: $head_cell_bg;
+
+						> span {
+							color: $head_cell_color;
+						}
+					}
+				}
+			}
+
+			//== Head
+			> .m-datatable__head {
+				.m-datatable__row {
+					> .m-datatable__cell {
+						> span {
+							> i {
+								color: $head_cell_icon_color;
+							}
+						}
+					}
+				}
+			}
+
+			//== Error message
+			&.m-datatable--error {
+				.m-datatable__body {
+					.m-datatable__error {
+
+					}
+				}
+			}
+		}
+
+		//== Scrollable
+		&.m-datatable--scroll {
+			//== scrollbar
+			.mCustomScrollbar {
+				.mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+					background: $scrollbar_color;
+					@include opacity(0.7);
+					@include transition(all 0.3s ease);
+
+					@include not-rounded {
+                    	@include border-radius(0 !important);
+                	}
+				}
+
+				// on drag
+				.mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
+					background: $scrollbar_on_drag_color;
+					@include opacity(1);
+					@include transition(all 0.3s ease);
+
+					@include not-rounded {
+                    	@include border-radius(0 !important);
+                	}
+				}
+			}
+		}
+
+		//== Pagination
+		> .m-datatable__pager {
+			> .m-datatable__pager-nav {
+				> li {
+					> .m-datatable__pager-link {
+						color: $page-default-font;
+
+						&.m-datatable__pager-link--first,
+						&.m-datatable__pager-link--prev,
+						&.m-datatable__pager-link--next,
+						&.m-datatable__pager-link--last {
+							background: $page-default;
+
+							&:hover {
+								background: $page-hover;
+								color: $page-hover-font;
+							}
+						}
+
+						&:hover {
+							background: $page-hover;
+							color: $page-hover-font;
+						}
+
+						&.m-datatable__pager-link--active {
+							background: $page-active;
+							color: $page-active-font;
+						}
+
+						
+						&.m-datatable__pager-link--disabled,
+						&.m-datatable__pager-link--disabled:hover {
+							color: $page-default-font;
+							background: $page-default;
+							@include opacity(0.3);  
+						}
+					}
+
+					> .m-pager-input {
+						background: $page-default;
+						border-color: $page-default;
+
+						&:focus {
+							background: $page-hover;
+							border-color: $page-hover;
+						}
+					}
+				}
+			}
+
+			> .m-datatable__pager-info {
+				.m-datatable__pager-size {
+					.btn.dropdown-toggle {
+						border: 0 !important;
+						color: $page-info-font;
+						background: $page-info;
+
+						i {
+							color: $page-info-hover-font;
+						}
+					}
+
+					.btn.dropdown-toggle:focus,
+					.btn.dropdown-toggle:hover,
+					 &.show > .btn.dropdown-toggle {
+						border: 0 !important;
+						color: $page-info-hover-font !important;
+						background: $page-info-hover;
+
+						i {
+							color: $page-info-hover-font !important;
+						}  
+					}
+
+					.dropdown-menu {
+						z-index: 100;
+
+						.modal & {
+							z-index: $m--modal-zindex + 1;
+						}
+					}
+				}
+			}
+		}
+
+		//== Subtable
+		&.m-datatable--subtable {
+			> .m-datatable__table {
+				> .m-datatable__body {
+					.m-datatable__toggle-subtable {
+						> i {
+							color: $subtable_toggle_icon;
+						}
+					}
+
+					.m-datatable__row-subtable {
+						border-top: 0;
+
+						.m-datatable__pager {
+				    		background: $subtable_pager_pagel;
+						}
+					}
+				}					
+			}
+		}
+	
+		//== Base Style
+		&.m-datatable--default {
+			//== Base Table
+			> .m-datatable__table {			
+				> .m-datatable__body {
+					.m-datatable__row {
+						> .m-datatable__cell {
+							> span {
+								color: $body_cell_font_color;
+							}
+
+							&.m-datatable__cell--sorted {
+								//background: $cell-sorted;
+							}
+
+							&.m-datatable__cell--hover {
+								background: $row-hover;
+							}
+						}
+
+						&.m-datatable__row--even {
+							> .m-datatable__cell {
+								background: $row-even;
+							}
+						}
+
+						&.m-datatable__row--active {
+							> .m-datatable__cell {
+								background: $row-active;
+							}
+						}
+
+						&.m-datatable__row--hover:not(.m-datatable__row--active) {
+							> .m-datatable__cell {
+								background: $row-hover;
+							}
+						}
+					}
+				}
+			}
+
+			//== Subtable
+			&.m-datatable--subtable {
+				> .m-datatable__table {
+					> .m-datatable__body {
+						.m-datatable__row {
+							&.m-datatable__row--subtable-expanded {
+								> .m-datatable__cell {
+									background: $subtable_expanded !important;
+								}
+							}
+						}
+
+						.m-datatable__row-subtable {
+							background: $row-even;
+
+							> .m-datatable__subtable {
+								> .m-datatable {
+									@include shadow( $subtable_shadow );
+								}
+							}
+
+							&.m-datatable__row-loading {
+								> .m-datatable__subtable {
+									> .m-datatable {
+										> .m-datatable__table {
+											background: $row-even;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//== Bordered Style
+		&.m-datatable--bordered {
+			//== Base Table
+			> .m-datatable__table {			
+				> .m-datatable__body {
+					.m-datatable__row {
+						> .m-datatable__cell {
+							> span {
+								color: $body_cell_font_color;
+							}
+
+							&.m-datatable__cell--sorted {
+								//background: $cell-sorted;
+							}
+						}
+
+						&.m-datatable__row--even {
+							> .m-datatable__cell {
+								background: $row-even;
+							}
+						}
+
+						&.m-datatable__row--active {
+							> .m-datatable__cell {
+								background: $row-active;
+							}
+						}
+
+						&.m-datatable__row--hover:not(.m-datatable__row--active) {
+							> .m-datatable__cell {
+								background: $row-hover;
+							}
+						}
+					}
+				}
+			}
+
+			//== Subtable
+			&.m-datatable--subtable {
+				> .m-datatable__table {
+					> .m-datatable__body {
+						.m-datatable__row {
+							&.m-datatable__row--subtable-expanded {
+								> .m-datatable__cell {
+									background: $subtable_expanded !important;
+								}
+							}
+						}
+
+						.m-datatable__row-subtable {
+							background: $row-even;
+
+							> .m-datatable__subtable {
+								> .m-datatable {
+									@include shadow( $subtable_shadow );
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--datatable-base();
+
+//== Component Skin
+@include m-build-component--datatable-skin();

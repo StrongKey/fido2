@@ -1,0 +1,113 @@
+//
+//** Error 3 Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--error-3-base() {
+    .m-error-3 {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;             
+
+        .m-error_container {
+            .m-error_number {
+             
+                > h1 {                
+                    font-size: 15.7rem;
+                    margin-left: 7.85rem;
+                    margin-top: 11.4rem;               
+                    font-weight: get-font-weight(bolder);                 
+                    -webkit-text-stroke-width: 0.35rem;
+                    -moz-text-stroke-width: 0.35rem;
+                    text-stroke-width: 0.35rem; 
+                }
+            }
+
+            .m-error_title {
+                margin-left: 7.85rem;
+                font-size: 2.5rem;      
+                font-weight: get-font-weight(boldest);          
+            }
+ 
+            .m-error_subtitle {             
+                margin-left: 7.85rem;
+                margin-top: 3.57rem;
+                font-size: get-font-size(regular, '+++++');
+                font-weight: get-font-weight(boldest);
+            }
+ 
+            .m-error_description {
+                margin-left: 7.85rem;
+                font-size: get-font-size(regular, '+++');
+                font-weight: get-font-weight(bolder);
+            }
+        } 
+    }    
+
+    @include mobile() {
+        .m-error-3 {
+            .m-error_container { 
+                .m-error_number {                
+ 
+                    > h1 {                        
+                        font-size: 8rem;
+                        margin-left: 4rem;
+                        margin-top: 3.5rem;                                                 
+                    }
+                }
+
+                .m-error_title {
+                    margin-left: 4rem;                    
+                }
+
+                .m-error_subtitle {
+                    margin-left: 4rem;
+                    padding-right: 0.5rem;
+                }
+
+                .m-error_description {
+                    margin-left: 4rem;
+                    padding-right: 0.5rem;
+                }
+            }
+        }    
+    }    
+}
+
+//== Snippet Skin
+@mixin m-build-snippet--error-3-skin() {     
+    $skin: get-default-skin();                              
+ 
+    .m-error-3 {
+        .m-error_container {
+            .m-error_number {
+                > h1 {
+                    color:#A3DCF0; 
+                    -webkit-text-stroke-color: white;
+                    -moz-text-stroke-color: white;
+                    text-stroke-color: white;                 
+
+                    @include hack-ie8-11 {
+                        color: white;
+                    }                               
+                } 
+            }
+ 
+            .m-error_subtitle {
+                color: get-color($skin, regular, '++++'); 
+            }
+
+            .m-error_description {
+                color: get-color($skin, regular, '++');
+ 
+            }  
+        }
+    }     
+}
+
+//== Build Snippet Base
+@include m-build-snippet--error-3-base();
+
+//== Build Snippet Skin
+@include m-build-snippet--error-3-skin();

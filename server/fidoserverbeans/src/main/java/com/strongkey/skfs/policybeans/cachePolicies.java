@@ -7,16 +7,15 @@
 
 package com.strongkey.skfs.policybeans;
 
-import com.strongkey.skfs.utilities.SKFSLogger;
 import com.strongkey.skce.pojos.MDSClient;
+import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
 import com.strongkey.skfs.entitybeans.FidoPoliciesPK;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
+import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.SKFSConstants;
-import com.strongkey.skce.utilities.skceMaps;
-import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
-import com.strongkey.fido2mds.MDS;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Collection;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;

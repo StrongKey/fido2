@@ -1,0 +1,123 @@
+//
+//** List Widget 1 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget25-base() {
+    .m-widget25 { 
+
+    	.m-widget25__price {
+            font-size: 70px;
+            font-weight: get-font-weight(regular);
+        }  
+
+        .m-widget25__desc {
+            margin-bottom: 50px;
+            font-size: get-font-size(regular, '+');
+            font-weight: get-font-weight(regular);
+        }
+
+        .m-widget25--progress {
+            display: table;
+            width:100%;
+            margin: 70px auto 0;
+            padding-top: 70px;
+            
+        	.m-widget25__progress {  
+                display: table-cell;                
+                width: 33%;
+                padding-right: 40px;
+                
+                .m-widget25__progress-number {
+                    font-size: 30px;
+                    font-weight: get-font-weight(boldest); 
+                }
+
+                .progress {
+                    height: 0.5rem;
+                }
+
+        		.m-widget25__progress-sub {  
+                    display: inline-block;  
+                    margin-top: 6px;                
+        			font-size: get-font-size(regular, '+');
+                    font-weight: get-font-weight(bolder);
+        		} 
+
+                &:last-child {
+                    padding-right: 0;
+                }     		 
+        	}
+        }    
+    } 
+
+    @include tablet-and-mobile {
+        .m-widget25 { 
+
+            .m-widget25__price {
+                font-size: 22px;
+            }  
+
+            .m-widget25__desc {
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .m-widget25--progress {
+                margin: 10px auto 0;
+                padding-top: 20px;               
+
+                .m-widget25__progress {  
+                    padding-right: 10px;
+                    display: block;
+                    width: 100%; 
+                    margin: 10px auto 0;
+                    padding-top: 20px;                    
+                    
+                    .m-widget25__progress-number {
+                        font-size: 16px;
+                    }                    
+
+                    .m-widget25__progress-sub {  
+                        margin-top: 6px;                
+                    }            
+                }
+            }    
+        } 
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--widget25-skin() {
+    $skin: get-default-skin(); 
+       
+    .m-widget25 {   
+        .m-widget25__price {
+        }  
+
+        .m-widget25__desc {
+            color: get-color($skin, regular, '--');
+        }
+         
+        .m-widget25--progress {
+            border-top: 0.07rem dashed get-color($skin, panel);
+
+            .m-widget25__progress {  
+
+                .m-widget25__progress-number {
+                     
+                }
+
+                .m-widget25__progress-sub {
+                    color: get-color($skin, regular, '----'); 
+                }            
+            }
+        }    
+    }       
+}
+
+//== Build Component Base
+@include m-build-component--widget25-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget25-skin();

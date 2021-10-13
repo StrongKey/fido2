@@ -1,0 +1,329 @@
+//
+//** Messenger Lists
+//
+
+//== Component Base
+@mixin m-build-component--messenger-base() {
+    .m-messenger {
+        // form
+        .m-messenger__form {
+            margin: 0 0 10px 0;
+            display: table;
+            table-layout: fixed;
+
+            .m-messenger__form-controls {
+                width: 100%;
+                display: table-cell;
+                vertical-align: middle;
+                padding: 0;
+
+                .m-messenger__form-input {
+                    width: 100%;
+                    padding: 10px 20px;
+
+                    @include rounded {
+                        @include border-radius(20px);
+                    }
+                }
+            }
+
+            .m-messenger__form-tools {
+                display: table-cell;
+                vertical-align: middle;
+                padding: 0 0 0 10px;
+
+                .m-messenger__form-attachment {
+                    @include border-radius(100%);
+                    @include vertical-horizontal-center-flexbox();
+                    height: 40px;
+                    width: 40px;
+                    text-align: center;
+                    vertical-align: middle;
+                    line-height: 0;
+                    cursor: pointer;
+
+                    > i {
+                        font-size: get-font-size(icon, '+');
+                    }
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        // seperator
+        .m-messenger__seperator {
+            margin: 30px 0;
+        }
+
+        // messages
+        .m-messenger__messages {
+            .m-messenger__datetime {
+                @include clearfix();
+                display: table;
+                text-align: center;  
+                padding: 10px 0;
+                width: 100%;
+                font-size: get-font-size(regular, '-');
+                font-weight: get-font-weight(bolder);
+                text-transform: uppercase;
+            }
+
+            .m-messenger__wrapper {
+                @include clearfix();
+            }
+
+            .m-messenger__message {
+                display: table;
+                table-layout: fixed;
+                @include clearfix();
+
+                &.m-messenger__message--in {
+                    float:left;
+                }
+
+                &.m-messenger__message--out {
+                    float: right;
+                    padding-left: 54px;
+                }
+
+                .m-messenger__message-pic {
+                    display: table-cell;
+                    vertical-align: top;
+                    width: 40px;
+                    padding: 6px 10px 0 0;    
+
+                    img {
+                        max-width: 40px;
+                        @include border-radius(100%);
+                        margin: 0 !important;
+                    }
+                }
+
+                .m-messenger__message-no-pic {
+                    height: 40px;
+                    width: 40px;
+                    display: inline-block;
+                    text-align: center;
+                    position: relative;
+                    @include vertical-horizontal-center-flexbox();
+                    @include border-radius(100%);
+
+                    > span {
+                        line-height: 0;
+                        font-weight: get-font-weight(boldest); 
+                        font-size: get-font-size(regular, '+++');
+                        text-transform: uppercase;
+                    }
+                }
+
+                .m-messenger__message-body {
+                    display: table-cell;
+                    vertical-align: top;
+                    padding: 0;
+                    position: relative;
+
+                    .m-messenger__message-content {
+                        padding: 17px;
+                        margin-right: 5px;
+
+                        @include rounded {
+                            @include border-radius(10px);
+                        }
+
+                        .m-messenger__message-username {
+                            font-size: get-font-size(regular, '-');
+                            padding-bottom: 4px;
+                        }
+
+                        .m-messenger__message-text {
+                            font-size: get-font-size(regular);
+                        }
+
+                        .m-messenger__message-typing {
+                            padding-bottom: 4px;
+                            font-size: get-font-size(regular, '-');
+                        }
+                    }
+                }
+            }
+        }
+
+        // message arrow enabled
+        &.m-messenger.m-messenger--message-arrow {
+            .m-messenger__message {
+                &.m-messenger__message--in {
+                    .m-messenger__message-arrow {
+                        @if smooth-arrow() {
+                            @include m--build-smooth-arrow-horizontal(right, default);
+                            left: 2px;
+                            right: auto;
+                            position: absolute;
+                            margin-left: 0;
+                            margin-top: 6px;
+                        } @else {
+                            @include m--build-classic-arrow(right, 10px);
+                            left: 0;
+                            position: absolute;
+                            margin-top: 10px ;
+                            margin-left: 0;
+                        }  
+                    }
+
+                    .m-messenger__message-content {
+                        margin-left: 10px;
+                    }
+                }
+
+                &.m-messenger__message--out {
+                    .m-messenger__message-arrow {
+                        @if smooth-arrow() {
+                            @include m--build-smooth-arrow-horizontal(left, default);
+                            right: 2px;
+                            left: auto;
+                            position: absolute;
+                            margin-left: 0;
+                            margin-right: 0;
+                            margin-top: 6px;
+                        } @else {
+                            @include m--build-classic-arrow(left, 10px);
+                            right: 0;
+                            left: auto;
+                            position: absolute;
+                            margin-top: 10px;
+                            margin-left: 0;
+                            margin-right: 0;
+                        }
+                    }
+
+                    .m-messenger__message-content {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--messenger-skin() {
+    $skin: get-default-skin();
+
+    @include component-skin(m-messenger, $skin) {
+        // contacts
+        .m-messenger__contacts {
+
+        }
+
+        // form
+        .m-messenger__form {
+            .m-messenger__form-input {
+                @include reset-input();
+                @include input-placeholder(get-color($skin, regular, '-'));
+                color: get-color($skin, regular);
+                background-color: get-color($skin, panel, '-');
+                
+                &:focus {
+                    background-color: get-color($skin, panel);
+                }
+            }
+
+            .m-messenger__form-attachment {
+                background-color: get-color($skin, panel, '--');
+                color: get-color($skin, icon);
+
+                &:hover {
+                    background-color: get-color($skin, panel);
+                    color: get-color($skin, icon);
+                }
+            }
+        }
+
+        // seperator
+        .m-messenger__seperator {
+            border-bottom: 1px solid get-color($skin, panel, '-');
+        }
+
+        // messages
+        .m-messenger__messages {
+            .m-messenger__datetime {
+                color: get-color($skin, muted);
+                margin: 0 0 20px 0;
+            }
+
+            .m-messenger__message {
+                margin: 0 0 20px 0;
+
+                &.m-messenger__message--in {
+                    .m-messenger__message-content {
+                        background: get-color($skin, panel, '-');
+
+                        .m-messenger__message-username {
+                            color: get-color($skin, regular, '-');
+                        }
+
+                        .m-messenger__message-text {
+                            color: get-color($skin, regular);
+                        }
+
+                        .m-messenger__message-typing {
+                            color: get-color($skin, regular, '--');
+                        }
+                    }
+                }
+
+                &.m-messenger__message--out {
+                    .m-messenger__message-content {
+                        background: get-brand-color();
+
+                        .m-messenger__message-username {
+                            color: darken(#fff, 6%);
+                        }
+
+                        .m-messenger__message-text {
+                            color: darken(#fff, 3%);
+                        }
+
+                        .m-messenger__message-typing {
+                            color: darken(#fff, 6%);
+                        }
+                    }
+                }
+            }
+        }
+
+        // message arrow enabled
+        &.m-messenger.m-messenger--message-arrow {
+            .m-messenger__message {
+                &.m-messenger__message--in {
+                    .m-messenger__message-arrow {
+                        @if smooth-arrow() {
+                            color: get-color($skin, panel, '-');
+                        } @else {
+                            @include m--set-classic-arrow-bg(right, get-color($skin, panel, '-'));
+                        }
+                    }         
+                }
+
+                &.m-messenger__message--out {
+                    .m-messenger__message-arrow {
+                        @if smooth-arrow() {
+                           color: get-brand-color(); 
+                        } @else {
+                            @include m--set-classic-arrow-bg(left, get-brand-color());
+                        }
+                    }        
+                }
+            }
+        }        
+    } 
+}
+
+//== Build Component Base
+@include m-build-component--messenger-base();
+
+//== Build Component - Light Skin
+@include m-build-component--messenger-skin();

@@ -28,7 +28,7 @@ MYSQL_SKLES_PASSWORD=$(grep \"password\" /usr/local/strongkey/payara5/glassfish/
 SERVICE_LDAP_BIND_PASS=Abcd1234!
 SAKA_DID=$1
 SERVICE_LDAP_SVCUSER_PASS=$2
-SKCE_LDIF_PATH=$3
+SKFS_LDIF_PATH=$3
 
 ##########################################
 ##########################################
@@ -38,9 +38,8 @@ usage() {
         echo "${0##*/} <did> <skfs-user-pass> <skfs-ldif-path>"
         echo "Options:"
         echo "did              The SKFS did to create."
-        echo "skfs-user-pass   The desired password for the default ldap users that"
-        echo "skfs-ldif-path   The full path to the skce.ldif file (This should be located in the SKFS installation directory)"
-        echo "                 will be created."
+        echo "skfs-user-pass   The desired password for the default ldap users that will be created."
+        echo "skfs-ldif-path   The full path to the skfs.ldif file (This should be located in the SKFS installation directory)"
 }
 
 
@@ -63,7 +62,7 @@ do
 done
 }
 
-check_exists $SKCE_LDIF_PATH
+check_exists $SKFS_LDIF_PATH
 
 # Check that we can find mysql
 if ! [ -f $MYSQL_HOME/bin/mysql ]; then
@@ -89,11 +88,11 @@ sed -r "s|dc: strongauth|dc: ${SLDNAME#dc=}|
         s|did=[0-9]+,|did=${SAKA_DID},|
         s|^ou: [0-9]+|ou: ${SAKA_DID}|
         s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
-        s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKCE_LDIF_PATH > /tmp/skce.ldif
+        s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_LDIF_PATH > /tmp/skfs.ldif
 
 echo "Importing default users..."
-ldapadd -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skce.ldif
+ldapadd -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skfs.ldif
 
-rm /tmp/skce.ldif
+rm /tmp/skfs.ldif
 
 exit 0

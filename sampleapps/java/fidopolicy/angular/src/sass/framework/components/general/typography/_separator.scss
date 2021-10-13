@@ -1,0 +1,64 @@
+//
+//** Separator Component
+//
+
+//== Component Base
+@mixin m-build-component--typography-separator-base() {
+    .m-separator {
+    	height: 0;
+        margin: 20px 0;
+
+        &.m-separator--md {
+            margin: 30px 0;
+        }
+
+        &.m-separator--lg {
+            margin: 40px 0;
+        }
+
+        &.m-separator--xl {
+            margin: 60px 0;
+        }
+
+        &.m-separator--sm {
+            margin: 20px 0;
+        }
+
+        &.m-separator--fit {
+            margin-left: -(array-get($m--portlet, layout, self, space));
+            margin-right: -(array-get($m--portlet, layout, self, space));
+        }
+    }
+}
+
+@mixin m-build-component--typography-separator-state() {
+    @each $name, $color in $m--state-colors {
+        .m-separator.m-separator--#{$name} {
+            border-bottom: 1px solid array-get($color, base);
+
+            &.m-separator--dashed {
+                border-bottom: 1px dashed array-get($color, base);
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--typography-separator-skin($skin) {
+    @include component-skin(m-separator, $skin) {
+        border-bottom: 1px solid get-color($skin, panel);
+
+    	&.m-separator--dashed {
+            border-bottom: 1px dashed get-color($skin, panel);
+        }
+    } 
+}
+
+//== Build Component Base
+@include m-build-component--typography-separator-base();
+
+//== Build Component - Light Skin
+@include m-build-component--typography-separator-skin(light);
+
+//== Build Component - State Colors
+@include m-build-component--typography-separator-state();

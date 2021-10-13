@@ -1,0 +1,88 @@
+//
+//** Widget 20 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget20-base() {
+    .m-widget20 { 
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .m-widget20__number {
+            padding-left: array-get($m--portlet, layout, self, space);
+            font-size: 2.5rem;
+            font-weight: get-font-weight(bolder);
+        }
+
+        .m-widget20__chart {
+            position: relative;
+        }
+         
+        .m-widget20__item {
+            display: table;             
+            padding-top: 1.15rem; 
+            padding-bottom: 1.15rem; 
+            width: 100%;
+
+            .m-widget20__icon {   
+                display: table-cell;              
+                text-align: center;                
+                > a { 
+                    width: 3.5rem; 
+                    height: 3.5rem; 
+
+                    > i {                 
+                        font-size: get-font-size(regular, '++++');
+                        font-weight: get-font-weight(regular);                     
+                    }
+                }         
+            }
+
+            .m-widget20__info {
+                display: table-cell;                 
+                padding-left: 1.5rem;                    
+                padding-right: 1.5rem;                 
+                vertical-align: middle;           
+                width: 100%;
+                
+                .m-widget20__title {
+                    font-size: get-font-size(regular, '+');
+                    font-weight: get-font-weight(boldest);                    
+                } 
+
+                .m-widget20__sub {
+                    font-size: get-font-size(regular, '-');
+                    font-weight: get-font-weight(regular);
+                } 
+            }        
+        }     
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget20-skin() {
+    $skin: get-default-skin(); 
+
+    .m-widget20 {
+        .m-widget20__item { 
+            .m-widget20__info {
+
+                .m-widget20__title {
+                    color: get-color($skin, regular, '-');       
+                } 
+
+                .m-widget20__sub {
+                    color: get-color($skin, regular, '--');       
+                }         
+            }                 
+        } 
+    }        
+}
+
+//== Build Component Base
+@include m-build-component--widget20-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget20-skin();

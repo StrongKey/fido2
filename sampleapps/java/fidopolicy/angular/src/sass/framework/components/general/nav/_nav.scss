@@ -1,0 +1,481 @@
+//
+//** Nav Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--nav-default-base($layout) {
+    //== Nav
+    .m-nav  {
+        padding:0;
+        margin: 0; 
+        list-style: none;
+
+        //== Nav item
+        .m-nav__item {
+            display: block;
+
+            //== Nav link
+            > .m-nav__link {
+                display: table;
+                table-layout: fixed;
+                width: 100%;
+                height: 100%;       
+                text-decoration: none;
+                position: relative; 
+                outline: none !important;  
+                vertical-align: middle;   
+                padding: array-get($layout, item, link, self, padding, default);
+
+                &:hover {
+                    text-decoration: none;
+                }
+
+                //== Nav text
+                .m-nav__link-text {         
+                    display: table-cell;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    vertical-align: middle;
+                    font-size: get-font-size(regular);
+                }
+
+                //== Nav title
+                .m-nav__link-title {                               
+                    display: table-cell;
+                    height: 100%;
+                    padding: 0;
+                    margin: 0;
+                    vertical-align: middle;
+
+                    > .m-nav__link-wrap {                              
+                        display: table;
+                        height: 100%;
+                        margin: 0;
+                        width: 100%;
+                        padding: 0; 
+                        vertical-align: middle; 
+
+                        .m-nav__link-text {
+                            padding-right: 0.8rem;
+                        }
+
+                        // nav item link's icon part
+                        > .m-nav__link-badge {
+                            display: table-cell;
+                            height: 100%;
+                            vertical-align: middle;     
+                            white-space: nowrap;       
+                            padding: array-get($layout, item, link, badge, padding);
+                            text-align: right; 
+                        }
+                    }                       
+                }
+
+                //== Nav arrow
+                .m-nav__link-arrow {
+                    display: table-cell;
+                    height: 100%;
+                    vertical-align: middle;
+                    text-align: right;
+                    line-height: 0;                    
+                    @include la-icon( array-get($m--icon-codes, down) );
+                }
+
+                //== Nav icon
+                .m-nav__link-icon {
+                    display: table-cell;
+                    height: 100%;
+                    vertical-align: middle;
+                    text-align: left;
+                    width: array-get($layout, item, link, icon, width);
+                    font-size: get-font-size(icon, '+');
+                    line-height: 0;
+                }
+
+                //== Nav bullet
+                .m-nav__link-bullet {
+                    display: table-cell;
+                    vertical-align: middle;
+                    text-align: center;
+                    width: array-get($layout, item, link, bullet, self, width);
+
+                    > span {
+                        vertical-align: middle;
+                        display: inline-block;
+                    }
+
+                    &.m-nav__link-bullet--dot {
+                        > span {
+                            width: array-get($layout, item, link, bullet, dot, size);
+                            height: array-get($layout, item, link, bullet, dot, size);
+                            @include border-radius(100%);
+                        }
+                    }
+
+                    &.m-nav__link-bullet--line {               
+                        > span {
+                            width: array-get($layout, item, link, bullet, line, width);
+                            height: array-get($layout, item, link, bullet, line, height);
+                        }
+                    }
+                }
+            }
+
+            //== Nav submenu
+            > .m-nav__sub {                
+                padding-left: 2rem;                 
+            }
+
+            //== Submenu open state
+            > .m-nav__link {
+                .m-nav__link-arrow {
+                    @include la-icon( array-get($m--icon-codes, up) );
+                }                   
+
+                &.collapsed {
+                    .m-nav__link-arrow {
+                        @include la-icon( array-get($m--icon-codes, down) ); 
+                    }
+                }
+            }          
+             
+
+            //== Disabled item
+            &.m-nav__item--disabled {
+                cursor: not-allowed;
+            }
+
+            //== Last item
+            &.m-nav__item--last {
+                padding-bottom: 0;
+            }
+        }
+
+        //= Nav section
+        .m-nav__section {
+            display: table;
+            width: 100%;
+            vertical-align: middle;
+            margin: array-get($layout, section, self, margin, default);
+
+            &.m-nav__section--first {
+                margin-top: 0;
+            }
+
+            &.m-nav__section--last {
+                margin-bottom: 0;
+            }
+
+            .m-nav__section-text {
+                display: table-cell;
+                margin: 0;
+                vertical-align: middle;
+                font-weight: get-font-weight(boldest);   
+                font-size: get-font-size(regular, '--');
+                text-transform: uppercase;
+            }
+
+            .m-nav__section-icon {
+                display: none;
+                text-align: center;
+                vertical-align: middle;
+                font-size: get-font-size(icon);
+            } 
+        }    
+
+        .m-nav__item + .m-nav__section {
+            margin-top: array-get($layout, section, self, margin, separator);
+        }
+
+        //== Nav separator
+        .m-nav__separator {
+            height: 0;
+            margin: array-get($layout, separator, margin, default);
+        }
+ 
+
+        //== Inline mode
+        &.m-nav--inline {
+            display: inline-block;
+            width: auto;
+            height: 100%;
+
+            &.m-nav--fluid {
+                width: 100%;
+            }
+
+            > .m-nav__item {
+                height: 100%;
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0 0 0 25px;
+
+                &:first-child {
+                    padding-left: 0;
+                }
+            
+                > .m-nav__link {
+                    width: auto;
+                    padding: array-get($layout, item, link, self, padding, inline);
+
+                    .m-nav__link-icon {
+                        padding-right: 10px;
+                    }
+
+                    .m-nav__link-bullet {
+                        padding-right: 10px;
+                    }
+                }
+
+                &.m-nav__item--last {
+                    padding-right: 0;
+
+                    > .m-nav__link {
+                        .m-nav__link-icon {
+                            text-align: right;
+                            padding-right: 0;
+                        }
+
+                        .m-nav__link-bullet {
+                            text-align: right;
+                            padding-right: 0;
+                        }
+                    }
+                }
+            }
+
+            > .m-nav__separator {
+                height: auto;
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0 0 0 5px;
+                margin: 0;
+            }
+        }
+
+        //== Hoverable item bg
+        &.m-nav--hover-bg {
+            .m-nav__item {
+                > .m-nav__link {
+                    padding: array-get($layout, item, link, self, padding, hover-bg);
+                }
+            }
+
+            .m-nav__section {
+                margin: array-get($layout, section, self, margin, hover-bg);
+            }
+
+            .m-nav__separator {
+                margin: array-get($layout, separator, margin, hover-bg);
+
+                &.m-nav__separator--fit {
+                    margin-left: 0;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        //== Active item bg
+        &.m-nav--active-bg {
+            .m-nav__item {
+                > .m-nav__link {
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;    
+                }   
+
+                > .m-nav__sub {
+                    padding-left: 1.75rem;   
+                }
+            }
+
+            &.m-nav--active-bg-padding-lg {
+                 .m-nav__item {
+                    > .m-nav__link {
+                        padding: 0.85rem 2rem;    
+                    }   
+
+                    > .m-nav__sub {
+                        padding-left: 2rem;   
+                    }
+                }
+            }
+        }
+
+        //== Large and bolf font
+        &.m-nav--font-lg {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {
+                        font-size: get-font-size(regular, '+');
+                    }
+                }
+            }
+        }
+
+        &.m-nav--font-bold {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {
+                        font-weight: get-font-weight(bold);
+                    }
+                }
+            }
+        }
+    }
+     
+}
+
+//== Component Skin
+@mixin m-build-component--nav-default-skin($layout, $skin) {
+     //== Nav
+     @include component-skin(m-nav, $skin) {
+        //== Nav item
+        .m-nav__item {
+            //== Nav link
+            > .m-nav__link {
+                .m-nav__link-text {                            
+                    color: get-color($skin, regular, '-');   
+                    font-weight: get-font-weight(bold);
+                }                
+
+                .m-nav__link-arrow {
+                    color: get-color($skin, regular, '-');
+                } 
+
+                .m-nav__link-icon {
+                    color: get-color($skin, icon, '+');
+                }
+
+                .m-nav__link-bullet {
+                    &.m-nav__link-bullet--line,
+                    &.m-nav__link-bullet--dot {
+                        > span {
+                            background-color: get-color($skin, icon);
+                        }
+                    }
+                }
+            }              
+
+            &:hover:not(.m-nav__item--disabled),
+            &.m-nav__item--active {
+                > .m-nav__link {          
+                    .m-nav__link-icon,         
+                    .m-nav__link-text, 
+                    .m-nav__link-arrow {                                
+                        color: get-brand-color();
+                    }
+
+                    .m-nav__link-bullet {
+                        &.m-nav__link-bullet--line,
+                        &.m-nav__link-bullet--dot {                    
+                            > span {
+                                background-color: get-brand-color();
+                            }
+                        }
+                    }     
+                } 
+            } 
+        }
+
+        &.m-nav__item--disabled {
+            @include opacity(0.7);
+        }         
+
+        .m-nav__section {
+            .m-nav__section-text {
+                color: get-brand-color();
+            }
+
+            .m-nav__section-icon {
+                color: get-color($skin, regular);
+            }
+        }
+
+        .m-nav__separator {      
+            border-bottom: 1px solid get-color($skin, panel, '-'); 
+
+            &.m-nav__separator--dashed {      
+                border-bottom: 1px dashed get-color($skin, panel); 
+            }
+        }
+
+        &.m-nav--hover-bg {
+            .m-nav__item {
+                &:hover,
+                &.m-nav__item--active {
+                    > .m-nav__link {
+                        background-color: get-color($skin, panel, '--');
+                    }
+                }
+            }
+        }
+
+        &.m-nav--active-bg {
+            .m-nav__item {
+                &.m-nav__item--active {
+                    > .m-nav__link {
+                        @include rounded {
+                            @include border-radius(2rem);
+                        }
+                        background-color: get-color($skin, panel, '--');
+                        
+                        .m-nav__link-text {
+                            color: get-brand-color(); 
+                        } 
+
+                        &.collapsed {                         
+                            background-color: #fff;
+
+                            .m-nav__link-text { 
+                                color: get-color($skin, regular, '---');
+                            }                                                                             
+                        }                        
+                    }                                                           
+                }
+
+                //== Metronic custom tab integration
+                > .m-nav__link.m-tabs__item--active {    
+                    @include rounded {
+                        @include border-radius(2rem);
+                    }
+                    background-color: get-color($skin, panel, '--');    
+
+                    .m-nav__link-text {
+                        color: get-brand-color(); 
+                    }                               
+                }                                         
+            }
+        }
+
+        &.m-nav--font-bold {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {       
+                        color: get-color($skin, regular, '---');                                                                                                 
+                    }                                                         
+                }
+            }
+        }
+
+        &.m-nav--inline {
+            .m-nav__separator { 
+                border-bottom: 0;
+            }            
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--nav-default-base( array-get($m--nav, default) );
+
+//== Component Skin - Light
+@include m-build-component--nav-default-skin( array-get($m--nav, default), light);
+
+//== Component Skin - Dark
+@include m-build-component--nav-default-skin( array-get($m--nav, default), dark);

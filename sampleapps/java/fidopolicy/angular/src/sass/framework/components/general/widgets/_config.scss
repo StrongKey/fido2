@@ -1,0 +1,40 @@
+//
+//** Lists Config
+//
+
+$m--widgets: (
+	// stats widget
+	stats: (
+		skins: (
+			light: (
+				self: (
+					bg-color: #fff
+				)
+			),
+
+			dark: (
+				self: (
+					bg-color: #333
+				)
+			)
+		)		
+	),
+
+
+	// stats2 widget
+	stats2: (
+		skins: (
+			light: (
+				self: (
+					bg-color: #fff
+				)
+			),
+
+			dark: (
+				self: (
+					bg-color: #333
+				)
+			)
+		)		
+	) 
+);	

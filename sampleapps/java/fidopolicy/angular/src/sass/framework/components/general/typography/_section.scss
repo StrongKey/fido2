@@ -1,0 +1,119 @@
+//
+//** Section Component
+//
+
+//== Component Base
+@mixin m-build-component--typography-section-base() {
+    .m-section {
+        margin: 0 0 40px 0;
+
+    	.m-section__heading {
+            display: block;
+            margin: 0 0 20px 0;
+            padding: 0;
+            font-family: get-heading-font-family();
+            font-weight: get-font-weight(bolder);
+        }
+
+        h4.m-section__heading {
+            font-size: get-font-size(regular, '+');
+        }
+
+        h3.m-section__heading {
+            font-size: get-font-size(regular, '++');
+        }
+
+        h2.m-section__heading {
+            font-size: get-font-size(regular, '+++');
+        }
+
+        h1.m-section__heading {
+            font-size: get-font-size(regular, '++++');
+        }
+
+        .m-section__sub {
+            display: block;
+            margin: 5px 0 10px 0;
+            font-size: get-font-size(regular);
+        }
+
+        .m-section__content {
+            margin: 0 0 10px 0;
+            font-size: get-font-size(regular);
+
+            .m-demo__component {
+                display: flex;
+                align-items: center;
+
+                > span {
+                    display: inline-block;
+
+                    &:first-child {
+                        width: 100%;
+                        height: 1px; 
+                    }
+
+                    &:last-child {
+                        width: 100%;
+                        height: 1px;
+                    }
+                }
+            }
+        }
+
+        .m-section__seperator {
+            margin: 5px 0;
+            height: 1px;
+            overflow: hidden;
+            display: block;
+        }
+
+        &.m-section--last {
+            margin-bottom: 0;
+
+            .m-section__content {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+
+//== Component Skin
+@mixin m-build-component--typography-section-skin($skin) {
+    @include component-skin(m-section, $skin) {
+        .m-section__heading {
+            color: get-color($skin, regular, '+');
+        }
+
+        .m-section__sub {
+            color: get-color($skin, regular, '-');
+        }
+
+        .m-section__content {
+            color: get-color($skin, regular);
+
+            .m-demo__component {
+                > span {
+
+                    &:first-child {
+                        background-color: get-color($skin, panel);
+                    }
+
+                    &:last-child {
+                        background-color: get-color($skin, panel);
+                    }
+                }    
+            }
+        }
+    } 
+}
+
+//== Build Component Base
+@include m-build-component--typography-section-base();
+
+//== Build Component - Light Skin
+@include m-build-component--typography-section-skin(light);
+
+//== Build Component - Dark Skin
+@include m-build-component--typography-section-skin(dark);

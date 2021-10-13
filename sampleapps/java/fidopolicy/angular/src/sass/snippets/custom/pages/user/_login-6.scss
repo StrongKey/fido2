@@ -1,0 +1,136 @@
+//
+//** "User Login - 6" Snippet
+//
+
+//== Snippet Base
+@mixin m-build-snippet--login-6-base() {
+    //== Login Base
+    .m-login.m-login--6 {  
+        background: white;
+        
+        //== Page Aside
+    	.m-login__aside {
+    		width: 700px;
+
+            .m-stack {
+                
+                background-position: center;
+                background-repeat: no-repeat;
+            }           
+        }
+
+        //== Page Content
+        .m-login__content {
+            padding: 5rem 10rem 10rem 10rem;
+            background-attachment: fixed;
+            background-size: cover;
+
+            .m-login__welcome {
+                color: #ffffff;
+                font-size: 3.5rem;
+                font-weight: get-font-weight(bolder);
+                margin-bottom: 2rem;
+            }
+
+            .m-login__msg {
+                color: #ffffff;
+                font-size: get-font-size(regular, '+');
+                font-weight: get-font-weight(thin);
+            }                    
+        }
+
+        //== Login Area
+    	.m-login__wrapper {
+            overflow: hidden;
+            padding: 35% 2rem 2rem 2rem;
+
+    		.m-login__logo {
+                text-align: center;
+                margin: 0 auto 4rem auto;
+    		}
+
+    		.m-login__head {
+                margin-top: 1rem;
+
+                .m-login__title {
+                    text-align: center;
+                    font-size: 1.5rem;
+    			}
+
+                .m-login__desc {
+                    margin-top: 1.5rem;
+                    text-align: center;
+                    font-size: font-get-size(regular);
+                }
+            }    		
+    	}    	
+    }
+
+   
+
+    @include minimal-desktop() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 100%;
+                margin: 0 auto;
+                padding: 3rem 3rem;
+            }
+
+            .m-login__content {
+                padding: 2rem;
+
+                .m-login__welcome {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+
+    @include tablet-and-mobile() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 100%;
+                margin: 0 auto;
+                padding: 2rem 3rem;
+
+                .m-login__wrapper {
+                    padding-top: 3rem;
+
+                    .m-login__logo {
+                        margin: 2rem auto 3.5rem auto;
+                    }
+                }
+            }
+
+            .m-login__content {
+                padding: 2rem;
+
+                .m-login__welcome {
+                    font-size: 1.5rem;
+                    margin-bottom: 1rem;
+                }
+
+                .m-login__msg {
+                    font-size: get-font-size(regular);
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    @include mobile() {
+        .m-login.m-login--1 {    
+            .m-login__aside {
+                width: 100%;
+                padding: 2rem 3rem;
+
+                .m-login__wrapper {
+                    padding-top: 2rem;
+                }
+            }
+        }
+    }
+}
+
+//== Build Component Base
+@include m-build-snippet--login-6-base();

@@ -122,7 +122,7 @@ public final class cryptoCommon {
     private static SortedMap<Long, Map<String, String>> configmap = new ConcurrentSkipListMap<>();
     private static SortedMap<String, PrivateKey> pvkeymap = new ConcurrentSkipListMap<>();
     private static SortedMap<String, PublicKey> publickeymap = new ConcurrentSkipListMap<>();
-    private static ArrayList<PrivateKey> jwtpvkeylist;
+    private static ArrayList<PrivateKey> jwtpvkeylist ;
     private static ArrayList<X509Certificate> jwtcertlist;
     private static ArrayList<PublicKey> jwtpublickeylist = new ArrayList<>();
     private static SortedMap<String,BlockingQueue<List>> jwtsignqMap = new ConcurrentSkipListMap<>();
@@ -671,7 +671,6 @@ public final class cryptoCommon {
         
         jwtpvkeylist = new ArrayList<>();
         jwtcertlist = new ArrayList<>();
-        
         if(jwttruststorelocation==null || jwtpassword==null || 
                 jwtthreads==null || jwtkeystorelocation==null ||
                 jwtsigningalgorithm==null){

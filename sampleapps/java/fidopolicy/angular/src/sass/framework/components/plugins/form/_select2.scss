@@ -1,0 +1,404 @@
+//
+//** Select2 Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--select2-base() {
+    $m-general-padding: 15px 15px;
+
+    // Select2 base
+
+    .select2-container--default {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            outline: none !important;
+            @include rounded {
+                @include border-radius(array-get($m--forms, input, layout, self, size, default, border-radius));
+            }
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+
+            height: auto;
+            line-height: 0;
+        }
+
+        .select2-selection--single .select2-selection__arrow,
+        .select2-selection--multiple .select2-selection__arrow {
+            @include m-generate-arrow-icon(down);    
+            border: 0;
+            top: 50%;
+            position: absolute;
+            margin-top: 0;
+            margin-left: 0;
+            font-size: 0.85rem;
+            left: auto;
+            display: inline-block; 
+            width: 1.9rem;
+
+            b {
+                display: none;
+            }
+        }
+
+        .select2-selection--single .select2-selection__rendered{
+            position: relative;
+            padding: array-get($m--forms, input, layout, self, size, default, padding, y) array-get($m--forms, input, layout, self, size, default, padding, x);
+            line-height: array-get($m--forms, input, layout, self, size, default, line-height);
+
+            .select2-selection__clear {
+                border: 0;
+                position: absolute;
+                top: 50%;                
+                @include la-icon-self('\f110');    
+                font-size: 1.4rem;
+                display: inline-block;
+                left: auto;
+                right: array-get($m--forms, input, layout, self, size, default, padding, x) + 0.85rem;
+                margin-right: 0.4rem;
+                margin-top: -(1.6rem/2);                
+            }
+        }
+
+        .select2-selection--multiple .select2-selection__rendered {
+            padding: (array-get($m--forms, input, layout, self, size, default, padding, y) - (0.28rem)) array-get($m--forms, input, layout, self, size, default, padding, x);
+            line-height: array-get($m--forms, input, layout, self, size, default, line-height);
+
+            .select2-selection__choice {
+                padding: 0.05rem 0.4rem 0.05rem 0.4rem;
+                font-size: 1rem;
+                margin: 0.1rem 0.4rem 0.1rem 0;
+                position: relative;
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }
+
+                .select2-selection__choice__remove {
+                    @include la-icon-self('\f110');    
+                    font-size: 1.4rem;
+                    display: inline-block;
+                    line-height: 0; 
+                    margin-right: 0.3rem;
+                    position: relative;
+                    top: 0.1rem;
+                }
+            }
+
+            .select2-search__field {
+                font-weight: 300;
+                margin: 0.25rem 0.25rem 0.25rem 0;
+            }
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            outline: none !important;
+            @include rounded {
+                @include border-radius(array-get($m--forms, input, layout, self, size, default, border-radius));
+            }   
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }         
+        }
+
+        // dropdown
+        .select2-dropdown {
+
+        }
+
+        .select2-search--dropdown {
+            padding: $m-general-padding;
+        }
+
+        // results
+        .select2-results__option {
+            padding: 5px 15px;  
+
+            &[aria-disabled=true] {
+                cursor: not-allowed;
+            }
+        
+            .select2-results__group {
+                padding: 5px 15px;
+                font-weight: get-font-weight(bolder);
+            }
+
+            .select2-results__option {
+                padding: 5px 30px; 
+            }
+        }
+    }
+
+    .select2-container .select2-search--inline .select2-search__field {
+        margin: 0; 
+    }
+
+    // Select2 component
+
+    select.m-select2 {
+        @include opacity(0);
+    }
+
+    .m-select2 {
+        > select.form-control {
+            @include opacity(0);
+        }
+
+        // pill style
+        &.m-select2--pill {
+            .select2-container--default {
+                .select2-selection--single,
+                .select2-selection--multiple {
+                    @include rounded {
+                        @include border-radius(array-get($m--forms, input, layout, self, size, default, pill-radius));
+                    }
+                    @include not-rounded {
+                        @include border-radius(0 !important);
+                    }
+                }
+            }
+        }
+
+        // square style
+        &.m-select2--square {
+            .select2-container--default {
+                .select2-selection--single,
+                .select2-selection--multiple {
+                    @include border-radius(0);
+                }
+            }
+        }
+    }
+
+    //== Select2 with bootstrap group input
+    .input-group {
+        > .select2-hidden-accessible {
+            &:first-child + .select2-container {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-right-radius(0);
+                        @include border-bottom-right-radius(0);
+                    }
+
+                    &,
+                    &.form-control {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-right-radius(0);
+                        @include border-top-right-radius(0);
+                    }
+                }
+            }
+
+            // the most right 
+            &:not(:first-child) + .select2-container:last-child {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-left-radius(0);
+                    }
+
+                    .select2-selection {
+                        &,
+                        &.form-control {
+                            @include border-top-left-radius(0);
+                            @include border-bottom-left-radius(0);
+                        }
+                    }
+                }
+            }
+
+            &:first-child + .select2-container + .input-group-text,
+            &:not(:first-child) + .select2-container + .input-group-text {
+                border-left: 0;    
+            }
+
+            &:not(:first-child) + .select2-container:not(:last-child) {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-left-radius(0);
+                    }
+
+                    .select2-selection {
+                        &,
+                        &.form-control {
+                            @include border-top-left-radius(0);
+                            @include border-top-right-radius(0);
+                            @include border-bottom-right-radius(0);
+                        }
+                    }
+                }
+            }
+        }
+
+        //== Pill style
+        &.m-input-group--pill {
+            > .select2-hidden-accessible {
+                // the most right 
+                &:not(:first-child) + .select2-container:last-child {
+                    > .selection {
+                        .select2-selection--single {
+                            @include rounded {
+                                @include border-top-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius));
+                                @include border-bottom-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius));
+                            } 
+                            @include not-rounded {
+                                @include border-radius(0 !important);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--select2-skin($skin) {
+    // select2 base
+    .select2-container--default {
+        .select2-selection--multiple,
+        .select2-selection--single {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+
+            .select2-selection__placeholder {
+                color: array-get($m--forms, input, skins, $skin, default, color, placeholder);
+            }
+        }
+
+        &.select2-container--focus, 
+        &.select2-container--open {
+            .select2-selection--multiple,
+            .select2-selection--single {
+                border-color: array-get($m--forms, input, skins, $skin, default, border, focus);
+            }
+        }
+
+        .select2-selection--single .select2-selection__rendered {
+            color: array-get($m--forms, input, skins, $skin, default, color, default);
+
+            .select2-selection__clear {
+                color: get-color($skin, regular);
+            }
+        }
+
+        .select2-selection--multiple .select2-selection__rendered {
+            color: array-get($m--forms, input, skins, $skin, default, color, default);
+
+            .select2-selection__choice {
+                color: get-color($skin, regular);
+                background: get-color($skin, panel);
+                border: 1px solid get-color($skin, panel);
+
+                .select2-selection__choice__remove {
+                    color: get-color($skin, regular);
+                }
+            }
+
+            .select2-search__field {                
+                @include input-placeholder(array-get($m--forms, input, skins, $skin, default, color, placeholder));
+            }
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+        }
+
+        //.select2-container--below.
+
+        // dropdown 
+        .select2-dropdown {
+            border: 1px solid array-get($m--forms, input, skins, $skin, default, border, default); 
+            @include shadow(get-shadow(light));
+        }
+
+        // result options
+        .select2-results__option {
+            &[aria-selected=true] {
+                background: get-color($skin, panel, '+');
+                color: get-color($skin, regular, '+');
+            }
+
+            &.select2-results__option--highlighted {
+                background: get-color($skin, panel, '-');
+                color: get-color($skin, regular, '+');
+            }
+        }
+
+        // disabled mode
+        &.select2-container--disabled {
+            cursor: not-allowed;
+
+            .select2-selection--multiple,
+            .select2-selection--single {
+                cursor: not-allowed;
+                background: array-get($m--forms, input, skins, $skin, default, bg, disabled);
+                border-color: array-get($m--forms, input, skins, $skin, default, bg, disabled);
+            }
+        }
+    }
+
+    // select2 components
+
+    .m-select2 {
+        // pill style
+        &.m-select2--air {
+            .select2-container--default {
+                .select2-selection--single,
+                .select2-selection--multiple {
+                    @include shadow( array-get($m--forms, input, skins, $skin, air, box-shadow, default) );
+                }
+            }
+        }
+
+        // pill style
+        &.m-select2--solid {
+            .select2-container--default {
+                .select2-selection--multiple,
+                .select2-selection--single {
+                    background-color: array-get($m--forms, input, skins, $skin, solid, bg, default);
+                    border-color: array-get($m--forms, input, skins, $skin, solid, border, default);
+
+                    .select2-selection__placeholder {
+                        color: array-get($m--forms, input, skins, $skin, solid, color, placeholder);
+                    }
+                }   
+            }
+        }
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--select2-validation-state($state, $color) {
+    .m-form.m-form--state .has-#{$state} {
+        .select2-container--default {
+            .select2-selection--multiple,
+            .select2-selection--single {
+                border-color: $color; 
+            }
+
+            &.select2-container--focus, 
+            &.select2-container--open {
+                .select2-selection--multiple,
+                .select2-selection--single {
+                    border-color: $color;
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--select2-base();
+
+//== Component Skin - Light
+@include m-build-component--select2-skin(light);
+    
+//== Component Validation States
+@include m-build-component--select2-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--select2-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--select2-validation-state(danger, array-get($m--state-colors, danger, base));  

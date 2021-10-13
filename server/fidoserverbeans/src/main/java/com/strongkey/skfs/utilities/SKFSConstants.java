@@ -123,6 +123,7 @@ public class SKFSConstants {
     public static final String JSON_KEY_ENROLLCHALLENGES = "enrollChallenges";
     public static final String JSON_KEY_REGISTERREQUEST = "registerRequests";
     public static final String JSON_KEY_SERVERORIGIN = "origin";
+    public static final String JSON_KEY_CROSSORIGIN = "crossOrigin";
     public static final String JSON_KEY_HASH_ALGORITHM = "hashAlgorithm";
     public static final String JSON_KEY_CHANNELID = "cid_pubkey";
     public static final String JSON_KEY_VERSION = "version";
@@ -207,19 +208,21 @@ public class SKFSConstants {
         /**
      * Various LDAP user roles logically linked to groups in LDAP
      */
-    public static final String LDAP_ROLE_ADM = "ADM";       //  'cn=AdminAuthorized'
-    public static final String LDAP_ROLE_SRV = "SRV";       //  'cn=Services'
-    public static final String LDAP_ROLE_ENC = "ENC";       //  'cn=EncryptionAuthorized'
-    public static final String LDAP_ROLE_DEC = "DEC";       //  'cn=DecryptionAuthorized'
-    public static final String LDAP_ROLE_CMV = "CMV";       //  'cn=CloudMoveAuthorized'
-    public static final String LDAP_ROLE_LOADKEY = "LDKY";  //  'cn=LoadAuthorized'
-    public static final String LDAP_ROLE_SIGN = "SIGN";     //  'cn=SignAuthorized'
-    public static final String LDAP_ROLE_REMOVEKEY = "RMKY"; //  'cn=RemoveAuthorized'
+//    public static final String LDAP_ROLE_ADM = "ADM";       //  'cn=AdminAuthorized'
+//    public static final String LDAP_ROLE_SRV = "SRV";       //  'cn=Services'
+//    public static final String LDAP_ROLE_ENC = "ENC";       //  'cn=EncryptionAuthorized'
+//    public static final String LDAP_ROLE_DEC = "DEC";       //  'cn=DecryptionAuthorized'
+//    public static final String LDAP_ROLE_CMV = "CMV";       //  'cn=CloudMoveAuthorized'
+//    public static final String LDAP_ROLE_LOADKEY = "LDKY";  //  'cn=LoadAuthorized'
+//    public static final String LDAP_ROLE_SIGN = "SIGN";     //  'cn=SignAuthorized'
+//    public static final String LDAP_ROLE_REMOVEKEY = "RMKY"; //  'cn=RemoveAuthorized'
     public static final String LDAP_ROLE_FIDO = "FIDO"; //  'cn=RemoveAuthorized'
     public static final String LDAP_ROLE_FIDO_REG = "FIDOREG"; //  'cn=FIDORegAuthorized'
     public static final String LDAP_ROLE_FIDO_SIGN = "FIDOSIGN"; //  'cn=FIDOSIGNAuthorized'
     public static final String LDAP_ROLE_FIDO_AUTHZ = "FIDOAUTHZ"; //  'cn=FIDOAUTHZAuthorized'
     public static final String LDAP_ROLE_FIDO_ADMIN = "FIDOADM"; //  'cn=RemoveAuthorized'
+    public static final String LDAP_ROLE_FIDO_MONITOR = "FIDOMONITOR"; //  'cn=RemoveAuthorized'
+    public static final String LDAP_ROLE_FIDO_POLICY_MANAGEMENT = "FIDOPOLICYMGT"; //  'cn=RemoveAuthorized'
 
      /**
      * LDAP attribute keys to fetch metadata of a user
@@ -249,12 +252,9 @@ public class SKFSConstants {
     public static final String FIDO_REGISTRATION_SETTING_DISPLAYNAME = "DISPLAYNAME";
     public static final String FIDO_REGISTRATION_SETTING_USERICON = "USERICON";
     public static final ArrayList<String> ALL_RSA_SIGNATURES = new ArrayList<String>( 
-            Arrays.asList("rsassa-pkcs1-v1_5-sha1","rsassa-pkcs1-v1_5-sha256",
-                    "rsassa-pkcs1-v1_5-sha384","rsassa-pkcs1-v1_5-sha512","rsassa-pss-sha256",
-                    "rsassa-pss-sha384","rsassa-pss-sha512")); 
+            Arrays.asList("RS256", "RS384", "RS512", "PS256", "PS384", "PS384")); 
     public static final ArrayList<String> ALL_EC_SIGNATURES = new ArrayList<String>( 
-            Arrays.asList("ecdsa-p256-sha256","ecdsa-p384-sha384","ecdsa-p521-sha512",
-                    "eddsa","ecdsa-p256k-sha256")); 
+            Arrays.asList("ES256", "ES384", "ES512", "EdDSA", "ES256K")); 
     public static final ArrayList<String> ALL_EC_CURVES= new ArrayList<String>( 
             Arrays.asList("secp256r1", "secp384r1", "secp521r1", "curve25519")); 
     /**
@@ -320,14 +320,23 @@ public class SKFSConstants {
     public static final String POLICY_REGISTRATION_EXCLUDECREDENTIALS = "excludeCredentials";
     public static final String POLICY_REGISTRATION_AUTHENTICATORSELECTION = "authenticatorSelection";
     public static final String POLICY_REGISTRATION_AUTHENTICATORATTACHMENT = "attachment";
-    public static final String POLICY_REGISTRATION_REQUIRERESIDENTKEY = "residentKey";
+    public static final String POLICY_REGISTRATION_REQUIRERESIDENTKEY = "discoverableCredential";
     public static final String POLICY_REGISTRATION_USERVERIFICATION = "userVerification";
     public static final String POLICY_REGISTRATION_ATTESTATION = "attestation";
     
     //Attestation
     public static final String POLICY_ATTESTATION_CONVEYANCE = "conveyance";
     public static final String POLICY_ATTESTATION_FORMATS = "formats";
+    public static final String POLICY_ATTESTATION_ENTERPRISE = "enterprise";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_ATTESTATION_TYPE = "attestationType";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_AUTHORIZED_RPID = "authorizedRpid";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_AUTHORIZED_TRUSTSTORE = "authorizedTruststore";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_AUTHORIZED_SERIAL = "authorizedSerial";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_AUTHORIZED_DN = "authorizedDN";
+    public static final String POLICY_ATTESTATION_ENTERPRISE_REQUIRED_OID = "requiredOID";
+    
     public static final String POLICY_ATTESTATION = "attestation";
+    
     
     //System
     public static final String POLICY_SYSTEM_FIDO_POLICY = "FidoPolicy";
@@ -337,24 +346,56 @@ public class SKFSConstants {
     public static final String POLICY_SYSTEM_VERSION =  "version";
     public static final String POLICY_SYSTEM_USER_PRESENCE_TIMEOUT =  "userPresenceTimeout";
     public static final String POLICY_SYSTEM_USER_VERIFICATION =  "userVerification";
-    
+    public static final String POLICY_SYSTEM_TRANSPORT =  "transport";
 
     //Authentication
     public static final String POLICY_ATTR_AUTHENTICATION = "authentication";
     public static final String POLICY_AUTHENTICATION_ALLOWCREDENTIALS = "allowCredentials";
     public static final String POLICY_AUTHENTICATION_USERVERIFICATION = "userVerification";
 
+    //Authorization 
+    public static final String POLICY_ATTR_AUTHORIZATION= "authorization";
+    public static final String POLICY_ATTR_AUTHORIZATION_MAXDATALENGTH= "maxdataLength";
+    public static final String POLICY_ATTR_AUTHORIZATION_PRESERVE= "preserve";
+    
     //Extensions
     public static final String POLICY_ATTR_EXTENSIONS = "extensions";
+    public static final String POLICY_ATTR_EXTENSIONS_UVM = "uvm";
+    public static final String POLICY_ATTR_EXTENSIONS_UVM_METHODS = "allowedMethods";
+    public static final String POLICY_ATTR_EXTENSIONS_UVM__KEY_PROTECTIONS = "allowedKeyProtections";
+    public static final String POLICY_ATTR_EXTENSIONS_UVM_KEY_PROTECTIONS_TYPES = "allowedProtectionTypes";
+    public static final String POLICY_ATTR_EXTENSIONS_LARGE_BLOB = "largeBlobSupport";
     public static final String POLICY_EXTENSIONS_EXAMPLE = "example.extension";
     public static final String POLICY_EXTENSIONS_APPID = "appid";
+    public static final String POLICY_ATTR_EXTENSIONS_INPUT_UVM = "uvm";
+    public static final String POLICY_ATTR_EXTENSIONS_INPUT_LARGEBLOB = "largeBlob";
+    public static final String POLICY_ATTR_EXTENSIONS_INPUT_LARGEBLOB_SUPPORT = "support";
+    public static final String POLICY_ATTR_EXTENSIONS_INPUT_LARGEBLOB_READ = "read";
+    public static final String POLICY_ATTR_EXTENSIONS_INPUT_LARGEBLOB_WRITE = "write";
+    public static final String POLICY_ATTR_EXTENSIONS_OUTPUT_UVM = "uvm";
+    public static final String POLICY_ATTR_EXTENSIONS_OUTPUT_LARGEBLOB = "largeBlob";
+    
+    //MDS
+     public static final String POLICY_ATTR_MDS_STATUS = "authenticatorStatus";
+     public static final String POLICY_ATTR_MDS_STATUS_REPORT = "authenticatorStatusReport";
+     public static final String POLICY_ATTR_MDS_STATUS_REPORT_STATUS = "status";
+     public static final String POLICY_ATTR_MDS_STATUS_REPORT_PRIORITY = "priority";
+     public static final String POLICY_ATTR_MDS_STATUS_REPORT_DECISION = "decision";
+     
+     
 
     //Misc constant values defined in FIDO2 policies
     public static final String POLICY_CONST_ENABLED = "enabled";
     public static final String POLICY_CONST_DISABLED = "disabled";
     public static final String POLICY_CONST_REQUIRED = "required";
+    public static final String POLICY_CONST_DISCOURAGED = "discouraged";
     public static final String POLICY_CONST_PREFERRED = "preferred";
+    public static final String POLICY_CONST_DIRECT = "direct";
+    public static final String POLICY_CONST_INDIRECT = "indirect";
+    public static final String POLICY_CONST_ENTERPRISE = "enterprise";
+       
     public static final String POLICY_CONST_NONE = "none";
+    
 
     //FIDO 2 - Webauthn
     public static final String FIDO2_PREREG_ATTR_RP = "rp";

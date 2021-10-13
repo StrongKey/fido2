@@ -1,0 +1,17 @@
+//
+//** "Example" Component Config
+//
+
+$m-config-component--example: (
+	param1: 1100px,
+	param2: 200px,	
+	param3: (
+		param3-1: 20px,
+		param3-2: 20px,
+		param3-3: (
+			param3-3-1: 20px,
+			param3-3-2: #eeeeee
+		),
+	),
+	param4
+);

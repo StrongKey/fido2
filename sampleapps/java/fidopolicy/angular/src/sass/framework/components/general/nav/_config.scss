@@ -1,0 +1,143 @@
+//
+//** Nav Component Config
+//
+
+$m--nav: (
+	// default
+	default: (
+		// self
+		self: (
+			padding: 0,
+			margin: 0
+		),
+
+		// nav item
+		item: (
+			// item itself
+			self: (
+				margin:	0,
+			),
+
+			// item link
+			link: (
+				// self
+				self: (
+					padding: (
+						hover-bg: 12px 30px,
+						default: 9px 0,
+						inline: 9px 0
+					)
+				),
+	
+				// link icon
+				icon:	(
+					width: 35px
+				),	
+
+				// link bullet
+				bullet:	(
+					self: (
+						width: 20px,
+					),
+					dot: (
+						size: 4px
+					),
+					line: (
+						width: 5px,
+						height: 1px
+					)							
+				),	
+				
+				// link badge
+				badge:	(
+					padding: 0px 0px 0px 5px
+				)
+			)
+		),
+
+		// nav section
+		section: (
+			// self
+			self: (
+				padding: 0 25px,
+				margin: (
+					separator: 20px,
+					default: 25px 0 0 0,
+					hover-bg: 20px 30px
+				)
+			)
+		),
+
+		// separator
+		separator: (
+			margin: (
+				default: 15px 0,
+				hover-bg: 30px 30px
+			),
+			fit-offset: -20px
+		)
+	),
+
+	// grid
+	grid: (
+		// item
+		item: (
+			// self
+			self: (
+				padding: (
+					desktop: 3.3rem 0.75rem,
+					mobile: 1rem 0.5rem
+				)
+			),
+
+			// icon
+			icon: (
+				font-size: 35px
+			),		
+
+			// text
+			text: (
+				margin: 10px 0 0 0
+			)
+		)
+	),
+
+	// sticky
+	sticky: (
+		// layout
+		layout: (
+			self: (
+				z-index: 110
+			)
+		),
+
+		// skins
+		skins: (
+			light: (
+				bg-color: #fff,
+				box-shadow: get-shadow(light)
+			),
+
+			dark: (
+				bg-color: #555,
+				box-shadow: get-shadow(dark)
+			)
+		)
+	),
+
+	// scroll top
+	scroll-top: (
+		// skins
+		skins: (
+			light: (
+				bg-color: #fff,
+				box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.2)
+			),
+
+			dark: (
+				bg-color: #555,
+				box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.2) 
+			)
+		)
+	)
+);

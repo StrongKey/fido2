@@ -1,0 +1,98 @@
+//
+//** Tooltip Customization
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--bootstrap-popover-base() {
+    .m-popover.popover {
+    	padding:0;
+    	@include border-radius(array-get($m--border-radius, general));
+
+        .arrow {
+            &:before {
+                border: 0;                 
+            }
+        }
+
+    	.popover-header {
+            padding: 12px 15px;
+    		font-weight: get-font-weight(bold);	
+    		border: 0;
+    		@include border-top-left-radius(array-get($m--border-radius, general));
+    		@include border-top-right-radius(array-get($m--border-radius, general));
+    	}
+
+    	.popover-body {
+    		padding: 12px 15px;
+    		font-size: get-font-size(regular);
+            font-weight: get-font-weight(normal); 
+    	}
+
+        &.show {
+        	@include opacity(1);
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--bootstrap-popover-skin($skin) {    
+    @include component-skin(m-popover, $skin) { 
+    	&.popover {
+    		border: 0;
+    		color: get-color($skin, regular, '-');	
+	        background: get-color($skin, box, '---');	
+    		@include shadow(get-shadow($skin, '+'));
+
+    		&:before {
+    			display: none;
+    		}
+
+            &.bs-popover-top {
+                .arrow::after {
+                    border-top-color: get-color($skin, box, '-');
+                }
+            }
+             
+            &.bs-popover-right {
+                .arrow::after {
+                    border-right-color: get-color($skin, box, '-');
+                }
+            }
+
+            &.bs-popover-bottom {
+                .popover-header::before,
+                .arrow::after {
+                    border-bottom-color: get-color($skin, box, '-');
+                }
+            }
+
+            &.bs-popover-left {
+                .arrow::after {
+                    border-left-color: get-color($skin, box, '-');
+                }
+            }
+
+    		.popover-header {
+    			color: get-color($skin, regular);	
+    			background: get-color($skin, box);	
+    		}
+
+    		.popover-body {
+    			color: get-color($skin, regular, '-');	
+    		}
+    	}
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--bootstrap-popover-base();
+
+//== Component Skin - Light
+@include m-build-component--bootstrap-popover-skin(light);
+
+//== Component Skin - Dark
+@include m-build-component--bootstrap-popover-skin(dark);

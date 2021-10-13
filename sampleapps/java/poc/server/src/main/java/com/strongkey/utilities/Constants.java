@@ -91,14 +91,14 @@ public class Constants {
     public static final String SKFS_JSON_KEY_ORIGIN = "origin";
 
     public static final String SKFS_JSON_KEY_REQUEST = "request";
-    public static final String SKFS_JSON_KEY_KEYID = "randomid";
+    public static final String SKFS_JSON_KEY_KEYID = "keyid";
 
     public static final String SKFS_RESPONSE_JSON_KEY_RESPONSE = "Response";
     public static final String SKFS_RESPONSE_JSON_KEY_CHALLENGE = "Challenge";
     public static final String SKFS_RESPONSE_JSON_KEY_MESSAGE = "Message";
     public static final String SKFS_RESPONSE_JSON_KEY_ERROR = "Error";
     public static final String SKFS_RESPONSE_JSON_KEY_KEYS = "keys";
-    public static final String SKFS_RESPONSE_JSON_KEY_RANDOMID = "randomid";
+    public static final String SKFS_RESPONSE_JSON_KEY_RANDOMID = "keyid";
 
     //  Miscellaneous
     public static final String CREATE_LOCATION = "N/A";

@@ -1,0 +1,36 @@
+//
+//** Horizontal Menu
+// Build horizontal menu for desktop mode and aside/vertical menu for mobile mode
+
+//== Horizontal menu for desktop mode
+@include m-generate--menu-hor(array-get($m-config-menu-header, desktop));
+
+//== Vertical menu for mobile mode
+@include m-generate--menu-ver(array-get($m-config-menu-header, tablet-and-mobile));
+
+@include desktop {
+	.m-header-menu {
+		width: auto;
+		float:left;
+	}
+}
+
+@include minimal-desktop {
+	.m-header-menu {
+		.m-menu__nav {
+			> .m-menu__item {
+				padding: 0px 7px;
+			}
+		}
+	}
+}
+
+@include tablet-and-mobile {
+	.m-header-menu {
+		display: none;
+
+		.m-aside-header-menu-mobile--offcanvas-on & {
+			display: block;
+		}
+	}
+}

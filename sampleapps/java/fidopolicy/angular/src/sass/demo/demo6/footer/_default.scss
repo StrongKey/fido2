@@ -1,0 +1,131 @@
+//
+//** Footer
+//
+
+//== Footer Base
+@mixin m-build-footer-default-base() {
+    //== General mode
+    .m-footer {
+        padding: array-get($m-config-footer, default, self, padding, desktop);
+        height: array-get($m-config-footer, default, self, height);
+		min-height: array-get($m-config-footer, default, self, height);
+		background: array-get($m-config-footer, default, self, bg-color);
+		@include shadow(array-get($m-config-footer, default, self, shadow));
+
+		.m-footer__copyright {
+			font-size: array-get($m-config-footer, default, copyright, font-size);
+			font-weight: array-get($m-config-footer, default, copyright, font-weight);
+			color: array-get($m-config-footer, default, copyright, color);
+		}
+    }
+
+    //== Desktop mode
+    @include desktop {
+    	//== Fixed footer
+	    .m-footer--fixed {
+	    	.m-footer {
+	    		z-index: array-get($m-config-footer, fixed, zindex);
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0; 	
+				@include transition(padding-top array-get($m-config-aside, aside-left, self, minimize, transition));  
+	    	}
+
+	    	.m-body {
+	    		padding-bottom: array-get($m-config-footer, default, self, height);
+	    	}
+
+	    	.m-content {
+	    		padding-bottom: array-get($m-config-footer, default, self, height);
+	    	}
+
+	    	&.m-footer--push {
+	    		.m-body {
+	    			padding-bottom: 0
+	    		}
+	    	}
+
+	    	&.m-footer--push.m-aside-left--enabled {
+	    		.m-footer {	    			
+					@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+					left: array-get($m-config-aside, aside-left, self, default, width);
+				}
+			}
+
+			&.m-footer--push.m-aside-left--enabled.m-aside-left--minimize {
+				.m-footer {	    
+					@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+					left: array-get($m-config-aside, aside-left, self, minimize, width);
+				}
+			}
+	    }
+
+	    //== Pushed footer
+	    .m-footer--push.m-aside-left--enabled:not(.m-footer--fixed) {         
+	    	.m-footer {
+	    		@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+				margin-left: array-get($m-config-aside, aside-left, self, default, width);
+				margin-top: -(array-get($m-config-footer, default, self, height));
+	    	}
+
+	    	&.m-aside-left--minimize  {
+				.m-footer {
+					@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+					margin-left: array-get($m-config-aside, aside-left, self, minimize, width);
+				}  
+	    	}	    
+
+	    	.m-aside-right,  
+	    	.m-wrapper {
+	    		margin-bottom: array-get($m-config-footer, default, self, height);
+	    	}	
+	    }
+    }	
+
+    //== Minimal desktop
+    @include minimal-desktop {
+    	.m-footer {
+    		.m-footer__nav {
+    			.m-nav__item {
+    				padding: 0 0 0 10px;
+
+    				&:first-child {
+    					padding-left: 0;	
+    				}
+
+    			}
+    		}
+    	}
+    }
+
+    //== Mobile & tablet mode
+    @include tablet-and-mobile {
+        .m-footer {
+			height: auto;
+			padding: array-get($m-config-footer, default, self, padding, mobile);
+
+			.m-stack__item {
+				text-align: center;
+			}
+
+			.m-footer__copyright {
+				display: inline-block;
+				margin-bottom: 1rem;
+			}
+
+			.m-footer__nav {
+				text-align: center;
+				float: none;
+				margin: 0 auto;
+
+				.m-nav__item {
+    				padding: 0 0 0 5px;
+    			}
+			}
+		}
+    }
+}
+
+//== Build Footer Base
+@include m-build-footer-default-base();

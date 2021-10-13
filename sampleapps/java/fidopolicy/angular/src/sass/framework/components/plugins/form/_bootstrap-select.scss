@@ -1,0 +1,379 @@
+//
+//** Bootstrap Select Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--select-base() {
+    $m-general-padding: 10px 15px; 
+    $m-title-padding: 10px 15px;
+
+    // Bootstrap select base
+   .bootstrap-select {
+        > .dropdown-toggle {
+            position: relative;
+            outline: none !important;
+            padding: array-get($m--forms, input, layout, self, size, default, padding, y) array-get($m--forms, input, layout, self, size, default, padding, x);
+            padding-right: array-get($m--forms, input, layout, self, size, default, padding, x) + 0.85rem;
+            
+            @include rounded {
+                @include border-radius(array-get($m--forms, input, layout, self, size, default, border-radius), '!important'); 
+            }
+
+            &:focus {
+                outline: none !important; 
+            }
+
+            &:after {
+                @include m-generate-arrow-icon(down, true);   
+                border: 0;
+                top: 50%;
+                position: absolute;
+                margin-top: 0;
+                font-size: 0.85rem;
+                right: (array-get($m--forms, input, layout, self, size, default, padding, x) + 0.85rem);
+                display: inline-block;                            
+            }
+        }
+
+        .dropdown-menu.inner {
+            display: block;
+
+            > li {
+                > a {
+                    display: block;
+                    position: relative;
+                    outline: none !important;
+                    padding: $m-general-padding;    
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+
+                    // text
+                    .text {
+                        small {
+
+                        }
+                    }
+
+                    // icons
+                    @include icons-size((fontawesome: 1.2rem, lineawesome: 1.2rem, metronic: 1.1rem));
+                    @include icons-style {
+                        vertical-align: middle;
+                    }
+                }
+
+                &.selected {
+                    > a {
+                        span.check-mark { 
+                            @include la-icon('\f17b');  
+                            top: 50%;
+                            position: absolute;
+                            margin-top: - (0.85rem / 2);  
+                            font-size: 0.85rem;
+                            right: (array-get($m--forms, input, layout, self, size, default, padding, x));
+                            display: inline-block;
+
+                            &:after {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+                &.divider {
+                    margin: 10px 0;
+                }
+
+                &.hidden {
+                    display: none;
+                }
+
+                &.no-results {
+                    padding: $m-general-padding;   
+                }
+            }
+        }
+
+        .popover-title {
+            padding: $m-title-padding;
+            margin-bottom: 5px;
+
+            .close {
+                display: none;
+            }
+        }
+
+        .bs-searchbox, 
+        .bs-actionsbox, 
+        .bs-donebutton {
+            padding: $m-title-padding;
+        }
+        
+    }
+
+    // Bootstrap select component
+    select.m-bootstrap-select {
+        @include opacity(0);
+    }
+
+    .m-bootstrap-select.bootstrap-select {
+        // input styles
+        &.m-bootstrap-select--pill {
+            > .dropdown-toggle {
+                @include rounded {
+                    @include border-radius(array-get($m--forms, input, layout, self, size, default, pill-radius), '!important'); 
+                }
+            }
+        }
+
+        &.m-bootstrap-select--square {
+            > .dropdown-toggle {
+                @include border-radius(0, '!important'); 
+            }
+        }
+    }
+
+    //== Bootstrap group input
+    .input-group {
+        > .bootstrap-select.form-control {
+            width: auto;
+        }
+
+        > .bootstrap-select.dropdown {
+            &:first-child > .dropdown-toggle {
+                @include rounded {
+                    @include border-top-right-radius(0 !important);
+                    @include border-bottom-right-radius(0 !important);
+                }
+            }
+
+            // the most right             
+            &:not(:first-child):last-child > .btn.dropdown-toggle {
+                @include rounded {
+                    @include border-top-left-radius(0 !important);
+                    @include border-bottom-left-radius(0 !important);
+                }
+            }
+
+            &:first-child + .input-group-text,
+            &:not(:first-child) + .input-group-text {
+                border-left: 0;    
+            }
+
+            &:not(:first-child):not(:last-child) > .btn.dropdown-toggle {
+                @include rounded {
+                    @include border-top-left-radius(0 !important);
+                    @include border-bottom-left-radius(0 !important);
+                    @include border-top-right-radius(0 !important);
+                    @include border-bottom-right-radius(0 !important);
+                }
+            }
+        }
+
+        //== Pill style
+        &.m-input-group--pill {
+            > .bootstrap-select.dropdown {
+                &:not(:first-child):last-child {
+                   .btn.dropdown-toggle {
+                        @include rounded {
+                            @include border-top-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius) !important);
+                            @include border-bottom-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius) !important); 
+                        }
+                    }
+                }
+            }
+        }
+
+        .input-group-btn:not(:first-child) > .btn:first-child, 
+        .input-group-btn:not(:first-child) > .dropdown:first-child {
+            margin-left: 0;
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--select-skin($skin) {
+    // Bootstrap select base
+   .bootstrap-select {
+        // dropdown button
+        > .dropdown-toggle {
+            &.btn-light,
+            &.btn-secondary {
+                background-color: transparent;
+                color: array-get($m--forms, input, skins, $skin, default, color, default);
+                border-color: array-get($m--forms, input, skins, $skin, default, border, default);
+                @include shadow(none);
+
+                &:focus,
+                &.active {
+                    background-color: transparent;
+                    border-color: array-get($m--forms, input, skins, $skin, default, border, focus);
+                }
+
+                &.disabled,
+                &:disabled {
+                    background: array-get($m--forms, input, skins, $skin, default, border, disabled);
+                    border-color: array-get($m--forms, input, skins, $skin, default, bg, disabled);
+                }
+            }
+
+            &.bs-placeholder {
+                color: array-get($m--forms, input, skins, $skin, default, color, placeholder);
+
+                // state colors
+                @each $name, $color in $m--state-colors {
+                    &.btn-#{$name} {
+                        color: array-get($color, inverse);
+
+                        > .filter-option {
+                            @include opacity(0.8);
+                        }
+                    }
+                }
+            }
+        }
+
+        // menu shown state
+        &.show {
+            > .dropdown-toggle {
+                &.btn-light,
+                &.btn-secondary {
+                    border-color: array-get($m--forms, input, skins, $skin, solid, border, focus) !important;
+                    @include shadow(none);
+                    background-color: transparent;
+                }
+            }
+        }
+
+        // menu dropdown
+        .dropdown-menu.inner {
+            > li {
+                > a {
+                    .text {
+                        color: get-color($skin, regular, '+');
+
+                        small {
+                            color: get-color($skin, regular, '-');
+                        }
+                    }
+
+                    span.check-mark {
+                        color: get-color($skin, regular);
+                    }
+
+                    @include icons-style {
+                        color: get-color($skin, regular);
+                    }
+                }
+
+                &.selected,
+                &:hover {
+                    > a {
+                        background: get-color($skin, panel, '-');
+
+                        .text {
+                            color: get-color($skin, regular, '+');
+                        }
+
+                        span.check-mark {
+                            color: get-color($skin, regular, '+');
+                        }
+                    }
+                }
+
+                &.selected {
+                    > a {
+                        background: get-color($skin, panel, '--');
+                    }
+                }
+
+                &.disabled {
+                    > a {
+                        @include opacity(0.6);
+                    }
+                }
+
+                &.divider {
+                    border-bottom: 1px solid get-color($skin, panel, '-');
+                }
+
+                &.active:not(.selected) {
+                    > a {
+                        background: get-state-color(primary, base);
+
+                        .text {
+                            color: get-state-color(primary, inverse);
+                        }
+
+                        span.check-mark {
+                            color: get-state-color(primary, inverse);
+                        }
+                    }
+                }
+
+                &.no-results {
+                    color: get-color($skin, regular);
+                }
+            }
+        }
+
+        // menu header
+        .popover-title {
+            background: get-color($skin, panel, '--');
+            border: 0;
+        }
+
+        .dropdown-menu {
+            margin-top: 1px;
+        }
+    }
+
+    // Bootstrap select component
+    .m-bootstrap-select.bootstrap-select {
+        // input styles
+        &.m-bootstrap-select--air {
+            > .dropdown-toggle {
+                @include shadow( array-get($m--forms, input, skins, $skin, air, box-shadow, default) );
+            }
+        }
+
+        &.m-bootstrap-select--solid {
+            > .dropdown-toggle {
+                background-color: array-get($m--forms, input, skins, $skin, solid, bg, default);
+                border-color: array-get($m--forms, input, skins, $skin, solid, border, default);
+            }
+        }
+    }
+}
+
+//== Component Validation State
+@mixin m-build-component--select-validation-state($state, $color) {
+    .m-form.m-form--state .has-#{$state} {
+        .bootstrap-select > {
+            .btn.btn-secondary,
+            .btn.btn-light {
+                border-color: $color;
+
+                &:focus {
+                    border-color: $color;
+                }
+            }
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--select-base();
+
+//== Component Skin - Light
+@include m-build-component--select-skin(light);
+    
+//== Component Validation States
+@include m-build-component--select-validation-state(success, array-get($m--state-colors, success, base));
+@include m-build-component--select-validation-state(warning, array-get($m--state-colors, warning, base));
+@include m-build-component--select-validation-state(danger, array-get($m--state-colors, danger, base));  

@@ -1,0 +1,26 @@
+//
+//** Code Component
+//
+
+//== Component Base
+@mixin m-build-component--typography-code-base() {
+    code {
+    	padding: 0.2rem 0.4rem;
+    }
+}
+
+
+//== Component Skin
+@mixin m-build-component--typography-code-skin() {
+	$skin:  get-default-skin();
+	
+    code {
+        background: get-color($skin, panel);    
+    }
+}
+
+//== Build Component Base
+@include m-build-component--typography-code-base();
+
+//== Build Component - Light Skin
+@include m-build-component--typography-code-skin();

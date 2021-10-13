@@ -14,7 +14,10 @@ import com.strongkey.crypto.utility.CryptoException;
 import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.skce.utilities.skceCommon;
 import com.strongkey.skfs.messaging.SKCEBacklogProcessor;
+import com.strongkey.skfs.policybeans.cacheMDSv3Local;
 import com.strongkey.skfs.utilities.SKFSCommon;
+import com.strongkey.skfs.utilities.SKFSConstants;
+import com.strongkey.skfs.utilities.SKFSLogger;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,10 +30,16 @@ import javax.ejb.Startup;
 @Startup
 public class startServices {
 
+     /*
+     * This class' name - used for logging
+     */
+    private final String classname = this.getClass().getName();
     @EJB
     getDomainsBeanLocal getdomejb;
     @EJB
     getFIDOConfigurationLocal getfidoconfig;
+    @EJB
+    cacheMDSv3Local caceMDSejb;
 
     @PostConstruct
     public void initialize() {
@@ -41,6 +50,9 @@ public class startServices {
         skceCommon.getConfigurationProperty("skce.cfg.property.skcehome");
         Collection<Domains> domains = getdomejb.getAll();
 
+        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-3000", "");
+        caceMDSejb.execute();
+        
         if (domains != null) {
             for (Domains d : domains) {
                 Long did = d.getDid();

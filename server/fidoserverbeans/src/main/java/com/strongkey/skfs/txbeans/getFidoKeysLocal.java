@@ -19,7 +19,8 @@ public interface getFidoKeysLocal {
     Collection<FidoKeys> getByUsernameStatus(Long did, String username, String status)throws SKFEException;
     Collection<FidoKeys> getAll(Long did)throws SKFEException;
     FidoKeys getByUsernameKH(Long did, String username, String KH)throws SKFEException;
-    FidoKeys getByfkid(Short sid, Long did, String username,Long fkid)throws SKFEException;
+    FidoKeys getByfkid(Short sid, Long did, Long fkid)throws SKFEException;
+    FidoKeys getByUsernamefkid(Short sid, Long did, String username,Long fkid)throws SKFEException;
     FidoKeys getNewestKeyByUsernameStatus(Long did, String username, String status) throws SKFEException;
     List<FidoKeys> getKeysByUsernameStatus(Long did, String username, String status) throws SKFEException;
 }

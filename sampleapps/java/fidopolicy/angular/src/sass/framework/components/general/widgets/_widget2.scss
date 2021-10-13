@@ -1,0 +1,146 @@
+//
+//** Tasks Component
+//
+
+//== Component Base
+@mixin m-build-component--widget2-base() {
+    .m-widget2 {
+        .m-widget2__item {
+            disply: table;          
+            margin-bottom: 1.4rem;
+            position: relative; 
+
+            // state bar
+            &:before {
+                position: absolute;
+                display: block;
+                width: 0.3rem;
+                border-radius: 4px;                
+                width: 4px;
+                border-radius: 4px;
+                height: 100%;
+                left: 0.8rem;
+                content: "";                                                   
+            }  
+            
+            // checkbox
+            .m-widget2__checkbox {
+                display: table-cell; 
+                vertical-align: middle; 
+                padding-left: 2.2rem;
+                padding-top: 1rem;
+                vertical-align: top;
+            }
+
+            // description text
+            .m-widget2__desc {
+                display: table-cell; 
+                width: 100%; 
+                vertical-align: top; 
+                padding-left: 0.3rem; 
+                padding-top: 0.23rem;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(regular);
+
+                .m-widget2__text {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bold);
+                }
+
+                .m-widget2__user-name {
+
+                    .m-widget2__link {
+                        font-size: get-font-size(regular, '-');
+                        font-weight: get-font-weight(regular);
+
+                        &:hover {
+                            text-decoration: none;
+                        }    
+                    }    
+                }
+            }
+
+            // actions
+            .m-widget2__actions {
+                display: table-cell;
+                vertical-align: top;
+                padding-left: 0.8rem;
+                padding-top: 0.8rem;   
+
+                .m-widget2__actions-nav {
+                    visibility: hidden;
+                     
+                    .m-dropdown__toggle {
+                        text-decoration: none;
+                        font-size: get-font-size(regular, '++++');
+                    }
+                } 
+            }
+
+            // m-widget2__action hover
+            &:hover {
+                .m-widget2__actions {
+                    .m-widget2__actions-nav {
+                        visibility: visible;                         
+                    }
+                }
+            }
+            // m-widget2__item hover
+            &:hover {
+                cursor: pointer;                   
+
+                .m-widget2__actions-nav {
+                    visibility: hidden;
+                } 
+            }
+
+            // item hover
+            &:hover {
+                .m-widget2__actions {
+                    .m-widget2__actions-nav {
+                        visibility: visible;
+                    }
+                }
+            }
+        }                            
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget2-skin() {
+    $skin: get-default-skin();
+    
+    .m-widget2__item { 
+        .m-widget2__desc {                         
+            .m-widget2__text {
+                color: get-color($skin, regular);
+            }
+            .m-widget2__user-name {
+                .m-widget2__link {
+                    color: get-color($skin, regular);
+                }                  
+            }
+        }    
+    }    
+     
+    .m-widget2__item {
+        // states
+        @each $name, $color in $m--state-colors {
+            &.m-widget2__item--#{$name} {
+                &:before {
+                    background: array-get($color, base);
+                }
+            }
+        }        
+    }    
+}
+
+//== Build Component Base
+@include m-build-component--widget2-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget2-skin();
+
+
+
+ 

@@ -84,7 +84,7 @@ export class ProfileComponent implements OnInit {
         let randomIDs = [];
         for (let key of this.fidoKeys) {
             if (key.checked) {
-                randomIDs.push(key.randomid);
+                randomIDs.push(key.keyid);
             }
         }
         if (randomIDs.length > 0) {

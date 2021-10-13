@@ -1,0 +1,153 @@
+ 
+//
+//** Sales By Application Component
+//
+
+//== Component Base
+@mixin m-build-component--widget11-base() {
+    // widget11 
+    .m-widget11 { 
+        .table-responsive {
+            overflow-y: hidden;
+        }
+
+        // Table
+        .table {
+            // Thead
+            thead {
+                > tr {
+                    > td {
+                        padding-top: 1.21rem;
+                        padding-bottom: 1.21rem; 
+                        padding-left: 0;
+                        padding-right: 0.5rem;                           
+                        vertical-align: top;
+                        border-top: 0;
+                        font-size: get-font-size(regular);
+                        font-weight: get-font-weight(boldest);    
+
+                        &:last-child {
+                            padding-right: 0;   
+                        }
+
+                        &.m-widget11__label {
+                            width: 3%;                            
+                        }
+
+                        &.m-widget11__app {
+                            width: 15%;                           
+                        }
+                            
+                        &.m-widget11__sales {
+                            width: 10%;                            
+                        }
+                        
+                        &.m-widget11__change {
+                            width: 10%;                       
+                        }
+
+                        &.m-widget11__price {
+                            width: 7%;                                                       
+                        }
+                        
+                        &.m-widget11__total {
+                            width: 7%;                                                       
+                        }
+                    }
+                }     
+            }
+
+            // Tbody
+            tbody {
+                > tr {
+                    > td {
+                        border: 0;
+                        padding-left: 0;
+                        padding-right: 0.5rem;    
+                        padding-top: 22px;                                                      
+                        vertical-align: top;                            
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(bolder); 
+
+                        > label {
+                            right: 0;
+                            top: 0.5rem;
+                            vertical-align: top;
+                        }
+
+                        .m-widget11__chart {
+                            position: relative;
+                            margin-top: -0.6rem;
+                        }
+
+                        &:last-child {
+                            padding-right: 0;   
+                        }                  
+                    }
+
+                    .m-widget11__title {
+                        font-size: get-font-size(regular, '+');
+                        font-weight: get-font-weight(bolder); 
+                        display: block;
+                    }
+
+                    .m-widget11__sub {
+                        display: block;
+                        font-size: get-font-size(regular, '-');
+                        font-weight: get-font-weight(regular); 
+                    }
+                }    
+            }
+        }
+    }   
+}                                     
+                                    
+//== Component Skin
+@mixin m-build-component--widget11-skin() {
+    $skin: get-default-skin();  
+     // widget11 
+    .m-widget11 {
+        .table {
+            // Head
+            thead {
+                tr > td {
+                    color: darken(get-state-color(metal, base), 10%);
+                }
+            }
+
+            // Tbody
+            tbody {
+                // border
+                > tr {
+                    > td {
+                        color: get-color($skin, regular, '----');
+                    }
+
+                    .m-widget11__title {
+                        color: get-color($skin, regular);
+
+                        > span {
+                            color: get-color($skin, regular, '----'); 
+                        }                           
+                    }
+                        
+                    border-bottom: 0.07rem dashed get-color($skin, panel); 
+
+                    &:last-child {
+                        border: 0;
+                    }         
+                }
+            } 
+        }     
+    }        
+}
+
+//== Build Component Base
+@include m-build-component--widget11-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget11-skin();
+
+
+
+ 

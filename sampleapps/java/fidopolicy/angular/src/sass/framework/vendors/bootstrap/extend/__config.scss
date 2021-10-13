@@ -1,0 +1,21 @@
+$m--bootstrap-extend-config: (
+	alert: (
+		icon: (
+			sizes: (
+				lineawesome: 2.4rem, 
+				fontawesome: 1.8rem, 
+				metronic: 2.4rem
+			)
+		)
+	),
+
+	dropdown: (
+		icon: (
+			sizes: (
+				lineawesome: 1.3rem, 
+				fontawesome: 1.1rem, 
+				metronic: 1.3rem
+			)
+		)
+	)
+);

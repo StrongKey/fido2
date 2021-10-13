@@ -1,0 +1,71 @@
+//
+//** Bootstrap Timepicker Component
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--timepicker-base() {
+   	.bootstrap-timepicker-widget {
+   		width: 175px;
+        @include not-rounded {
+            @include border-radius(0);
+        }
+
+   		.bootstrap-timepicker-hour,
+   		.bootstrap-timepicker-minute,
+   		.bootstrap-timepicker-meridian,
+   		.bootstrap-timepicker-second {
+   			@include reset-input();	
+   		}
+
+   		table td {
+            @include not-rounded {
+                @include border-radius(0 !important);
+            }
+
+            > a {
+   		        border: 0;   	
+
+                @include not-rounded {
+                    @include border-radius(0 !important);
+                }			
+
+                .la {
+                    font-size: get-font-size(regular, '+');
+                }
+   		    }
+        }
+   	}
+}
+
+//== Component Skin
+@mixin m-build-component--timepicker-skin($skin) {
+      .bootstrap-timepicker-widget {
+         .bootstrap-timepicker-hour,
+         .bootstrap-timepicker-minute,
+         .bootstrap-timepicker-meridian,
+         .bootstrap-timepicker-second {
+            color: get-color($skin, regular);         
+         }
+
+        table td > a {
+            .la {
+                color: get-color($skin, regular, '--');
+            }
+
+            &:hover {
+                background: get-color($skin, panel);
+            }              
+         }
+      }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--timepicker-base();
+
+//== Component Skin - Light
+@include m-build-component--timepicker-skin(light);
+    

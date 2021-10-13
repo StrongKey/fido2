@@ -1,0 +1,292 @@
+//
+//** Wizard 4 Component
+//
+
+//== Component Base
+@mixin m-build-component--wizard-4-base() {
+	.m-wizard.m-wizard--4 {		
+
+		//== Default Head
+		.m-wizard__head {
+			padding: 3rem 4rem;
+			
+			//== Default Nav
+			.m-wizard__nav {
+				.m-wizard__steps {									 
+					.m-wizard__step {						 
+						margin-bottom: 2rem;		
+						@include border-radius(2.3rem);  
+
+						.m-wizard__step-info {
+							display: table;						 												 							 						 
+							width: 100%;
+							
+							.m-wizard__step-number {
+								display: table-cell;														 
+								vertical-align: middle;	
+								text-decoration: none;	
+								padding: 0.0715rem 0 0.0715rem 0; 												 												 
+
+								> span {
+									width: 4rem;
+									height: 4rem;
+									@include border-radius(100%);							
+									justify-content: center;
+									align-items: center; 
+									display: flex;
+
+									> span {
+										font-size: 1.7rem; 
+										font-weight: get-font-weight(bolder); 
+									}
+								}
+							}						 
+
+							.m-wizard__step-label {
+								display: table-cell;							 
+								vertical-align: middle;
+								font-weight: get-font-weight(bolder);
+								padding-left: 2rem;							
+								width: 100%;						 
+							}
+
+							.m-wizard__step-icon {								
+								display: table-cell;							 
+								vertical-align: middle;
+								text-align: right;								
+
+								> i {
+									font-size: 1.8rem; 
+									font-weight: get-font-weight(boldest);
+								}
+							}
+						}
+
+						//== Current 
+						&.m-wizard__step--current {
+							.m-wizard__step-info {
+								.m-wizard__step-icon {
+									display: none;
+								}	
+							}
+						}				
+					}
+				}
+			}	
+		}
+
+		.m-wizard__form { 
+			padding: 4.2rem 4rem 3rem 4rem;	
+			border-left: 0.07rem solid #EBEDF2;
+
+			.m-wizard__form-step1 {
+				.m-form__section {
+					.form-group {			
+						padding-bottom: 2rem;
+
+						&:last-child {
+							padding-bottom: 0;
+						} 
+					}
+				}				
+			}
+
+			.m-form__actions {
+				padding-bottom: 1rem;
+			}			 
+		}		
+
+		.m-portlet__foot {
+			margin: 0 -4rem;
+
+			.m-form__actions {
+				padding: 3rem 4rem 0 4rem;
+			}
+		}		
+	}
+
+	@include responsive-below(1300px) {
+		.m-wizard.m-wizard--4 {	
+			.m-wizard__head {
+				padding: 3rem 1rem;
+			}
+		}
+	}
+
+	@include minimal-desktop-and-below {
+		.m-wizard.m-wizard--4 {
+			padding-top: 0;			 
+
+			.m-wizard__head {
+				padding: 0;
+
+				.m-wizard__nav {						 				
+					padding-bottom: 2rem; 
+					display: table;	
+					width: auto;						
+					margin: 2rem auto 0 auto;								  
+							
+					.m-wizard__steps {					 				
+						.m-wizard__step {
+							@include border-radius(2rem);		
+							margin-bottom: 2rem;
+							padding: 0.02rem 1rem 0.05rem 0;	
+
+							&:last-child {							 						 
+								margin-bottom: 0;							 							 
+							}
+
+							.m-wizard__step-info {
+								width: 100%;
+
+								.m-wizard__step-label {								 						
+									width: 100%;						 
+								}
+
+								.m-wizard__step-icon {								 
+									text-align: right;
+									padding-left: 1rem;	
+								}
+							}				
+						}						
+					}				 						 	
+				}
+			}
+			.m-wizard__form { 				 
+				padding: 3rem 0 0 0;				 
+				border-top: 0.07rem solid #EBEDF2;
+				border-left: 0;
+
+
+				.m-wizard__form-step {
+					padding-top: 1rem;
+				} 
+			}
+		}	
+	}	
+}
+
+//== Component Skin
+@mixin m-build-component--wizard-4-skin() {
+	$skin: get-default-skin();
+
+	.m-wizard.m-wizard--4 {
+		.m-wizard__head {
+			.m-wizard__nav {
+				.m-wizard__steps {
+					.m-wizard__step {
+						.m-wizard__step-info {
+							.m-wizard__step-label {
+								color: get-color($skin, regular, '----');
+							}
+
+							a.m-wizard__step-number {
+								> span {
+									background-color: get-color($skin, panel, '-');
+
+									> span {
+										color: get-color($skin, regular, '-----');
+									}									
+								}
+							}
+
+							a.m-wizard__step-number:hover {
+								> span {
+									background-color: get-color($skin, panel, '+');
+
+									> span {
+										color: #fff;
+									}
+								}
+							}
+
+							.m-wizard__step-icon {
+								> i {
+									color: #fff;
+								}
+							}		
+						}					 					 
+					} 	
+				}
+			}	 
+		}		 
+	}		
+}
+
+//== Component States
+@mixin m-build-component--wizard-4-states() {
+	 
+	 .m-wizard.m-wizard--4 {
+		@each $name, $color in $m--state-colors {
+			
+			//== Wizard states
+			&.m-wizard--#{$name} {
+				.m-wizard__head {					
+					.m-wizard__nav {
+						//== Steps
+						.m-wizard__steps {
+							.m-wizard__step {
+								//== Done state
+								&.m-wizard__step--done {
+									.m-wizard__step-info {									
+										.m-wizard__step-icon {
+											> i {
+												color: array-get($color, base);
+											}
+										}										 
+									}									 
+								}
+
+								//== current state
+								&.m-wizard__step--current {
+									background-color: array-get($color, base);
+
+									.m-wizard__step-info {
+										a.m-wizard__step-number {										 
+											> span {
+												background-color: darken(array-get($color, base), 20%);
+
+												> span {
+													color: array-get($color, inverse);
+												}											 
+											}										 	
+										}
+
+										a.m-wizard__step-number:hover {
+											> span {
+												background-color: darken(array-get($color, base), 10%);
+
+												> span {
+													color: array-get($color, inverse);
+												}
+											}
+										}
+
+										.m-wizard__step-label {
+											color: array-get($color, inverse);
+										}
+
+										.m-wizard__step-icon {
+											> i {
+												color: array-get($color, base);
+											}
+										}	
+									}									 
+								}
+							} 	
+						}
+					}	 
+				}	 	  			  		      
+			}
+		}		
+	}
+}
+
+//== Build Component Base
+@include m-build-component--wizard-4-base();
+
+//== Build Component Skin
+@include m-build-component--wizard-4-skin();
+
+//== Build Component States
+@include m-build-component--wizard-4-states();

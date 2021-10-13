@@ -30,11 +30,13 @@ public class ClientData {
     String type;
     String challenge;
     String origin;
+    Boolean crossOrigin;
 
-    public ClientData(String type, String challenge, String origin) {
+    public ClientData(String type, String challenge, String origin, Boolean co) {
         this.type = type;
         this.challenge = challenge;
         this.origin = origin;
+        this.crossOrigin = co;
     }
 
     public String getType() {
@@ -66,6 +68,7 @@ public class ClientData {
                 .add("type", type)
                 .add("challenge", challenge)
                 .add("origin", origin)
+                .add("crossOrigin", crossOrigin)
                 .build();
         return clientData;
     }

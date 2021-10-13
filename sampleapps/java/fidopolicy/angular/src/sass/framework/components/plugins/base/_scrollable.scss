@@ -1,0 +1,133 @@
+//
+//** Scrollable Component Based On mCustomScrollbar Plugin
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--scrollable-base() {
+    .m-scroller:not(.m-scrollable--track),
+    .m-scrollable:not(.m-scrollable--track) {
+        > .ps__rail-x {
+            top: 4px !important;
+            height: 4px !important;
+
+            &:hover,
+            &:focus {
+                height: 4px !important;
+            } 
+
+            > .ps__thumb-x {
+                top: 0 !important;
+                height: 4px !important;
+
+                &:hover,
+                &:focus {
+                    top: 0 !important;
+                    height: 4px !important;
+                } 
+            }
+        }
+
+        > .ps__rail-y {
+            right: 4px !important;
+            width: 4px !important;
+
+            &:hover,
+            &:focus {
+                width: 4px !important;
+            } 
+
+            > .ps__thumb-y {
+                right: 0 !important;
+                width: 4px !important;
+
+                &:hover,
+                &:focus {
+                    right: 0 !important;
+                    width: 4px !important;
+                } 
+            }
+        }        
+
+        @include m-set-component--scrollable-skin( get-color(light, panel, '+++') );
+    }    
+
+    .ps {
+        overflow: hidden;
+        position: relative;
+
+        > .ps__rail-x {
+            > .ps__thumb-x {
+                background: get-color(light, panel, '++++');
+            }
+        }
+
+        > .ps__rail-y {
+            > .ps__thumb-y {
+                background: get-color(light, panel, '++++');                
+            }
+        }
+    }
+
+    .m-scrollable {
+        overflow: hidden;
+        margin-right: -14px;
+        padding-right: 14px;
+        position: relative;
+    }
+}
+
+//== Component Customzie Skin
+@mixin m-set-component--scrollable-skin($color) {
+    > .ps__rail-x {
+        &:hover,
+        &:focus {
+            opacity: 1;
+            background: transparent !important;
+
+            > .ps__thumb-x {
+                opacity: 1;
+            }
+        } 
+
+        > .ps__thumb-x {
+            background: $color;
+            opacity: 1;
+
+            &:hover,
+            &:focus {
+                opacity: 1;
+                background: $color;
+            } 
+        }
+    }
+
+    > .ps__rail-y {
+        &:hover,
+        &:focus {
+            background: transparent !important;
+            opacity: 1;
+
+            > .ps__thumb-y {
+                opacity: 1;
+            }
+        } 
+
+        > .ps__thumb-y {
+            background: $color;
+            opacity: 1;
+
+            &:hover,
+            &:focus {
+                opacity: 1;
+                background: $color;
+            } 
+        }
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--scrollable-base();

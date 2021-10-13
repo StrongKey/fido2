@@ -1,0 +1,94 @@
+//
+//** Support Tickets  Component
+//
+
+//== Component Base
+@mixin m-build-component--widget3-base() {
+    .m-widget3 {         
+          
+        // widjet header
+        .m-widget3__item {
+            margin-bottom: 0.8rem;
+            .m-widget3__header {
+                display: table;             
+                 
+            	.m-widget3__user-img {                       
+                    margin-bottom: 0.7rem;                 
+
+                    .m-widget3__img {
+                        width: 3.2rem;                        
+                        border-radius: 50%;
+                    }
+                }
+                // widget info
+                .m-widget3__info {
+                    display: table-cell;
+                    width: 100%;
+                    padding-left: 1rem; 
+                    padding-top: -0.57rem;
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(regular);
+                    vertical-align: middle;
+
+                    .m-widget3__username {
+                        font-size: get-font-size(regular);
+                        font-weight: get-font-weight(bolder);                    
+                    } 
+
+                    .m-widget3__time {
+                        font-size: get-font-size(regular, '-');
+                        font-weight: get-font-weight(regular);
+                    } 
+
+                }
+                // widget status
+                .m-widget3__status{
+                    display: table-cell;
+                    float: right;
+                    padding-top: 1.07rem;                  
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bolder);                             
+                }
+            }
+            // widget body
+            .m-widget3__body {
+                .m-widget3__text {
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(regular);
+                      
+                }
+            } 
+        }            
+    } 
+}
+
+//== Component Skin
+@mixin m-build-component--widget3-skin() {
+    $skin: get-default-skin();    
+
+    .m-widget3 {	          
+        .m-widget3__item {
+            .m-widget3__username {
+                color: get-color($skin, regular);       
+            } 
+
+            .m-widget3__body {
+                .m-widget3__text {
+                    color: get-color($skin, regular, '---');
+                }
+            }
+            // widget border 
+            border-bottom: 0.07rem dashed get-color($skin, panel);
+             
+            &:last-child {
+                border-bottom: 0;
+            } 
+        }        
+    }
+}
+
+//== Build Component Base
+@include m-build-component--widget3-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget3-skin();

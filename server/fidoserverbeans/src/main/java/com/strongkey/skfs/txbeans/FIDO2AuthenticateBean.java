@@ -156,6 +156,10 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             String bdreqtype = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_REQUEST_TYPE, "String"); //jsonObject.getString(SKFSConstants.JSON_KEY_REQUEST_TYPE);
             String bdnonce = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_NONCE, "String"); //jsonObject.getString(SKFSConstants.JSON_KEY_NONCE);
             String bdorigin = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_SERVERORIGIN, "String"); //jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
+            Boolean crossOrigin = (Boolean) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_CROSSORIGIN, "Boolean"); //jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
+            if(crossOrigin == null){
+                crossOrigin = Boolean.FALSE;
+            }
 //            String bdhashAlgo = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_HASH_ALGORITHM, "String"); // jsonObject.getString(SKFSConstants.JSON_KEY_HASH_ALGORITHM);
 
             if (bdreqtype == null || bdnonce == null || bdorigin == null) {
@@ -206,11 +210,13 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "RPID - BDORIGIN : " + originURI + " - " + bdoriginURI);
 
-            if (!bdoriginURI.equals(originURI)) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE,
-                        SKFSCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'origin'");
-                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-5011")
-                        + " Invalid 'origin'"));
+            if (!crossOrigin) {
+                if (!bdoriginURI.equals(originURI)) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE,
+                            SKFSCommon.getMessageProperty("FIDO-ERR-5011"), " Invalid 'origin'");
+                    throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-5011")
+                            + " Invalid 'origin'"));
+                }
             }
 
             String authenticatorObject = (String) applianceCommon.getJsonValue(responseObject,
@@ -346,12 +352,12 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             serverid = user.getSkid();
 
             FidoKeys key = null;
-            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + username + "-" + regkeyid);
+            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + regkeyid);
             if (fkinfo != null) {
                 key = fkinfo.getFk();
             }
             if (key == null) {
-                key = getkeybean.getByfkid(serverid, did, username, regkeyid);
+                key = getkeybean.getByfkid(serverid, did, regkeyid);
             }
 
             FidoPolicyObject fidoPolicy = getpolicybean.getPolicyByDidUsername(did, username_received, key);
@@ -362,44 +368,50 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
             String rpId = fidoPolicy.getRpOptions().getId();
             String rpidServletExtracted;
-            if (rpId == null) {
-                rpidServletExtracted = originURI.getHost();
-            } else {
-                System.out.println("rpidhashfrompolicy = " + Base64.toBase64String(SKFSCommon.getDigestBytes(rpId, "SHA256")));
-                //check if the origin received is rpid+1 if not then reject it
-                if (origin.startsWith("android")) {
-                    rpidServletExtracted = rpId;
+            
+                if (rpId == null) {
+                    rpidServletExtracted = originURI.getHost();
                 } else {
-                    String originwithoutSchemePort;
-                    if (origin.startsWith("https")) {
-                        originwithoutSchemePort = origin.substring(8).split(":")[0];
+                    System.out.println("rpidhashfrompolicy = " + Base64.toBase64String(SKFSCommon.getDigestBytes(rpId, "SHA256")));
+                    //check if the origin received is rpid+1 if not then reject it
+                    if (origin.startsWith("android")) {
+                        rpidServletExtracted = rpId;
                     } else {
-                        //reject it
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                + " RPID Hash invalid'"));
-                    }
-                    if (!originwithoutSchemePort.endsWith(rpId)) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                + " RPID Hash invalid'"));
-                    }
-                    
-                    String origin2 = originwithoutSchemePort.replace(rpId, "");
-                    if (origin2.split("\\.").length > 1) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                + " RPID Hash invalid'"));
-                    }
-                    rpidServletExtracted = rpId;
-                }
-            }
-            if (!Base64.toBase64String(authenticatorData.getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                        + " RPID Hash invalid'"));
-            }
+                        String originwithoutSchemePort;
+                        if (origin.startsWith("https")) {
+                            originwithoutSchemePort = origin.substring(8).split(":")[0];
+                        } else {
+                            //reject it
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                            throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                    + " RPID Hash invalid'"));
+                        }
+                        if (!crossOrigin) {
+                            if (!originwithoutSchemePort.endsWith(rpId)) {
+                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                        + " RPID Hash invalid'"));
+                            }
 
+                            String origin2 = originwithoutSchemePort.replace(rpId, "");
+                            if (origin2.split("\\.").length > 1) {
+                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                        + " RPID Hash invalid'"));
+                            }
+                        }
+                        rpidServletExtracted = rpId;
+                    }
+                
+                    if (!crossOrigin) {
+                        if (!Base64.toBase64String(authenticatorData.getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                            throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                    + " RPID Hash invalid'"));
+                        }
+                    }
+            }
+            
             if (key != null) {
                 RegistrationSettings rs = RegistrationSettings.parse(key.getRegistrationSettings(), key.getRegistrationSettingsVersion());
                 String signingKeyType = getKeyTypeFromRegSettings(rs);
@@ -423,7 +435,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                 verifyPolicyBean.execute(user, did, json, authenticatorData, key, rs.getAttestationFormat());
 
                 //  update the sign counter value in the database with the new counter value.
-                String jparesult = updatekeybean.execute(serverid, did, username, regkeyid, authenticatorData.getCounterValueAsInt(), modifyloc);
+                String jparesult = updatekeybean.execute(serverid, did, regkeyid, authenticatorData.getCounterValueAsInt(), modifyloc);
                 JsonObject jo;
                 try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                     jo = jr.readObject();

@@ -165,17 +165,17 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
 
             Short sid_to_be_deactivated = null;
 //            String did_to_be_deactivated =null;
-            int userfkidhyphen ;
+//            int userfkidhyphen ;
 //            String fidouser;
             Long fkid_to_be_deactivated = null;
             try {
                 String[] mapvaluesplit = randomid.split("-", 3);
                 sid_to_be_deactivated = Short.parseShort(mapvaluesplit[0]);
 //                did_to_be_deactivated = mapvaluesplit[1];
-                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
+//                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
 
 //                fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
-                fkid_to_be_deactivated = Long.parseLong(mapvaluesplit[2].substring(userfkidhyphen + 1));
+                fkid_to_be_deactivated = Long.parseLong(mapvaluesplit[2]);
             } catch (Exception ex) {
                     skcero.setErrorkey("FIDO-ERR-0028");
                             skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0028") + "Invalid randomid= " + randomid);
@@ -200,7 +200,7 @@ public class u2fDeactivateBean_v1 implements u2fDeactivateBeanLocal_v1, u2fDeact
                             SKFSCommon.getMessageProperty("FIDO-MSG-5005"), "");
                     try {
                         //  if the fkid_to_be_deactivated is valid, delete the entry from the database
-                        String jparesult = updatekeystatusbean.execute(sid_to_be_deactivated, Long.parseLong(did), username, fkid_to_be_deactivated, modifyloc, applianceConstants.INACTIVE_STATUS);
+                        String jparesult = updatekeystatusbean.execute(sid_to_be_deactivated, Long.parseLong(did), fkid_to_be_deactivated, modifyloc, applianceConstants.INACTIVE_STATUS);
                         JsonObject jo;
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();

@@ -180,7 +180,7 @@ public class updateFIDOKeysUsername implements updateFIDOKeysUsernameLocal {
                                     + addkeyres.getString("message")));
                         }
                         // delete old key
-                        String jparesult = delFidoKeyejb.execute(fk.getFidoKeysPK().getSid(), (long) fk.getFidoKeysPK().getDid(), fk.getFidoKeysPK().getUsername(), fk.getFidoKeysPK().getFkid());
+                        String jparesult = delFidoKeyejb.execute(fk.getFidoKeysPK().getSid(), (long) fk.getFidoKeysPK().getDid(), fk.getFidoKeysPK().getFkid());
                         JsonObject jo;
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();
@@ -214,64 +214,6 @@ public class updateFIDOKeysUsername implements updateFIDOKeysUsernameLocal {
             retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
             return retObj.toString();
         }
-//        //  Verify if the fkid exists.
-//        FidoKeys rk = null;
-//        try {
-//            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + username + "-" + fkid);
-//            if (fkinfo != null) {
-//                rk = fkinfo.getFk();
-//            }
-//            if (rk == null) {
-//                rk = getregkeysejb.getByfkid(sid, did, username, fkid);
-//            }
-//        } catch (SKFEException ex) {
-//            Logger.getLogger(updateFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        if (rk == null) {
-//            status = false;
-//            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2002", "");
-//            errmsg = SKFSCommon.getMessageProperty("FIDOJPA-ERR-2002");
-//            retObj = Json.createObjectBuilder().add("status", status).add("message", errmsg).build();
-//            return retObj.toString();
-//        }
-//
-//        //modify the DB
-//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String moddate = df.format(new Date());
-//        Date modifyDateFormat = null;
-//        try {
-//            modifyDateFormat = df
-//                    .parse(moddate);
-//        } catch (ParseException e) {
-//        }
-//        String primarykey = sid + "-" + did + "-" + newUsername + "-" + fkid;
-//        rk.getFidoKeysPK().setUsername(newUsername);
-//        rk.setModifyLocation(modify_location);
-//        rk.setModifyDate(modifyDateFormat);
-//        rk.setId(primarykey);
-//
-//        em.merge(rk);
-//        em.flush();
-//        em.clear();
-//
-//        try {
-//            if (applianceCommon.replicate()) {
-//                if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
-//                    String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_KEYS, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, rk);
-//                    if (response != null) {
-//                        return response;
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            sc.setRollbackOnly();
-//            SKFSLogger.exiting(SKFSConstants.SKFE_LOGGER,classname, "execute");
-//            throw new RuntimeException(e.getLocalizedMessage());
-//        }
-//
-//        FidoKeysInfo fkinfoObj = new FidoKeysInfo(rk);
-//        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, primarykey, fkinfoObj);
-
         //return a success message
         SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", "FIDOJPA-MSG-2015", "");
         retObj = Json.createObjectBuilder().add("status", status).add("message", SKFSCommon.getMessageProperty("FIDOJPA-MSG-2015")).build();

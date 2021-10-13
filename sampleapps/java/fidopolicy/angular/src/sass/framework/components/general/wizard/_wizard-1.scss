@@ -1,0 +1,307 @@
+//
+//** Wizard 1 Component
+//
+
+//== Component Base
+@mixin m-build-component--wizard-1-base() {
+	.m-wizard.m-wizard--1 {
+		//== Default Head
+		.m-wizard__head {
+			margin: 3rem 0 3rem 0;
+			
+			//== Progress
+			.m-wizard__progress {				
+				.progress {				
+					@include rounded {
+						@include border-radius(0.71rem);
+					}
+					height: 0.71rem;	
+					position: relative;			
+					overflow: visible;	 
+  					 
+					.progress-bar {	
+						position: relative;	
+						@include rounded {
+							@include border-radius(0.71rem);
+						}
+
+						&:after {
+							content: '';
+							display: block;
+							position: absolute;						   	 						    		     
+							width: 1.3rem;
+							height: 1.3rem;
+							right: -(1.3rem/2);
+							@include border-radius(50%);
+							z-index: 1;
+							top: -0.3rem;			 				 
+						}
+					}	
+				} 
+			}
+
+			//== Default Nav
+			.m-wizard__nav {
+				.m-wizard__steps {
+					margin-top: 3rem;					 
+					width: 100%;
+					display: table;	
+					table-layout: fixed;
+
+					.m-wizard__step {
+						display: table-cell;						 
+						vertical-align: middle;	
+
+						.m-wizard__step-info {
+							display: table;						 										 
+
+							.m-wizard__step-number {
+								display: table-cell;														 
+								vertical-align: middle;	
+								text-decoration: none;
+								outline: none !important;
+
+								> span {
+									width: 4rem;
+									height: 4rem;
+									@include border-radius(100%);							
+									justify-content: center;
+									align-items: center; 
+									display: flex;
+
+									> span {
+										font-size: 1.7rem; 
+										font-weight: get-font-weight(bolder); 
+									}
+								}
+							}		
+						}
+
+						.m-wizard__step-line {
+							display: table-cell;
+							vertical-align: middle;							
+
+							> span {
+								margin-left: 0.8rem;
+								margin-right: 0.7rem;
+								width: 2.5rem;
+								height: 0.3rem;								 
+								display: block;
+								@include border-radius(0.6rem);
+							}
+						}
+
+						.m-wizard__step-label {
+							display: table-cell;							 
+							vertical-align: middle;
+							font-weight: get-font-weight(bolder);
+						}
+					}
+
+					&:last-child {
+						padding-right: 0;
+					}
+				}	
+			}
+		}
+
+		//== Centered Nav
+		&.m-wizard--nav-centered {	
+			.m-wizard__head {
+				margin: 3rem auto;	
+				width: 80%;
+			}		 
+		}
+	}	 
+
+	@include minimal-desktop-and-below {
+		.m-wizard.m-wizard--1 {
+			.m-wizard__head {				 		 
+				position: relative;	
+				width: 100% !important;	
+
+				.m-wizard__progress {
+					padding-bottom: 3rem;
+				}		 				 	 
+
+				.m-wizard__nav { 
+					.m-wizard__steps {				 
+						display: table;	
+						width: auto;						
+						margin: 0 auto;					 											 
+
+						.m-wizard__step {						 
+							display: table-cell;							 
+							display: block;
+							width: 100%; 
+							margin-bottom: 2.5rem;
+							padding-right: 0;							 
+							
+							&:last-child {
+								margin-bottom: 0;							
+							}						
+
+							.m-wizard__step-linc {
+								display: table-cell;								
+								vertical-align: middle;
+								margin-bottom: 2rem;								 						 				 
+							}
+
+							.m-wizard__step-info {
+								display: table-cell;								 
+								vertical-align: middle; 
+								text-align: left;	
+								padding-left: 0;	
+								margin-bottom: 2rem;								 				
+
+								.m-wizard__step-title {
+									margin-bottom: 0;								 
+								}
+
+								&:last-child {
+									.m-wizard__step-info {
+										margin-bottom: 0;
+									}	
+								}									
+							}						 
+						}	 
+					}
+				}				 
+			}			 
+		}	
+	}	 
+}						 
+
+//== Component Skin
+@mixin m-build-component--wizard-1-skin() {
+	$skin: get-default-skin();
+	.m-wizard.m-wizard--1 {
+		.m-wizard__head {
+			.m-wizard__steps {
+				.m-wizard__step {
+					.m-wizard__step-info {
+						.m-wizard__step-label {
+							color: get-color($skin, regular, '----');
+						}
+
+						.m-wizard__step-number { 
+							> span {
+								background-color: get-color($skin, panel, '+');
+
+								> span {
+									color: white;
+								}
+							}
+						}
+
+						a.m-wizard__step-number:hover {
+							> span {
+								background-color: get-color($skin, panel, '+++');
+
+								> span {
+									color: white;
+								}
+							}
+						}
+
+						.m-wizard__step-line {
+							> span {
+								background-color: get-color($skin, panel, '+');
+							}
+						}
+					}
+				} 	
+			} 	
+		}		 
+	}	
+}
+
+//== Component States
+@mixin m-build-component--wizard-1-states() {
+	.m-wizard.m-wizard--1 {
+		
+		@each $name, $color in $m--state-colors {
+			//== Wizard states
+			&.m-wizard--#{$name} { 
+				//== Progress
+				.m-wizard__progress {
+					.progress {
+						.progress-bar {
+							background-color: array-get($color, base);
+
+							&:after {
+								background-color: array-get($color, base);
+							}
+						}						
+					}	
+				}
+
+				//== Steps
+				.m-wizard__steps {
+					.m-wizard__step {
+						//== Done state
+						&.m-wizard__step--done {
+							.m-wizard__step-info {
+								.m-wizard__step-number { 
+									> span {
+										background-color: array-get($color, base);
+
+										> span {
+											color: array-get($color, inverse);
+										}
+									}
+								}
+
+								a.m-wizard__step-number:hover {
+									> span {
+										background-color: darken(array-get($color, base), 5%);
+
+										> span {
+											color: array-get($color, inverse);
+										}
+									}
+								}
+							}
+						}
+
+						//== Current state
+						&.m-wizard__step--current {
+							.m-wizard__step-info {
+								.m-wizard__step-number { 
+									> span {
+										background-color: lighten(array-get($color, base), 20%);
+
+										> span {
+											color: array-get($color, inverse);
+										}
+									}
+								}
+
+								a.m-wizard__step-number:hover {
+									> span {
+										background-color: lighten(array-get($color, base), 10%);
+
+										> span {
+											color: array-get($color, inverse);
+										}
+									}
+								}
+							}
+						}
+					} 
+				}				   	
+			}							 							      
+		}
+	}
+}
+
+//== Build Component Base
+@include m-build-component--wizard-1-base();
+
+//== Build Component Skin
+@include m-build-component--wizard-1-skin();
+
+//== Build Component States
+@include m-build-component--wizard-1-states();
+
+				 

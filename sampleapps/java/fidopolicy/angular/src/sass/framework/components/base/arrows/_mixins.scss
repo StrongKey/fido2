@@ -1,0 +1,106 @@
+@mixin m--build-smooth-arrow-vertical($direction, $size) {
+    position: absolute;
+	line-height: 0;
+	display: inline-block;
+	overflow: hidden;
+    height: array-get($m-smooth-arrows, size, $size, $direction, height);
+    width: array-get($m-smooth-arrows, size, $size, $direction, font-size);
+    
+    @include icon(array-get($m-smooth-arrows, icon, $direction));
+
+    position: relative;
+    left: 50%;
+    margin-left: - (array-get($m-smooth-arrows, size, $size, $direction, font-size) / 2);
+
+    &:before {               
+        position: relative;
+        top: 100%;
+    	margin-top: array-get($m-smooth-arrows, size, $size, $direction, offset);   
+    	font-size: array-get($m-smooth-arrows, size, $size, $direction, font-size);        
+
+        // ie8-11 versions hack
+        @include hack-ie8-11 {
+            margin-top: array-get($m-smooth-arrows, size, $size, $direction, offset-ie); 
+        }
+    }	  
+}
+
+@mixin m--build-smooth-arrow-horizontal($direction, $size) {
+    position: absolute;
+	line-height: 0;
+    display: inline-block;
+    overflow: hidden;
+    width: array-get($m-smooth-arrows, size, $size, $direction, width);
+    height: array-get($m-smooth-arrows, size, $size, $direction, font-size);
+    
+    @include icon(array-get($m-smooth-arrows, icon, $direction));
+    
+    position: relative;
+    
+    @if $direction == 'right' {
+        left: 0;
+        margin-left: -(array-get($m-smooth-arrows, size, $size, $direction, offset));  
+    } @else {
+        left: auto;
+        right: 0;
+        margin-left: auto;
+        margin-right: -(array-get($m-smooth-arrows, size, $size, $direction, offset));  
+    } 
+
+    &:before {               
+        position: relative;
+        top: 0;
+        margin-top: array-get($m-smooth-arrows, size, $size, $direction, font-size) /  2;
+        font-size: array-get($m-smooth-arrows, size, $size, $direction, font-size);          
+    }
+}
+
+@mixin m--build-classic-arrow($direction, $size) {
+    display: inline-block;
+    width: $size; 
+    height: 0; 
+    position: absolute;
+    border: 0;
+
+    @if $direction == 'top' {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;      
+        border-bottom: $size solid black;
+    }
+
+    @if $direction == 'bottom' {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;      
+        border-top: $size solid black;
+    }
+
+    @if $direction == 'right' {
+        border-right: $size solid black;
+        border-top: $size solid transparent;      
+        border-bottom: $size solid transparent;
+    }
+
+    @if $direction == 'left' {
+        border-left: $size solid black;
+        border-top: $size solid transparent;      
+        border-bottom: $size solid transparent;
+    }
+}
+
+@mixin m--set-classic-arrow-bg($direction, $color) {
+    @if $direction == 'top' {
+        border-bottom-color: $color;
+    }
+
+    @if $direction == 'bottom' {
+        border-top-color: $color;
+    }
+
+    @if $direction == 'right' {
+        border-right-color: $color;
+    }
+
+    @if $direction == 'left' {
+        border-left-color: $color;
+    }
+}

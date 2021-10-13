@@ -15,7 +15,7 @@ import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.core.U2FUtility;
 import com.strongkey.skfs.fido.policyobjects.AlgorithmsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.AuthenticationPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.ExtensionsPolicyOptions;
+import com.strongkey.skfs.fido.policyobjects.DefinedExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.extensions.Fido2AuthenticationExtension;
@@ -344,44 +344,56 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         String rpRequestedUserVerification = options.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null);
 
         // Use RP requested options, assuming the policy allows.
-        if (fidoPolicy.getUserVerification().contains(rpRequestedUserVerification)) {
+        if (fidoPolicy.getSystemOptions().getUserVerification().contains(rpRequestedUserVerification)) {
             userVerificationResponse = rpRequestedUserVerification;
         } else if (rpRequestedUserVerification != null) {
             throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_USERVERIFICATION);
-        }
-
-        // If an option is unset, verify the policy allows for the default behavior.
-        if (userVerificationResponse == null && !fidoPolicy.getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED)) {
-            throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
-        }
-        return userVerificationResponse;
-    }
-
-    private JsonObject generateExtensions(ExtensionsPolicyOptions extOp, JsonObject extensionsInput){
-        JsonObjectBuilder extensionJsonBuilder = Json.createObjectBuilder();
-
-        for(Fido2Extension ext: extOp.getExtensions()){
-            if(ext instanceof Fido2AuthenticationExtension){
-                JsonValue extensionInput = (extensionsInput == null) ? null
-                        : extensionsInput.get(ext.getExtensionIdentifier());
-
-                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
-                if(extensionChallangeObject != null){
-                    if(extensionChallangeObject instanceof String){
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
-                    }
-                    else if(extensionChallangeObject instanceof JsonObject){
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
-                    }
-                    else if (extensionChallangeObject instanceof JsonValue) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
-                    }
-                    else{
-                        throw new UnsupportedOperationException("Unimplemented Extension requested");
-                    }
+        } else {
+             //Specifying the lowest constraint for user verfication
+            if(fidoPolicy.getSystemOptions().getUserVerification().size() < 3){
+                if (fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED) && fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_REQUIRED)){
+                    userVerificationResponse =   SKFSConstants.POLICY_CONST_PREFERRED;
+                } else if (fidoPolicy.getSystemOptions().getUserVerification().size() == 1){
+                    userVerificationResponse =   fidoPolicy.getSystemOptions().getUserVerification().get(0);
+                } else if(fidoPolicy.getSystemOptions().getUserVerification().isEmpty()){
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "User Verfication Options Missing from FIDO Policy");
                 }
             }
         }
+
+       
+        return userVerificationResponse;
+    }
+
+    private JsonObject generateExtensions(DefinedExtensionsPolicyOptions extOp, JsonObject extensionsInput){
+        JsonObjectBuilder extensionJsonBuilder = Json.createObjectBuilder();
+
+//        for(Fido2Extension ext: extOp.getExtensions()){
+//            if(ext instanceof Fido2AuthenticationExtension){
+//                JsonValue extensionInput = (extensionsInput == null) ? null
+//                        : extensionsInput.get(ext.getExtensionIdentifier());
+//
+//                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
+//                if(extensionChallangeObject != null){
+//                    if(extensionChallangeObject instanceof String){
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
+//                    }
+//                    else if(extensionChallangeObject instanceof JsonObject){
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
+//                    }
+//                    else if (extensionChallangeObject instanceof JsonValue) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
+//                    }
+//                    else{
+//                        throw new UnsupportedOperationException("Unimplemented Extension requested");
+//                    }
+//                }
+//            }
+//        }
+        if(extOp.getUVM() != null){
+            extensionJsonBuilder.add(SKFSConstants.POLICY_ATTR_EXTENSIONS_INPUT_UVM ,true);
+        }
+        
 
         return extensionJsonBuilder.build();
     }

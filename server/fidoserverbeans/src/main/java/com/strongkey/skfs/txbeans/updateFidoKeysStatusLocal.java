@@ -11,5 +11,6 @@ import javax.ejb.Local;
 @Local
 public interface updateFidoKeysStatusLocal {
 
-    public String execute(Short sid,Long did, String username, Long fkid, String modify_location, String status);
+//    public String execute(Short sid,Long did, String username, Long fkid, String modify_location, String status);
+    public String execute(Short sid,Long did, Long fkid, String modify_location, String status);
 }

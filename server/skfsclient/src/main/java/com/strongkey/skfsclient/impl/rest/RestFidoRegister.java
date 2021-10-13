@@ -39,7 +39,8 @@ public class RestFidoRegister {
                                 String credential1,
                                 String credential2,
                                 String username,
-                                String origin) throws Exception
+                                String origin,
+                                String crossOrigin) throws Exception
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -72,7 +73,8 @@ public class RestFidoRegister {
         // Build request payload
         prereg.setUsername(username);
         prereg.setDisplayName(username);
-        prereg.setOptions(Constants.JSON_ATTESTATION_DIRECT);
+//        prereg.setOptions(Constants.JSON_ATTESTATION_DIRECT);
+        prereg.setOptions(Json.createObjectBuilder().build());
         prereg.setExtensions(Constants.JSON_EMPTY);
 
         // Prepare for POST call
@@ -152,7 +154,11 @@ public class RestFidoRegister {
 //        System.out.println(origin);
 //        System.out.println(resJsonObj.toString());
 //        System.out.println("******************************");
-        JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, "packed", "Basic", true);
+        Boolean co = Boolean.FALSE;
+        if(crossOrigin.equalsIgnoreCase("true") || crossOrigin.equalsIgnoreCase("yes")){
+            co = Boolean.TRUE;
+        }
+        JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, "packed", "Basic", true, co);
         System.out.println("Simulator Response : ");
 
         StringReader regresreader = new StringReader(input.toString());

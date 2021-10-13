@@ -122,7 +122,7 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                     FidoKeys key = (FidoKeys) it.next();
                     if (key != null) {
                         //  Create a json object out of this key information
-                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
+                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
                         FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
                         skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
                         long modifytime = 0L;
@@ -137,20 +137,18 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
 
                         //  Generate a unique randomid for this key to be user
                         //  as a pointer for the key data base index.
-//                          String randomid = Base64.encodeBase64String(new SecureRandom().generateSeed(64));
-                        String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
-//                        userkeypointerMap.put(randomid, String.valueOf(key.getFidoKeysPK().getSid()) + "-" + String.valueOf(key.getFidoKeysPK().getFkid()));
-                        String time_to_live = SKFSCommon.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
-                        if (time_to_live == null || time_to_live.isEmpty()) {
-                            time_to_live = "300";
-                        }
+                        String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
+//                        String time_to_live = SKFSCommon.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
+//                        if (time_to_live == null || time_to_live.isEmpty()) {
+//                            time_to_live = "300";
+//                        }
 
                         String regSettings = key.getRegistrationSettings();
                         JsonObjectBuilder keyJsonBuilder = Json.createObjectBuilder()
-                                .add("randomid", randomid)
-                                .add("randomid_ttl_seconds", time_to_live)
+                                .add("keyid", randomid)
+//                                .add("randomid_ttl_seconds", time_to_live)
                                 .add("fidoProtocol", key.getFidoProtocol())
-                                .add("fidoVersion", key.getFidoVersion())
+//                                .add("fidoVersion", key.getFidoVersion())
                                 .add("credentialId", key.getKeyhandle())
                                 .add("createLocation", key.getCreateLocation())
                                 .add("createDate", key.getCreateDate().getTime())
@@ -171,20 +169,10 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                         }
                         keysArrayBuilder.add(keyJsonBuilder.build());
                     }
-
-                    //  Create a UserKeyPointers object that will bind the map
-                    //  and also track the creation time so that it can be flushed
-                    //  on a periodic basis by an independent job.
-//                    UserKeyPointers ukp = new UserKeyPointers(userkeypointerMap);
-                    //  Add it to the map in Common.
-//                    skceMaps.getMapObj().put(SKFSConstants.MAP_USER_KEY_POINTERS,username, ukp);
-//                    SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-MSG-0030"), "");
                 }
             }
-//            else {
-//                return skcero;
-//            }
         } catch (Exception ex) {
+            ex.printStackTrace();
             skcero.setErrorkey("FIDO-ERR-0001");
             skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + " Could not parse user keys; " + ex.getLocalizedMessage());
             SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", SKFSCommon.getMessageProperty("FIDO-ERR-0001"), " Could not parse user keys; " + ex.getLocalizedMessage());

@@ -1,0 +1,1185 @@
+//
+//** Menus Settings
+//
+
+$m-header-fixed-zindex: array-get($m-config-header, header, fixed, zindex);
+
+$m-config-menu-header: (
+	// desktop
+	desktop: (
+		// base parameters required to build the base menu
+		base: (
+			class: m-header-menu, // menu element class name
+			mode: desktop // menu mode: "desktop", "desktop-and-tablet" or "general"
+		),
+
+		// customize the menu
+		build: (
+			// menu nav
+			layout: (
+				// self
+				self: (
+					margin: 0 0 0 10px
+				),
+
+				// primary item
+				item: (
+					// menu itself
+					self: (
+						padding: 0px 2px
+					),
+
+					// primary menu link
+					link: (
+						// self
+						self: (
+							padding: 0px
+						),
+
+						// link icon
+						icon: (
+							width: 30px,
+							align: left,
+							font-size: 1.4rem,
+							padding: 0
+						),
+
+						// link bullet
+						bullet:	(
+							self: (
+								width: 20px,
+								align: left
+							),
+
+							dot: (
+								size: 4px,
+							),
+
+							line: (
+								width: 5px,
+								height: 1px,
+							)							
+						),
+
+						// link text
+						text: (
+							align: left,
+							font-size: 1rem,
+							font-weight: 400,
+							font-transform:	initial
+						),
+
+						// link badge
+						badge:	(
+							padding: 0px 0px 0px 5px,
+							align: right,	
+						),
+
+						// link arrow
+						arrow: (
+							width: 20px,
+							align: right,
+							font-size: 0.8rem
+						)
+					),
+
+					// submenu
+					submenu: (
+						// submenu itself
+						self: (
+							zindex: $m-header-fixed-zindex + 1, 
+							padding: (
+								classic: 20px 0px,
+								megamenu: 0px
+							),
+							border-radius: 4px,
+							width: (
+								// classic width
+								classic: 275px,
+								
+								// full width
+								full: (
+									offset: 20px
+								)
+							),
+							animation: (
+								offset: 10px
+							),
+						),
+
+						// submenu item
+						item: (
+							self: (
+								padding: 0px
+							),
+
+							link: (
+								// link self
+								self: (
+									padding: 9px 30px,
+									padding-x: 30px,
+									height: 40px
+								),
+
+								// link icon
+								icon: (
+									width: 33px,
+									font-size: 1.4rem,
+									align: left,
+									padding: 0 
+								),
+
+								// link bullet
+								bullet:	(
+									self: (
+										width: 20px,
+										align: left
+									),
+
+									dot: (
+										size: 4px
+									),
+
+									line: (
+										width: 9px,
+										height: 1px
+									)							
+								),	
+								
+								// link text
+								text: (
+									font-size: get-font-size(regular),
+									font-weight: 400,
+									font-transform:	initial
+								),
+
+								// link badge
+								badge:	(
+									padding: 0px 0px 0px 5px,
+									align: right,	
+								),
+
+								// link arrow
+								arrow: (
+									padding: 0px 0px 0px 10px,
+									width: 20px,
+									align: right,
+									font-size: 0.8rem
+								)
+							),
+
+							column: (
+								// column itself
+								self: (
+									padding: 0 0 20px 0
+								),
+
+								// heading
+								heading: (
+									// heading itself
+									self: (
+										padding: 30px 30px 10px 30px
+									),
+
+									// heading caption
+									caption: (										
+										// caption icon
+										icon: (
+											width: 30px,
+											align: left,
+											font-size: 1.35rem,
+											padding: 0
+										),
+
+										// caption text
+										text: (
+											font-size: 1.07rem,
+											font-weight: 500,
+											font-transform:	initial
+										),
+
+										// caption badge
+										badge:	(
+											padding: 0px 0px 0px 5px,
+											align: right	
+										)
+									)
+								)
+							)
+						),
+
+						// submenu arrow
+						arrow: (
+							// classic triangle arrow
+							classic: (
+								size: 10px, // arrow size
+								offset: (  
+									arrow: 5px,  // arrow offset
+									dropdown: -15px // dropdown offset
+								)
+							),
+
+							// smooth triangle arrow
+							smooth: (
+								offset: (  
+									arrow: 13px,  // arrow offset
+									dropdown: -10px, // dropdown offset
+									dropdown-root: 10px, // root dropdown offset
+								)
+							) 
+						)
+					)
+				)
+			),
+		
+			// skins
+			skins: (
+				// light skin
+				light: (
+					// primary item
+					item: (
+							// primary menu link
+						link: (
+							// link icon
+							icon: (
+								font-color:	(
+									default: #b8bece,
+									active: get-brand-color(),
+									hover: get-brand-color(),
+								)
+							),
+
+							// link bullet
+							bullet:	(
+								dot: (
+									bg-color: (
+										default: #b8bece,
+										active: get-brand-color(),
+										hover: get-brand-color(),
+									)
+								),
+
+								line: (
+									bg-color:	(
+										default: #b8bece,
+										active: get-brand-color(),
+										hover: get-brand-color(),
+									)
+								)							
+							),
+
+							// link text
+							text: (
+								font-color:	(
+									default: #676c7b,
+									active: get-brand-color(),
+									hover: get-brand-color()
+								)
+							),
+
+							// link arrow
+							arrow: (
+								font-color:	(
+									default: #b9c1d4,
+									active: get-brand-color(),
+									hover: get-brand-color(),
+								)
+							)
+						),
+
+						// submenu
+						submenu: (
+							// itself
+							self: (
+								bg-color: #ffffff,
+								box-shadow: get-shadow(light)
+							),
+
+							// 
+							item: (
+								link: (
+									// link bg color
+									self: (
+										bg-color: (
+											default: null,
+											active: $m-secondary-brand-hover-color,
+											hover: $m-secondary-brand-hover-color
+										)
+									),
+
+									// link icon
+									icon: (
+										font-color:	(
+											default: #b8bece,
+											active: get-brand-color(),
+											hover: get-brand-color(),
+										)
+									),
+
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: #b8bece,
+												active: get-brand-color(),
+												hover: get-brand-color(),
+											)
+										),
+										line: (
+											bg-color:	(
+												default: #b8bece,
+												active: get-brand-color(),
+												hover: get-brand-color(),
+											)
+										)							
+									),
+
+									// link text
+									text: (
+										font-color:	(
+											default: #676c7b,
+											active: get-brand-color(),
+											hover: get-brand-color()
+										)
+									),
+
+									// link arrow
+									arrow: (
+										font-color:	(
+											default: #b9c1d4,
+											active: get-brand-color(),
+											hover: get-brand-color(),
+										)
+									)
+								),
+								// mega menu column
+								column: (
+									// separator
+									separator: (
+										border: 1px solid #f6f7fa
+									),
+									// heading
+									heading: (
+										// heading caption
+										caption: (										
+											// caption icon
+											icon: (
+												font-color:	#5f6281
+											),
+
+											// caption text
+											text: (
+												font-color:	#5f6281
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				),
+
+				// dark skin
+				dark: (
+					// primary item
+					item: (
+						// primary menu link
+						link: (
+
+							// link icon
+							icon: (
+								font-color:	(
+									default: #676a8a,
+									active: #676a8a,
+									hover: #676a8a,
+								)
+							),
+							// link bullet
+							bullet:	(
+								dot: (
+									bg-color: (
+										default: #676a8a,
+										active: #676a8a,
+										hover: #676a8a,
+									)
+								),
+								line: (
+									bg-color:	(
+										default: #676a8a,
+										active: #676a8a,
+										hover: #676a8a,
+									)
+								)							
+							),
+							// link text
+							text: (
+								font-color:	(
+									default: #676a8a,
+									active: get-brand-color(),
+									hover: get-brand-color()
+								)
+							),
+							// link arrow
+							arrow: (
+								font-color:	(
+									default: #676a8a,
+									active: #676a8a,
+									hover: #676a8a,
+								)
+							)
+						),
+
+						// submenu
+						submenu: (
+							// submenu itself
+							self: (
+								bg-color: #2c2e3e,
+								box-shadow: get-shadow(dark)
+							),
+
+							// 
+							item: (
+								link: (
+									// link bg color
+									self: (
+										bg-color: (
+											default: null,
+											active: lighten(#2c2e3e, 5%),
+											hover: lighten(#2c2e3e, 5%)
+										)
+									),
+
+									// link icon
+									icon: (
+										font-color:	(
+											default: #676a8a,
+											active: #676a8a,
+											hover: #676a8a
+										)
+									),
+									// link bullet
+									bullet:	(
+										dot: (
+											bg-color: (
+												default: #404356,
+												active: #404356,
+												hover: #404356,
+											)
+										),
+										line: (
+											bg-color: (
+												default: #404356,
+												active: #404356,
+												hover: #404356,
+											)
+										)							
+									),	
+										
+									// link text
+									text: (
+										font-color:	(
+											default: #5f6281,
+											active: get-brand-color(),
+											hover: get-brand-color()
+										)
+									),
+									// link arrow
+									arrow: (
+										font-color:	(
+											default: #676a8a,
+											active: #676a8a,
+											hover: #676a8a,
+										)
+									)
+								),
+
+								// mega menu column
+								column: (
+									// separator
+									separator: (
+										border: 1px solid #323444
+									),
+
+									// heading
+									heading: (
+										// heading caption
+										caption: (										
+											// caption icon
+											icon: (
+												font-color:	#5f6281
+											),
+
+											// caption text
+											text: (
+												font-color:	#5f6281
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+		)
+	),
+
+	// tablet and mobile mode
+	tablet-and-mobile: (
+		// base parameters required to build the base menu
+		base:	(
+			class: m-aside-header-menu-mobile,
+			parent-class: m-aside-header-menu-mobile,
+			mode: tablet-and-mobile, //menu mode: "mobile", "tablet-and-mobile" or "general"
+		),	
+
+		// customize the menu
+		build: (
+			// layout
+			layout: (
+				// default mode
+				default: (
+					// menu panel itself
+					self: (
+						padding: 30px 0 30px 0
+					),
+
+					// root item
+					item: (
+						// item itself
+						self: (
+							margin:	0
+						),
+
+						// item link
+						link: (
+							// link itself
+							self: (
+								height: 44px,				
+								padding: 9px 30px
+							),					
+
+							// link icon
+							icon:	(
+								width: 35px,
+								align: left,
+								font-size: 1.4rem
+							),		
+
+							// link bullet
+							bullet:	(
+								self: (
+									width: 15px,
+								),
+
+								dot: (
+									size: 4px
+								),
+
+								line: (
+									width: 5px,
+									height: 1px
+								)							
+							),					
+
+							// link text
+							text:	(
+								font-size: 1.02rem,
+								font-weight: 400,
+								font-transform:	initial
+							),
+
+							// link arrow
+							arrow:	(
+								width: 20px,
+								align: right,
+								transition: all 0.3s ease,
+								font-size: 0.7rem
+							),
+
+							// link badge
+							badge:	(
+								padding: 0px 0px 0px 5px,
+								align: right
+							)
+						),
+
+						// item submenu
+						submenu: (
+							// submenu self
+							self: (
+								indent: 15px,
+								margin:	0
+							),
+
+							// submenu item
+							item: (
+								// item itself
+								self: (
+									margin:	0
+								),
+
+								// item link
+								link: (
+									// link itself
+									self: (
+										padding: 0 30px,
+										padding-x: 30px,
+										height: 40px
+									),					
+
+									// link icon
+									icon:	(
+										width: 35px,
+										align: left,
+										font-size: 1.35rem
+									),		
+
+									// link bullet
+									bullet:	(
+										self: (
+											width: 20px,
+										),
+										dot: (
+											size: 4px
+										),
+										line: (
+											width: 5px,
+											height: 1px
+										)							
+									),						
+
+									// link text
+									text:	(
+										font-size: 1rem,
+										font-weight: 400,
+										font-transform:	initial
+									),
+
+									// link arrow
+									arrow:	(
+										width: 20px,
+										align: right,
+										transition: all 0.3s ease,
+										font-size: 0.7rem
+									),
+
+									// link badge
+									badge:	(
+										padding: 0px 0px 0px 5px,
+										align: right,	
+									)
+								)
+							),
+
+							// submenu section
+							section: (
+								self: (
+									indent: 15px,
+									padding: 0 25px,
+									margin: 20px 0 0 0,
+									height: 40px
+								),
+
+								text: (
+									font-size: 0.8rem,
+									font-weight: 300,
+									font-transform: uppercase,
+									letter-spacing: 0.3px
+								),
+
+								icon: (
+									font-size: 1.1rem
+								)
+							),
+
+							// submenu separator
+							separator: (
+								margin: 15px 0
+							)
+						),
+
+						// arrow
+						arrow: (
+							// classic triangle arrow
+							classic: (
+								size: 10px, // arrow size
+								offset: (  
+									arrow: 10px,  // arrow offset
+									dropdown: -5px // dropdown offset
+								)
+							),
+
+							// smooth triangle arrow
+							smooth: (
+								top: 2px,
+								right: -2px,
+								margin: 0px -7px 0 0
+							) 
+						)
+					),
+
+					// root section
+					section: (
+						self: (
+							padding: 0 27px,
+							margin: 20px 0 0 0,
+							height: 40px
+						),
+
+						text: (
+							font-size: 0.83rem,
+							font-weight: 500,
+							font-transform: uppercase,
+							letter-spacing: 0.3px
+						),
+
+						icon: (					
+							font-size: 1.1rem
+						)
+					),
+
+					// root separator
+					separator: (
+						margin: 15px 0,
+					)
+				)		
+			),
+
+			// skins
+			skins: (
+				// dark skin
+				dark: (
+					// default mode
+					default: (
+						// menu panel itself
+						self: (
+							bg-color: array-get($m-config-aside, aside-left, skins, dark, self, bg-color)
+						),
+
+						// root item
+						item: (
+							// item itself
+							self: (
+								bg-color: (
+									default: null,
+									open: #292b3a,
+									expanded: #292b3a,
+									active: null,
+									hover: #292b3a
+								)
+							),
+
+							// item link
+							link: (
+								// link itself
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										expanded: null,
+										active: null,
+										hover: null
+									)
+								),					
+
+								// link icon
+								icon: (
+									font-color:	(
+										default: #525672,
+										open: #8c8ea4,
+										expanded: #8c8ea4,
+										active: get-brand-color(), 
+										hover: #8c8ea4
+									),
+								),		
+
+								// link bullet
+								bullet:	(
+									dot: (
+										bg-color: (
+											default: #525672,
+											open: #8c8ea4,
+											expanded: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4
+										)
+									),
+									line: (
+										bg-color: (
+											default: #525672,
+											open: #8c8ea4,
+											expanded: #8c8ea4,
+											active: get-brand-color(),
+											hover: #8c8ea4					
+										)
+									)							
+								),					
+
+								// link text
+								text:	(
+									font-color:	(
+										default: #868aa8,
+										open: #868aa8,
+										expanded: #868aa8,
+										active: get-brand-color(),
+										hover: #868aa8		
+									)	
+								),
+
+								// link arrow
+								arrow:	(
+									font-color:	(
+										default: #525672,
+										open: #8c8ea4,
+										expanded: #8c8ea4,
+										active: get-brand-color(),
+										hover: #8c8ea4,
+									)
+								)
+							),
+
+							// item submenu
+							submenu: (
+								// submenu self
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										active: null,
+										hover: null
+									)
+								),
+
+								// submenu item
+								item: (
+									// item itself
+									self: (
+										bg-color: (
+											default: null,
+											open: null,
+											active: null,
+											hover: null
+										)
+									),
+
+									// item link
+									link: (
+										// link itself
+										self: (
+											bg-color: (
+												default: null,
+												open: null,
+												active: null,
+												hover: null
+											)
+										),					
+
+										// link icon
+										icon:	(
+											font-color:	(
+												default: #525672,
+												open: #8c8ea4,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										),		
+
+										// link bullet
+										bullet:	(
+											dot: (
+												bg-color: (
+													default: #525672,
+													open: #8c8ea4,
+													active: get-brand-color(),
+													hover: #8c8ea4
+												)
+											),
+
+											line: (
+												bg-color: (
+													default: #525672,
+													open: #8c8ea4,
+													active: get-brand-color(),
+													hover: #8c8ea4
+												)
+											)							
+										),						
+
+										// link text
+										text: (
+											font-color:	(
+												default: #686c89,
+												open: #868aa8,
+												active: get-brand-color(),
+												hover: #868aa8
+											)	
+										),
+
+										// link arrow
+										arrow:	(
+											font-color:	(
+												default: #525672,
+												open: #8c8ea4,
+												active: get-brand-color(),
+												hover: #8c8ea4
+											)
+										)
+									)
+								),
+
+								// submenu section
+								section: (
+									text: (
+										font-color: #464b66
+									),
+									icon: (
+										font-color: #424554
+									)
+								),
+
+								// submenu separator
+								separator: (
+									border: 1px solid rgba(#ffffff, 0.07)
+								)
+							)
+						),
+
+						// root section
+						section: (
+							text: (
+								font-color: #464b66
+							),
+							icon: (
+								font-color: #424554
+							)
+						),
+
+						// root separator
+						separator: (
+							border: 1px solid rgba(#ffffff, 0.07)
+						)
+					)
+				),
+					
+				// light skin
+				light: (
+					// default mode
+					default: (
+						// menu panel itself
+						self: (
+							bg-color: #ffffff
+						),
+
+						// root item
+						item: (
+							// item itself
+							self: (
+								bg-color: (
+									default: null,
+									open: null,
+									expanded: null,
+									active: null,
+									hover: null
+								)
+							),
+
+							// item link
+							link: (
+								// link itself
+								self: (
+									bg-color: (
+										default: null,
+										open: #f8f8fb,
+										expanded: #f8f8fb,
+										active: #f8f8fb,
+										hover: #f8f8fb
+									)
+								),					
+
+								// link icon
+								icon: (
+									font-color:	(
+										default: lighten(#8c8ea4, 10%),
+										open: lighten(#8c8ea4, 5%),
+										expanded: lighten(#8c8ea4, 5%),
+										active: get-brand-color(), 
+										hover: lighten(#8c8ea4, 5%)
+									),
+								),		
+
+								// link bullet
+								bullet:	(
+									dot: (
+										bg-color: (
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											expanded: lighten(#8c8ea4, 5%),
+											active: get-brand-color(),
+											hover: lighten(#8c8ea4, 5%)
+										)
+									),
+									line: (
+										bg-color: (
+											default: lighten(#8c8ea4, 10%),
+											open: lighten(#8c8ea4, 5%),
+											expanded: lighten(#8c8ea4, 5%),
+											active: get-brand-color(),
+											hover: lighten(#8c8ea4, 5%)					
+										)
+									)							
+								),					
+
+								// link text
+								text:	(
+									font-color:	(
+										default: darken(#868aa8, 15%),
+										open: darken(#868aa8, 20%),
+										expanded: darken(#868aa8, 20%),
+										active: get-brand-color(),
+										hover: darken(#868aa8, 20%)	
+									)	
+								),
+
+								// link arrow
+								arrow:	(
+									font-color:	(
+										default: lighten(#8c8ea4, 10%),
+										open: lighten(#8c8ea4, 5%),
+										expanded: lighten(#8c8ea4, 5%),
+										active: get-brand-color(),
+										hover: lighten(#8c8ea4, 5%)
+									)
+								)
+							),
+
+							// item submenu
+							submenu: (
+								// submenu self
+								self: (
+									bg-color: (
+										default: null,
+										open: null,
+										active: null,
+										hover: null
+									)
+								),
+
+								// submenu item
+								item: (
+									// item itself
+									self: (
+										bg-color: (
+											default: null,
+											open: null,
+											expanded: null,
+											active: null,
+											hover: null
+										)
+									),
+
+									// item link
+									link: (
+										// link itself
+										self: (
+											bg-color: (
+												default: null,
+												open: #f8f8fb,
+												expanded: #f8f8fb,
+												active: #f8f8fb,
+												hover: #f8f8fb
+											)
+										),					
+
+										// link icon
+										icon:	(
+											font-color:	(
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												active: get-brand-color(), 
+												hover: lighten(#8c8ea4, 5%)
+											)
+										),		
+
+										// link bullet
+										bullet:	(
+											dot: (
+												bg-color: (
+													default: lighten(#8c8ea4, 10%),
+													open: lighten(#8c8ea4, 5%),
+													expanded: lighten(#8c8ea4, 5%),
+													active: get-brand-color(),
+													hover: lighten(#8c8ea4, 5%)
+												)
+											),
+
+											line: (
+												bg-color: (
+													default: lighten(#8c8ea4, 10%),
+													open: lighten(#8c8ea4, 5%),
+													expanded: lighten(#8c8ea4, 5%),
+													active: get-brand-color(),
+													hover: lighten(#8c8ea4, 5%)
+												)
+											)							
+										),						
+
+										// link text
+										text: (
+											font-color:	(
+												default: darken(#868aa8, 5%),
+												open: darken(#868aa8, 10%),
+												active: get-brand-color(),
+												hover: darken(#868aa8, 10%)
+											)	
+										),
+
+										// link arrow
+										arrow:	(
+											font-color:	(
+												default: lighten(#8c8ea4, 10%),
+												open: lighten(#8c8ea4, 5%),
+												active: get-brand-color(),
+												hover: lighten(#8c8ea4, 5%)
+											)
+										)
+									)
+								),
+
+								// submenu section
+								section: (
+									text: (
+										font-color: lighten(#868aa8, 10%)
+									),
+									icon: (
+										font-color: lighten(#868aa8, 12%)
+									)
+								),
+
+								// submenu separator
+								separator: (
+									border: 1px solid rgba(#000000, 0.07)
+								)
+							)
+						),
+
+						// root section
+						section: (
+							text: (
+								font-color: lighten(#868aa8, 10%)
+							),
+							icon: (
+								font-color: lighten(#868aa8, 12%)
+							)
+						),
+
+						// root separator
+						separator: (
+							border: 1px solid rgba(#000000, 0.07)
+						)
+					)
+				)
+			)			
+		)
+	)	
+);

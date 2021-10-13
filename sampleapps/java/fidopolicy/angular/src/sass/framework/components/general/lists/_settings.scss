@@ -1,0 +1,82 @@
+//
+//** Settings List
+//
+
+//== Component Base
+@mixin m-build-component--list-settings-base($layout) {
+    .m-list-settings {
+        .m-list-settings__group {
+            margin: array-get($layout, group, self, margin); 
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .m-list-settings__heading {
+                margin: array-get($layout, group, heading, margin); 
+                font-weight: get-font-weight(boldest);   
+                font-size: get-font-size(regular);
+                text-transform: uppercase;
+            }
+
+            .m-list-settings__item {
+                display: table;
+                table-layout: fixed;
+                width: 100%;            
+                padding: array-get($layout, group, item, self, padding);  
+
+                .m-list-settings__item-label {
+                    display: table-cell;
+                    text-align: left;
+                    vertical-align: middle;
+                    padding: array-get($layout, group, item, caption, padding);
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(bold);
+                }
+
+                .m-list-settings__item-control {                
+                    display: table-cell;
+                    text-align: right;
+                    vertical-align: middle;
+                    padding: array-get($layout, group, item, control, padding);
+
+                    .m-switch {
+                        > label {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }        
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--list-settings-skin($layout, $skin) {
+
+    @include component-skin(m-list-settings, $skin) {
+
+        .m-list-settings__group {
+            color: get-color($skin, regular, '+');
+        }
+
+        .m-list-settings__item {
+            .m-list-settings__item-caption {
+                color: get-color($skin, regular, '-');
+            }
+        }
+    } 
+}
+
+//== Build Component Base
+@include m-build-component--list-settings-base( array-get($m--lists, settings ) );
+
+//== Build Component - Light Skin
+@include m-build-component--list-settings-skin( array-get($m--lists, settings), light );
+
+//== Build Component - Dark Skin
+@include m-build-component--list-settings-skin( array-get($m--lists, settings), dark );

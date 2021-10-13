@@ -51,8 +51,8 @@ RUN yum -y install wget unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-
     wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/5.2020.7/payara-5.2020.7.zip -q &&\
     wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.6/mariadb-java-client-2.2.6.jar -q &&\
     wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/j/jemalloc-3.6.0-1.el7.x86_64.rpm -q &&\
-    wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.2-dist.tgz -q &&\
-    tar xzf fido2server-v4.4.2-dist.tgz
+    wget https://github.com/StrongKey/fido2/raw/master/fido2server-v4.4.3-dist.tgz -q &&\
+    tar xzf fido2server-v4.4.3-dist.tgz
 
 # Create necessary directories
 RUN mkdir -p ${STRONGKEY_HOME}/certs ${STRONGKEY_HOME}/Desktop ${STRONGKEY_HOME}/dbdumps ${STRONGKEY_HOME}/lib ${STRONGKEY_HOME}/bin ${STRONGKEY_HOME}/appliance/etc ${STRONGKEY_HOME}/crypto/etc ${SKFS_HOME}/etc ${SKFS_HOME}/keystores ${STRONGKEY_HOME}/skce/etc

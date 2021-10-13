@@ -30,11 +30,8 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -43,13 +40,13 @@ import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 import org.bouncycastle.openssl.PEMParser;
-import javax.ejb.Stateless;
 
 
 /**
@@ -148,12 +145,13 @@ public class JWTVerify implements JWTVerifyLocal {
             
             //Check validity of all entities in payload 
             JsonObject payloadJson = SKFSCommon.getJsonObjectFromString(plaintext);
-            if(plaintext.contains("exp")){
-                String expDateString = payloadJson.getString("exp");
-                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, JWTVerify.class.getName(), "expDateString",
-                        SKFSCommon.getMessageProperty("FIDO-MSG-6002"),"expDateString: "+expDateString);
-                Date expDate=new SimpleDateFormat(pattern).parse(expDateString);
+            if(payloadJson.containsKey("exp")){
+                Long expDateString = payloadJson.getJsonNumber("exp").longValue();
+//                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
+//                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, JWTVerify.class.getName(), "expDateString",
+//                        SKFSCommon.getMessageProperty("FIDO-MSG-6002"),"expDateString: "+expDateString);
+//                Date expDate=new SimpleDateFormat(pattern).parse(expDateString);
+                Date expDate=new Date(expDateString);
                 Date currentDate = new Date();
                 SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, JWTVerify.class.getName(), "expDate",
                         SKFSCommon.getMessageProperty("FIDO-MSG-6002"),"expDate: "+expDate);
@@ -166,8 +164,8 @@ public class JWTVerify implements JWTVerifyLocal {
                         SKFSCommon.getMessageProperty("FIDO-MSG-6002"),"before jwt expiration");
                 }
             }
-            if(plaintext.contains("uname")){
-                String uname = payloadJson.getString("uname");
+            if(payloadJson.containsKey("sub")){
+                String uname = payloadJson.getString("sub");
                 if(!uname.equals(username)){
                     SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, JWTVerify.class.getName(), "payload uname does not match username",
                         SKFSCommon.getMessageProperty("FIDO-MSG-6002"),"payload uname does not match: "+uname);
@@ -216,7 +214,7 @@ public class JWTVerify implements JWTVerifyLocal {
             }
             return true;
         } catch (IOException | NoSuchAlgorithmException | InvalidAlgorithmParameterException |
-                SignatureException | CertificateException | InterruptedException | CertPathValidatorException | ParseException  ex) {
+                SignatureException | CertificateException | InterruptedException | CertPathValidatorException  ex) {
             Logger.getLogger(JWTVerify.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;

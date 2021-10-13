@@ -1,0 +1,90 @@
+//
+//** List Widget 16 Component
+//
+
+//== Component Base
+@mixin m-build-component--widget6-base() {
+    // widget6 
+    .m-widget6 { 
+        .m-widget6__head {
+            .m-widget6__action {
+                margin-bottom: 2.14rem;
+            }
+
+            .m-widget6__item {
+                display: table;
+                width: 100%;
+                margin-bottom: 1.07rem;
+                font-size: get-font-size(regular);
+                font-weight: get-font-weight(boldest);
+
+                .m-widget6__caption {
+                    display: table-cell;
+                    width: 33%;
+                    padding-left: 0;
+                    padding-right: 0;
+
+                    &:last-child {
+                        padding-right: 0;
+                        padding-left: 0;  
+                    }
+                }
+            }
+        } 
+
+        .m-widget6__body {            
+            .m-widget6__item {
+                display: table;
+                width: 100%;
+                padding-top: 1.07rem;
+                padding-bottom: 1.07rem;                 
+
+                .m-widget6__text {                    
+                    display: table-cell;
+                    width: 33%;
+                    padding-left: 0;
+                    padding-right: 0;
+                    vertical-align: top;
+                    font-size: get-font-size(regular);
+                    font-weight: get-font-weight(regular); 
+                }               
+            }
+        } 
+
+        .m-widget6__foot {
+            .m-widget6__action {
+                text-align: right;
+                margin-top: 1rem;
+            }
+        }
+    }   
+}                                     
+       
+//== Component Skin
+@mixin m-build-component--widget6-skin() {
+    $skin: get-default-skin();  
+     // widget6 
+    .m-widget6 {                     
+        .m-widget6__item {
+            .m-widget6__text {                    
+                color: get-color($skin, regular, '---');  
+            }
+
+            .m-widget6__caption {                    
+                color: darken(get-state-color(metal, base), 10%);
+            }                 
+
+            border-bottom: 0.07rem dashed get-color($skin, panel);
+
+            &:last-child {
+                border-bottom: 0;
+            }  
+        }          
+    }     
+}
+
+//== Build Component Base
+@include m-build-component--widget6-base();
+
+//== Build Component - Light Skin
+@include m-build-component--widget6-skin();

@@ -165,17 +165,17 @@ public class u2fActivateBean_v1 implements u2fActivateBeanLocal_v1, u2fActivateB
         }
 
             Short sid_to_be_activated = null;
-            int userfkidhyphen ;
+//            int userfkidhyphen ;
 //            String fidouser;
             Long fkid_to_be_activated = null;
             try {
                 String[] mapvaluesplit = randomid.split("-", 3);
                 sid_to_be_activated = Short.parseShort(mapvaluesplit[0]);
                 did = mapvaluesplit[1];
-                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
+//                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
 
 //                fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
-                fkid_to_be_activated = Long.parseLong(mapvaluesplit[2].substring(userfkidhyphen + 1));
+                fkid_to_be_activated = Long.parseLong(mapvaluesplit[2]);
             } catch (Exception ex) {
                     skcero.setErrorkey("FIDO-ERR-0029");
                             skcero.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0029") + "Invalid randomid= " + randomid);
@@ -204,7 +204,7 @@ public class u2fActivateBean_v1 implements u2fActivateBeanLocal_v1, u2fActivateB
                             SKFSCommon.getMessageProperty("FIDO-MSG-5005"), "");
                     try {
                         //  if the fkid_to_be_activated is valid, delete the entry from the database
-                        String jparesult = updatekeystatusbean.execute(sid_to_be_activated, Long.parseLong(did), username, fkid_to_be_activated, modifyloc, applianceConstants.ACTIVE_STATUS);
+                        String jparesult = updatekeystatusbean.execute(sid_to_be_activated, Long.parseLong(did), fkid_to_be_activated, modifyloc, applianceConstants.ACTIVE_STATUS);
                         JsonObject jo;
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();

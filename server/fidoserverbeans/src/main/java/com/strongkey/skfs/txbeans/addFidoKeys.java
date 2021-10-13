@@ -284,7 +284,6 @@ public class addFidoKeys implements addFidoKeysLocal {
         }
 
         Short sid = applianceCommon.getServerId().shortValue();
-//        long fkid = getregkeysejb.nextfkid(sid, did, username);
         long fkid = seqgenejb.nextFIDOKeyID(did);
         //Persist entry after successfully validating all inputs
 

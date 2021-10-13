@@ -1,0 +1,90 @@
+//
+//** Tooltip Customization
+//
+
+//==== Component Mixins ====//
+
+//== Component Base
+@mixin m-build-component--bootstrap-tooltip-base() {
+    .m-tooltip.tooltip {
+        .tooltip-inner {
+        	padding: 7px 20px 7px 20px;
+        	font-size: get-font-size(regular); 
+
+        	@include rounded {
+        		@include border-radius(30px);
+        	}
+        }
+
+        &.m-tooltop--auto-width {
+        	.tooltip-inner {
+        		white-space:nowrap;
+  				max-width:none;
+        	}
+        }
+
+        &.show {
+        	@include opacity(1);
+        }
+
+        &.bs-tooltip-left .arrow::before, 
+    	&.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    		left: -1px;
+    	}
+
+    	&.bs-tooltip-right .arrow::before, 
+    	&.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    		right: -1px;
+    	}
+
+        &.m-tooltip--portlet {
+            @include opacity(1);
+        }
+    }
+}
+
+//== Component Skin
+@mixin m-build-component--bootstrap-tooltip-skin($skin) {    
+    @include component-skin(m-tooltip, $skin) { 
+    	.tooltip-inner {
+    		color: get-color($skin, regular, '-');	
+	        background: get-color($skin, box, '-');	
+	        @include shadow(get-shadow($skin, '-'));
+	    }
+
+	    &.bs-tooltip-top {
+		    .arrow::before {
+		      	border-top-color: get-color($skin, box, '-')
+		    }
+		}
+		 
+		&.bs-tooltip-right {
+		    .arrow::before {
+		    	border-right-color: get-color($skin, box, '-')
+		    }
+		}
+
+		&.bs-tooltip-bottom {
+		    .arrow::before {
+		      	border-bottom-color: get-color($skin, box, '-')
+		    }
+		}
+
+		&.bs-tooltip-left {
+		    .arrow::before {
+		      	border-left-color: get-color($skin, box, '-')
+		    }
+		}
+    }
+}
+
+//==== Generate Component ====//
+
+//== Component Base
+@include m-build-component--bootstrap-tooltip-base();
+
+//== Component Skin - Light
+@include m-build-component--bootstrap-tooltip-skin(light);
+
+//== Component Skin - Dark
+@include m-build-component--bootstrap-tooltip-skin(dark);

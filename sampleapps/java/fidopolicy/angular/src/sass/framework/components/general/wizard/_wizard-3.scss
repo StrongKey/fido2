@@ -1,0 +1,297 @@
+//
+//** Wizard 3 Component
+//
+
+//== Component Base
+@mixin m-build-component--wizard-3-base() {
+	.m-wizard.m-wizard--3 {
+		padding: 0;
+
+		//== Default Head
+		.m-wizard__head {
+			padding: 5rem 4rem;
+
+			//== Progress
+			.m-wizard__progress {
+				margin: 0 0 3rem 0;			
+				height: 0.71rem;	 
+
+				.progress { 
+					@include rounded {
+						@include border-radius(0.71rem);
+					}
+					height: 0.71rem;	
+					position: relative;					 	
+
+					.progress-bar {
+						position: absolute;	
+						@include rounded {
+							@include border-radius(0.71rem);
+						}
+						height: 0.71rem;						 
+					}
+				}			
+			}
+			//== Default Nav
+			.m-wizard__nav {
+				.m-wizard__steps {									 
+					.m-wizard__step {						 
+						margin-bottom: 2rem;
+
+						.m-wizard__step-info {
+							display: table;							 							 						 
+
+							.m-wizard__step-number {
+								display: table-cell;														 
+								vertical-align: middle;	
+								text-decoration: none;								 
+
+								> span {
+									width: 4rem;
+									height: 4rem;
+									@include border-radius(100%);							
+									justify-content: center;
+									align-items: center; 
+									display: flex;
+
+									> span {
+										font-size: 1.7rem; 
+										font-weight: get-font-weight(bolder); 
+									}
+								}
+							}		
+							
+
+							.m-wizard__step-line {
+								display: table-cell;
+								vertical-align: middle;							
+
+								> span {
+									margin-left: 0.8rem;
+									margin-right: 0.7rem;
+									width: 2.6rem;
+									height: 0.32rem;								 
+									display: block;
+									@include border-radius(0.6rem);
+								}
+							}
+
+							.m-wizard__step-label {
+								display: table-cell;							 
+								vertical-align: middle;
+								font-weight: get-font-weight(bolder);							 
+							}
+						}					
+					}
+				}
+			}	
+		}
+
+		.m-wizard__form { 
+			padding: 5rem 4rem 3rem 4rem;
+			border-left: 0.07rem solid #EBEDF2;
+
+			.m-wizard__form-step1 {
+				.m-form__section {
+					.form-group {			
+						padding-bottom: 2rem;
+
+						&:last-child {
+							padding-bottom: 0;
+						} 
+					}
+				}				
+			}
+
+			.m-form__actions {
+				padding-bottom: 1rem;
+			}			 
+		}		
+
+		.m-portlet__foot {
+			margin: 0 -4rem;
+
+			.m-form__actions {
+				padding: 3rem 4rem 0 4rem;
+			}
+		}
+	}
+
+	@include minimal-desktop-and-below {
+		.m-wizard.m-wizard--3 {
+			padding: 0;
+
+			.m-wizard__head{
+				padding: 2rem 2rem;
+			}
+
+			.m-wizard__nav {						 				
+				padding-bottom: 2rem; 
+				display: table;	
+				width: auto;						
+				margin: 2rem auto 0 auto;								  
+						
+				.m-wizard__steps {					 				
+					.m-wizard__step {
+						margin-bottom: 2rem;	
+
+						&:last-child {							 						 
+							margin-bottom: 0;							 							 
+						}				
+					}						
+				}				 						 	
+			}
+
+			.m-wizard__form { 
+				padding: 2rem 2rem;	
+				border-top: 0.07rem solid #EBEDF2;
+
+				.m-wizard__form-step {
+					padding-top: 1rem;
+				} 	
+			}
+
+			.m-portlet__foot {
+				margin: 0 -2rem;
+
+				.m-form__actions {
+					padding: 2rem 2rem 0 2rem;
+				}
+			}
+		}	
+	}	
+}
+
+//== Component Skin
+@mixin m-build-component--wizard-3-skin() {
+	$skin: get-default-skin();
+
+	.m-wizard.m-wizard--3 {
+		.m-wizard__head {
+			.m-wizard__nav {
+				.m-wizard__steps {
+					.m-wizard__step {
+						.m-wizard__step-info {
+							.m-wizard__step-label {
+								color: get-color($skin, regular, '----');
+							}
+
+							a.m-wizard__step-number {
+								> span {
+									background-color: get-color($skin, panel, '+');
+
+									> span {
+										color: white;
+									}									
+								}
+							}
+
+							a.m-wizard__step-number:hover {
+								> span {
+									background-color: get-color($skin, panel, '+++');
+
+									> span {
+										color: white;
+									}
+								}
+							}	
+						} 
+
+						.m-wizard__step-line {
+							> span {
+								background-color: get-color($skin, panel, '+');
+							}
+						}						 
+					} 	
+				}
+			}	 
+		}		 
+	}	
+}
+
+//== Component States
+@mixin m-build-component--wizard-3-states() {
+	.m-wizard.m-wizard--3 {
+		@each $name, $color in $m--state-colors {
+			
+			//== Wizard states
+			&.m-wizard--#{$name} {
+				.m-wizard__head {
+					//== Progress
+					.m-wizard__progress {
+						.progress {
+							.progress-bar {
+								background-color: array-get($color, base);							 
+							}						
+						}	
+					}
+					.m-wizard__nav {						
+						//== Steps
+						.m-wizard__steps {
+							.m-wizard__step {
+								//== Done state								
+								&.m-wizard__step--done {
+									.m-wizard__step-info {
+										a.m-wizard__step-number {										 
+											> span {
+												background-color: array-get($color, base);
+
+												> span {
+													color: array-get($color, inverse);
+												}											 
+											}										 	
+										}
+
+										a.m-wizard__step-number:hover {
+											> span {
+												background-color: darken(array-get($color, base), 5%);
+
+												> span {
+													color: array-get($color, inverse);
+												}
+											}
+										}								 
+									}
+								}
+
+								//== current state								
+								&.m-wizard__step--current {
+									.m-wizard__step-info {
+										a.m-wizard__step-number {										 
+											> span {
+												background-color: lighten(array-get($color, base), 20%);
+
+												> span {
+													color: array-get($color, inverse);
+												}											 
+											}										 	
+										}
+
+										a.m-wizard__step-number:hover {
+											> span {
+												background-color: darken(array-get($color, base), 10%);
+
+												> span {
+													color: array-get($color, inverse);
+												}
+											}
+										}								 
+									}
+								}
+							} 	
+						}
+					}	 
+				}	 	  			  		      
+			}
+		}		
+	}
+}
+
+//== Build Component Base
+@include m-build-component--wizard-3-base();
+
+//== Build Component Skin
+@include m-build-component--wizard-3-skin();
+
+//== Build Component States
+@include m-build-component--wizard-3-states();

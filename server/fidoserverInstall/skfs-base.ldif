@@ -1,0 +1,40 @@
+dn: dc=strongauth,dc=com
+objectClass: domain
+objectClass: top
+dc: strongauth
+
+dn: ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for Applications
+ou: Applications
+
+dn: ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for StrongAuth Applications
+ou: StrongAuth
+
+dn: ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for the SKCE Application
+ou: SKCE
+
+dn: ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for version 2.0 of the SKCE Application
+ou: v2
+
+dn: ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for users of version 2.0 of the SKCE Application
+ou: users
+
+dn: ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+objectClass: organizationalUnit
+objectClass: top
+description: OU node for groups of version 2.0 of the SKCE Application
+ou: groups
