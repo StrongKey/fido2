@@ -68,10 +68,10 @@ public class WebauthnService {
             String displayName = getValueFromInput(Constants.RP_JSON_KEY_DISPLAYNAME, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
 //            String prereg = SKFSClient.preregister(username, displayName, policy);
-            
+            String did = Integer.toString(Common.getDid(policy));
 
             //Verify User does not already exist
-            if (!doesAccountExists(username)) {
+            if (!doesAccountExists(did+"-"+username)) {
                 String prereg = SKFSClient.preregister(username, displayName, policy);
                 Common.getRPIDFromPreRegResponse(prereg, policy);
                 return generateResponse(Response.Status.OK, prereg);
@@ -100,14 +100,16 @@ public class WebauthnService {
     public Response register(JsonObject input) {
         try {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
-        
-            if (!doesAccountExists(username)) {
-                String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
+            String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
+            String did = Integer.toString(Common.getDid(policy));
+            if (!doesAccountExists(did+"-"+username)) {
+                
                 String regresponse = SKFSClient.register(username, policy, getOrigin(), input);
                 System.out.println("Received from FIDO Server: " + regresponse);
                 
                 //On success, add user to database
-                userdatabase.addUser(username);
+                
+                userdatabase.addUser(did+"-"+username);
                 
                 return generateResponse(Response.Status.OK, getResponseFromSKFSResponse(regresponse));
             } else {
@@ -147,11 +149,11 @@ public class WebauthnService {
             String displayName = getValueFromInput(Constants.RP_JSON_KEY_DISPLAYNAME, input);
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
 
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);
 
@@ -192,11 +194,11 @@ public class WebauthnService {
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
 
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);
 
@@ -205,7 +207,7 @@ public class WebauthnService {
                 return generateResponse(Response.Status.FORBIDDEN, POCLogger.getMessageProperty("POC-WS-ERR-1003"));
             }
 
-            if (doesAccountExists(username)) {
+            if (doesAccountExists(did+"-"+username)) {
                 String regresponse = SKFSClient.register(username, policy, getOrigin(), input);
                 return generateResponse(Response.Status.OK, getResponseFromSKFSResponse(regresponse));
             } else {
@@ -241,11 +243,12 @@ public class WebauthnService {
             // Verify user exists
             
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
+            String did = Integer.toString(Common.getDid(policy));
             String preauth = SKFSClient.preauthenticate(username, policy);
             Common.getRPIDFromPreAuthenticateResponse(preauth, policy);
             int keysize = Common.checkNumberOfKeysInPreAuthResponse(preauth);
             if(keysize == 0){
-                if (!userdatabase.doesUserExist(username)) {
+                if (!userdatabase.doesUserExist(did+"-"+username)) {
                 POCLogger.logp(Level.SEVERE, CLASSNAME, "preauthenticate", "POC-WS-ERR-1002", username);
                 return generateResponse(Response.Status.NOT_FOUND, POCLogger.getMessageProperty("POC-WS-ERR-1002"));
             }
@@ -274,8 +277,8 @@ public class WebauthnService {
         try {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
-
-            if (doesAccountExists(username)) {
+            String did = Integer.toString(Common.getDid(policy));
+            if (doesAccountExists(did+"-"+username)) {
                 String authresponse = SKFSClient.authenticate(username, policy, getOrigin(), input, request.getHeader("User-Agent"));
                 return generateAuthenticateResponse(Response.Status.OK, getResponseFromSKFSResponse(authresponse), getJWTFromSKFSResponse(authresponse));
             } else {
@@ -306,11 +309,11 @@ public class WebauthnService {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);
             
@@ -357,11 +360,11 @@ public class WebauthnService {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);       
                     
@@ -371,7 +374,7 @@ public class WebauthnService {
                 return generateResponse(Response.Status.FORBIDDEN, POCLogger.getMessageProperty("POC-WS-ERR-1003"));
             }
             
-            userdatabase.deleteUser(username);
+            userdatabase.deleteUser(did+"-"+username);
             String SKFSResponse = SKFSClient.getKeys(username, policy);
             JsonArray keyIds = getKeyIdsFromSKFSResponse(SKFSResponse);
             
@@ -408,11 +411,11 @@ public class WebauthnService {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);
 
@@ -443,11 +446,11 @@ public class WebauthnService {
             String username = getValueFromInput(Constants.RP_JSON_KEY_USERNAME, input);
             String policy = getValueFromInput(Constants.RP_JSON_KEY_POLICY, input);
             String jwt = getValueFromInput(Constants.RP_JSON_KEY_JWT, input);
-            String did = Integer.toString(SKFSClient.getDid(policy));
+            String did = Integer.toString(Common.getDid(policy));
             String jwtPassword = Configurations.getConfigurationProperty("poc.cfg.property.jwtpassword");
             String jwtTrustStoreLocation = Configurations.getConfigurationProperty("poc.cfg.property.jwttruststorelocation");
             String defaultRpid = Configurations.getConfigurationProperty("poc.cfg.property.rpid");
-            String rpid = Common.didRPID.getOrDefault(SKFSClient.getDid(policy), defaultRpid);
+            String rpid = Common.didRPID.getOrDefault(Common.getDid(policy), defaultRpid);
             
             Boolean isJwtVerified = v.verify( did, jwt, username, request.getHeader("User-Agent"), request.getLocalAddr(), jwtPassword, jwtTrustStoreLocation, rpid);
             

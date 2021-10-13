@@ -6,7 +6,6 @@
 */
 package com.strongkey.utilities;
 
-import com.strongkey.poc.SKFSClient;
 import java.io.StringReader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -40,7 +39,7 @@ public class Common {
         JsonObject RP = preRegResponse.getJsonObject("rp");
         String id = RP.getString("id");
 //        System.out.println("RP ID: " + id);
-        didRPID.putIfAbsent(SKFSClient.getDid(policy), id);
+        didRPID.putIfAbsent(getDid(policy), id);
     }
 
     public static void getRPIDFromPreAuthenticateResponse(String responseString, String policy) {
@@ -49,7 +48,7 @@ public class Common {
         JsonObject preAuthResponse = data.getJsonObject("Response");
         String id = preAuthResponse.getString("rpId");
 //        System.out.println("RP ID: " + id);
-        didRPID.putIfAbsent(SKFSClient.getDid(policy), id);
+        didRPID.putIfAbsent(getDid(policy), id);
     }
     
     public static int checkNumberOfKeysInPreAuthResponse(String responseString) {
@@ -61,5 +60,40 @@ public class Common {
         System.out.println("Credentials Size: " + credentials.size());
 
         return credentials.size();
+    }
+    
+    public static int getDid(String policy)
+    {
+        int SKFSDID=0;
+        switch (policy)
+            {
+               case Constants.RESTRICTED_FIPS_POLICY:
+                   SKFSDID = 8;
+                   break;
+                case Constants.RESTRICTED_APPLE_POLICY:
+                    SKFSDID = 7;
+                    break;
+                case Constants.RESTRICTED_TPM_POLICY:
+                    SKFSDID = 5;
+                    break;
+                case Constants.RESTRICTED_ANDROID_KEY_POLICY:
+                    SKFSDID = 6;
+                    break;
+                case Constants.STRICT_ANDROID_SAFETYNET_POLICY:
+                    SKFSDID = 4;
+                    break;
+                case Constants.STRICT_POLICY:
+                    SKFSDID = 3;
+                    break;
+                case Constants.MODERATE_POLICY:
+                    SKFSDID = 2;
+                    break;
+                case Constants.MINIMAL_POLICY:
+                    SKFSDID = 1;
+                    break;
+                default:
+                    break;
+         }
+        return SKFSDID;
     }
 }

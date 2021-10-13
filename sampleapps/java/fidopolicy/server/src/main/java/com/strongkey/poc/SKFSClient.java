@@ -97,48 +97,15 @@ public class SKFSClient {
             return callSKFSSoapApi(
                 payloadBuilder,
                 "preregister",
-                getDid(policy));
+                Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                 APIURI + Constants.REST_SUFFIX + Constants.PREREGISTER_ENDPOINT,
-                payloadBuilder, getDid(policy), SVCUSERNAME, SVCPASSWORD);
+                payloadBuilder, Common.getDid(policy), SVCUSERNAME, SVCPASSWORD);
         }
     }
 
-    public static int getDid(String policy)
-    {
-        int SKFSDID=0;
-        switch (policy)
-            {
-               case Constants.RESTRICTED_FIPS_POLICY:
-                   SKFSDID = 8;
-                   break;
-                case Constants.RESTRICTED_APPLE_POLICY:
-                    SKFSDID = 7;
-                    break;
-                case Constants.RESTRICTED_TPM_POLICY:
-                    SKFSDID = 5;
-                    break;
-                case Constants.RESTRICTED_ANDROID_KEY_POLICY:
-                    SKFSDID = 6;
-                    break;
-                case Constants.STRICT_ANDROID_SAFETYNET_POLICY:
-                    SKFSDID = 4;
-                    break;
-                case Constants.STRICT_POLICY:
-                    SKFSDID = 3;
-                    break;
-                case Constants.MODERATE_POLICY:
-                    SKFSDID = 2;
-                    break;
-                case Constants.MINIMAL_POLICY:
-                    SKFSDID = 1;
-                    break;
-                default:
-                    break;
-         }
-        return SKFSDID;
-    }
+    
 
     // Set authenticator registration preferences from properties.
     private static JsonObject getRegOptions(String policy){
@@ -302,12 +269,12 @@ public class SKFSClient {
             return callSKFSSoapApi(
                     payloadBuilder,
                     "register",
-                    getDid(policy));
+                    Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                     APIURI + Constants.REST_SUFFIX + Constants.REGISTER_ENDPOINT,
                     payloadBuilder,
-                    getDid(policy), SVCUSERNAME, SVCPASSWORD);
+                    Common.getDid(policy), SVCUSERNAME, SVCPASSWORD);
         }
     }
 
@@ -321,12 +288,12 @@ public class SKFSClient {
             return callSKFSSoapApi(
                 payloadBuilder,
                 "preauthenticate",
-                getDid(policy));
+                Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                 APIURI + Constants.REST_SUFFIX + Constants.PREAUTHENTICATE_ENDPOINT,
                 payloadBuilder,
-                getDid(policy), SVCUSERNAME, SVCPASSWORD);
+                Common.getDid(policy), SVCUSERNAME, SVCPASSWORD);
         }
     }
 
@@ -396,11 +363,11 @@ public class SKFSClient {
             return callSKFSSoapApi(
                 payloadBuilder,
                 "authenticate",
-                getDid(policy));
+                Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                 APIURI + Constants.REST_SUFFIX + Constants.AUTHENTICATE_ENDPOINT,
-                payloadBuilder, getDid(policy), SVCUSERNAME, SVCPASSWORD);
+                payloadBuilder, Common.getDid(policy), SVCUSERNAME, SVCPASSWORD);
         }
     }
 
@@ -412,12 +379,12 @@ public class SKFSClient {
             return callSKFSSoapApi(
                 payloadBuilder,
                 "getkeysinfo",
-                 getDid(policy));
+                 Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                 APIURI + Constants.REST_SUFFIX + Constants.GETKEYSINFO_ENDPOINT,
                 payloadBuilder,
-                getDid(policy), SVCADMINUSER, SVCADMINPASSWORD);
+                Common.getDid(policy), SVCADMINUSER, SVCADMINPASSWORD);
         }
     }
 
@@ -429,12 +396,12 @@ public class SKFSClient {
             return callSKFSSoapApi(
                 payloadBuilder,
                 "deregister",
-                getDid(policy));
+                Common.getDid(policy));
         } else {
             return callSKFSRestApi(
                 APIURI + Constants.REST_SUFFIX + Constants.DEREGISTER_ENDPOINT,
                 payloadBuilder,
-                getDid(policy), SVCADMINUSER, SVCADMINPASSWORD);
+                Common.getDid(policy), SVCADMINUSER, SVCADMINPASSWORD);
         }
     }
 
