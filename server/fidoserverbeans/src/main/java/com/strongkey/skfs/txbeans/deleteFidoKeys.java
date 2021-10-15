@@ -59,7 +59,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
      *                error/success message
      */
     @Override
-    public String execute(Short sid, Long did, String username,  Long fkid) {
+    public String execute(Short sid, Long did, Long fkid) {
         SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "execute");
 
         //Declating variables
@@ -109,7 +109,7 @@ public class deleteFidoKeys implements deleteFidoKeysLocal {
         //  Verify if the fkid exists.
         FidoKeys rk = null;
         try {
-            rk = getregkeysejb.getByfkid(sid, did, username, fkid);
+            rk = getregkeysejb.getByfkid(sid, did, fkid);
         } catch (SKFEException ex) {
             Logger.getLogger(deleteFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
         }

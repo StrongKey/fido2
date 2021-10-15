@@ -69,7 +69,8 @@ public class updateFidoKeys implements updateFidoKeysLocal {
      * error/success message
      */
     @Override
-    public String execute(Short sid, Long did, String username, Long fkid, Integer newCounter, String modify_location) {
+//    public String execute(Short sid, Long did, String username, Long fkid, Integer newCounter, String modify_location) {
+    public String execute(Short sid, Long did, Long fkid, Integer newCounter, String modify_location) {
         SKFSLogger.entering(SKFSConstants.SKFE_LOGGER,classname, "execute");
 
         //Declaring variables
@@ -183,12 +184,12 @@ public class updateFidoKeys implements updateFidoKeysLocal {
         //  Verify if the fkid exists.
         FidoKeys rk = null;
         try {
-            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + username + "-" + fkid);
+            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + fkid);
             if (fkinfo != null) {
                 rk = fkinfo.getFk();
             }
             if (rk == null) {
-                rk = getregkeysejb.getByfkid(sid, did, username, fkid);
+                rk = getregkeysejb.getByfkid(sid, did, fkid);
             }
         } catch (SKFEException ex) {
             Logger.getLogger(updateFidoKeys.class.getName()).log(Level.SEVERE, null, ex);
@@ -211,6 +212,7 @@ public class updateFidoKeys implements updateFidoKeysLocal {
         } catch (ParseException e) {
         }
         String primarykey = sid + "-" + did + "-" + rk.getFidoKeysPK().getUsername() + "-" + fkid;
+        String mapkey = sid + "-" + did + "-" + fkid;
         rk.setCounter(newCounter);
         rk.setModifyLocation(modify_location);
         rk.setModifyDate(modifyDateFormat);
@@ -236,7 +238,7 @@ public class updateFidoKeys implements updateFidoKeysLocal {
         }
 
         FidoKeysInfo fkinfoObj = new FidoKeysInfo(rk);
-        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, primarykey, fkinfoObj);
+        skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
 
         //return a success message
         SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.FINE, classname, "execute", "FIDOJPA-MSG-2004", "");

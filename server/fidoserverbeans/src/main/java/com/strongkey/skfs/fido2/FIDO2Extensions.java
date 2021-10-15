@@ -55,5 +55,9 @@ public class FIDO2Extensions {
     public Object getExtension(String extensionName) {
         return extensionMap.get(extensionName);
     }
+    
+    public Boolean containsExtension(String extensionName) {
+        return extensionMap.containsKey(extensionName);
+    }
 
 }

@@ -81,7 +81,8 @@ public class updateFIDO2DisplayName implements updateFIDO2DisplayNameLocal {
     private EntityManager em;
 
     @Override
-    public String execute(Short sid, Long did, String username, Long fkid, String modify_location, String displayname) {
+//    public String execute(Short sid, Long did, String username, Long fkid, String modify_location, String displayname) {
+    public String execute(Short sid, Long did, Long fkid, String modify_location, String displayname) {
          //Declaring variables
         Boolean outputstatus = true;
         String errmsg;
@@ -189,12 +190,12 @@ public class updateFIDO2DisplayName implements updateFIDO2DisplayNameLocal {
         //  Verify if the fkid exists.
         FidoKeys rk = null;
         try {
-            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + username + "-" + fkid);
+            FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, sid + "-" + did + "-" + fkid);
             if (fkinfo != null) {
                 rk = fkinfo.getFk();
             }
             if (rk == null) {
-                rk = getkeysejb.getByfkid(sid, did, username, fkid);
+                rk = getkeysejb.getByfkid(sid, did, fkid);
             }
         } catch (SKFEException ex) {
             Logger.getLogger(updateFidoKeysStatus.class.getName()).log(Level.SEVERE, null, ex);
@@ -241,6 +242,10 @@ public class updateFIDO2DisplayName implements updateFIDO2DisplayNameLocal {
 
         if(regsettingsjson.containsKey(SKFSConstants.FIDO_REGISTRATION_SETTING_KTY)){
             jobj.add(SKFSConstants.FIDO_REGISTRATION_SETTING_KTY, regsettingsjson.getInt(SKFSConstants.FIDO_REGISTRATION_SETTING_KTY));
+        }
+        
+        if(regsettingsjson.containsKey(SKFSConstants.FIDO_REGISTRATION_SETTING_FMT)){
+            jobj.add(SKFSConstants.FIDO_REGISTRATION_SETTING_FMT, regsettingsjson.getString(SKFSConstants.FIDO_REGISTRATION_SETTING_FMT));
         }
 
         if(regsettingsjson.containsKey(SKFSConstants.FIDO_REGISTRATION_SETTING_ALG)){

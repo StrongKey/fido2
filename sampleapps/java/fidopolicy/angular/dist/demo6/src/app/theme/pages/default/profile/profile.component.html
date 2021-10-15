@@ -1,0 +1,182 @@
+<div fxLayout="column" fxFlexFill style="background-color: white;height:100%">
+	<div fxLayout="row" style="padding:2% 1%">
+		<div fxFlex="50" fxLayoutAlign="none start" style="margin:0% 1% 1% 2%;">
+			<h2>
+				My Profile
+			</h2>
+		</div>
+		<div fxFlex="50" fxLayoutAlign="end start">
+			<button mat-raised-button type="button" style="background-color:#013e51; color:white; margin:0% 2% 2% 2%" (click)="deleteUser()">
+				Delete My Account
+			</button>
+		</div>
+	</div>
+	<div>
+		<mat-tab-group mat-align-tabs="start" [selectedIndex]="ifZeroPlatformKeys ? 1 : 0">
+			<mat-tab label="Platform Keys">
+				<div fxLayout="row"  style="padding:2% 1%">
+					<div fxFlex="50" fxLayoutAlign="none start" style="margin:0% 1% 1% 2%;">
+						<h2>
+							Platform Keys
+						</h2>
+					</div>
+					<div fxFlex="50" fxLayoutAlign="end start">
+						<button mat-raised-button type="button" data-toggle="modal" data-target="#newKeyModal" style="margin:0% 2% 2% 2%;background-color:#013e51;color:white;">
+							REGISTER NEW KEY
+						</button>
+						<button mat-raised-button type="button" (click)="deleteKeys()" style="background-color:#013e51;color:white;margin:0% 2% 2% 2%;">
+							DELETE SELECTED KEYS
+						</button>
+					</div>
+				</div>
+				<div class="m-portlet__body" style="padding:0% 2% 2% 3%">
+					<table class="table table-striped- table-bordered table-hover table-checkable" style="width: 100%; margin-bottom:2%" id="m_table_1" *ngIf="this.ifPlatformKey">
+
+						<thead>
+							<tr>
+								<th>
+									SELECT
+								</th>
+								<th>
+									CREDENTIAL ID
+								</th>
+								<th>
+									DISPLAY NAME
+								</th>
+								<th>
+									CREATED
+								</th>
+								<th>
+									LAST USED
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let key of fidoKeys; let i = index">
+								<tr *ngIf="key.attestationFormat=='tpm' || key.attestationFormat=='apple' || key.attestationFormat.startsWith('android')">
+									<td>
+										<div class="m-widget2__checkbox">
+											<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
+												<input type="checkbox" [(ngModel)]="key.checked" name="isChecked{{i}}">
+												<span></span>
+											</label>
+										</div>
+									</td>
+									<div id=data>
+										<td [attr.title]="key.credentialId">{{key.credentialId.substring(0,10)}}...</td>
+									</div>
+									<td>{{ key.displayName }}</td>
+									<td>{{ key.createDate | date:'medium' }}</td>
+									<td *ngIf="key.modifyDate != 0">{{ key.modifyDate | date:'medium'}}</td>
+									<td *ngIf="key.modifyDate == 0">{{ 'never' }}</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+					<div *ngIf="!this.ifPlatformKey" fxLayout="column" fxLayoutAlign="start center" style="margin:2%">
+						<p>
+							No Platform Keys registered to this account
+						</p>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Security Keys">
+
+				<div fxLayout="row"  style="padding:2% 1%">
+					<div fxFlex="50" fxLayoutAlign="none start" style="margin:0% 1% 1% 2%;">
+						<h2>
+							Security Keys
+						</h2>
+					</div>
+					<div fxFlex="50" fxLayoutAlign="end start">
+						<button mat-raised-button type="button" data-toggle="modal" data-target="#newKeyModal" style="margin:0% 2% 2% 2%;background-color:#013e51;color:white;">
+							REGISTER NEW KEY
+						</button>
+						<button mat-raised-button type="button" (click)="deleteKeys()" style="background-color:#013e51;color:white;margin:0% 2% 2% 2%;">
+							DELETE SELECTED KEYS
+						</button>
+					</div>
+				</div>
+
+				<div class="m-portlet__body" style="padding:0% 2% 2% 3%">
+					<table class="table table-striped- table-bordered table-hover table-checkable table-card" id="m_table_1" style="width: 100%; margin-bottom:2%" *ngIf="this.ifNonPlatformKey">
+						<thead>
+							<tr>
+								<th>
+									SELECT
+								</th>
+								<th>
+									CREDENTIAL ID
+								</th>
+								<th>
+									DISPLAY NAME
+								</th>
+								<th>
+									CREATED
+								</th>
+								<th>
+									LAST USED
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let key of fidoKeys; let i = index">
+								<tr *ngIf="key.attestationFormat!='tpm' && key.attestationFormat!='apple' && !key.attestationFormat.startsWith('android')">
+									<td style="padding:auto">
+										<div class="m-widget2__checkbox">
+											<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
+												<input type="checkbox" [(ngModel)]="key.checked" name="isChecked{{i}}">
+												<span></span>
+											</label>
+										</div>
+									</td>
+									<td [attr.title]="key.credentialId">{{key.credentialId.substring(0,10)}}...</td>
+									<td>{{ key.displayName }}</td>
+									<td>{{ key.createDate | date:'medium' }}</td>
+									<td *ngIf="key.modifyDate != 0">{{ key.modifyDate | date:'medium'}}</td>
+									<td *ngIf="key.modifyDate == 0">{{ 'never' }}</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+
+					<div *ngIf="!this.ifNonPlatformKey" fxLayout="column" fxLayoutAlign="start center" style="margin:2%">
+						<p>
+							No Security Keys registered to this account
+						</p>
+					</div>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</div>
+	<div class="modal fade" id="newKeyModal" tabindex="-1" role="dialog" aria-labelledby="newKeyModalLabel" aria-hidden="true" data-backdrop="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title" style="font-weight: bold;">Register New Key</h2>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeNewKeyModal>
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					You are trying to add additional keys to the existing keys.
+					<br>
+					<br>
+					<div class="form-group m-form__group row">
+						<label class="col-sm-4 col-form-label" style="font-weight: bold;">
+							Display Name
+						</label>
+						<div class="col-sm-8">
+							<input class="form-control m-input" type="text" name="displayname" [(ngModel)]="newDisplayName" required>
+						</div>
+					</div>
+					<br>
+					<div class="form-group m-form__group row">
+						<div class="col-sm-8"></div>
+						<button class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" (click)="addKey()">Add Key</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

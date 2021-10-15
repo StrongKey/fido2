@@ -18,11 +18,13 @@ public class AttestationPolicyOptions {
 
     private final List<String> conveyance;
     private final ArrayList<String> formats;
+    private final EnterpriseAttestationOptions enterpriseAttestationOptions;
 
-    private AttestationPolicyOptions(List<String> conveyance, ArrayList<String> formats){
+    private AttestationPolicyOptions(List<String> conveyance, ArrayList<String> formats,  EnterpriseAttestationOptions enterpriseAttestationOptions){
 
         this.conveyance = conveyance;
         this.formats = formats;
+        this.enterpriseAttestationOptions = enterpriseAttestationOptions;
     }
 
     
@@ -33,10 +35,16 @@ public class AttestationPolicyOptions {
     public ArrayList<String> getAttestationFormats() {
         return formats;
     }
-
+    
+    public EnterpriseAttestationOptions getEnterpriseOptions(){
+        return enterpriseAttestationOptions;
+    }
     public static AttestationPolicyOptions parse(JsonObject attestationJson) {
-
-
+        EnterpriseAttestationOptions enterprise = null;
+        if(attestationJson.containsKey(SKFSConstants.POLICY_ATTESTATION_ENTERPRISE)){
+             enterprise = EnterpriseAttestationOptions.parse(attestationJson.getJsonObject(SKFSConstants.POLICY_ATTESTATION_ENTERPRISE));
+        }
+       
         return new AttestationPolicyOptions.AttestationPolicyOptionsBuilder(
                 new ArrayList<>(attestationJson.getJsonArray(SKFSConstants.POLICY_ATTESTATION_CONVEYANCE).stream()
                         .map(x -> (JsonString) x)
@@ -45,23 +53,26 @@ public class AttestationPolicyOptions {
                 new ArrayList<>(attestationJson.getJsonArray(SKFSConstants.POLICY_ATTESTATION_FORMATS).stream()
                         .map(x -> (JsonString) x)
                         .map(x -> x.getString())
-                        .collect(Collectors.toList())))
-                .build();
+                        .collect(Collectors.toList())),
+                enterprise        
+                ).build();
     }
 
     public static class AttestationPolicyOptionsBuilder{
         private final List<String> builderConveyance;
         private final ArrayList<String> builderFormats;
+        private final EnterpriseAttestationOptions builderEnterpriseAttesationOptions;
 
-        public AttestationPolicyOptionsBuilder( List<String> builderConveyance, ArrayList<String> builderFormats){
+        public AttestationPolicyOptionsBuilder( List<String> builderConveyance, ArrayList<String> builderFormats, EnterpriseAttestationOptions builderEnterpriseAttesationOptions){
             this.builderConveyance = builderConveyance;
             this.builderFormats = builderFormats;
+            this.builderEnterpriseAttesationOptions=builderEnterpriseAttesationOptions;
         }
 
 
         public AttestationPolicyOptions build(){
             return new AttestationPolicyOptions(
-                    builderConveyance, builderFormats);
+                    builderConveyance, builderFormats, builderEnterpriseAttesationOptions);
         }
     }
 }

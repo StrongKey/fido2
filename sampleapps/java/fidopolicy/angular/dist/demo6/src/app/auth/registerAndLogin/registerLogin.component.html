@@ -1,0 +1,136 @@
+<div fxLayout="column" style="background-color:white; min-height:650px !important">
+	<div fxLayout="row" fxFlexFill style="">
+		<div fxFlex="50" fxFlexFill style="background-color: white">
+			<div fxLayout="column">
+				<div fxLayout="column" fxLayoutAlign="center center">
+					<h1 class="m-login__title" style="margin-top:20px">
+						<b>StrongKey</b>
+					</h1>
+					<h2 class="m-login__title">
+						<b>FIDO Policies</b>
+					</h2>
+				</div>
+
+				<!-- to display types of policies and its contents i.e., restricted, strict, moderate and minimal -->
+				<div class="content" *ngIf="this.outerPolicy">
+					<div fxLayout="row wrap" fxLayoutGap="16px grid">
+						<div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="overflow:true" *ngFor="let policy of this.policyList; let num=index;">
+							<mat-card fxLayout="column" fxFlexFill fxLayoutAlign="space-evenly" class="mat-elevation-z4" style="height: 100%;min-width: 100%;">
+								<mat-card-header fxLayout="column" fxLayoutAlign="center center">
+									<mat-card-title>{{policy}}</mat-card-title>
+								</mat-card-header>
+								<mat-card-content fxLayout="column" fxLayoutAlign="start start">
+									<p style="white-space:pre-line">
+										{{this.policyDescList[num]}}
+									</p>
+								</mat-card-content>
+								<mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+									<button mat-raised-button style="background-color: #ebefef;" (click)="viewCard(policy)">View Policies</button>
+								</mat-card-actions>
+							</mat-card>
+						</div>
+					</div>
+				</div>
+
+				<!-- to display sub types of a policy  -->
+				<div class="content" *ngIf="!this.outerPolicy">
+					<div fxLayout="row wrap" fxLayoutGap="16px grid">
+						<div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" *ngFor="let policy of this.selectedPolicyList; let num=index;">
+							<mat-card fxLayout="column" fxFlexFill fxLayoutAlign="space-evenly" class="mat-elevation-z4" style="height: 100%;min-width: 100%;">
+								<mat-card-header fxLayout="column" fxLayoutAlign="center center">
+									<mat-card-title>{{policy}}</mat-card-title>
+								</mat-card-header>
+								<mat-card-content fxLayout="column" fxLayoutAlign="start start">
+									<p style="white-space:pre-line">
+										{{this.selectedPolicyDescList[num]}}
+									</p>
+								</mat-card-content>
+								<mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+									<button mat-raised-button style="background-color: #ebefef;" (click)="viewJson(num)" data-toggle="modal" data-target="#restrictedModal">View Policy</button>
+								</mat-card-actions>
+							</mat-card>
+						</div>
+					</div>
+				</div>
+
+				<!-- to display json structure of a policy  -->
+				<div class="modal fade" id="restrictedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content" style="width:85%; margin:auto;">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle">Policy</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<pre style="text-align:left" [innerHTML]="this.selectedPolicyJson | prettyjson: [false, 3]"></pre>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Back button -->
+				<div *ngIf="!this.outerPolicy" fxLayout="column" fxLayoutAlign="end end">
+					<button style="height:100%" mat-button (click)="returnToPolicies()">
+						<mat-icon>arrow_back_ios</mat-icon>
+					</button>
+				</div>
+			</div>
+		</div>
+		<!-- divider -->
+		<div fxFlex="1" fxFlexFill style="background-color: white">
+			<div style=" box-shadow:-0.1em 0 0.8em -4px black;   border-top-color: white; height: 100%"></div>
+
+		</div>
+		<!-- register and login frame -->
+		<div fxFlex="49" fxLayoutAlign="center" fxFlexFill style="background-color: white; ">
+			<div fxLayout="column" fxFlex="65" style="margin-top:20px;">
+				<div fxLayoutAlign="center center">
+					<img style=" width: 100px; margin-bottom: 5%; " src="./assets/app/media/img//logo/logo.png">
+				</div>
+				<div fxLayoutAlign="center center" style="margin-top:5%">
+					<h2 class="m-login__title">
+						<b>Register | Login</b>
+					</h2>
+				</div>
+				<form fxLayoutAlign="stretch" fxLayout="column" #f="ngForm" class="m-login__form m-form" action="">
+					<ng-template #alertSignup></ng-template>
+					<mat-form-field appearance="outline">
+						<mat-label>Username</mat-label>
+						<input matInput type="text" name="username" [(ngModel)]="user.username" #usernameDOM="ngModel" required>
+					</mat-form-field>
+					<mat-form-field appearance="outline">
+						<mat-label>Select Policy</mat-label>
+						<mat-select required (selectionChange)="policyValue($event)" id="policy" name="policy" [(ngModel)]="user.policy" #policyDOM="ngModel">
+							<mat-option value="minimal">{{this.minimalRef}}</mat-option>
+							<mat-option value="moderate">{{this.moderateRef}}</mat-option>
+							<mat-option value="restrictedAndroidKey">{{this.restrictedAndroidKeyRef}}</mat-option>
+							<mat-option value="restrictedApple">{{this.restrictedAppleRef}}</mat-option>
+							<mat-option value="restrictedTpm">{{this.restrictedTpmRef}}</mat-option>
+							<mat-option value="restrictedFips">{{this.restrictedFipsRef}}</mat-option>
+							<mat-option value="strict">{{this.strictRef}}</mat-option>
+							<mat-option value="strictAndroidSafetyNet">{{this.strictAndroidSafetyNetRef}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+
+					<div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50">
+						<button fxFlex="40" mat-raised-button [disabled]="loading" type="button" (click)="f.form.valid && register()" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_register_submit"
+							style="background-color:#013e51;color:white">
+							Register
+						</button>
+						<div fxFlex="20">
+						</div>
+						<button fxFlex="40" mat-raised-button [disabled]="loading" type="button" (click)="f.form.valid && signin()" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_signin_submit"
+							style="background-color:#013e51;color:white">
+							Login
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		<hr style="box-shadow:0 -0.1em 0.8em -4px black;">
+</div>

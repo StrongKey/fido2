@@ -920,6 +920,9 @@ Y8P          Y8P 888
         strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.FINE, classname, "setupMaxLenMap", "APPL-MSG-1023", "put(appliance.cfg.maxlen.8192charstring)");
         maxlenmap.put("appliance.cfg.maxlen.8192charstring", Integer.parseInt(getApplianceConfigurationProperty("appliance.cfg.maxlen.8192charstring")));
 
+        strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.FINE, classname, "setupMaxLenMap", "APPL-MSG-1023", "put(appliance.cfg.maxlen.10000charstring)");
+        maxlenmap.put("appliance.cfg.maxlen.10000charstring", Integer.parseInt(getApplianceConfigurationProperty("appliance.cfg.maxlen.8192charstring")));
+
         strongkeyLogger.logp(applianceConstants.APPLIANCE_LOGGER, Level.FINE, classname, "setupMaxLenMap", "APPL-MSG-1023", "put(appliance.cfg.maxlen.16384charstring)");
         maxlenmap.put("appliance.cfg.maxlen.16384charstring", Integer.parseInt(getApplianceConfigurationProperty("appliance.cfg.maxlen.16384charstring")));
 

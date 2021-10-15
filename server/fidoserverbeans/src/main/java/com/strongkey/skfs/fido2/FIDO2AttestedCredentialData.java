@@ -167,4 +167,12 @@ public class FIDO2AttestedCredentialData {
                     "FIDO2AttestedCredentialData size (bytes: " + cborLength);
         return remainingDataIndex + cborLength;
     }
+    
+    public static long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();
+        return buffer.getLong();
+    }
+
 }

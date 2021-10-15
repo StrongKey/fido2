@@ -13,6 +13,7 @@ import static com.strongkey.cbor.jacob.CborConstants.*;
 import com.strongkey.cbor.jacob.CborDecoder;
 import com.strongkey.cbor.jacob.CborType;
 import com.strongkey.skce.utilities.TPMConstants;
+import com.strongkey.skfs.pojos.FIDOMetadataService;
 import com.strongkey.skfs.pojos.FIDOReturnObject;
 import com.strongkey.skfs.pojos.FIDOReturnObjectV1;
 import com.strongkey.skfs.requests.ServiceInfo;
@@ -21,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -30,6 +32,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -51,6 +55,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x9.ECNamedCurveTable;
@@ -78,6 +85,14 @@ public class SKFSCommon {
 
     public static final SKFSCron cron = new SKFSCron();
 
+    private static SortedMap<String, String> mdsentryattcertpointer = new ConcurrentSkipListMap<>();
+    
+    private static SortedMap<String, JsonObject> mdsentryaaguidMap = new ConcurrentSkipListMap<>();
+
+    private static FIDOMetadataService metadataservice = null;
+
+    private static X509Certificate mdsrootca = null;
+    
     private static SortedMap<Long, Map> skfsconfigmap = new ConcurrentSkipListMap<>();
 
     private static SortedMap<Integer, JsonArray> transport_combinations = new ConcurrentSkipListMap<>();
@@ -237,6 +252,37 @@ public class SKFSCommon {
         cron.flushFIDOKeysJob();
 
         putTransportsMap();
+        
+        String mdsenabled = SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.enabled");
+        if (mdsenabled.equalsIgnoreCase("true") || mdsenabled.equalsIgnoreCase("yes")) {
+            // Download global sign root cert
+            Client client = null;
+            WebTarget webTarget;
+            Response rs = null;
+            try {
+
+                client = ClientBuilder.newClient();
+                webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+
+                // Execute the method.
+                rs = webTarget.request().get();
+
+                if (rs.getStatus() > 299) {
+                    System.err.println("Method failed: " + rs.readEntity(String.class));
+                } else {
+
+                    CertificateFactory fac = CertificateFactory.getInstance("X509");
+                    SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                }
+            } catch (Exception e) {
+                System.err.println("Fatal protocol violation: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                rs.close();
+                client.close();
+                // Release the connection.
+            }
+        }
     }
 
     /**
@@ -610,6 +656,43 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         return Boolean.valueOf(updatefidousers);
     }
 
+    public static FIDOMetadataService getMetadataservice() {
+        return metadataservice;
+    }
+
+    public static void setMetadataservice(FIDOMetadataService mds) {
+        metadataservice = mds;
+    }
+
+    public static String getMdsentrypointer(String key) {
+        return mdsentryattcertpointer.get(key);
+    }
+
+    public static void setMdsentrypointer(String key, String value) {
+        mdsentryattcertpointer.put(key, value);
+    }
+    
+    public static JsonObject getMdsentryfromMap(String key) {
+        return mdsentryaaguidMap.get(key);
+    }
+
+    public static void setMdsentry(String key, JsonObject value) {
+        mdsentryaaguidMap.put(key, value);
+    }
+    
+    public static Boolean containsMdsentry(String key) {
+        return mdsentryaaguidMap.containsKey(key);
+    }
+
+    public static X509Certificate getMdsrootca() {
+        return mdsrootca;
+    }
+
+    public static void setMdsrootca(X509Certificate mdsrootca) {
+        SKFSCommon.mdsrootca = mdsrootca;
+    }
+
+    
     public static String getDigest(String Input, String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
         MessageDigest digest = MessageDigest.getInstance(algorithm, "BCFIPS");
@@ -840,29 +923,29 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
     public static int getIANACOSEAlgFromPolicyAlg(String alg) {
         switch (alg) {
-            case "rsassa-pkcs1-v1_5-sha1":
+            case "RS1":
                 return -65535;
-            case "rsassa-pkcs1-v1_5-sha256":
+            case "RS256":
                 return -257;
-            case "rsassa-pkcs1-v1_5-sha384":
+            case "RS384":
                 return -258;
-            case "rsassa-pkcs1-v1_5-sha512":
+            case "RS512":
                 return -259;
-            case "rsassa-pss-sha256":
+            case "PS256":
                 return -37;
-            case "rsassa-pss-sha384":
+            case "PS384":
                 return -38;
-            case "rsassa-pss-sha512":
+            case "PS512":
                 return -39;
-            case "ecdsa-p256-sha256":
+            case "ES256":
                 return -7;
-            case "ecdsa-p384-sha384":
+            case "ES384":
                 return -35;
-            case "ecdsa-p521-sha512":
+            case "ES512":
                 return -36;
-            case "eddsa":
+            case "EdDSA":
                 return -8;
-            case "ecdsa-p256k-sha256":
+            case "ES256K":
                 return -47;
             default:
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
@@ -874,29 +957,29 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     public static String getPolicyAlgFromIANACOSEAlg(long alg) {
         switch ((int) alg) {
             case -65535:
-                return "rsassa-pkcs1-v1_5-sha1";
+                return "RS1";
             case -257:
-                return "rsassa-pkcs1-v1_5-sha256";
+                return "RS256";
             case -258:
-                return "rsassa-pkcs1-v1_5-sha384";
+                return "RS384";
             case -259:
-                return "rsassa-pkcs1-v1_5-sha512";
+                return "RS512";
             case -37:
-                return "rsassa-pss-sha256";
+                return "PS256";
             case -38:
-                return "rsassa-pss-sha384";
+                return "PS384";
             case -39:
-                return "rsassa-pss-sha512";
+                return "PS512";
             case -7:
-                return "ecdsa-p256-sha256";
+                return "ES256";
             case -35:
-                return "ecdsa-p384-sha384";
+                return "ES384";
             case -36:
-                return "ecdsa-p521-sha512";
+                return "ES512";
             case -8:
-                return "eddsa";
+                return "EdDSA";
             case -43:                       //TODO remove this note when number is officially decided
-                return "ecdsa-p256k-sha256";
+                return "ES256K";
 
             default:
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",
@@ -943,29 +1026,29 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     public static String getPolicyAlgFromAlg(String alg) {
         switch (alg.toUpperCase()) {
             case "SHA1WITHRSA":
-                return "rsassa-pkcs1-v1_5-sha1";
+                return "RS1";
             case "SHA256WITHRSA":
-                return "rsassa-pkcs1-v1_5-sha256";
+                return "RS256";
             case "SHA384WITHRSA":
-                return "rsassa-pkcs1-v1_5-sha384";
+                return "RS384";
             case "SHA512WITHRSA":
-                return "rsassa-pkcs1-v1_5-sha512";
+                return "RS512";
             case "SHA256WITHRSAandMGF1":
-                return "rsassa-pss-sha256";
+                return "PS256";
             case "SHA384WITHRSAandMGF1":
-                return "rsassa-pss-sha384";
+                return "PS384";
             case "SHA512WITHRSAandMGF1":
-                return "rsassa-pss-sha512";
+                return "PS512";
             case "SHA256WITHECDSA":
-                return "ecdsa-p256-sha256";
+                return "ES256";
             case "SHA384WITHECDSA":
-                return "ecdsa-p384-sha384";
+                return "ES384";
             case "SHA512WITHECDSA":
-                return "ecdsa-p521-sha512";
+                return "ES512";
             case "NONEWITHECDSA":
-                return "eddsa";
+                return "EdDSA";
 //            case "SHA256withECDSA":
-//                return "ecdsa-p256k-sha256";      //JCE does not differentiate
+//                return "ES256K";      //JCE does not differentiate
 
             default:
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2002",

@@ -37,9 +37,9 @@ public class FidoEngine {
                        "Command: R (registration) | A (authentication) | G (getkeysinfo) | U (updatekey) | D (deregister) | P (ping)\n"
                      + "| CP (createpolicy) | PP (updatepolicy) | DP (deletepolicy) | GP (getpolicy)\n"
                      + "| GC (getconfiguration) | UC (updateconfiguration) | DC (deleteconfiguration)\n"
-                     + "       java -jar skfsclient.jar R <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin>\n"
-                     + "       java -jar skfsclient.jar A <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <authcounter>\n"
-                     + "       java -jar skfsclient.jar AZ <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <txid> <txpayload> <origin> <authcounter> <verify>\n"
+                     + "       java -jar skfsclient.jar R <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <crossorigin>\n"
+                     + "       java -jar skfsclient.jar A <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <authcounter> <crossorigin>\n"
+                     + "       java -jar skfsclient.jar AZ <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <txid> <txpayload> <origin> <authcounter> <crossorigin> <verify>\n"
                      + "       java -jar skfsclient.jar G <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username>\n"
                      + "       java -jar skfsclient.jar U <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id> <displayname> <status>\n"
                      + "       java -jar skfsclient.jar D <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id>\n"
@@ -67,6 +67,7 @@ public class FidoEngine {
                      + "         username            : Username for registration, authentication, or getting keys info\n"
                      + "         command             : R (registration) | A (authentication) | G (getkeysinfo) | U (updatekeyinfo) | D (deregister) | P (ping)\n"
                      + "         origin              : Origin to be used by the fido client simulator\n"
+                     + "         crossorigin         : Boolean that will determine if client data allows crossorigin or not - to be used for the simulator\n"
                      + "         authcounter         : Auth counter to be used by the fido client simulator\n"
                      + "         txid                : Unique identifier for the transaction (Base64URLSafe Strong)\n"
                      + "         txpayload           : Transaction payload to be used to generate the challenge for transaction authorization (Base64URLSafe Strong)\n"
@@ -108,6 +109,7 @@ public class FidoEngine {
         String displayname;
         String status;
         String origin;
+        String crossOrigin;
         int auth_counter;
         String configkey;
         String configvalue;
@@ -144,42 +146,44 @@ public class FidoEngine {
             switch (command.toUpperCase()) {
 
                 case Constants.COMMANDS_REGISTER:
-                    if (args.length != 9) {
+                    if (args.length != 10) {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
                     username    = args[7];
                     origin      = args[8];
+                    crossOrigin = args[9];
 
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
-                        RestFidoRegister.register(hostport, did, authtype, credential1, credential2, username, origin);
+                        RestFidoRegister.register(hostport, did, authtype, credential1, credential2, username, origin, crossOrigin);
                     } else {
-                        SoapFidoRegister.register(hostport, did, authtype, credential1, credential2, username, origin);
+                        SoapFidoRegister.register(hostport, did, authtype, credential1, credential2, username, origin, crossOrigin);
                     }
 
                     System.out.println("\nDone with Register!\n");
                     break;
 
                 case Constants.COMMANDS_AUTHENTICATE:
-                    if (args.length != 10) {
+                    if (args.length != 11) {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
                     username        = args[7];
                     origin          = args[8];
                     auth_counter    = Integer.parseInt(args[9]);
-
+                    crossOrigin          = args[10];
+                    
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
-                        RestFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
+                        RestFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin);
                     } else {
-                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter);
+                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin);
                     }
 
                     System.out.println("\nDone with Authenticate!\n");
                     break;
                     
                 case Constants.COMMANDS_AUTHORIZE:
-                    if (args.length != 13) {
+                    if (args.length != 14) {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
@@ -188,12 +192,13 @@ public class FidoEngine {
                     txpayload       = args[9];
                     origin          = args[10];
                     auth_counter    = Integer.parseInt(args[11]);
-                    verifyAuthz     = args[12];
+                    crossOrigin     = args[12];
+                    verifyAuthz     = args[13];
 
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
-                        RestFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz);
+                        RestFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz, crossOrigin);
                     } else {
-                        SoapFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz);
+                        SoapFidoAuthorize.authorize(hostport, did, authtype, credential1, credential2, username, txid, txpayload, origin, auth_counter, verifyAuthz, crossOrigin);
                     }
 
                     System.out.println("\nDone with Authenticate!\n");

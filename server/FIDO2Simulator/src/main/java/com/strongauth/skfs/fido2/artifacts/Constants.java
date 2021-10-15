@@ -33,7 +33,8 @@ public class Constants
     public static final int FIDO_REGISTER_COUNTER = 0;
     public static final Boolean[] REGISTRATION_FLAGS = new Boolean[] {Constants.USER_PRESENT, Constants.USER_VERIFIED, Constants.ATTESTED_DATA_INCLUDED, Constants.EXTENSION_DATA_INCLUDED} ;
     public static final Boolean[] AUTHN_FLAGS = new Boolean[] {Constants.USER_PRESENT, Constants.USER_VERIFIED, Boolean.FALSE, Constants.EXTENSION_DATA_INCLUDED} ;
-    public static final String AAGUID = "7a98c250-6808-11cf-b73b-00aa00b677a7";
+//    public static final String AAGUID = "7a98c250-6808-11cf-b73b-00aa00b677a7";
+    public static final String AAGUID = "3b1adb99-0dfe-46fd-90b8-7f7614a4de2a";
 
     // Constants related to the Attestation Key
     public static final String ATTESTATION_KEYSTORE_FILE = "/resources/attestation.jceks";

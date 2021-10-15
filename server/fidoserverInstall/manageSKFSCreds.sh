@@ -28,6 +28,7 @@ SERVICE_LDAP_BIND_PASS=Abcd1234!
 OPERATION=$1
 SAKA_DID=$2
 USERNAME=$3
+allgroups="FidoRegistrationService-AuthorizedServiceCredentials,FidoAuthenticationService-AuthorizedServiceCredentials,FidoAuthorizationService-AuthorizedServiceCredentials,FidoAdministrationService-AuthorizedServiceCredentials,FidoCredentialService-AuthorizedServiceCredentials,FidoPolicyManagementService-AuthorizedServiceCredentials,FidoMonitoringService-AuthorizedServiceCredentials"
 
 
 ##########################################
@@ -40,9 +41,6 @@ usage() {
         echo "${0##*/} getUserGroups <did> <username>"
         echo "${0##*/} changeUserPassword <did> <username>"
         echo "${0##*/} deleteUser <did> <username>"
-        echo "${0##*/} addAdmin <did> <username>"
-        echo "${0##*/} deleteAdmin <did> <username>"
-        echo "${0##*/} changeAdminPassword <did> <username>"
         echo "Options:"
         echo "did              The domain ID"
         echo "username         Username of the user or admin user"
@@ -96,7 +94,7 @@ LDAPUSER
         tput setaf 1; echo "This User is currently a Member of NO Groups!"
         tput sgr0; echo "Please run addUserToGroup and specify which of the following Groups you wish $USERNAME to be added to:"
         echo ""
-        echo "FidoAuthorized,FidoRegAuthorized,FidoSignAuthorized,FidoAuthzAuthorized"
+        echo "$allgroups"
         echo ""
         exit 0
     else
@@ -156,7 +154,7 @@ if [ "$OPERATION" = "addUserToGroup" ]; then
     read -a groupsarr <<< "$groups"
     for group in "${groupsarr[@]}";
     do
-        if [[ "FidoAuthorizedFidoRegAuthorizedFidoSignAuthorizedFidoAuthzAuthorized" == *"$group"* ]]; then
+        if [[ "$allgroups" == *"$group"* ]]; then
             cat > /tmp/ldapgroup.ldif << LDAPUSER
 dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
 changetype: modify
@@ -187,9 +185,8 @@ if [ "$OPERATION" = "deleteUser" ]; then
         echo "$USERNAME does not exist"
         exit 1
     fi
-    groups="FidoAuthorized,FidoRegAuthorized,FidoSignAuthorized,FidoAuthzAuthorized"
     IFS=','
-    read -a groupsarr <<< "$groups"
+    read -a groupsarr <<< "$allgroups"
     for group in "${groupsarr[@]}";
     do
         cat > /tmp/ldapgroup.ldif << LDAPUSER
@@ -210,27 +207,7 @@ LDAPUSER
     exit 0
 fi
 
-if [ "$OPERATION" = "deleteAdmin" ]; then
-    cat > /tmp/ldapuser.ldif << LDAPUSER
-dn: cn=FidoAdminAuthorized,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
-changetype: modify
-delete: uniqueMember
-uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
-LDAPUSER
-    ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/ldapuser.ldif 2> /tmp/Error
-    ERROR=$(</tmp/Error)
-    rm /tmp/ldapuser.ldif /tmp/Error
-    if [ -z "$ERROR" ]; then
-        echo "Removed User $USERNAME from LDAP Groups"
-    else
-        echo $ERROR
-        exit 1
-    fi
-    ldapdelete -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" "cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com"
-    echo "Deleted Admin $USERNAME"
-    exit 0
-fi
-if [ "$OPERATION" = "changeUserPassword" ] || [ "$OPERATION" = "changeAdminPassword" ]; then
+if [ "$OPERATION" = "changeUserPassword" ] ; then
 
     USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b dc=strongauth,dc=com cn=$USERNAME -LLL 2> /dev/null)
     if [ -z "$USER_EXIST" ]; then

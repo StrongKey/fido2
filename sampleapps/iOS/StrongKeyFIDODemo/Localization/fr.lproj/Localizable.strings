@@ -1,0 +1,226 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License, as published by the Free Software Foundation and
+ * available at http://www.fsf.org/licensing/licenses/lgpl.html,
+ * version 2.1.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2001-2021 StrongAuth, Inc. (DBA StrongKey)
+ *
+ * **********************************************
+ *
+ * 888b    888          888
+ * 8888b   888          888
+ * 88888b  888          888
+ * 888Y88b 888  .d88b.  888888  .d88b.  .d8888b
+ * 888 Y88b888 d88""88b 888    d8P  Y8b 88K
+ * 888  Y88888 888  888 888    88888888 "Y8888b.
+ * 888   Y8888 Y88..88P Y88b.  Y8b.          X88
+ * 888    Y888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * **********************************************
+ *
+ * French translation Strings
+ *
+ */
+
+/* No comment provided by engineer. */
+"    Terms and conditions go here." = "Terminaux et conditions.";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"Add Key" = "Ajouter une clé";
+
+/* No comment provided by engineer. */
+"Already have an account?" = "Vous avez déjà un compte?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete this key?" = "Êtes-vous sûr de vouloir supprimer cette clé?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete your account?" = "Êtes-vous sûr de vouloir supprimer votre compte?";
+
+/* No comment provided by engineer. */
+"Attestation Format" = "Format d'attestation";
+
+/* No comment provided by engineer. */
+"Cannot delete this Key" = "Impossible de supprimer cette touche";
+
+/* No comment provided by engineer. */
+"Click Me" = "Cliquez sur moi";
+
+/* No comment provided by engineer. */
+"Create Date" = "Créer un rendez-vous";
+
+/* No comment provided by engineer. */
+"Create Location" = "Créer un emplacement";
+
+/* No comment provided by engineer. */
+"Create On: %@" = "Créer sur: %@";
+
+/* No comment provided by engineer. */
+"Created On:" = "Créé sur:";
+
+/* No comment provided by engineer. */
+"Delete" = "Effacer";
+
+/* No comment provided by engineer. */
+"Delete Account" = "Supprimer le compte";
+
+/* No comment provided by engineer. */
+"Dismiss" = "Proche";
+
+/* No comment provided by engineer. */
+"Display Name" = "Afficher un nom";
+
+/* No comment provided by engineer. */
+"Don't have an account?" = "Ne pas avoir un compte?";
+
+/* No comment provided by engineer. */
+"Error" = "Erreur";
+
+/* No comment provided by engineer. */
+"Error adding new Key" = "Erreur lors de l'ajout d'une nouvelle clé";
+
+/* No comment provided by engineer. */
+"FIDO Demo" = "FIDO Demo";
+
+/* No comment provided by engineer. */
+"FIDO Protocol" = "Protocole FIDO";
+
+/* No comment provided by engineer. */
+"FIDO Version" = "Version FIDO";
+
+/* No comment provided by engineer. */
+"Key Credential ID" = "Identifiant clé";
+
+/* No comment provided by engineer. */
+"Key Details" = "Détails clés";
+
+/* No comment provided by engineer. */
+"Key Information" = "Information clé";
+
+/* No comment provided by engineer. */
+"Key Management" = "Gestion clé";
+
+/* No comment provided by engineer. */
+"Key Name" = "Nom de la clé";
+
+/* No comment provided by engineer. */
+"Language" = "Langue";
+
+/* No comment provided by engineer. */
+"Last Used" = "Dernière utilisation";
+
+/* No comment provided by engineer. */
+"Last Used Date" = "Date de la dernière utilisation";
+
+/* No comment provided by engineer. */
+"Last Used Location" = "Dernier emplacement utilisé";
+
+/* No comment provided by engineer. */
+"Last used location:" = "Dernier emplacement utilisé :";
+
+/* No comment provided by engineer. */
+"Last used location: %@" = "Lieu d'occasion dernier: %@";
+
+/* No comment provided by engineer. */
+"Last used:" = "Dernière utilisation :";
+
+/* No comment provided by engineer. */
+"Last used: %@" = "Dernière utilisation: %@";
+
+/* No comment provided by engineer. */
+"License Agreement" = "Accord de licence";
+
+/* No comment provided by engineer. */
+"Login" = "Login";
+
+/* No comment provided by engineer. */
+"Login to start using the app" = "Connectez-vous pour commencer à utiliser l'application";
+
+/* No comment provided by engineer. */
+"NO INTERNET" = "PAS D'INTERNET";
+
+/* No comment provided by engineer. */
+"Note" = "Noter";
+
+/* No comment provided by engineer. */
+"Ok" = "D'accord";
+
+/* No comment provided by engineer. */
+"OK" = "d'accord";
+
+/* No comment provided by engineer. */
+"Platform Key" = "Clé de plate-forme";
+
+/* No comment provided by engineer. */
+"Register" = "S'inscrire";
+
+/* No comment provided by engineer. */
+"Register *Platform* Key" = "Inscription *Plateforme* Clé";
+
+/* No comment provided by engineer. */
+"Register *Security* Key" = "Enregistrer la clé *Sécurité*";
+
+/* No comment provided by engineer. */
+"Security Key" = "Clef de sécurité";
+
+/* No comment provided by engineer. */
+"Server timeout" = "Délai d'expiration du serveur";
+
+/* No comment provided by engineer. */
+"Sign Out" = "Se déconnecter";
+
+/* No comment provided by engineer. */
+"Status" = "Statut";
+
+/* No comment provided by engineer. */
+"Successfully Registered" = "Enregistré avec succès";
+
+/* No comment provided by engineer. */
+"Terms and Conditions" = "Termes et conditions";
+
+/* No comment provided by engineer. */
+"Terms and conditions go here." = "Termes et conditions ici.";
+
+/* No comment provided by engineer. */
+"This is your only key for the account. If you want to delete the account select Delete Account from the Settings Menu top right!" = "Ceci est votre seule clé pour le compte. Si vous souhaitez supprimer le compte, sélectionnez Supprimer le compte dans le menu Paramètres en haut à droite!";
+
+/* No comment provided by engineer. */
+"This step cannot be reversed. Your username and all your registered key will be removed from the account." = "Cette étape ne peut pas être inversée. Votre nom d'utilisateur et votre clé enregistrée seront supprimés du compte.";
+
+/* No comment provided by engineer. */
+"This step cannot be reversed. Your username and all your registered keys will be removed from the account." = "Cette étape ne peut pas être inversée. Votre nom d'utilisateur et toutes vos clés enregistrées seront supprimés du compte.";
+
+/* No comment provided by engineer. */
+"user does not exist" = "L'utilisateur n'existe pas";
+
+/* No comment provided by engineer. */
+"username" = "Nom d'utilisateur";
+
+/* No comment provided by engineer. */
+"username already in use" = "Nom d'utilisateur déjà utilisé";
+
+/* No comment provided by engineer. */
+"Yes, delete my account" = "Oui, supprimer mon compte";
+
+/* No comment provided by engineer. */
+"Yes, delete this key." = "Oui, supprimez cette clé.";
+
+/* No comment provided by engineer. */
+"You can use additional keys to login on other devices." = "Vous pouvez utiliser des clés supplémentaires pour vous connecter sur d'autres appareils.";
+
+/* No comment provided by engineer. */
+"You will not be able to use this key to login on any device." = "Vous ne pourrez pas utiliser cette touche pour vous connecter à un périphérique.";
+

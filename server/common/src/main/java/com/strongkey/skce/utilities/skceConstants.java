@@ -90,6 +90,8 @@ public class skceConstants {
     public static final String LDAP_ROLE_FIDO_SIGN = "FIDOSIGN"; //  'cn=FidoSignAuthorized'
     public static final String LDAP_ROLE_FIDO_AUTHZ = "FIDOAUTHZ"; //  'cn=FidoAuthzAuthorized'
     public static final String LDAP_ROLE_FIDO_ADMIN = "FIDOADM"; //  'cn=FidoAdminAuthorized'
+    public static final String LDAP_ROLE_FIDO_POLICY_MANAGEMENT = "FIDOPOLICYMGT"; //  'cn=FidoAdminAuthorized'
+    public static final String LDAP_ROLE_FIDO_MONITOR = "FIDOMONITOR"; //  'cn=FidoAdminAuthorized'
 
     /**
      * *********************************************************************

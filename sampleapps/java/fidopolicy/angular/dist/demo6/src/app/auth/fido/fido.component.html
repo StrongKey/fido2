@@ -1,0 +1,32 @@
+<div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--signin m-login--2 m-login-2--skin-3" id="m_login" style="background-color:white;">
+	<div class="m-grid__item m-grid__item--fluid	m-login__wrapper">
+		<div class="m-login__container login-card">
+			<div class="m-login__logo" style="margin: 0 auto 3rem auto;">
+				<a>
+					<img style="height: 25%; width: 25%;" src="./assets/app/media/img//logo/logo.png">
+				</a>
+			</div>
+			<div class="m-login__signin">
+				<div class="m-login__head">
+					<h3 class="m-login__title" style="color: #004054">
+						<b *ngIf="!isRegister">Authentication</b>
+						<b *ngIf="!!isRegister">Registration</b>
+            <p>Please choose one of the following approved authentication keys.</p>
+						<div class = "auth_icons_grid">
+    					<img  style="height: 15%; width: 15%; padding:5px;" src="./assets/app/media/img//icons/wifi_key.png">
+    					<img style="height: 15%; width: 15%; padding:5px;" src="./assets/app/media/img//icons/BT_key.png">
+    					<img style="height: 15%; width: 15%; padding:5px;" src="./assets/app/media/img//icons/usb_key.png">
+							<img style="height: 15%; width: 15%; padding:5px;" src="./assets/app/media/img//icons/fingerprint.png">
+					</div>
+					<img style="margin-top: 50px;"src="./assets/app/media/img//misc/loading.gif"/>
+					</h3>
+				</div>
+				<div class="m_login__footer text-center">
+					<button id="m_fido_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom m-login__btn" (click)="fidoCancel()">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

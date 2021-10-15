@@ -52,7 +52,8 @@ public class SoapFidoRegister {
                                 String credential1,
                                 String credential2,
                                 String username,
-                                String origin)
+                                String origin,
+                                String crossOrigin)
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -164,7 +165,11 @@ public class SoapFidoRegister {
 //            System.out.println(origin);
 //            System.out.println(resJsonObj.toString());
 //            System.out.println("******************************");
-            JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, "packed", "Basic", true);
+            Boolean co = Boolean.FALSE;
+            if (crossOrigin.equalsIgnoreCase("true") || crossOrigin.equalsIgnoreCase("yes")) {
+                co = Boolean.TRUE;
+            }
+            JsonObject input = FIDO2AuthenticatorSimulator.generateFIDO2RegistrationResponse(origin, resJsonObj.toString(), origin, "packed", "Basic", true, co);
             System.out.println("Simulator Response : ");
 
             StringReader regresreader = new StringReader(input.toString());

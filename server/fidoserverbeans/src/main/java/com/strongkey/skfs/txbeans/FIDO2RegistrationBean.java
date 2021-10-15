@@ -90,8 +90,15 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             UserSessionInfo userInfo = (UserSessionInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_USER_SESSION_INFO, challengeDigest);
             String sessionUsername = retrieveUsernameFromSessionMap(userInfo, challengeDigest);
             verifyUsernameMatch(metadataJson.getString(SKFSConstants.FIDO_METADATA_KEY_USERNAME), sessionUsername);
-            verifyOrigin(clientDataJson.getString(SKFSConstants.JSON_KEY_SERVERORIGIN), origin);
-
+            
+            Boolean crossOrigin = Boolean.FALSE;
+            if (clientDataJson.containsKey(SKFSConstants.JSON_KEY_CROSSORIGIN)) {
+                crossOrigin = clientDataJson.getBoolean(SKFSConstants.JSON_KEY_CROSSORIGIN);
+            }
+            if (!crossOrigin) {
+                verifyOrigin(clientDataJson.getString(SKFSConstants.JSON_KEY_SERVERORIGIN), origin);
+            }
+            
             //TODO rpid hash matches.
             
             //Get AttestationObject
@@ -100,7 +107,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             //Retrieve AAGUID
             String aaguid = getAAGUID(attObject);
             
-
+            
             //Perform Policy Verification
             verifyRegistrationPolicyBean.execute(userInfo, clientDataJson, attObject);
 

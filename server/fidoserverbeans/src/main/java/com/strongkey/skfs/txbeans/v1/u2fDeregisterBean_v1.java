@@ -161,17 +161,17 @@ public class u2fDeregisterBean_v1 implements u2fDeregisterBeanLocal_v1, u2fDereg
 
             Short sid_to_be_deleted = null;
 //            String did_to_be_deactivated = null;
-            int userfkidhyphen;
-            String fidouser;
+//            int userfkidhyphen;
+//            String fidouser;
             Long fkid_to_be_deleted = null;
             try {
                 String[] mapvaluesplit = randomid.split("-", 3);
                 sid_to_be_deleted = Short.parseShort(mapvaluesplit[0]);
                 did = mapvaluesplit[1];
-                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
+//                userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
 
-                fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
-                fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2].substring(userfkidhyphen + 1));
+//                fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
+                fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
             } catch (Exception ex) {
                 rv.setErrorkey("FIDO-ERR-0023");
                 rv.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0023") + "Invalid randomid= " + randomid);
@@ -197,7 +197,7 @@ public class u2fDeregisterBean_v1 implements u2fDeregisterBeanLocal_v1, u2fDereg
                             SKFSCommon.getMessageProperty("FIDO-MSG-5005"), "");
                     try {
                         //  if the fkid_to_be_deleted is valid, delete the entry from the database
-                        String jparesult = deletekeybean.execute(sid_to_be_deleted, Long.parseLong(did), username, fkid_to_be_deleted);
+                        String jparesult = deletekeybean.execute(sid_to_be_deleted, Long.parseLong(did),  fkid_to_be_deleted);
                         JsonObject jo;
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();

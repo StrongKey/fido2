@@ -16,12 +16,10 @@ import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.core.U2FUtility;
 import com.strongkey.skfs.fido.policyobjects.AlgorithmsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.AttestationPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.ExtensionsPolicyOptions;
+import com.strongkey.skfs.fido.policyobjects.DefinedExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RegistrationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2RegistrationExtension;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
@@ -44,7 +42,6 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 
 
 @Stateless
@@ -129,9 +126,6 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
             String attestPref = generateAttestationConveyancePreference(fidoPolicy.getAttestationOptions(), options);
             if(attestPref != null){
                 returnObjectBuilder.add(SKFSConstants.FIDO2_PREREG_ATTR_ATTESTATION, attestPref);
-            }
-            else{
-                attestPref = SKFSConstants.FIDO2_CONST_ATTESTATION_DIRECT;
             }
 
         JsonObject extensionsJson = generateExtensions(fidoPolicy.getExtensionsOptions(), extensions);
@@ -260,10 +254,9 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         else {
             allowedRSASignatures = cryptoOp.getAllowedRSASignatures();
         }
-
-//TODO fix this hardcoded assuption that EC is preferred over RSA
-        if (!cryptoOp.getAllowedRSASignatures().contains("none")) {
-            for (String alg : allowedRSASignatures) {
+        //TODO fix this hardcoded assuption that EC is preferred over RSA
+        for (String alg : allowedRSASignatures) {
+            if(!alg.equalsIgnoreCase("none")) {
                 JsonObject publicKeyCredential = Json.createObjectBuilder()
                         .add(SKFSConstants.FIDO2_ATTR_TYPE, "public-key") //TODO fix this hardcoded assumption
                         .add(SKFSConstants.FIDO2_ATTR_ALG, SKFSCommon.getIANACOSEAlgFromPolicyAlg(alg))
@@ -303,7 +296,10 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
     private JsonObject generateAuthenticatorSelection(FidoPolicyObject fidoPolicy, JsonObject options){
         JsonObject authselectResponse;
         RegistrationPolicyOptions regOp = fidoPolicy.getRegistrationOptions();
-        JsonObject rpRequestedAuthSelect = options.getJsonObject(SKFSConstants.FIDO2_PREREG_ATTR_AUTHENTICATORSELECT);
+        JsonObject rpRequestedAuthSelect = null;
+        if(options.containsKey(SKFSConstants.FIDO2_PREREG_ATTR_AUTHENTICATORSELECT)){
+            rpRequestedAuthSelect = options.getJsonObject(SKFSConstants.FIDO2_PREREG_ATTR_AUTHENTICATORSELECT);
+        }
         JsonObjectBuilder authselectBuilder = Json.createObjectBuilder();
         // Use RP requested options, assuming the policy allows.
         if(rpRequestedAuthSelect != null){
@@ -317,6 +313,13 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
             }
             else if(rpRequestedAttachment != null){
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_ATTACHMENT);
+            } else {
+                //If there is only one option for the attachment in FIDO Policy then that options is specified 
+                if(regOp.getAuthenticatorAttachment().size() == 1){
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_ATTACHMENT, regOp.getAuthenticatorAttachment().get(0));
+                } else if (regOp.getAuthenticatorAttachment().isEmpty()){
+                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0003", "Attestation Attachment Options Missing from FIDO Policy");
+                }
             }
 
             if (rpRequestedRequireResidentKey != null) {
@@ -325,15 +328,70 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
                 } else {
                     throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
                 }
+            } else {
+                 //Specifying the lowest constraint for Discoverable credential
+                if(regOp.getRequireResidentKey().size() < 3){
+                    if (regOp.getRequireResidentKey().contains(SKFSConstants.POLICY_CONST_PREFERRED) && regOp.getRequireResidentKey().contains(SKFSConstants.POLICY_CONST_REQUIRED)){
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, SKFSConstants.POLICY_CONST_PREFERRED);
+                    } else if (regOp.getRequireResidentKey().size() == 1){
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY,regOp.getRequireResidentKey().get(0));
+                    } else if(regOp.getRequireResidentKey().isEmpty()){
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "Discoverable Credential Options Missing from FIDO Policy");
+                    }
+                }
             }
 
-            if(fidoPolicy.getUserVerification().contains(rpRequestedUserVerification)){
+            if(fidoPolicy.getSystemOptions().getUserVerification().contains(rpRequestedUserVerification)){
                 authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, rpRequestedUserVerification);
             }
             else if (rpRequestedUserVerification != null) {
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_USERVERIFICATION);
+            } else {
+                 //Specifying the lowest constraint for user verfication
+                if(fidoPolicy.getSystemOptions().getUserVerification().size() < 3){
+                    if (fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED) && fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_REQUIRED)){
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION,  SKFSConstants.POLICY_CONST_PREFERRED);
+                    } else if (fidoPolicy.getSystemOptions().getUserVerification().size() == 1){
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION,fidoPolicy.getSystemOptions().getUserVerification().get(0));
+                    } else if(fidoPolicy.getSystemOptions().getUserVerification().isEmpty()){
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "User Verfication Options Missing from FIDO Policy");
+                    }
+                }
+            }
+        } else {
+            //If there are no requested authenticator select options specified the FIDO Policy will be consulted
+           
+            //If there is only one option for the attachment in FIDO Policy then that options is specified 
+            if(regOp.getAuthenticatorAttachment().size() == 1){
+                authselectBuilder.add(SKFSConstants.FIDO2_ATTR_ATTACHMENT, regOp.getAuthenticatorAttachment().get(0));
+            }else if (regOp.getAuthenticatorAttachment().isEmpty()){
+                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0003", "Attestation Attachment Options Missing from FIDO Policy");
+                }
+            //Specifying the lowest constraint for Discoverable credential
+            if(regOp.getRequireResidentKey().size() < 3){
+                if (regOp.getRequireResidentKey().contains(SKFSConstants.POLICY_CONST_PREFERRED) && regOp.getRequireResidentKey().contains(SKFSConstants.POLICY_CONST_REQUIRED)){
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY,  SKFSConstants.POLICY_CONST_PREFERRED);
+                } else if (regOp.getRequireResidentKey().size() == 1){
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY,regOp.getRequireResidentKey().get(0));
+                } else if(regOp.getRequireResidentKey().isEmpty()){
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "Discoverable Credential Options Missing from FIDO Policy");
+                }
+            }
+            
+            //Specifying the lowest constraint for user verfication
+            if(fidoPolicy.getSystemOptions().getUserVerification().size() < 3){
+                if (fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED) && fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_REQUIRED)){
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION,  SKFSConstants.POLICY_CONST_PREFERRED);
+                } else if (fidoPolicy.getSystemOptions().getUserVerification().size() == 1){
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION,fidoPolicy.getSystemOptions().getUserVerification().get(0));
+                } else if(fidoPolicy.getSystemOptions().getUserVerification().isEmpty()){
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0009", "User Verfication Options Missing from FIDO Policy");
+                }
             }
         }
+        
+        
+        
         authselectResponse = authselectBuilder.build();
         // If an option is unset, verify the policy allows for the default behavior.
         if(!authselectResponse.isEmpty()){
@@ -342,7 +400,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
             }
             if(authselectResponse.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
-                    && !fidoPolicy.getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED)){
+                    && !fidoPolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED)){
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
             }
             return authselectResponse;
@@ -360,6 +418,19 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         }
         else if(rpRequestedAttestation != null){
             throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_PREREG_ATTR_ATTESTATION);
+        } else {
+             //Specifying the lowest constraint for Attestation Conveyance 
+            if(attOp.getAttestationConveyance().contains(SKFSConstants.POLICY_CONST_DIRECT)){
+                attestionResponse = SKFSConstants.POLICY_CONST_DIRECT;
+            } else if (attOp.getAttestationConveyance().contains(SKFSConstants.POLICY_CONST_INDIRECT)){
+                attestionResponse = SKFSConstants.POLICY_CONST_INDIRECT;
+            } else if (attOp.getAttestationConveyance().contains(SKFSConstants.POLICY_CONST_ENTERPRISE)){
+                attestionResponse = SKFSConstants.POLICY_CONST_ENTERPRISE;
+            } else if (attOp.getAttestationConveyance().contains(SKFSConstants.POLICY_CONST_NONE)){
+                attestionResponse = SKFSConstants.POLICY_CONST_NONE;
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0003", "Attestation Conveyance Options Missing from FIDO Policy");
+            }
         }
 
         // If an option is unset, verify the policy allows for the default behavior.
@@ -369,30 +440,33 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         return attestionResponse;
     }
 
-    private JsonObject generateExtensions(ExtensionsPolicyOptions extOp, JsonObject extensionsInput){
+    private JsonObject generateExtensions(DefinedExtensionsPolicyOptions extOp, JsonObject extensionsInput){
         JsonObjectBuilder extensionJsonBuilder = Json.createObjectBuilder();
 
-        for (Fido2Extension ext : extOp.getExtensions()) {
-            if (ext instanceof Fido2RegistrationExtension) {
-                JsonValue extensionInput = (extensionsInput == null) ? null
-                        : extensionsInput.get(ext.getExtensionIdentifier());
-
-                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
-                if (extensionChallangeObject != null) {
-                    if (extensionChallangeObject instanceof String) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
-                    }
-                    else if (extensionChallangeObject instanceof JsonObject) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
-                    }
-                    else if (extensionChallangeObject instanceof JsonValue) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
-                    }
-                    else {
-                        throw new UnsupportedOperationException("Unimplemented Extension requested");
-                    }
-                }
-            }
+//        for (Fido2Extension ext : extOp.getExtensions()) {
+//            if (ext instanceof Fido2RegistrationExtension) {
+//                JsonValue extensionInput = (extensionsInput == null) ? null
+//                        : extensionsInput.get(ext.getExtensionIdentifier());
+//
+//                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
+//                if (extensionChallangeObject != null) {
+//                    if (extensionChallangeObject instanceof String) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
+//                    }
+//                    else if (extensionChallangeObject instanceof JsonObject) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
+//                    }
+//                    else if (extensionChallangeObject instanceof JsonValue) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
+//                    }
+//                    else {
+//                        throw new UnsupportedOperationException("Unimplemented Extension requested");
+//                    }
+//                }
+//            }
+//        }
+        if(extOp.getUVM() != null){
+            extensionJsonBuilder.add(SKFSConstants.POLICY_ATTR_EXTENSIONS_INPUT_UVM ,true);
         }
 
         return extensionJsonBuilder.build();

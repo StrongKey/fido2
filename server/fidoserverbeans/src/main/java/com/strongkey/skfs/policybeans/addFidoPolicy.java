@@ -14,6 +14,7 @@ import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.entitybeans.FidoPolicies;
 import com.strongkey.skfs.entitybeans.FidoPoliciesPK;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
+import com.strongkey.skfs.fido.policyobjects.MDSAuthenticatorStatusPolicy;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.FidoPolicyMDSObject;
 import com.strongkey.skfs.requests.CreateFidoPolicyRequest;
@@ -23,6 +24,7 @@ import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFSLogger;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Level;
@@ -88,6 +90,7 @@ public class addFidoPolicy implements addFidoPolicyLocal {
                         sid,
                         pid.longValue());
             MDSClient mds = null;
+            
 
             skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));
 

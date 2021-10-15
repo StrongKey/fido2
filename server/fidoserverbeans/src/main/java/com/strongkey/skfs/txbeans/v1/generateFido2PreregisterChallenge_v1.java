@@ -30,7 +30,7 @@ import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.core.U2FUtility;
 import com.strongkey.skfs.fido.policyobjects.AlgorithmsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.AttestationPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.ExtensionsPolicyOptions;
+import com.strongkey.skfs.fido.policyobjects.DefinedExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RegistrationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
@@ -341,7 +341,7 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
             }
 
-            if(fidopolicy.getUserVerification().contains(rpRequestedUserVerification)){
+            if(fidopolicy.getSystemOptions().getUserVerification().contains(rpRequestedUserVerification)){
                 authselectBuilder.add(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, rpRequestedUserVerification);
             }
             else if (rpRequestedUserVerification != null) {
@@ -356,7 +356,7 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY + "Missing");
             }
             if(authselectResponse.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null) == null
-                    && !fidopolicy.getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED)){
+                    && !fidopolicy.getSystemOptions().getUserVerification().contains(SKFSConstants.POLICY_CONST_PREFERRED)){
                 throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_USERVERIFICATION + "Missing");
             }
             return authselectResponse;
@@ -383,31 +383,31 @@ public class generateFido2PreregisterChallenge_v1 implements generateFido2Prereg
         return attestionResponse;
     }
 
-    private JsonObject generateExtensions(ExtensionsPolicyOptions extOp, JsonObject extensionsInput){
+    private JsonObject generateExtensions(DefinedExtensionsPolicyOptions extOp, JsonObject extensionsInput){
         JsonObjectBuilder extensionJsonBuilder = Json.createObjectBuilder();
 
-        for (Fido2Extension ext : extOp.getExtensions()) {
-            if (ext instanceof Fido2RegistrationExtension) {
-                JsonValue extensionInput = (extensionsInput == null) ? null
-                        : extensionsInput.get(ext.getExtensionIdentifier());
-
-                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
-                if (extensionChallangeObject != null) {
-                    if (extensionChallangeObject instanceof String) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
-                    }
-                    else if (extensionChallangeObject instanceof JsonObject) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
-                    }
-                    else if (extensionChallangeObject instanceof JsonValue) {
-                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
-                    }
-                    else {
-                        throw new UnsupportedOperationException("Unimplemented Extension requested");
-                    }
-                }
-            }
-        }
+//        for (Fido2Extension ext : extOp.getExtensions()) {
+//            if (ext instanceof Fido2RegistrationExtension) {
+//                JsonValue extensionInput = (extensionsInput == null) ? null
+//                        : extensionsInput.get(ext.getExtensionIdentifier());
+//
+//                Object extensionChallangeObject = ext.generateChallengeInfo(extensionInput);
+//                if (extensionChallangeObject != null) {
+//                    if (extensionChallangeObject instanceof String) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (String) extensionChallangeObject);
+//                    }
+//                    else if (extensionChallangeObject instanceof JsonObject) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonObject) extensionChallangeObject);
+//                    }
+//                    else if (extensionChallangeObject instanceof JsonValue) {
+//                        extensionJsonBuilder.add(ext.getExtensionIdentifier(), (JsonValue) extensionChallangeObject);
+//                    }
+//                    else {
+//                        throw new UnsupportedOperationException("Unimplemented Extension requested");
+//                    }
+//                }
+//            }
+//        }
 
         return extensionJsonBuilder.build();
     }

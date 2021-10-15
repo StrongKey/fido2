@@ -1,10 +1,38 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License, as published by the Free Software Foundation and
+ * available at http://www.fsf.org/licensing/licenses/lgpl.html,
+ * version 2.1 or above.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2001-2021 StrongAuth, Inc.
+ *
+ * $Date: $
+ * $Revision: $
+ * $Author: $
+ * $URL: $
+ *
+ * *********************************************
+ *                    888
+ *                    888
+ *                    888
+ *  88888b.   .d88b.  888888  .d88b.  .d8888b
+ *  888 "88b d88""88b 888    d8P  Y8b 88K
+ *  888  888 888  888 888    88888888 "Y8888b.
+ *  888  888 Y88..88P Y88b.  Y8b.          X88
+ *  888  888  "Y88P"   "Y888  "Y8888   88888P'
+ *
+ * *********************************************
+ *
+ */
+
 package com.strongkey.FIDO2JWTVerify;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +56,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -73,7 +99,7 @@ public class Verify {
         requiredPayload.add("exp");
         requiredPayload.add("cip");
         requiredPayload.add("agent");
-        requiredPayload.add("uname");
+        requiredPayload.add("sub");
 
         String[] jwtb64split = jwtb64.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -83,6 +109,9 @@ public class Verify {
                 .add("signature", jwtb64split[2])
                 .build();
         jwtsigningalgorithm = jwt.getJsonObject("protected").getString("alg");
+        if(jwtsigningalgorithm.equalsIgnoreCase("ES256")){
+            jwtsigningalgorithm = "SHA256withECDSA";
+        }
 
         try {
             // Setup FIPS Provider
@@ -109,6 +138,8 @@ public class Verify {
             certx.add(cert);
             certx.add(jwtCAcert);
 
+            System.out.println(cert);
+            System.out.println();
             CertPath path = cf.generateCertPath(certx);
             Set<TrustAnchor> trustAnchor = new HashSet<>();
             trustAnchor.add(new TrustAnchor(jwtCAcert, null));
@@ -140,18 +171,21 @@ public class Verify {
             }
             JsonObject payloadJson = getJsonObjectFromString(plaintext);
             //Check validity of all entities in payload 
-            if (plaintext.contains("exp")) {
-                String expDateString = payloadJson.getString("exp");
+            if (payloadJson.containsKey("exp")) {
+//                String expDateString = payloadJson.getString("exp");
+                Long expDateString = payloadJson.getJsonNumber("exp").longValue();
+                
                 String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                Date expDate = new SimpleDateFormat(pattern).parse(expDateString);
+//                Date expDate = new SimpleDateFormat(pattern).parse(expDateString);
+                Date expDate = new Date(expDateString);
                 Date currentDate = new Date();
                 if (currentDate.after(expDate)) {
                     System.err.println("past jwt expiration");
                     return false;
                 }
             }
-            if (plaintext.contains("uname")) {
-                String uname = payloadJson.getString("uname");
+            if (payloadJson.containsKey("sub")) {
+                String uname = payloadJson.getString("sub");
                 if (!uname.equals(username)) {
                     System.err.println("payload uname does not match: " + uname);
                     return false;
@@ -180,8 +214,9 @@ public class Verify {
             }
             return true;
         } catch (IOException | NoSuchAlgorithmException | InvalidAlgorithmParameterException
-                | SignatureException | CertificateException | CertPathValidatorException | ParseException ex) {
+                | SignatureException | CertificateException | CertPathValidatorException ex) {
             System.err.println(ex);
+            ex.printStackTrace();
         }
         return false;
 
@@ -212,6 +247,7 @@ public class Verify {
                 if (alias.equals("jwtCA-" + did)) {
                     X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
                     correctCert = cert;
+                    System.out.println("correctcert = \n" + correctCert );
                     break;
                 }
             }

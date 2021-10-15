@@ -791,7 +791,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                 while (it.hasNext()) {
                     FidoKeys key = (FidoKeys) it.next();
                     if (key != null) {
-                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getUsername() + "-" + key.getFidoKeysPK().getFkid();
+                        String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
                         FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
                         skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
                         keyhandles[i] = decryptKH(key.getKeyhandle());
@@ -1078,12 +1078,12 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     }
                     //  Persist sign counter info & the user presence bytes to the database - TBD
                     FidoKeys key = null;
-                    FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + username + "-" + regkeyid);
+                    FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + regkeyid);
                     if (fkinfo != null) {
                         key = fkinfo.getFk();
                     }
                     if (key == null) {
-                        key = getkeybean.getByfkid(serverid, Long.parseLong(did), username, regkeyid);
+                        key = getkeybean.getByfkid(serverid, Long.parseLong(did), regkeyid);
                     }
                     if (key != null) {
                         int oldCounter = key.getCounter();
@@ -1104,7 +1104,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                             }
                         }
                         //  update the sign counter value in the database with the new counter value.
-                        String jparesult = updatekeybean.execute(serverid, Long.parseLong(did), username, regkeyid, newCounter, modifyloc);
+                        String jparesult = updatekeybean.execute(serverid, Long.parseLong(did), regkeyid, newCounter, modifyloc);
                         JsonObject jo;
                         try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                             jo = jr.readObject();
@@ -1483,7 +1483,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             responseJSON = SKFSCommon.buildDeregisterResponse("", "", skcero.getErrormsg());
         } else {
             // Build the output
-            String response = "Successfully deleted user registered security key";
+            String response = "Successfully deleted";
             responseJSON = SKFSCommon.buildDeregisterResponse(response, "", "");
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
         }

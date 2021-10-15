@@ -67,10 +67,10 @@ public class JWTCreate implements JWTCreateLocal {
         }
         JsonObject jsonPayload = Json.createObjectBuilder()
                 .add("rpid", rpid)
-                .add("iat", iat)
-                .add("exp", exp)
+                .add("iat", currentDate.getTime())
+                .add("exp", expDate.getTime())
                 .add("cip", cip)
-                .add("uname", username)
+                .add("sub", username)
                 .add("agent", agent)
                 .build();
         //Get signing key and certificate from queue
@@ -84,6 +84,9 @@ public class JWTCreate implements JWTCreateLocal {
                     SKFSCommon.getMessageProperty("FIDO-MSG-6003"),ex.getMessage());
         }
         String alg = cryptoCommon.getJwtSignAlgorithm();
+        if(alg.equalsIgnoreCase("SHA256withECDSA")){
+            alg = "ES256";
+        }
         Signature ecsig = (Signature) signinglist.get(0);
         X509Certificate cert = (X509Certificate) signinglist.get(1);
         StringWriter sWriter = new StringWriter();

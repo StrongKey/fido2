@@ -173,7 +173,11 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
                 group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoauthzgroup")+groupdnsuffix;
             } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_ADMIN)) {
                 group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidoadmingroup")+groupdnsuffix;
-            } 
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_MONITOR)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidomonitoringgroup")+groupdnsuffix;
+            } else if (operation.equalsIgnoreCase(skceConstants.LDAP_ROLE_FIDO_POLICY_MANAGEMENT)) {
+                group = skceCommon.getConfigurationProperty(did, "ldape.cfg.property.service.ce.ldap.ldapfidopolicymanagementgroup")+groupdnsuffix;
+            }
             else {
                 // Invalid operation
                 strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.SEVERE, "APPL-MSG-1000", "User-Operation=" + username + "-" + operation + "]");
@@ -222,11 +226,12 @@ public class authorizeLdapUserBean implements authorizeLdapUserBeanLocal, author
                 }
             }
             // Failed authentication with supplied credentials;
-        } catch (AuthenticationException ex) {
+        } catch (AuthenticationException  ex) {
             ex.printStackTrace();
             strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.SEVERE, "APPL-ERR-1000", username + ex.getLocalizedMessage());
             throw new SKCEException(skceCommon.getMessageProperty("SKCEWS-ERR-3055").replace("{0}", "") + username);
         } catch (NamingException ex) {
+            ex.printStackTrace();
             strongkeyLogger.log(applianceConstants.APPLIANCE_LOGGER,Level.SEVERE, "APPL-ERR-1000", username + ex.getLocalizedMessage());
             throw new SKCEException(skceCommon.getMessageProperty("SKCEWS-ERR-3055").replace("{0}", "") + username);
         }

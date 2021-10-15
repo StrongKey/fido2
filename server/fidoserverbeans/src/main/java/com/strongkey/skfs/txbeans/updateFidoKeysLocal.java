@@ -12,7 +12,11 @@ import javax.ejb.Local;
 public interface updateFidoKeysLocal {
 
     public String execute(Short sid,Long did,
-            String username,Long fkid,
+            Long fkid,
             Integer newCounter,
             String modify_location);
+//    public String execute(Short sid,Long did,
+//            String username,Long fkid,
+//            Integer newCounter,
+//            String modify_location);
 }

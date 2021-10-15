@@ -11,5 +11,6 @@ import javax.ejb.Local;
 @Local
 public interface deleteFidoKeysLocal {
 
-    public String execute(Short sid,Long did, String username, Long fkid);
+//    public String execute(Short sid,Long did, String username, Long fkid);
+    public String execute(Short sid,Long did, Long fkid);
 }

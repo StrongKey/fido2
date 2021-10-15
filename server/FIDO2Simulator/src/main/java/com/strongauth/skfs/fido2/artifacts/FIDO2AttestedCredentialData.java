@@ -82,6 +82,7 @@ public class FIDO2AttestedCredentialData
         }
 
         ByteBuffer credentialData = ByteBuffer.allocate(16 + 2 + credentialId.length + pklen);
+        credentialData.put(aaguid);
         credentialData.position(16);
         credentialData
             .putShort((short) credentialId.length)
