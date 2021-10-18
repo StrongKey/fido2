@@ -47,7 +47,7 @@ Sample code is provided with a brief explanation of what each sample does:
 * Java Samples
   * [DEMO](https://demo5.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
-  * [FIDO Policy](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): sample Policy Module
+  * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): Proof-of-concept Java application
   * [SSO](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/): FIDO-enabled sample applications demonstrating SSO
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO-enabled sample Android application and Android client library to perform FIDO transactions
 
