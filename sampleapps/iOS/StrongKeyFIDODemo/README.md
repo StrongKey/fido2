@@ -6,6 +6,8 @@
 This is a demo application to show SKFS capabilities on a rich-client native application running on Apple's iPhone, iPad, and Mac devices.
 This project is built using the Model View ViewModel (MVVM) design pattern, and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs.
 
+[Download StrongKey FIDO Server (SKFS) Demo for iOS/iPadOS/macOS.](https://testflight.apple.com/join/Nik6PGNK). This sample code is configured to function with demo.strongkey.com, and is not designed for production use.
+
 ## Features
 
 - Register a new account using Passkey, powered by SKFS
