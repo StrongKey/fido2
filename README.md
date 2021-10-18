@@ -39,7 +39,7 @@ For the latest version:
 * Troubleshooting
   * [Error messages](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-error-codes-and-their-meanings)
   * [Known Issues](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-solutions-for-known-issues)
-* [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with KA 3.x and moving forward
+* [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with SKFS 4.3.x and moving forward
 
 ## Sample Applications
 Sample code is provided with a brief explanation of what each sample does:
