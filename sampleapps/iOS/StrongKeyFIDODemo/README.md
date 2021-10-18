@@ -1,9 +1,9 @@
 
-# StrongKey FIDO Demo iOS/iPadOS/macOS
+# StrongKey FIDO Server (SKFS) Demo for iOS/iPadOS/macOS
 
 ## About
 
-This is a demo application to show StrongKey FIDO Server (SKFS) capabilities on a rich-client native application running on Apple's iPhone, iPad, and Mac devices.
+This is a demo application to show SKFS capabilities on a rich-client native application running on Apple's iPhone, iPad, and Mac devices.
 This project is built using the Model View ViewModel (MVVM) design pattern, and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs
 
 ## Features
