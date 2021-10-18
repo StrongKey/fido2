@@ -4,7 +4,7 @@
 ## About
 
 This is a demo application to show SKFS capabilities on a rich-client native application running on Apple's iPhone, iPad, and Mac devices.
-This project is built using the Model View ViewModel (MVVM) design pattern, and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs
+This project is built using the Model View ViewModel (MVVM) design pattern, and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs.
 
 ## Features
 
@@ -26,7 +26,7 @@ For macOS this app can run on all Macs with macOS 12.0 and TouchID support in bo
 
 ## Third-party Libraries
 
-This project does not uses any external libraries. Some extensions are used from `/Utilities`
+This project does not uses any external libraries. Some extensions are used from `/Utilities`.
 
 ## Build Requirements
 
@@ -37,5 +37,6 @@ This project does not uses any external libraries. Some extensions are used from
 You will need a paid Apple Developer account to make use of the Passkey APIs.
  1. Clone or download the source code.
  2. Make sure that your iPhone/iPad/macOS or Simulator has FaceID/TouchID enrolled.
- 3. Turn on Syncing Platform Authenticator option for iPhones and iPads. `Settings -> Developer -> Syncing Platform Authenticator`
+ 3. Turn on Syncing Platform Authenticator option for iPhones and iPads.
+    `Settings -> Developer -> Syncing Platform Authenticator`
  4. Build and Run on the target device.
