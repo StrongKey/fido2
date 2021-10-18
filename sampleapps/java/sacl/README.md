@@ -40,7 +40,7 @@ This folder includes the following sample applications:
     
 3. The third application we will be installing is **SFAKMA**. Follow the [SFAKMA Installation Instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-sample-code-collection-of-fido-enabled-sample-applications-demonstrating-the-android-client-library-and-sso/skfs-sample-code-sfakma) to download and install the latest version.
 
-4. We will now install the **Android native app** on an Android device. Follow the [Android Native App Installation Instructions](mobile/android/docs/SACL.pdf) to download and install the latest version.
+4. We will now install the **Android native app** on an Android device. Follow the [Android Native App Installation Instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-android-app-preview-release) to download and install the latest version.
 
 5. All the required applications have been installed. You can now **enroll a user** through your Android device and perform transactions.
 
