@@ -41,15 +41,19 @@ For the latest version:
   * [Known Issues](https://docs.strongkey.com/index.php/skfs-home/skfs-troubleshooting/skfs-solutions-for-known-issues)
 * [Release Notes](https://docs.strongkey.com/index.php/skfs-home/skfs-release-notes) Starting with SKFS 4.3.x and moving forward
 
-## Sample Applications
+## Showcase
 Sample code is provided with a brief explanation of what each sample does:
 
-* Java Samples
-  * [DEMO](https://demo5.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
+* Demo Applications
+  * [Basic](https://demo.strongkey.com/basicdemo): A basic Java application demonstrating FIDO2 registration and authentication
+  * [FIDO Policy Demo](https://demo.strongkey.com/fidopolicy): A few policies to use as launching points for your own
+
+* Sample Apps
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
   * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): Proof-of-concept Java application
   * [SSO](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/): FIDO-enabled sample applications demonstrating SSO
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO-enabled sample Android application and Android client library to perform FIDO transactions
+  * [iOS](https://github.com/StrongKey/fido2/tree/master/sampleapps/iOS/StrongKeyFIDODemo): SKFS for iOS demonstrating Passkey and FIDO2
 
 ## Sample Client
 SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli) for commands to test FIDO2 functionality against your sandbox.
