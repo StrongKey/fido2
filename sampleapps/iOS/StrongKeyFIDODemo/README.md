@@ -3,19 +3,19 @@
 
 ## About
 
-This is a Demo application to show StrongKey's FIDO Server capabilities on a rich client native application running on Apple's iPhone, iPad and Mac devices.
-This project is built using MVVM design pattern and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs
+This is a demo application to show StrongKey FIDO Server (SKFS) capabilities on a rich-client native application running on Apple's iPhone, iPad, and Mac devices.
+This project is built using the Model View ViewModel (MVVM) design pattern, and makes use of Apple's latest [Authentication Services](https://developer.apple.com/documentation/authenticationservices) for Passkey APIs
 
 ## Features
 
-- Register a new account using Passkey powered by SKFS
-- Login to account using Passkey or Security Key
-	- Manage Keys
+- Register a new account using Passkey, powered by SKFS
+- Login to an account using Passkey or a security key
+	- Manage keys
 	- Add new keys
 	- Delete keys
 - View details
-- Delete account for testing
-- Support for iPhones, iPads and Macs
+- Delete account(s) for testing
+- Support for iPhones, iPads, and Macs
 
 ## System Requirements
 
@@ -24,7 +24,7 @@ For macOS this app can run on all Macs with macOS 12.0 and TouchID support in bo
 - iOS 15.0+
 - macOS 12.0 and above
 
-## Third-Party Libraries
+## Third-party Libraries
 
 This project does not uses any external libraries. Some extensions are used from `/Utilities`
 
@@ -34,8 +34,8 @@ This project does not uses any external libraries. Some extensions are used from
 
 ## Getting Started
 
-You will need a paid Apple Developer account to make use of the Passkey APIs
- 1. Clone or download the source code
+You will need a paid Apple Developer account to make use of the Passkey APIs.
+ 1. Clone or download the source code.
  2. Make sure that your iPhone/iPad/macOS or Simulator has FaceID/TouchID enrolled.
  3. Turn on Syncing Platform Authenticator option for iPhones and iPads. `Settings -> Developer -> Syncing Platform Authenticator`
  4. Build and Run on the target device.
