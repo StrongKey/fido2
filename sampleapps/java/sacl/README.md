@@ -34,13 +34,13 @@ This folder includes the following sample applications:
    
 ## Installation Instructions on a Server with a FIDO2 Server on the SAME Server
 
-1. The first application we will be installing is **SFAECO**. Follow the [SFAECO Installation Guide](sfaeco/docs/Installation_Guide_Linux.md) instructions to download and install the latest version.
+1. The first application we will be installing is **SFAECO**. Follow the [SFAECO Installation Instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-sample-code-collection-of-fido-enabled-sample-applications-demonstrating-the-android-client-library-and-sso/skfs-sample-code-sfaeco) to download and install the latest version.
 
-2. The second application we will be installing is **SFABOA**, which has to be installed on the same machine where SFAECO has been installed in the previous step. Follow the [SFABOA Installation Guide](sfaboa/docs/Installation_Guide_Linux.md) instructions to download and install the latest version.
+2. The second application we will be installing is **SFABOA**, which has to be installed on the same machine where SFAECO has been installed in the previous step. Follow the [SFABOA Installation Instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-sample-code-collection-of-fido-enabled-sample-applications-demonstrating-the-android-client-library-and-sso/skfs-sample-code-sfaboa) to download and install the latest version.
     
-3. The third application we will be installing is **SFAKMA**. Follow the [SFAKMA Installation Guide](sfakma/docs/Installation_Guide_Linux.md) instructions to download and install the latest version.
+3. The third application we will be installing is **SFAKMA**. Follow the [SFAKMA Installation Instructions](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-sample-code-collection-of-fido-enabled-sample-applications-demonstrating-the-android-client-library-and-sso/skfs-sample-code-sfakma) to download and install the latest version.
 
-4. We will now install the **Android native app** on an Android device. Follow the [Android Native App Installation Guide](mobile/android/docs/SACL.pdf) instructions to download and install the latest version.
+4. We will now install the **Android native app** on an Android device. Follow the [Android Native App Installation Instructions](mobile/android/docs/SACL.pdf) to download and install the latest version.
 
 5. All the required applications have been installed. You can now **enroll a user** through your Android device and perform transactions.
 
