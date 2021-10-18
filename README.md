@@ -30,7 +30,7 @@ For the latest version:
 * [Administration](https://docs.strongkey.com/index.php/skfs-home/skfs-administration)
   * [Operations](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-operations)
   * [Security](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security)
-  * [Policy](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-policy)
+  * [Policy](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-security/skfs-policy)
   * [Testing](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli)
 * [Application Development](https://docs.strongkey.com/index.php/skfs-home/skfs-developers)
   * [Registration](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-initial-registration) and [Authentication](https://docs.strongkey.com/index.php/skfs-home/skfs-developers/skfs-fido2-enabling-a-web-application/skfs-enabling-authentication) step-by-step breakdown with code examples
@@ -47,7 +47,7 @@ Sample code is provided with a brief explanation of what each sample does:
 * Java Samples
   * [DEMO](https://demo5.strongkey.com): A basic Java application demonstrating FIDO2 registration and authentication
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
-  * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/poc/): Proof of concept (PoC) Java application
+  * [FIDO Policy](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): sample Policy Module
   * [SSO](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/): FIDO-enabled sample applications demonstrating SSO
   * [Android](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/sacl/mobile/android): FIDO-enabled sample Android application and Android client library to perform FIDO transactions
 
