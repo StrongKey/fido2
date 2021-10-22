@@ -43,7 +43,7 @@
     "swagger-ui": "^3.25.0",
     "swagger-ui-dist": "^3.20.7",
     "sweetalert2": "^9.10.0",
-    "tinymce": "^4.8.5",
+    "tinymce": "^5.9.0",
     "tslib": "^1.10.0",
     "typescript-formatter": "^5.2.0",
     "zone.js": "~0.9.1"
