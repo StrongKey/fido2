@@ -8,6 +8,8 @@ This project is built using the Model View ViewModel (MVVM) design pattern, and 
 
 [Download StrongKey FIDO Server (SKFS) Demo for iOS/iPadOS/macOS.](https://testflight.apple.com/join/Nik6PGNK). This sample code is configured to function with demo.strongkey.com, and is not designed for production use.
 
+Documentation for the SKFS iOS Demo can be found [here](https://docs.strongkey.com/index.php/skfs-home/skfs-sample-code/skfs-ios). 
+
 ## Features
 
 - Register a new account using Passkey, powered by SKFS
