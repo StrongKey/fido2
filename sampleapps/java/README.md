@@ -5,7 +5,7 @@ Sample code is provided with a brief explanation of what each sample does:
 * Java Samples
   * [Demo](https://demo.strongkey.com/basicdemo/): A basic Java application demonstrating FIDO2 registration and authentication
   * [Basic](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/basic/): Basic Java sample application
-  * [PoC](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): Proof of concept (PoC) Java application
+  * [Policy Demo](https://github.com/StrongKey/fido2/tree/master/sampleapps/java/fidopolicy): FIDO Policy Demo application
 
 ## Sample Client
 SKFS client offers examples of the various API calls using different available methods. Read the [skfsclient docs](https://docs.strongkey.com/index.php/skfs-home/skfs-administration/skfs-skfsclient-cli/skfs-v3-api-usage) for commands to test FIDO2 functionality against your sandbox.
