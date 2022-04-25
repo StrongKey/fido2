@@ -12,6 +12,7 @@ import com.strongkey.skfs.requests.PreauthenticationRequest;
 import com.strongkey.skfs.requests.PreauthorizeRequest;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
+import com.strongkey.skfs.requests.ServiceInfo;
 import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
@@ -32,9 +33,9 @@ public interface u2fServletHelperBeanLocal {
     
     Response authorize(Long did, AuthenticationRequest authentication);
 
-    Response deregister(Long did, String keyid);
+    Response deregister(Long did, String keyid, ServiceInfo svcinfoObj);
 
     Response patchfidokey(Long did, String keyid, UpdateFidoKeyRequest fidokey);
 
-    Response getkeysinfo(Long did, String username);
+    Response getkeysinfo(Long did, String username, ServiceInfo svcinfoObj);
 }

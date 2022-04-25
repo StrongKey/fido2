@@ -154,7 +154,21 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
                         + addkeyres.getString("message")));
             }
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0024", "");
-            String responseJSON = SKFSCommon.buildReturn("Successfully processed registration response");
+            String wsresponse = "Successfully processed registration response";
+            String responseJSON;
+            JsonObjectBuilder job = Json.createObjectBuilder();
+            job.add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, wsresponse);
+            if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")){
+                if(SKFSCommon.containsMDSWSList("R")){
+                    if (SKFSCommon.containsMdsentry(aaguid)) {
+                        job.add("MDSEntry", SKFSCommon.getMdsentryfromMap(aaguid));
+                    }else{
+                        job.addNull("MDSEntry");
+                    }
+                    
+                }
+            }
+            responseJSON = job.build().toString();
             return responseJSON;
         }
         catch(RuntimeException | SKFEException | CertificateException | NoSuchProviderException ex){

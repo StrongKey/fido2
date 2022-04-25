@@ -5,7 +5,7 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.4.0</version>
+        <version>4.5.0</version>
     </parent>
     
     <groupId>com.strongkey</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bc-fips</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2.1</version>
             <type>jar</type>
         </dependency>
 <!--        <dependency>

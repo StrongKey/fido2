@@ -38,7 +38,7 @@ public class pingBean implements pingBeanLocal {
 
     @Override
     public String execute(
-            Long did) {
+            Long did, String svcusername) {
 
         Date in = new Date();
         Date out;
@@ -46,6 +46,7 @@ public class pingBean implements pingBeanLocal {
         String ID = thId + "-" + in.getTime();
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0060", "[TXID=" + ID + "]"
+                + "\n svcusername=" + svcusername
                 + "\n did=" + did);
 
         StringBuilder sbuf = new StringBuilder(1024);

@@ -73,6 +73,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
         String userAgent, clientIP;
         String wsresponse = "", logs = "", errmsg = "";
+        String aaguid= "";
         String userHandle ="", jwt = "";
         JsonObject txdetail = null;
         JsonArray FIDOAuthRefs = null;
@@ -417,6 +418,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                 String signingKeyType = getKeyTypeFromRegSettings(rs);
                 byte[] publickeyBytes = java.util.Base64.getUrlDecoder().decode(userpublickey);
                 Boolean isSignatureValid;
+                aaguid = key.getAaguid();
                 KeyFactory kf = KeyFactory.getInstance(signingKeyType, "BCFIPS");
                 X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publickeyBytes);
                 PublicKey pub = kf.generatePublic(pubKeySpec);
@@ -516,6 +518,15 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             //call jwtcreate to generate a jwt
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, wsresponse);
+            if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")){
+                if(SKFSCommon.containsMDSWSList("A")){
+                    if (SKFSCommon.containsMdsentry(aaguid)) {
+                        job.add("MDSEntry", SKFSCommon.getMdsentryfromMap(aaguid));
+                    }else{
+                        job.addNull("MDSEntry");
+                    }
+                }
+            }
             job.add("jwt", jwt);
             responseJSON = job.build().toString();
         }

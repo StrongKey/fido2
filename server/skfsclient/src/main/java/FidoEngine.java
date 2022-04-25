@@ -15,6 +15,7 @@ import com.strongkey.skfsclient.impl.rest.RestFidoAuthorize;
 import com.strongkey.skfsclient.impl.rest.RestFidoGetConfiguration;
 import com.strongkey.skfsclient.impl.rest.RestFidoGetKeysInfo;
 import com.strongkey.skfsclient.impl.rest.RestFidoGetPolicyInfo;
+import com.strongkey.skfsclient.impl.rest.RestFidoGetUsersKeysInfo;
 import com.strongkey.skfsclient.impl.rest.RestFidoPing;
 import com.strongkey.skfsclient.impl.rest.RestFidoRegister;
 import com.strongkey.skfsclient.impl.soap.SoapFidoActionsOnKey;
@@ -24,6 +25,9 @@ import com.strongkey.skfsclient.impl.soap.SoapFidoGetKeysInfo;
 import com.strongkey.skfsclient.impl.soap.SoapFidoPing;
 import com.strongkey.skfsclient.impl.soap.SoapFidoRegister;
 import java.util.Calendar;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 
 public class FidoEngine {
 
@@ -51,7 +55,8 @@ public class FidoEngine {
                      + "       java -jar skfsclient.jar GC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ]\n"
                      + "       java -jar skfsclient.jar UC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey> <configvalue> [<notes>]\n"
                      + "       java -jar skfsclient.jar DC <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <configkey>\n"
-                     + "       java -jar skfsclient.jar UU <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <oldusername> <newusername>\n\n"
+                     + "       java -jar skfsclient.jar UU <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <oldusername> <newusername>\n"
+                     + "       java -jar skfsclient.jar GUK <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <usernames>\n\n"
                      + "Acceptable Values:\n"
                      + "         hostport            : host and port to access the fido \n"
                      + "                                 SOAP & REST format : http://<FQDN>:<non-ssl-portnumber> or \n"
@@ -117,6 +122,7 @@ public class FidoEngine {
         String verifyAuthz;
         String oldusername;
         String newusername;
+        String usernames;
 
         try {
             if (args.length == 0) {
@@ -422,7 +428,7 @@ public class FidoEngine {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
-                    if(authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)){
+                    if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
                         System.out.println("HMAC authentication not implemented for this webservice");
                         break;
                     }
@@ -437,6 +443,35 @@ public class FidoEngine {
 
                     System.out.println("\nDone with Update Username!\n");
                     break;
+
+                case Constants.COMMANDS_GET_USER_KEYS:
+                    if (args.length != 8) {
+                        System.out.println("Missing arguments...\n" + usage);
+                        break;
+                    }
+                    if (authtype.equalsIgnoreCase(Constants.AUTHORIZATION_HMAC)) {
+                        System.out.println("HMAC authentication not implemented for this webservice");
+                        break;
+                    }
+                    usernames = args[7];
+                    JsonArray usernameArray;
+                    JsonArrayBuilder jab = Json.createArrayBuilder();
+                    String[] usernameList = usernames.split(",");
+                    for (String usernameList1 : usernameList) {
+                        jab.add(usernameList1);
+                    }
+                    usernameArray = jab.build();
+                    if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
+                        RestFidoGetUsersKeysInfo.getUserKeysInfo(hostport, did, authtype, credential1, credential2, usernameArray);
+                    } else {
+//                        SoapFidoActionsOnConfiguration.delete(hostport, did, authtype, credential1, credential2, configkey);
+                        System.out.println("Not yet implemented");
+                    }
+
+                    System.out.println("\nDone with Update Username!\n");
+                    break;
+
+                    
                 default:
                     System.out.println("Invalid Command...\n" + usage);
             }
