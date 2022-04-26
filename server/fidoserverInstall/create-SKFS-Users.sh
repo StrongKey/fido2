@@ -91,7 +91,7 @@ sed -r "s|dc: strongauth|dc: ${SLDNAME#dc=}|
         s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_LDIF_PATH > /tmp/skfs.ldif
 
 echo "Importing default users..."
-ldapadd -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skfs.ldif
+ldapadd -x -c -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skfs.ldif
 
 rm /tmp/skfs.ldif
 

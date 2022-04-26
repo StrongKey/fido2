@@ -28,6 +28,7 @@ public class Payload {
     private JsonObject metadata;
     private String keyid;
     private JsonArray configurations;
+    private JsonArray usernameArray;
     private String txid;
     private String txpayload;
 
@@ -111,6 +112,14 @@ public class Payload {
         this.configurations = configurations;
     }
 
+    public JsonArray getUsernamArray() {
+        return usernameArray;
+    }
+
+    public void setUsernamArray(JsonArray usernameArray) {
+        this.usernameArray = usernameArray;
+    }
+
     public String getTxid() {
         return txid;
     }
@@ -187,6 +196,9 @@ public class Payload {
         }
         if (this.configurations != null) {
             job.add("configurations", configurations);
+        }
+        if (this.usernameArray != null) {
+            job.add("usernames", usernameArray);
         }
         return job.build();
     }

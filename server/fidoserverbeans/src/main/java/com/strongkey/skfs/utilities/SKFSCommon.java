@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,9 +33,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -82,6 +85,8 @@ public class SKFSCommon {
     private static String skfshome;
 
     public static List<String> tldList = new ArrayList<>();
+
+    public static List<String> MDSWSList = new ArrayList<>();
 
     public static final SKFSCron cron = new SKFSCron();
 
@@ -254,35 +259,60 @@ public class SKFSCommon {
         putTransportsMap();
         
         String mdsenabled = SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.enabled");
+        String mdsmechanism = SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.mechanism");
         if (mdsenabled.equalsIgnoreCase("true") || mdsenabled.equalsIgnoreCase("yes")) {
-            // Download global sign root cert
-            Client client = null;
-            WebTarget webTarget;
-            Response rs = null;
-            try {
-
-                client = ClientBuilder.newClient();
-                webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
-
-                // Execute the method.
-                rs = webTarget.request().get();
-
-                if (rs.getStatus() > 299) {
-                    System.err.println("Method failed: " + rs.readEntity(String.class));
-                } else {
-
+            if (mdsmechanism.trim().equalsIgnoreCase("file")) {
+                InputStream targetStream = null;
+                try {
+                    File initialFile = new File(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+                    targetStream = new FileInputStream(initialFile);
                     CertificateFactory fac = CertificateFactory.getInstance("X509");
-                    SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                    SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(targetStream));
+                } catch (FileNotFoundException | CertificateException e) {
+                    Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, e);
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        targetStream.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            } catch (Exception e) {
-                System.err.println("Fatal protocol violation: " + e.getMessage());
-                e.printStackTrace();
-            } finally {
-                rs.close();
-                client.close();
-                // Release the connection.
+            } else {
+                // Download global sign root cert
+                Client client = null;
+                WebTarget webTarget;
+                Response rs = null;
+                try {
+
+                    client = ClientBuilder.newClient();
+                    webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+
+                    // Execute the method.
+                    rs = webTarget.request().get();
+
+                    if (rs.getStatus() > 299) {
+                        System.err.println("Method failed: " + rs.readEntity(String.class));
+                    } else {
+
+                        CertificateFactory fac = CertificateFactory.getInstance("X509");
+                        SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                    }
+                } catch (Exception e) {
+                    System.err.println("Fatal protocol violation: " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    rs.close();
+                    client.close();
+                    // Release the connection.
+                }
             }
         }
+        
+        // populate the list
+        String wslist = getConfigurationProperty("skfs.cfg.property.return.MDS.webservices");
+        String[] splitlist = wslist.split(",");
+        MDSWSList.addAll(Arrays.asList(splitlist));
     }
 
     /**
@@ -684,6 +714,10 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         return mdsentryaaguidMap.containsKey(key);
     }
 
+    public static Boolean containsMDSWSList(String key){
+        return MDSWSList.contains(key);
+    }
+    
     public static X509Certificate getMdsrootca() {
         return mdsrootca;
     }
@@ -1009,6 +1043,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         String curveName = ECNamedCurveTable.getName(oid);
         switch (curveName) {
             case "P-256":
+            case "prime256v1":
                 return "secp256r1";
             case "P-384":
                 return "secp384r1";
