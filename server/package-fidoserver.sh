@@ -37,7 +37,7 @@ echo "Creating fidoserver..."
 # Create dist
 # This cd is important for mvn to work
 cd $fidoserver
-mvn -q install:install-file -Dfile=$fidoserver/lib/bc-fips-1.0.1.jar -DgroupId=org.bouncycastle -DartifactId=bc-fips -Dversion=1.0.1 -Dpackaging=jar
+mvn -q install:install-file -Dfile=$fidoserver/lib/bc-fips-1.0.2.1.jar -DgroupId=org.bouncycastle -DartifactId=bc-fips -Dversion=1.0.2.1 -Dpackaging=jar
 mvn -q install:install-file -Dfile=$fidoserver/lib/bcpkix-fips-1.0.0.jar -DgroupId=org.bouncycastle -DartifactId=bcpkix-fips -Dversion=1.0.0 -Dpackaging=jar
 echo "-Clean and building source..."
 mvn clean install -q

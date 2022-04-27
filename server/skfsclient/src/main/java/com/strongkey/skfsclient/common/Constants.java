@@ -34,6 +34,7 @@ public class Constants {
     public static final String REST_GET_CONFIGURATION_ENDPOINT = "/getconfiguration";
     public static final String REST_UPDATE_CONFIGURATION_ENDPOINT = "/updateconfiguration";
     public static final String REST_DELETE_CONFIGURATION_ENDPOINT = "/deleteconfiguration";
+    public static final String REST_GETUSERKEYSINFO_ENDPOINT = "/getuserkeys";
     
     //Unchanged operation endpoints
     public static final String CREATE_POLICY_ENDPOINT = "/fidopolicies";
@@ -56,6 +57,7 @@ public class Constants {
     public static final String COMMANDS_UPDATE_CONFIGURATION = "UC";
     public static final String COMMANDS_DELETE_CONFIGURATION = "DC";
     public static final String COMMANDS_UPDATE_USERNAME = "UU";
+    public static final String COMMANDS_GET_USER_KEYS = "GUK";
 
     public static final String JSON_KEY_SERVLET_INPUT_USERNAME = "username";
     public static final String JSON_KEY_SERVLET_INPUT_REQUEST = "request";
