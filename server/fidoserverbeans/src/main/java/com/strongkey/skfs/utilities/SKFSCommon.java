@@ -58,9 +58,6 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x9.ECNamedCurveTable;
@@ -280,31 +277,46 @@ public class SKFSCommon {
                 }
             } else {
                 // Download global sign root cert
-                Client client = null;
-                WebTarget webTarget;
-                Response rs = null;
+//                Client client = null;
+//                WebTarget webTarget;
+//                Response rs = null;
+                HttpURLConnection con = null;
                 try {
+                    
+//                    client = ClientBuilder.newClient();
+//                    webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+//
+//                    // Execute the method.
+//                    rs = webTarget.request().get();
+                URL url = new URL(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setConnectTimeout(5000);
+                con.setReadTimeout(5000);
 
-                    client = ClientBuilder.newClient();
-                    webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+                // Execute the method.
+                int statusCode = con.getResponseCode();
 
-                    // Execute the method.
-                    rs = webTarget.request().get();
-
-                    if (rs.getStatus() > 299) {
-                        System.err.println("Method failed: " + rs.readEntity(String.class));
+//                    if (rs.getStatus() > 299) {
+                    if (statusCode > 299) {
+                        System.err.println("Method failed: " + con.getResponseMessage());
                     } else {
 
                         CertificateFactory fac = CertificateFactory.getInstance("X509");
-                        SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                        SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(con.getInputStream()));
                     }
                 } catch (Exception e) {
                     System.err.println("Fatal protocol violation: " + e.getMessage());
                     e.printStackTrace();
                 } finally {
-                    rs.close();
-                    client.close();
-                    // Release the connection.
+                    if(con !=null)
+                        con.disconnect();
+//                    if (rs != null) {
+//                        rs.close();
+//                    }
+//                    if (client != null) {
+//                        client.close();// Release the connection.
+//                    }
                 }
             }
         }

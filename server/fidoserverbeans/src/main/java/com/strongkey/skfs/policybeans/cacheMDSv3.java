@@ -45,6 +45,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.security.Signature;
@@ -69,10 +71,6 @@ import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 
 @Stateless
@@ -112,29 +110,39 @@ public class cacheMDSv3 implements cacheMDSv3Local {
                         }
                     }
                 } else {
-                    Client client = null;
-                    WebTarget webTarget;
-                    Response rs = null;
+//                    Client client = null;
+//                    WebTarget webTarget;
+//                    Response rs = null;
+                    HttpURLConnection con = null;
                     try {
+//                        client = ClientBuilder.newClient();
+//                        webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+//
+//                        // Execute the method.
+//                        rs = webTarget.request().get();
 
-                        client = ClientBuilder.newClient();
-                        webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
-
-                        // Execute the method.
-                        rs = webTarget.request().get();
-
-                        if (rs.getStatus() > 299) {
-                            System.err.println("Method failed: " + rs.readEntity(String.class));
+                        URL url = new URL(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+                        con = (HttpURLConnection) url.openConnection();
+                        con.setRequestMethod("GET");
+                        con.setConnectTimeout(5000);
+                        con.setReadTimeout(5000);
+                        
+                        int statusCode = con.getResponseCode();
+//                        if (rs.getStatus() > 299) {
+                        if (statusCode > 299) {
+                            System.err.println("Method failed: " + con.getResponseMessage());
                         } else {
 
                             CertificateFactory fac = CertificateFactory.getInstance("X509");
-                            SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                            SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(con.getInputStream()));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
-                        rs.close();
-                        client.close();
+                        if(con !=null)
+                            con.disconnect();
+//                        if(client != null)
+//                            client.close();
                         // Release the connection.
                     }
                 }
@@ -143,9 +151,9 @@ public class cacheMDSv3 implements cacheMDSv3Local {
             X509Certificate GSRootCert = SKFSCommon.getMdsrootca();
 
             X509Certificate EECERT = null;
-            Client client = null;
-            WebTarget webTarget;
-            Response rs = null;
+//            Client client = null;
+//            WebTarget webTarget;
+//            Response rs = null;
             String MDSJWTBlob = "", plaintext = "";
             String jwtsigningalgo = "";
             // 1 - FETCH MDS BLOB
@@ -166,139 +174,160 @@ public class cacheMDSv3 implements cacheMDSv3Local {
                 MDSJWTBlob = resultStringBuilder.toString();
 
             } else {
+                HttpURLConnection con = null;
                 try {
-                    client = ClientBuilder.newClient();
-                    webTarget = client.target(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.url"));
+//                    client = ClientBuilder.newClient();
+//                    webTarget = client.target(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.url"));
+//
+//                    rs = webTarget.request().get();
+                    URL url = new URL(getConfigurationProperty("skfs.cfg.property.mds.url"));
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");
+                    con.setConnectTimeout(5000);
+                    con.setReadTimeout(5000);
 
-                    rs = webTarget.request().get();
+                    int statusCode = con.getResponseCode();
 
-                    if (rs.getStatus() > 299) {
-                        System.err.println("Method failed: " + rs.readEntity(String.class));
+//                    if (rs.getStatus() > 299) {
+                    if (statusCode > 299) {
+                        System.err.println("Method failed: " + con.getResponseMessage());
                     } else {
                         // Deal with the response.
-                        MDSJWTBlob = rs.readEntity(String.class);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        String inputLine;
+                        if ((inputLine = in.readLine()) != null) {
+                            MDSJWTBlob = inputLine;
+                        }
+                        
+//                        MDSJWTBlob = rs.readEntity(String.class);
                     }
                 } catch (Exception e) {
                     //throw error
                     System.err.println("Fatal protocol violation: " + e.getMessage());
                     e.printStackTrace();
                 } finally {
-                    rs.close();
-                    client.close();
-                }
-            }
-            // 2 - DECODE JWT BLOB
-            String[] jwtb64split = MDSJWTBlob.split("\\.");
-            Base64.Decoder decoder = Base64.getUrlDecoder();
-            JsonObject jwt = Json.createObjectBuilder()
-                    .add("protected", SKFSCommon.getJsonObjectFromString(new String(decoder.decode(jwtb64split[0]), StandardCharsets.UTF_8)))
-                    .add("payload", jwtb64split[1])
-                    .add("signature", jwtb64split[2])
-                    .build();
-
-            System.out.println(jwt.getString("signature"));
-            try {
-
-                jwtsigningalgo = jwt.getJsonObject("protected").getString("alg");
-                if (jwtsigningalgo.equalsIgnoreCase("RS256")) {
-                    jwtsigningalgo = "SHA256withRSA";
-                }
-                // Setup FIPS Provider
-                Security.addProvider(new BouncyCastleFipsProvider());
-                plaintext = new String(decoder.decode(jwt.getString("payload")), StandardCharsets.UTF_8);
-                JsonArray x5carray = jwt.getJsonObject("protected").getJsonArray("x5c");
-                CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                List<X509Certificate> certx = new ArrayList<>();
-                for (int i = 0; i < x5carray.size(); i++) {
-                    CertificateFactory fac = CertificateFactory.getInstance("X509");
-                    String currentCertb64 = x5carray.getString(i);
-                    InputStream is = new ByteArrayInputStream(Base64.getDecoder().decode(currentCertb64));
-                    X509Certificate currentCert = (X509Certificate) fac.generateCertificate(is);
-                    certx.add(currentCert);
-                    if (i == 0) {
-                        EECERT = currentCert;
+                    if (con != null) {
+                        con.disconnect();
                     }
+//                    if (client != null) {
+//                        client.close();
+//                    }
                 }
-                certx.add(GSRootCert);
-
-                CertPath path = cf.generateCertPath(certx);
-                Set<TrustAnchor> trustAnchor = new HashSet<>();
-                trustAnchor.add(new TrustAnchor(GSRootCert, null));
-
-                CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
-
-                PKIXParameters pkix = new PKIXParameters(trustAnchor);
-
-                pkix.setRevocationEnabled(false);
-
-                pkix.setPolicyQualifiersRejected(true);
-                pkix.setDate(new Date());
-                CertPathValidatorResult cpvr = cpv.validate(path, pkix);
-                if (cpvr != null) {
-                    System.out.println("Certificate valid");
-                } else {
-                    //throw error
-                    System.out.println("Certificate not valid");
-                }
-//            //verify payload signature
-                byte[] rsbytes = decoder.decode(jwt.getString("signature"));
-                Signature s = Signature.getInstance(jwtsigningalgo);
-                s.initVerify(EECERT.getPublicKey());
-                s.update((jwtb64split[0].concat(".").concat(jwtb64split[1])).getBytes(StandardCharsets.UTF_8));
-//
-                boolean verified = s.verify(rsbytes);
-                if (!verified) {
-                    System.out.println("Signature not valid");
-                } else {
-                    //throw error
-                    System.out.println("Signature Verified!!");
-                }
-            } catch (Exception ex) {
-                //throw error
-                ex.printStackTrace();
             }
+            if (!MDSJWTBlob.isEmpty()) {
+                // 2 - DECODE JWT BLOB
+                String[] jwtb64split = MDSJWTBlob.split("\\.");
+                Base64.Decoder decoder = Base64.getUrlDecoder();
+                JsonObject jwt = Json.createObjectBuilder()
+                        .add("protected", SKFSCommon.getJsonObjectFromString(new String(decoder.decode(jwtb64split[0]), StandardCharsets.UTF_8)))
+                        .add("payload", jwtb64split[1])
+                        .add("signature", jwtb64split[2])
+                        .build();
 
-            // 4 - CONVERT TO JSON
-            JsonObject MDSBlob = SKFSCommon.getJsonObjectFromString(plaintext);
+                System.out.println(jwt.getString("signature"));
+                try {
 
-            Boolean processMDSEntries = Boolean.FALSE;
-            // 5- PARSE JSON
-            FIDOMetadataService fidomds = new FIDOMetadataService();
-            fidomds.setLegalHeader(MDSBlob.getString("legalHeader"));
-            fidomds.setNo(MDSBlob.getInt("no"));
-            fidomds.setNextUpdate(MDSBlob.getString("nextUpdate"));
+                    jwtsigningalgo = jwt.getJsonObject("protected").getString("alg");
+                    if (jwtsigningalgo.equalsIgnoreCase("RS256")) {
+                        jwtsigningalgo = "SHA256withRSA";
+                    }
+                    // Setup FIPS Provider
+                    Security.addProvider(new BouncyCastleFipsProvider());
+                    plaintext = new String(decoder.decode(jwt.getString("payload")), StandardCharsets.UTF_8);
+                    JsonArray x5carray = jwt.getJsonObject("protected").getJsonArray("x5c");
+                    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                    List<X509Certificate> certx = new ArrayList<>();
+                    for (int i = 0; i < x5carray.size(); i++) {
+                        CertificateFactory fac = CertificateFactory.getInstance("X509");
+                        String currentCertb64 = x5carray.getString(i);
+                        InputStream is = new ByteArrayInputStream(Base64.getDecoder().decode(currentCertb64));
+                        X509Certificate currentCert = (X509Certificate) fac.generateCertificate(is);
+                        certx.add(currentCert);
+                        if (i == 0) {
+                            EECERT = currentCert;
+                        }
+                    }
+                    certx.add(GSRootCert);
 
-            FIDOMetadataService fidomdsCommon = SKFSCommon.getMetadataservice();
-            if (fidomdsCommon != null) {
-                if (fidomds.getNo() > fidomdsCommon.getNo()) {
+                    CertPath path = cf.generateCertPath(certx);
+                    Set<TrustAnchor> trustAnchor = new HashSet<>();
+                    trustAnchor.add(new TrustAnchor(GSRootCert, null));
+
+                    CertPathValidator cpv = CertPathValidator.getInstance("PKIX");
+
+                    PKIXParameters pkix = new PKIXParameters(trustAnchor);
+
+                    pkix.setRevocationEnabled(false);
+
+                    pkix.setPolicyQualifiersRejected(true);
+                    pkix.setDate(new Date());
+                    CertPathValidatorResult cpvr = cpv.validate(path, pkix);
+                    if (cpvr != null) {
+                        System.out.println("Certificate valid");
+                    } else {
+                        //throw error
+                        System.out.println("Certificate not valid");
+                    }
+//            //verify payload signature
+                    byte[] rsbytes = decoder.decode(jwt.getString("signature"));
+                    Signature s = Signature.getInstance(jwtsigningalgo);
+                    s.initVerify(EECERT.getPublicKey());
+                    s.update((jwtb64split[0].concat(".").concat(jwtb64split[1])).getBytes(StandardCharsets.UTF_8));
+//
+                    boolean verified = s.verify(rsbytes);
+                    if (!verified) {
+                        System.out.println("Signature not valid");
+                    } else {
+                        //throw error
+                        System.out.println("Signature Verified!!");
+                    }
+                } catch (Exception ex) {
+                    //throw error
+                    ex.printStackTrace();
+                }
+
+                // 4 - CONVERT TO JSON
+                JsonObject MDSBlob = SKFSCommon.getJsonObjectFromString(plaintext);
+
+                Boolean processMDSEntries = Boolean.FALSE;
+                // 5- PARSE JSON
+                FIDOMetadataService fidomds = new FIDOMetadataService();
+                fidomds.setLegalHeader(MDSBlob.getString("legalHeader"));
+                fidomds.setNo(MDSBlob.getInt("no"));
+                fidomds.setNextUpdate(MDSBlob.getString("nextUpdate"));
+
+                FIDOMetadataService fidomdsCommon = SKFSCommon.getMetadataservice();
+                if (fidomdsCommon != null) {
+                    if (fidomds.getNo() > fidomdsCommon.getNo()) {
+                        processMDSEntries = Boolean.TRUE;
+                    }
+                } else {
                     processMDSEntries = Boolean.TRUE;
                 }
-            } else {
-                processMDSEntries = Boolean.TRUE;
-            }
 
-            if (processMDSEntries) {
-                SKFSCommon.setMetadataservice(fidomds);
+                if (processMDSEntries) {
+                    SKFSCommon.setMetadataservice(fidomds);
 
-                JsonArray MDSEntriesArray = MDSBlob.getJsonArray("entries");
-                int noofentries = MDSEntriesArray.size();
-                //print no of entries
-                for (int i = 0; i < noofentries; i++) {
-                    JsonObject entry = MDSEntriesArray.getJsonObject(i);
-                    if (entry.containsKey("aaguid")) {
-                        String aaguid = entry.getString("aaguid");
-                        SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINEST, classname, "execute", "FIDO-MSG-2001", "AAGUID added =" + aaguid);
-                        SKFSCommon.setMdsentry(aaguid, entry);
-                    }
-                    if (entry.containsKey("attestationCertificateKeyIdentifiers")) {
-                        JsonArray attcertarray = entry.getJsonArray("attestationCertificateKeyIdentifiers");
-                        String attcertkey = Base64.getUrlEncoder().encodeToString(attcertarray.toString().getBytes());
-                        for (int j = 0; j < attcertarray.size(); j++) {
-                            String attcertentry = attcertarray.getString(j);
-                            SKFSCommon.setMdsentrypointer(attcertentry, attcertkey);
-                            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINEST, classname, "execute", "FIDO-MSG-2001", "CERT KEY added =" + attcertentry);
+                    JsonArray MDSEntriesArray = MDSBlob.getJsonArray("entries");
+                    int noofentries = MDSEntriesArray.size();
+                    //print no of entries
+                    for (int i = 0; i < noofentries; i++) {
+                        JsonObject entry = MDSEntriesArray.getJsonObject(i);
+                        if (entry.containsKey("aaguid")) {
+                            String aaguid = entry.getString("aaguid");
+                            SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINEST, classname, "execute", "FIDO-MSG-2001", "AAGUID added =" + aaguid);
+                            SKFSCommon.setMdsentry(aaguid, entry);
                         }
-                        SKFSCommon.setMdsentry(attcertkey, entry);
+                        if (entry.containsKey("attestationCertificateKeyIdentifiers")) {
+                            JsonArray attcertarray = entry.getJsonArray("attestationCertificateKeyIdentifiers");
+                            String attcertkey = Base64.getUrlEncoder().encodeToString(attcertarray.toString().getBytes());
+                            for (int j = 0; j < attcertarray.size(); j++) {
+                                String attcertentry = attcertarray.getString(j);
+                                SKFSCommon.setMdsentrypointer(attcertentry, attcertkey);
+                                SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINEST, classname, "execute", "FIDO-MSG-2001", "CERT KEY added =" + attcertentry);
+                            }
+                            SKFSCommon.setMdsentry(attcertkey, entry);
+                        }
                     }
                 }
             }
