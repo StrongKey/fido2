@@ -62,7 +62,7 @@ public class SKFSServlet {
     private u2fServletHelperBeanLocal lookup_u2fServletHelperBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.4.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
+            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.5.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -71,7 +71,7 @@ public class SKFSServlet {
     private pingBeanLocal lookup_pingBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.4.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
+            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.5.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -80,7 +80,7 @@ public class SKFSServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.4.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -89,7 +89,7 @@ public class SKFSServlet {
     private authenticateRestRequestBeanLocal lookupauthenticateRestRequestBeanLocall() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.4.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
+            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -148,6 +148,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_REG);
+                pregreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
@@ -220,6 +221,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_REG);
+                registration.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
@@ -290,6 +292,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_SIGN);
+                pauthreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
@@ -363,6 +366,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_SIGN);
+                authentication.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                     return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
@@ -417,6 +421,7 @@ public class SKFSServlet {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
                 isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                deregreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 try {
@@ -438,7 +443,7 @@ public class SKFSServlet {
             }
         }
 
-        return u2fHelperBean.deregister(svcinfoObj.getDid(), deregreq.getPayload().getKeyid());
+        return u2fHelperBean.deregister(svcinfoObj.getDid(), deregreq.getPayload().getKeyid(), svcinfoObj);
     }
 
 
@@ -504,6 +509,7 @@ public class SKFSServlet {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
                 isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                patchreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 try {
@@ -580,6 +586,7 @@ public class SKFSServlet {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
                 isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                getkeysreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 try {
@@ -601,7 +608,7 @@ public class SKFSServlet {
             }
         }
 
-        return u2fHelperBean.getkeysinfo(svcinfoObj.getDid(), getkeysreq.getPayload().getUsername());
+        return u2fHelperBean.getkeysinfo(svcinfoObj.getDid(), getkeysreq.getPayload().getUsername(), svcinfoObj);
     }
 
     @POST
@@ -650,7 +657,7 @@ public class SKFSServlet {
 
         String response;
         try {
-            response = pingbean.execute(svcinfoObj.getDid());
+            response = pingbean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername());
             return Response.status(Response.Status.OK).entity(response).build();
         } catch (Exception ex) {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
@@ -712,6 +719,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_AUTHZ);
+                pauthreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
@@ -779,6 +787,7 @@ public class SKFSServlet {
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_AUTHZ);
+                authentication.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();

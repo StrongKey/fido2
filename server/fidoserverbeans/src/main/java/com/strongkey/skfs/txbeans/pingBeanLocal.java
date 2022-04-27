@@ -24,5 +24,5 @@ import javax.ejb.Local;
 @Local
 public interface pingBeanLocal {
 
-    public String execute(Long did);
+    public String execute(Long did,String svcusername);
 }

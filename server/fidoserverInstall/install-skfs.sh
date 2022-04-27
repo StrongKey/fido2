@@ -13,7 +13,7 @@
 ##########################################
 ##########################################
 # Fido Server Info
-FIDOSERVER_VERSION=4.4.3
+FIDOSERVER_VERSION=4.5.0
 
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
@@ -25,12 +25,21 @@ BUFFERPOOLSIZE=512m
 
 # JWT
 RPID=strongkey.com
+JWT_CREATE=true
 JWT_DN='CN=StrongKey KeyAppliance,O=StrongKey'
 JWT_DURATION=30
 JWT_KEYGEN_DN='/C=US/ST=California/L=Cupertino/O=StrongAuth/OU=Engineering'
 JWT_CERTS_PER_SERVER=3
 JWT_KEYSTORE_PASS=Abcd1234!
 JWT_KEY_VALIDITY=365
+
+# MDS
+MDS_ENABLED=true        # Property that enables MDS download
+MDS_RETURN=false        # Property to determine if MDS data should be returned in the JSON response.
+MDS_RETURN_WS=R,A,G
+MDS_MECHANISM=url                               	# Property that define the MDS fetch mechanism. Allowed options : URL / File
+MDS_MECHANISM_URL=https://mds.fidoalliance.org/         # In case of 'file' the location can be a file on the local file system under the /usr/local/strongauth directory
+MDS_ROOTCA_URL=http://secure.globalsign.com/cacert/root-r3.crt
 
 # Policy
 POLICY_DOMAINS=ALL	# 'ALL' or 'ONE'
@@ -206,7 +215,7 @@ echo strongkey:$LINUX_PASSWORD | /usr/sbin/chpasswd
 cat >> /etc/sudoers <<-EOFSUDOERS
 
 ## SKFS permissions
-Cmnd_Alias SKFS_COMMANDS = /usr/sbin/service glassfishd start, /usr/sbin/service glassfishd stop, /usr/sbin/service glassfishd restart, /usr/sbin/service mysqld start, /usr/sbin/service mysqld stop, /usr/sbin/service mysqld restart
+Cmnd_Alias SKFS_COMMANDS = /usr/sbin/service glassfishd start, /usr/sbin/service glassfishd stop, /usr/sbin/service glassfishd restart, /usr/sbin/service mysqld start, /usr/sbin/service mysqld stop, /usr/sbin/service mysqld restart, /usr/sbin/service slapd start, /usr/sbin/service slapd stop, /usr/sbin/service slapd restart
 strongkey ALL=SKFS_COMMANDS
 EOFSUDOERS
 
@@ -391,7 +400,7 @@ if [ $INSTALL_OPENLDAP = 'Y' ]; then
 	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif >/dev/null 2>&1
 	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/core.ldif >/dev/null 2>&1
 
-	/bin/ldapadd -x -w $OPENLDAP_PASS -D "cn=Manager,dc=strongauth,dc=com" -f $SKFS_SOFTWARE/$SKFS_BASE_LDIF
+	/bin/ldapadd -x -c -w $OPENLDAP_PASS -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f $SKFS_SOFTWARE/$SKFS_BASE_LDIF
 
 	cp $SKFS_SOFTWARE/local.ldif /etc/openldap/schema/
 	/bin/ldapadd -x -H ldapi:/// -D "cn=config" -w $OPENLDAP_PASS -f /etc/openldap/schema/local.ldif
@@ -406,14 +415,14 @@ if [ $INSTALL_OPENLDAP = 'Y' ]; then
 		s|(domain( id)*) [0-9]*|\1 ${SAKA_DID}|
 		s|userPassword: .*|userPassword: $SERVICE_LDAP_SVCUSER_PASS|" $SKFS_SOFTWARE/$SKFS_LDIF > /tmp/skfs.ldif
 
-	/bin/ldapadd -x -w $OPENLDAP_PASS -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/skfs.ldif
+	/bin/ldapadd -x -c -w $OPENLDAP_PASS -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/skfs.ldif
 
 	/bin/ldapmodify -Y external -H ldapi:/// -f add_slapdlog.ldif >/dev/null 2>&1
 	systemctl force-reload slapd >/dev/null 2>&1
 	cp $SKFS_SOFTWARE/10-slapd.conf /etc/rsyslog.d/
 	service rsyslog restart
 
-	echo "ldape.cfg.property.service.ce.ldap.ldapurl=ldap://localhost:389" > /usr/local/strongkey/skce/etc/skce-configuration.properties
+	echo "ldape.cfg.property.service.ce.ldap.ldapurl=ldap://localhost:389" >> /usr/local/strongkey/skce/etc/skce-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/skce
 fi
 
@@ -506,7 +515,16 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 	echo "appliance.cfg.property.replicate=false" >> $STRONGKEY_HOME/appliance/etc/appliance-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/appliance
 	
-	echo "skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+	echo "skfs.cfg.property.allow.changeusername=$ALLOW_USERNAME_CHANGE
+
+skfs.cfg.property.jwt.create=$JWT_CREATE
+
+skfs.cfg.property.mds.enabled=$MDS_ENABLED
+skfs.cfg.property.return.MDS=$MDS_RETURN
+skfs.cfg.property.return.MDS.webservices=$MDS_RETURN_WS
+skfs.cfg.property.mds.mechanism=$MDS_MECHANISM
+skfs.cfg.property.mds.url=$MDS_MECHANISM_URL
+skfs.cfg.property.mds.rootca.url=$MDS_ROOTCA_URL" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
 	
 	mkdir -p $STRONGKEY_HOME/fido
@@ -603,7 +621,7 @@ EOFAPPJSON
 
 fi
 
-# Future build
-#echo "Please visit: https://$(hostname):8181/#/setup/$(echo $(hostname)$install_date_millis | md5sum | cut -d ' ' -f 1) for first time setup"
+# Copy files to various locations
+cp $SKFS_SOFTWARE/applerootca.crt $SKFS_HOME
 
 echo "Done!"

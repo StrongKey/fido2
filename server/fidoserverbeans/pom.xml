@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.4.0</version>
+        <version>4.5.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.5.1</version>
+            <version>3.16.1</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -69,7 +69,7 @@
             <scope>provided</scope>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>fido2mds</artifactId>
             <version>${project.version}</version>
@@ -83,7 +83,7 @@
                     <artifactId>crypto</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>

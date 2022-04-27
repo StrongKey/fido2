@@ -30,6 +30,7 @@ import com.strongkey.skfs.requests.PreauthenticationRequest;
 import com.strongkey.skfs.requests.PreauthorizeRequest;
 import com.strongkey.skfs.requests.PreregistrationRequest;
 import com.strongkey.skfs.requests.RegistrationRequest;
+import com.strongkey.skfs.requests.ServiceInfo;
 import com.strongkey.skfs.requests.UpdateFidoKeyRequest;
 import com.strongkey.skfs.utilities.FEreturn;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
@@ -150,6 +151,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0001", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + preregistration.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + preregistration.getSVCInfo().getProtocol()
                 + "\n username=" + preregistration.getPayload().getUsername()
                 + "\n displayname=" + preregistration.getPayload().getDisplayname()
@@ -387,6 +389,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0003", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + registration.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + registration.getSVCInfo().getProtocol()
                 + "\n response=" + registration.getPayload().getResponse()
                 + "\n metadata=" + registration.getPayload().getMetadata());
@@ -478,6 +481,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0005", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + preauthentication.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + preauthentication.getSVCInfo().getProtocol()
                 + "\n username=" + preauthentication.getPayload().getUsername()
                 + "\n options=" + preauthentication.getPayload().getOptions()
@@ -683,6 +687,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0013", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + preauthorize.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + preauthorize.getSVCInfo().getProtocol()
                 + "\n username=" + preauthorize.getPayload().getUsername()
                 + "\n txid=" + preauthorize.getPayload().getTxid()
@@ -806,6 +811,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0007", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + authentication.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + authentication.getSVCInfo().getProtocol()
                 + "\n response=" + authentication.getPayload().getResponse()
                 + "\n metadata=" + authentication.getPayload().getMetadata());
@@ -1066,6 +1072,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0015", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + authentication.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + authentication.getSVCInfo().getProtocol()
                 + "\n response=" + authentication.getPayload().getResponse()
                 + "\n metadata=" + authentication.getPayload().getMetadata());
@@ -1163,7 +1170,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
      * error message incase something went wrong. Will be empty if successful.
      */
     @Override
-    public Response deregister(Long did, String keyid) {
+    public Response deregister(Long did, String keyid, ServiceInfo svcinfoObj) {
 
         Date in = new Date();
         Date out;
@@ -1172,6 +1179,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0009", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + svcinfoObj.getSvcusername()
                 + "\n keyid=" + keyid);
 
         if (keyid == null || keyid.trim().isEmpty()) {
@@ -1241,6 +1249,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, SKFSCommon.getMessageProperty("FIDO-MSG-0019"), "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + fidokey.getSVCInfo().getSVCUsername()
                 + "\n keyid=" + keyid
                 + "\n fidokey=" + fidokey.toString());
 
@@ -1293,7 +1302,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
      * successful.
      */
     @Override
-    public Response getkeysinfo(Long did, String username) {
+    public Response getkeysinfo(Long did, String username, ServiceInfo svcinfoObj) {
 
         Date in = new Date();
         Date out;
@@ -1302,6 +1311,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         //  1. Receive request and print inputs
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0011", "[TXID=" + ID + "]"
                 + "\n did=" + did
+                + "\n svcusername=" + svcinfoObj.getSvcusername()
                 + "\n username=" + username);
 
         //  2. Input checks

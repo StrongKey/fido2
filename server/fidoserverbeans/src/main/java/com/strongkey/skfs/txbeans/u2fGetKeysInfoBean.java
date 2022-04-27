@@ -167,6 +167,17 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                                 keyJsonBuilder.add("attestationFormat", attestationFormat);
                             }
                         }
+                        
+                        if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")) {
+                            if (SKFSCommon.containsMDSWSList("G")) {
+                                if (SKFSCommon.containsMdsentry(key.getAaguid())) {
+                                    keyJsonBuilder.add("MDSEntry", SKFSCommon.getMdsentryfromMap(key.getAaguid()));
+                                } else {
+                                    keyJsonBuilder.addNull("MDSEntry");
+                                }
+
+                            }
+                        }
                         keysArrayBuilder.add(keyJsonBuilder.build());
                     }
                 }

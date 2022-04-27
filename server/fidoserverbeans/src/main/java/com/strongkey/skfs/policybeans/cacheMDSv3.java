@@ -37,14 +37,21 @@ import com.strongkey.skfs.utilities.SKFSCommon;
 import static com.strongkey.skfs.utilities.SKFSCommon.getConfigurationProperty;
 import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFSLogger;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.security.Signature;
 import java.security.cert.CertPath;
 import java.security.cert.CertPathValidator;
 import java.security.cert.CertPathValidatorResult;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
@@ -56,6 +63,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.json.Json;
@@ -81,36 +89,57 @@ public class cacheMDSv3 implements cacheMDSv3Local {
     public void execute() {
 
         String mdsenabled = SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.enabled");
+        String mdsmechanism = SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.mechanism");
         if (mdsenabled.equalsIgnoreCase("true") || mdsenabled.equalsIgnoreCase("yes")) {
             SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-3001", "");
 
             if (SKFSCommon.getMdsrootca() == null) {
-                Client client = null;
-                WebTarget webTarget;
-                Response rs = null;
-                try {
-
-                    client = ClientBuilder.newClient();
-                    webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
-
-                    // Execute the method.
-                    rs = webTarget.request().get();
-
-                    if (rs.getStatus() > 299) {
-                        System.err.println("Method failed: " + rs.readEntity(String.class));
-                    } else {
-
+                if (mdsmechanism.trim().equalsIgnoreCase("file")) {
+                    InputStream targetStream = null;
+                    try {
+                        File initialFile = new File(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+                        targetStream = new FileInputStream(initialFile);
                         CertificateFactory fac = CertificateFactory.getInstance("X509");
-                        SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                        SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(targetStream));
+                    } catch (FileNotFoundException | CertificateException e) {
+                        Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, e);
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            targetStream.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    rs.close();
-                    client.close();
-                    // Release the connection.
+                } else {
+                    Client client = null;
+                    WebTarget webTarget;
+                    Response rs = null;
+                    try {
+
+                        client = ClientBuilder.newClient();
+                        webTarget = client.target(getConfigurationProperty("skfs.cfg.property.mds.rootca.url"));
+
+                        // Execute the method.
+                        rs = webTarget.request().get();
+
+                        if (rs.getStatus() > 299) {
+                            System.err.println("Method failed: " + rs.readEntity(String.class));
+                        } else {
+
+                            CertificateFactory fac = CertificateFactory.getInstance("X509");
+                            SKFSCommon.setMdsrootca((X509Certificate) fac.generateCertificate(rs.readEntity(InputStream.class)));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        rs.close();
+                        client.close();
+                        // Release the connection.
+                    }
                 }
             }
+            
             X509Certificate GSRootCert = SKFSCommon.getMdsrootca();
 
             X509Certificate EECERT = null;
@@ -120,27 +149,44 @@ public class cacheMDSv3 implements cacheMDSv3Local {
             String MDSJWTBlob = "", plaintext = "";
             String jwtsigningalgo = "";
             // 1 - FETCH MDS BLOB
-            try {
-                client = ClientBuilder.newClient();
-                webTarget = client.target(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.url"));
+            if (mdsmechanism.trim().equalsIgnoreCase("file")) {
 
-                rs = webTarget.request().get();
-
-                if (rs.getStatus() > 299) {
-                    System.err.println("Method failed: " + rs.readEntity(String.class));
-                } else {
-                    // Deal with the response.
-                    MDSJWTBlob = rs.readEntity(String.class);
+                StringBuilder resultStringBuilder = new StringBuilder();
+                try {
+                    File initialFile = new File(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.url"));
+                    InputStream inputStream = new FileInputStream(initialFile);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        resultStringBuilder.append(line);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(cacheMDSv3.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (Exception e) {
-                //throw error
-                System.err.println("Fatal protocol violation: " + e.getMessage());
-                e.printStackTrace();
-            } finally {
-                rs.close();
-                client.close();
-            }
+                MDSJWTBlob = resultStringBuilder.toString();
 
+            } else {
+                try {
+                    client = ClientBuilder.newClient();
+                    webTarget = client.target(SKFSCommon.getConfigurationProperty("skfs.cfg.property.mds.url"));
+
+                    rs = webTarget.request().get();
+
+                    if (rs.getStatus() > 299) {
+                        System.err.println("Method failed: " + rs.readEntity(String.class));
+                    } else {
+                        // Deal with the response.
+                        MDSJWTBlob = rs.readEntity(String.class);
+                    }
+                } catch (Exception e) {
+                    //throw error
+                    System.err.println("Fatal protocol violation: " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    rs.close();
+                    client.close();
+                }
+            }
             // 2 - DECODE JWT BLOB
             String[] jwtb64split = MDSJWTBlob.split("\\.");
             Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -150,6 +196,7 @@ public class cacheMDSv3 implements cacheMDSv3Local {
                     .add("signature", jwtb64split[2])
                     .build();
 
+            System.out.println(jwt.getString("signature"));
             try {
 
                 jwtsigningalgo = jwt.getJsonObject("protected").getString("alg");

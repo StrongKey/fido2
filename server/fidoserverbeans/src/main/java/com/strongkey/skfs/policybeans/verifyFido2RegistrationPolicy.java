@@ -98,6 +98,8 @@ public class verifyFido2RegistrationPolicy implements verifyFido2RegistrationPol
                                 singleaaguid = Boolean.FALSE;
                             }
                         }
+                        //missing pkix validation for attestation cert?
+                        
                         //check to see if the aaguid is revoked or update available
                         SortedMap<String, String> authstatusreportPolicymap = new ConcurrentSkipListMap<>();
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",

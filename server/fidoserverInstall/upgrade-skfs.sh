@@ -23,6 +23,7 @@ GLASSFISH_ADMIN_PASSWORD=adminadmin
 MYSQL_ROOT_PASSWORD=BigKahuna
 MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
 SERVICE_LDAP_BIND_PASS=Abcd1234!
+SERVICE_LDAP_BASEDN='dc=strongauth,dc=com'
 
 GLASSFISH=payara-4.1.2.181.zip
 MARIADB=mariadb-10.2.30-linux-glibc_214-x86_64.tar.gz
@@ -33,6 +34,7 @@ DBCLIENT=mariadb-java-client-2.2.6.jar
 
 RPNAME=FIDOServer
 RPID=strongkey.com
+JWT_CREATE=true
 JWT_DN='CN=StrongKey KeyAppliance,O=StrongKey'
 JWT_DURATION=30
 JWT_KEYGEN_DN='/C=US/ST=California/L=Cupertino/O=StrongAuth/OU=Engineering'
@@ -42,6 +44,15 @@ JWT_KEY_VALIDITY=365
 SAKA_DID=1
 
 ALLOW_USERNAME_CHANGE=false
+
+MDS_ENABLED=true	# Property that enables MDS download
+MDS_RETURN=false	# Property to determine if MDS data should be returned in the JSON response.
+MDS_RETURN_WS=R,A,G
+MDS_MECHANISM=url                                       # Property that define the MDS fetch mechanism. Allowed options : URL / File
+MDS_MECHANISM_URL=https://mds.fidoalliance.org/		# In case of 'file' the location can be a file on the local file system under the /usr/local/strongauth directory
+MDS_ROOTCA_URL=http://secure.globalsign.com/cacert/root-r3.crt
+
+
 
 LATEST_SKFS_BUILD=fidoserver.ear
 
@@ -205,7 +216,7 @@ if [ ! -f $STRONGKEY_HOME/skfs/keystores/jwtsigningtruststore.bcfks ]; then
 	# OPENDJ
 	cd $STRONGKEY_HOME
         cat >> $STRONGKEY_HOME/upgrading/update.ldif <<- EOFUPDATELDIF
-dn: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: add
 objectClass: person
 objectClass: organizationalPerson
@@ -216,32 +227,32 @@ givenName: fidoadminuser
 cn: fidoadminuser
 sn: fidoadminuser
 
-dn: cn=FidoRegAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=FidoRegAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: FidoRegAuthorized
-uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 
-dn: cn=FidoSignAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=FidoSignAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: FidoSignAuthorized
-uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 
-dn: cn=FidoAuthzAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=FidoAuthzAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: FidoAuthzAuthorized
-uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 
-dn: cn=FidoAdminAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=FidoAdminAuthorized,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 objectClass: groupOfUniqueNames
 objectClass: top
 cn: FidoAdminAuthorized
-uniqueMember: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 EOFUPDATELDIF
 
-        if [[ -z $(/usr/local/strongkey/OpenDJ-3.0.0/bin/ldapsearch -h localhost -p 1389 -D "cn=Directory Manager" -w 'Abcd1234!' -b "dc=strongauth,dc=com" "CN=*" | grep fidoadminuser) ]]; then
+        if [[ -z $(/usr/local/strongkey/OpenDJ-3.0.0/bin/ldapsearch -h localhost -p 1389 -D "cn=Directory Manager" -w $SERVICE_LDAP_BIND_PASS -b "$SERVICE_LDAP_BASEDN" "CN=*" | grep fidoadminuser) ]]; then
 		$STRONGKEY_HOME/OpenDJ-3.0.0/bin/ldapmodify --filename $STRONGKEY_HOME/upgrading/update.ldif \
 					  --hostName $(hostname) \
 					  --port 1389 \
@@ -494,8 +505,8 @@ if [[ $CURRENT_SKFS_BUILDNO < "4.4.2" ]]; then
 
 	# Extract OpenDJ ldif
 	service opendjd stop
-        export-ldif --includeBranch "dc=strongauth,dc=com" --backendID userRoot --ldifFile $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif -e entryUUID -e createTimestamp -e pwdChangedTime -e creatorsName -i uniqueMember -i ou -i domainName -i description -i did -i givenName -i userPassword -i uid -i cn -i sn
-	sed -i '/cn: FIDOUsers/i uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+        export-ldif --includeBranch "$SERVICE_LDAP_BASEDN" --backendID userRoot --ldifFile $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif -e entryUUID -e createTimestamp -e pwdChangedTime -e creatorsName -i uniqueMember -i ou -i domainName -i description -i did -i givenName -i userPassword -i uid -i cn -i sn
+	sed -i "/cn: FIDOUsers/i uniqueMember: cn=encryptdecrypt,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN" $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
 	sed -i '/fidoinetorgperson/d' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
 	sed -i '/did:/{$!N;/\n.*userPassword/!P;D}' $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
 	
@@ -529,7 +540,7 @@ if [[ $CURRENT_SKFS_BUILDNO < "4.4.2" ]]; then
         /bin/ldapadd -x -H ldapi:/// -D "cn=config" -w $SERVICE_LDAP_BIND_PASS -f /etc/openldap/schema/local.ldif
         sleep 5
 	
-        /bin/ldapadd -x -w $SERVICE_LDAP_BIND_PASS -D "cn=Manager,dc=strongauth,dc=com" -f $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
+        /bin/ldapadd -x -c -w $SERVICE_LDAP_BIND_PASS -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f $STRONGKEY_HOME/SKFS-OpenDJ-export.ldif
 
         /bin/ldapmodify -Y external -H ldapi:/// -f add_slapdlog.ldif >/dev/null 2>&1
         systemctl force-reload slapd >/dev/null 2>&1
@@ -549,6 +560,110 @@ if [[ $CURRENT_SKFS_BUILDNO < "4.4.2" ]]; then
 	
 	mv $STRONGKEY_HOME/fido/VersionFidoServer-4.4.1 $STRONGKEY_HOME/fido/VersionFidoServer-4.4.2
 fi # End of 4.4.2 Upgrade
+
+# 4.4.2 upgrade finished, start upgrade to 4.4.3
+if [[ $CURRENT_SKFS_BUILDNO < "4.4.3" ]]; then
+	echo "Upgrading to 4.4.3"
+
+	# 4.4.3 LDAP Changes
+	service slapd stop
+	slapcat -n 0 -l $SCRIPT_HOME/openldap-backup-config.ldif
+	slapcat -n 2 -l $SCRIPT_HOME/openldap-backup-data.ldif
+	# replace old group names and add 2 new groups
+	sed -r "s|cn=FidoAuthorized|cn=FidoCredentialService-AuthorizedServiceCredentials|
+		s|FidoRegAuthorized|FidoRegistrationService-AuthorizedServiceCredentials|
+		s|FidoSignAuthorized|FidoAuthenticationService-AuthorizedServiceCredentials|
+		s|FidoAuthzAuthorized|FidoAuthorizationService-AuthorizedServiceCredentials|
+		s|FidoAdminAuthorized|FidoAdministrationService-AuthorizedServiceCredentials|" $SCRIPT_HOME/openldap-backup-data.ldif > $SCRIPT_HOME/openldap-backup-data-4.4.3.ldif
+
+	sed -i '0,/cn: FidoAuthorized/{s/cn: FidoAuthorized/cn: FidoCredentialService-AuthorizedServiceCredentials/}' $SCRIPT_HOME/openldap-backup-data-4.4.3.ldif
+	sed -i '/cn: FidoAuthorized/d' $SCRIPT_HOME/openldap-backup-data-4.4.3.ldif
+
+	rm -rf /etc/openldap/slapd.d/*
+	rm -rf /var/lib/ldap/*
+	slapadd -n 0 -F /etc/openldap/slapd.d/ -l $SCRIPT_HOME/openldap-backup-config.ldif
+	slapadd -n 2 -l $SCRIPT_HOME/openldap-backup-data-4.4.3.ldif
+	chown -R ldap. /etc/openldap/slapd.d
+	chmod -R 755 /etc/openldap/slapd.d
+	chown -R ldap. /var/lib/ldap
+	chmod -R 755 /var/lib/ldap
+	service slapd start
+	
+	# Add new groups to LDAP
+	cat > $SCRIPT_HOME/newgroups4.4.3.ldif <<-EOFNEWGROUPSLDIF
+dn: cn=FidoPolicyManagementService-AuthorizedServiceCredentials,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoPolicyManagementService-AuthorizedServiceCredentials
+uniqueMember: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+
+dn: cn=FidoMonitoringService-AuthorizedServiceCredentials,did=1,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: FidoMonitoringService-AuthorizedServiceCredentials 
+uniqueMember: cn=fidoadminuser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+uniqueMember: cn=svcfidouser,did=1,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+EOFNEWGROUPSLDIF
+
+	/bin/ldapadd -x -c -w $SERVICE_LDAP_BIND_PASS -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f $SCRIPT_HOME/newgroups4.4.3.ldif
+
+	# 4.4.3 Policy Changes
+	MARIA_HOME=$STRONGKEY_HOME/mariadb-10.5.8
+	$MARIA_HOME/bin/mysqldump -u skfsdbuser -p$MARIA_SKFSDBUSER_PASSWORD skfs fido_policies > $SCRIPT_HOME/fido_policies-backup.sql
+
+	# Remove old policies and insert new default policies
+	$MARIA_HOME/bin/mysql -u skfsdbuser -p$MARIA_SKFSDBUSER_PASSWORD skfs -e "TRUNCATE FIDO_POLICIES;"
+	startDate=$(date +%s)
+	echo "Inserting default minimal policies for each existing did..."
+	currentMaxPID=1
+	for policydid in $($MARIA_HOME/bin/mysql -u skfsdbuser -p$MARIA_SKFSDBUSER_PASSWORD skfs -B --skip-column-names -e "select did from domains order by did asc;");do
+		fidoPolicy=$(echo "{\"FidoPolicy\":{\"name\":\"MinimalPolicy\",\"copyright\":\"\",\"version\":\"1.0\",\"startDate\":\"${startDate}\",\"endDate\":\"1760103870871\",\"system\":{\"requireCounter\":\"mandatory\",\"integritySignatures\":false,\"userVerification\":[\"required\",\"preferred\",\"discouraged\"],\"userPresenceTimeout\":0,\"allowedAaguids\":[\"all\"],\"jwtKeyValidity\":${JWT_KEY_VALIDITY},\"jwtRenewalWindow\":30,\"transport\":[\"usb\",\"internal\"]},\"algorithms\":{\"curves\":[\"secp256r1\",\"secp384r1\",\"secp521r1\",\"curve25519\"],\"rsa\":[\"RS256\",\"RS384\",\"RS512\",\"PS256\",\"PS384\",\"PS384\"],\"signatures\":[\"ES256\",\"ES384\",\"ES512\",\"EdDSA\",\"ES256K\"]},\"attestation\":{\"conveyance\":[\"none\",\"indirect\",\"direct\",\"enterprise\"],\"formats\":[\"fido-u2f\",\"packed\",\"tpm\",\"android-key\",\"android-safetynet\",\"apple\",\"none\"]},\"registration\":{\"displayName\":\"required\",\"attachment\":[\"platform\",\"cross-platform\"],\"discoverableCredential\":[\"required\",\"preferred\",\"discouraged\"],\"excludeCredentials\":\"enabled\"},\"authentication\":{\"allowCredentials\":\"enabled\"},\"authorization\":{\"maxdataLength\":256,\"preserve\":true},\"rp\":{\"id\":\"${RPID}\",\"name\":\"${RPNAME}\"},\"extensions\":{},\"mds\":{\"authenticatorStatusReport\":[{\"status\":\"FIDO_CERTIFIED_L1\",\"priority\":\"1\",\"decision\":\"IGNORE\"},{\"status\":\"FIDO_CERTIFIED_L2\",\"priority\":\"1\",\"decision\":\"ACCEPT\"},{\"status\":\"UPDATE_AVAILABLE\",\"priority\":\"5\",\"decision\":\"IGNORE\"},{\"status\":\"REVOKED\",\"priority\":\"10\",\"decision\":\"DENY\"}]},\"jwt\":{\"algorithms\":[\"ES256\",\"ES384\",\"ES521\"],\"duration\":${JWT_DURATION},\"required\":[\"rpid\",\"iat\",\"exp\",\"cip\",\"uname\",\"agent\"],\"signingCerts\":{\"DN\":\"${JWT_DN}\",\"certsPerServer\":${JWT_CERTS_PER_SERVER}}}}}" | /usr/bin/base64 -w 0)
+		$MARIA_HOME/bin/mysql --user=skfsdbuser --password=$MARIA_SKFSDBUSER_PASSWORD --database=skfs -e "insert into FIDO_POLICIES values (1,${policydid},${currentMaxPID},'${fidoPolicy}','Active','',NOW(),NULL,NULL);"
+		currentMaxPID=$((currentMaxPID+1))
+	done
+
+	echo "The StrongKey FIDO Policy format has changed. As such, a default minimal policy has been added to your fido_policies database. A mysqldump of your pre-upgrade FIDO policies within the fido_policies table has been saved to $SCRIPT_HOME/fido_policies-backup.sql"
+
+	cp $SCRIPT_HOME/skfsclient/skfsclient.jar $STRONGKEY_HOME/skfsclient 
+	chown -R strongkey. $STRONGKEY_HOME/skfsclient/
+
+	mv $STRONGKEY_HOME/fido/VersionFidoServer-4.4.2 $STRONGKEY_HOME/fido/VersionFidoServer-4.4.3
+fi # End of 4.4.3 Upgrade
+
+# 4.4.3 upgrade finished, start upgrade to 4.4.4
+if [[ $CURRENT_SKFS_BUILDNO < "4.4.4" ]]; then
+	if [ -f $STRONGKEY_HOME/skce/etc/skce-configuration.properties ]; then
+		sed -ri "s|ldap://localhost:1389|ldap://localhost:389|
+			 s|cn=Directory Manager|cn=Manager,$SERVICE_LDAP_BASEDN|i" $STRONGKEY_HOME/skce/etc/skce-configuration.properties
+	else
+		mkdir -p $STRONGKEY_HOME/skce/etc
+		echo "ldape.cfg.property.service.ce.ldap.ldapurl=ldap://localhost:389" >> $STRONGKEY_HOME/skce/etc/skce-configuration.properties
+		echo "ldape.cfg.property.service.ce.ldap.ldapbinddn=cn=Manager,$SERVICE_LDAP_BASEDN" >> $STRONGKEY_HOME/skce/etc/skce-configuration.properties
+		echo "ldape.cfg.property.service.ce.ldap.search.ldapurl=ldap://localhost:389" >> $STRONGKEY_HOME/skce/etc/skce-configuration.properties
+		echo "ldape.cfg.property.service.ce.ldap.search.ldapbinddn=cn=Manager,$SERVICE_LDAP_BASEDN" >> $STRONGKEY_HOME/skce/etc/skce-configuration.properties
+	fi
+	mv $STRONGKEY_HOME/fido/VersionFidoServer-4.4.3 $STRONGKEY_HOME/fido/VersionFidoServer-4.4.4
+fi # End of 4.4.4 Upgrade
+
+# 4.4.4 upgrade finished, start upgrade to 4.5.0
+if [[ $CURRENT_SKFS_BUILDNO < "4.5.0" ]]; then
+	echo "skfs.cfg.property.jwt.create=$JWT_CREATE
+
+skfs.cfg.property.mds.enabled=$MDS_ENABLED
+skfs.cfg.property.return.MDS=$MDS_RETURN
+skfs.cfg.property.return.MDS.webservices=$MDS_RETURN_WS
+skfs.cfg.property.mds.mechanism=$MDS_MECHANISM
+skfs.cfg.property.mds.url=$MDS_MECHANISM_URL
+skfs.cfg.property.mds.rootca.url=$MDS_ROOTCA_URL" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+
+	cp $SCRIPT_HOME/applerootca.crt $STRONGKEY_HOME/skfs
+	chown -R strongkey. $STRONGKEY_HOME/skfs
+	cp -r $SCRIPT_HOME/skfsclient/ $STRONGKEY_HOME
+	chown -R strongkey. $STRONGKEY_HOME/skfsclient/
+	mv $STRONGKEY_HOME/fido/VersionFidoServer-4.4.4 $STRONGKEY_HOME/fido/VersionFidoServer-4.5.0
+fi # End of 4.5.0 Upgrade
+
 
 # Start Glassfish
 echo

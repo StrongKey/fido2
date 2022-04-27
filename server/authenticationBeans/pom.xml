@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.4.0</version>
+        <version>4.5.0</version>
     </parent>
 
     <groupId>com.strongkey</groupId>
