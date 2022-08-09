@@ -416,11 +416,13 @@ public class SKFSServlet {
         }
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin;
+        boolean isAuthorizedAdmin = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
-                isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                if(!isAuthorized){
+                    isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                }
                 deregreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
@@ -428,7 +430,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+                    //return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -504,11 +506,13 @@ public class SKFSServlet {
         }
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin;
+        boolean isAuthorizedAdmin = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
-                isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                if(!isAuthorized){
+                    isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                }
                 patchreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
@@ -516,7 +520,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+                //    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -581,11 +585,13 @@ public class SKFSServlet {
 
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin;
+        boolean isAuthorizedAdmin = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
-                isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                if(!isAuthorized){
+                    isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                }
                 getkeysreq.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
@@ -593,7 +599,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+                 //   return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -629,18 +635,20 @@ public class SKFSServlet {
         }
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin;
+        boolean isAuthorizedAdmin = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_MONITOR);
-                isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                if(!isAuthorized){
+                    isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
+                }
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
                 try {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+                 //   return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {

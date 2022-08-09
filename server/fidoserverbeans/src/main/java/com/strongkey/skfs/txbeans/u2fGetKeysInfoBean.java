@@ -162,9 +162,14 @@ public class u2fGetKeysInfoBean implements u2fGetKeysInfoBeanLocal {
                             if (displayName != null) {
                                 keyJsonBuilder.add("displayName", displayName);
                             }
-                            String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
-                            if (displayName != null) {
-                                keyJsonBuilder.add("attestationFormat", attestationFormat);
+                            
+                            try {
+                                String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
+                                if (attestationFormat != null) {
+                                    keyJsonBuilder.add("attestationFormat", attestationFormat);
+                                }
+                            } catch (Exception ex) {
+
                             }
                         }
                         

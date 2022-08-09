@@ -99,17 +99,26 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
 
         Short sid_to_be_deleted = null;
 //        String did_to_be_deactivated = null;
-//        int userfkidhyphen;
-//        String fidouser;
+        int userfkidhyphen;
+        String current_pk;
+        String fidouser;
         Long fkid_to_be_deleted = null;
         try {
             String[] mapvaluesplit = keyid.split("-", 3);
             sid_to_be_deleted = Short.parseShort(mapvaluesplit[0]);
 //            did_to_be_deactivated = mapvaluesplit[1];
-//            userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
+            userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
 
 //            fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
-            fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
+//            fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
+           if (userfkidhyphen == -1) {
+                fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
+                current_pk = sid_to_be_deleted + "-" + did + "-" + fkid_to_be_deleted;
+            }else{
+                fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2].substring(userfkidhyphen + 1));
+                fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
+                current_pk = sid_to_be_deleted + "-" + did + "-" + fidouser + "-" + fkid_to_be_deleted;
+            }
         } catch (Exception ex) {
             rv.setErrorkey("FIDO-ERR-0023");
             rv.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0023") + "Invalid keyid= " + keyid);
@@ -118,7 +127,7 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
             return rv;
         }
 
-        String current_pk = sid_to_be_deleted + "-" + did + "-" + fkid_to_be_deleted;
+//        String current_pk = sid_to_be_deleted + "-" + did + "-" + fkid_to_be_deleted;
         if(!keyid.equalsIgnoreCase(current_pk)){
             //user is not authorized to deactivate this key
             //  throw an error and return.
