@@ -967,11 +967,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     
     public static Response validatePreauthenticatePayload(JsonObject preauthpayload) {
         
-        String residentkey = preauthpayload.getJsonObject("options").getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
-        if (residentkey != null && residentkey.equalsIgnoreCase("required")) {
-            System.out.println("has rk");
-        } else{
-            if (preauthpayload.containsKey("username")) {
+        if (preauthpayload.containsKey("username")) {
             if (preauthpayload.getString("username").isEmpty()) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
                 return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
@@ -980,8 +976,6 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
             return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
         }
-        }
-        
 
         try {
             if (preauthpayload.containsKey("options")) {

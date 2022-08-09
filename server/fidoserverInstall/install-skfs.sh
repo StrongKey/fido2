@@ -542,6 +542,8 @@ skfs.cfg.property.mds.mechanism=$MDS_MECHANISM
 skfs.cfg.property.mds.url=$MDS_MECHANISM_URL
 skfs.cfg.property.mds.rootca.url=$MDS_ROOTCA_URL
 
+skfs.cfg.property.apple.rootca.url=$STRONGKEY_HOME/skfs/applerootca.crt
+
 skfs.cfg.property.return.responsedetail=$RESPONSE_DETAIL
 skfs.cfg.property.return.responsedetail.webservices=$RESPONSE_DETAIL_WEBSERVICES
 skfs.cfg.property.return.responsedetail.format=$RESPONSE_DETAIL_FORMAT" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties

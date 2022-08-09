@@ -30,7 +30,7 @@ This project is a basic service provider web application written in Java to work
 5. Undeploy the old version and deploy the new .war file to Payara.
 
     ```sh
-    payara5/glassfish/bin/asadmin undeploy basicserver
+    payara5/glassfish/bin/asadmin undeploy basicdemo
     payara5/glassfish/bin/asadmin deploy basicdemo.war
     ```
 

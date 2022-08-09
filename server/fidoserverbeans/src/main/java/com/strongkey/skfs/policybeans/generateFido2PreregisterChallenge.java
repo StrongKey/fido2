@@ -306,7 +306,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         if(rpRequestedAuthSelect != null){
             String rpRequestedAttachment = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT, null);
 //            Boolean rpRequestedRequireResidentKey = SKFSCommon.handleNonExistantJsonBoolean(rpRequestedAuthSelect, SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
-            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
+            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);;
             String rpRequestedUserVerification = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null);
 
             if(regOp.getAuthenticatorAttachment().contains(rpRequestedAttachment)){
@@ -325,12 +325,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
 
             if (rpRequestedRequireResidentKey != null) {
                 if (regOp.getRequireResidentKey().contains(rpRequestedRequireResidentKey)) {
-                    if(rpRequestedRequireResidentKey.equalsIgnoreCase("required")){
-                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, Boolean.TRUE);
-                    }
-                    else{
-                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, Boolean.FALSE);
-                    }
+                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, rpRequestedRequireResidentKey);
                 } else {
                     throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
                 }

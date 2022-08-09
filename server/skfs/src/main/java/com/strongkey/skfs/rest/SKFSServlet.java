@@ -253,7 +253,7 @@ public class SKFSServlet {
 
         //convert payload to pre auth object
         PreauthenticationRequest pauthreq = new PreauthenticationRequest();
-        pauthreq.setUsername(preauthpayload.getString("username", ""));
+        pauthreq.setUsername(preauthpayload.getString("username"));
         pauthreq.setOptions(preauthpayload.getJsonObject("options"));
         if (preauthpayload.containsKey("extensions")) {
             pauthreq.getPayload().setExtensions(preauthpayload.getString("extensions"));

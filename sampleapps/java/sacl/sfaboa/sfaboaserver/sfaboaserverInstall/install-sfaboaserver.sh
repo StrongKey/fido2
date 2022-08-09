@@ -11,7 +11,7 @@
 #SHOWALL=1
 
 STRONGKEY_HOME=/usr/local/strongkey
-MARIATGT=mariadb-10.5.8
+MARIATGT=mariadb-10.6.8
 GLASSFISH_HOME=$STRONGKEY_HOME/payara5/glassfish
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)

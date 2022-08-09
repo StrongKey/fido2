@@ -31,7 +31,7 @@ echo "-Copying files..."
 cp $fidopolicyserver/target/fidopolicyboa.war $fidopolicyserver/fidopolicyserverInstall
 
 # Create archives
-echo "-Packaging fidoserver..."
+echo "-Packaging fidopolicyserver..."
 tar zcf fidopolicyserver-v1.0-dist.tgz -C $fidopolicyserver/fidopolicyserverInstall .
 
 # Do not go to the failure function

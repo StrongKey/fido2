@@ -519,21 +519,15 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             jsonExtensions = jsonreader.readObject();
         }
 
-        String residentkey = preauthentication.getPayload().getOptions().getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
-        if (residentkey != null && residentkey.equalsIgnoreCase("required")) {
-
-        } else {
-            if (preauthentication.getPayload().getUsername() == null || preauthentication.getPayload().getUsername().isEmpty()) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0002")
-                        + " username")).build();
-            }
-
-            if (preauthentication.getPayload().getUsername().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " username").build();
-            }
+        if (preauthentication.getPayload().getUsername() == null || preauthentication.getPayload().getUsername().isEmpty()) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0002")
+                    + " username")).build();
         }
 
+        if (preauthentication.getPayload().getUsername().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " username").build();
+        }
 
         String appid = applianceMaps.getDomain(did).getSkfeAppid();
 

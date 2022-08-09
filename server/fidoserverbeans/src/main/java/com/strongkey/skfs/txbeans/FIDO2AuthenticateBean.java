@@ -78,6 +78,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
     public String execute(Long did, String authresponse, String authmetadata, String method, String txid, String txpayload, String agent, String cip) {
 
         String userAgent, clientIP;
+        String sessiontype = "";
         String wsresponse = "", logs = "", errmsg = "";
         String aaguid= "";
         String userHandle ="", jwt = "";
@@ -320,10 +321,11 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
             //  Look for the sessionid in the sessionmap and retrieve the username
             UserSessionInfo user = (UserSessionInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_USER_SESSION_INFO, KHhash);
+            sessiontype = user.getSessiontype();
             if (user == null) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0006", "");
                 throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0006")));
-            } else if (user.getSessiontype().equalsIgnoreCase(SKFSConstants.FIDO_USERSESSION_AUTH) || user.getSessiontype().equalsIgnoreCase(SKFSConstants.FIDO_USERSESSION_AUTHORIZE)) {
+            } else if (sessiontype.equalsIgnoreCase(SKFSConstants.FIDO_USERSESSION_AUTH) || sessiontype.equalsIgnoreCase(SKFSConstants.FIDO_USERSESSION_AUTHORIZE)) {
                 username = user.getUsername();
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0022", " username=" + username);
 
