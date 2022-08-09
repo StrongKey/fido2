@@ -9,6 +9,9 @@ package com.strongkey.skfs.fido2;
 
 import java.util.ArrayList;
 import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 public class NoneAttestationStatement implements FIDO2AttestationStatement {
 
@@ -34,5 +37,10 @@ public class NoneAttestationStatement implements FIDO2AttestationStatement {
     @Override
     public String getAttestationType() {
         return "none";
+    }
+    
+     public JsonObject toJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        return job.build();
     }
 }

@@ -193,7 +193,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                     logs = fer.getLogmsg();
                     regChallenge = (U2FRegistrationChallenge) fer.getResponse();
                     if (regChallenge == null) {
-                        //  Chould not generate registration nonce.
+                        //  Could not generate registration nonce.
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0025"), "");
                         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0025") + "").build();
                     } else {
@@ -221,8 +221,8 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                     }
                 }
             } catch (SKFEException |NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), "Error during preregister: " + ex.getMessage());
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + " Error during preregister: " + ex.getMessage()).build();
             } 
 
             //  Make a silent preauthenticate call to fetch all the key handles.
@@ -240,16 +240,19 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                     while (it.hasNext()) {
                         FidoKeys key = (FidoKeys) it.next();
                         if (key != null) {
-                            String kh = decryptKH(key.getKeyhandle());
+                            if (!key.getStatus().equalsIgnoreCase(applianceConstants.DELETED)) {
 
-                            // Do a silent preauthenticate call to get auth wsresponse for this key handle.
-                            // Fetch transports from the child table and create a jsonarray and pass it on to the auth challenge object
-                            FEreturn feskcero = u2fpreauthbean.execute(did, preregistration.getSVCInfo().getProtocol(), preregistration.getPayload().getUsername(), kh, key.getAppid(), SKFSCommon.getTransportJson(key.getTransports().intValue()));
-                            if (feskcero != null) {
-                                U2FAuthenticationChallenge authChallenge = (U2FAuthenticationChallenge) feskcero.getResponse();
-                                if (authChallenge != null) {
-                                    authresponses[i] = authChallenge.toJsonString(appid);
-                                    i++;
+                                String kh = decryptKH(key.getKeyhandle());
+
+                                // Do a silent preauthenticate call to get auth wsresponse for this key handle.
+                                // Fetch transports from the child table and create a jsonarray and pass it on to the auth challenge object
+                                FEreturn feskcero = u2fpreauthbean.execute(did, preregistration.getSVCInfo().getProtocol(), preregistration.getPayload().getUsername(), kh, key.getAppid(), SKFSCommon.getTransportJson(key.getTransports().intValue()));
+                                if (feskcero != null) {
+                                    U2FAuthenticationChallenge authChallenge = (U2FAuthenticationChallenge) feskcero.getResponse();
+                                    if (authChallenge != null) {
+                                        authresponses[i] = authChallenge.toJsonString(appid);
+                                        i++;
+                                    }
                                 }
                             }
                         }
@@ -259,7 +262,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 }
             } catch (SKFEException ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage()).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0008") + " could not fetch key handles " + ex.getMessage()).build();
             } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
@@ -391,7 +394,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 + "\n did=" + did
                 + "\n svcusername=" + registration.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + registration.getSVCInfo().getProtocol()
-                + "\n response=" + registration.getPayload().getResponse()
+                + "\n response=" + registration.getPayload().getResponse().getJsonObject("response")
                 + "\n metadata=" + registration.getPayload().getMetadata());
 
         //  2. Input checks
@@ -516,15 +519,21 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
             jsonExtensions = jsonreader.readObject();
         }
 
-        if (preauthentication.getPayload().getUsername() == null || preauthentication.getPayload().getUsername().isEmpty()) {
-            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0002")
-                    + " username")).build();
+        String residentkey = preauthentication.getPayload().getOptions().getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
+        if (residentkey != null && residentkey.equalsIgnoreCase("required")) {
+
+        } else {
+            if (preauthentication.getPayload().getUsername() == null || preauthentication.getPayload().getUsername().isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " username");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0002")
+                        + " username")).build();
+            }
+
+            if (preauthentication.getPayload().getUsername().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " username").build();
+            }
         }
 
-        if (preauthentication.getPayload().getUsername().trim().length() > applianceCommon.getMaxLenProperty("appliance.cfg.maxlen.256charstring")) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1002") + " username").build();
-        }
 
         String appid = applianceMaps.getDomain(did).getSkfeAppid();
 
@@ -579,6 +588,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 ex.printStackTrace();
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0008", ex.getMessage());
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0008")
+                        + " could not fetch key handles " 
                         + ex.getMessage())).build();
             }
 
@@ -651,8 +661,9 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                     }
                 }
             } catch (NoSuchAlgorithmException | NoSuchProviderException | UnsupportedEncodingException ex) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", ex.getMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0001")
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001", "Error during preauthenticate: " + ex.getMessage());
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-0003")
+                        + "Error during preauthenticate: " 
                         + ex.getMessage())).build();
             }
             responseJSON = Json.createObjectBuilder()
@@ -813,7 +824,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 + "\n did=" + did
                 + "\n svcusername=" + authentication.getSVCInfo().getSVCUsername()
                 + "\n protocol=" + authentication.getSVCInfo().getProtocol()
-                + "\n response=" + authentication.getPayload().getResponse()
+                + "\n response=" + authentication.getPayload().getResponse().getJsonObject("response")
                 + "\n metadata=" + authentication.getPayload().getMetadata());
 
         //  2. Input checks
@@ -1197,14 +1208,14 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         } else {
             // Build the output
             String response = "Successfully deleted";
-            responseJSON = SKFSCommon.buildReturn(response);
+            responseJSON = SKFSCommon.buildReturnwithCode(response,"FIDO-MSG-0010");
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0039", "");
         }
 
         out = new Date();
         long rt = out.getTime() - in.getTime();
         //  6. Print output and Return
-        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse" + responseJSON);
+        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.INFO, "FIDO-MSG-0010", "[TXID=" + ID + ", START=" + in.getTime() + ", FINISH=" + out.getTime() + ", TTC=" + rt + "]" + "\nResponse: " + responseJSON);
         return Response.ok().entity(responseJSON).build();
     }
 
@@ -1269,7 +1280,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
         } else {
             // Build the output
             String response = "Successfully updated user registered security key";
-            responseJSON = SKFSCommon.buildReturn(response);
+            responseJSON = SKFSCommon.buildReturnwithCode(response, "FIDO-MSG-0020");
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0052", "");
         }
 
@@ -1339,6 +1350,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
 
             responseJSON = Json.createObjectBuilder()
                     .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, keysJsonObj)
+                    .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0012")
                     .build().toString();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-0040", "");
         }

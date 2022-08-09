@@ -13,7 +13,7 @@
 ##########################################
 ##########################################
 # Fido Server Info
-FIDOSERVER_VERSION=4.5.0
+FIDOSERVER_VERSION=4.6.0
 
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
@@ -41,6 +41,11 @@ MDS_MECHANISM=url                               	# Property that define the MDS 
 MDS_MECHANISM_URL=https://mds.fidoalliance.org/         # In case of 'file' the location can be a file on the local file system under the /usr/local/strongauth directory
 MDS_ROOTCA_URL=http://secure.globalsign.com/cacert/root-r3.crt
 
+# RESPONSE_DETAIL
+RESPONSE_DETAIL=false			# Property to determine if webservices should return detailed information in response.
+RESPONSE_DETAIL_WEBSERVICES=R,A		# Property to determine what webservices should return the detailed information. Default : R,A ( Reg / Auth ). Comma separated list of all the allowed web services example : R, or R,A or A and so on.
+RESPONSE_DETAIL_FORMAT=default		# Property to determine the format for the returned response details. Allowed values : default | webauthn2
+
 # Policy
 POLICY_DOMAINS=ALL	# 'ALL' or 'ONE'
 
@@ -54,9 +59,9 @@ INSTALL_MARIA=Y
 INSTALL_FIDO=Y
 
 # Start Required Distributables
-GLASSFISH=payara-5.2020.7.zip
+GLASSFISH=payara-5.2021.6.zip
 JEMALLOC=jemalloc-3.6.0-1.el7.x86_64.rpm
-MARIA=mariadb-10.5.8-linux-x86_64.tar.gz
+MARIA=mariadb-10.6.8-linux-systemd-x86_64.tar.gz
 MARIACONJAR=mariadb-java-client-2.2.6.jar
 # End Required Distributables
 
@@ -71,8 +76,8 @@ STRONGKEY_HOME=/usr/local/strongkey
 SKFS_HOME=$STRONGKEY_HOME/skfs
 GLASSFISH_HOME=$STRONGKEY_HOME/payara5/glassfish
 GLASSFISH_CONFIG=$GLASSFISH_HOME/domains/domain1/config
-MARIAVER=mariadb-10.5.8-linux-x86_64
-MARIATGT=mariadb-10.5.8
+MARIAVER=mariadb-10.6.8-linux-systemd-x86_64
+MARIATGT=mariadb-10.6.8
 MARIA_HOME=$STRONGKEY_HOME/$MARIATGT
 SKFS_SOFTWARE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SKFS_BASE_LDIF=skfs-base.ldif
@@ -113,15 +118,21 @@ APT_GET_CMD=$(which apt-get 2>/dev/null)
 echo -n "Installing required linux packages (openjdk, unzip, libaio, ncurses-compat-libs[only applicable for Amazon Linux], rng-tools, curl) ... "
 echo -n "The installer will skip packages that do not apply or are already installed. "
 if [[ ! -z $YUM_CMD ]]; then
-	yum -y install unzip libaio java-1.8.0-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+	yum -y install unzip libaio java-11-openjdk ncurses-compat-libs rng-tools curl >/dev/null 2>&1
+	update-alternatives --set java java-11-openjdk.x86_64
 	if [ $INSTALL_OPENLDAP = 'Y' ]; then
-		yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
-		yum -y reinstall openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+		if [[ $(cat /etc/system-release | grep "CentOS") ]]; then
+			yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+			yum -y reinstall openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel >/dev/null 2>&1
+		elif [[ $(cat /etc/system-release | grep "Rocky") ]]; then
+			dnf -y install openldap-servers openldap-clients >/dev/null 2>&1
+			dnf -y reinstall openldap-servers openldap-clients >/dev/null 2>&1
+		fi
 	fi
 	systemctl restart rngd
 elif [[ ! -z $APT_GET_CMD ]]; then
 	apt-get update >/dev/null 2>&1
-	apt install unzip libncurses5 libaio1 dbus openjdk-8-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
+	apt install unzip libncurses5 libaio1 dbus openjdk-11-jdk-headless daemon rng-tools curl -y >/dev/null 2>&1
 	# modify rng tools to use dev urandom as the vm may not have a harware random number generator
 	if ! grep -q "^HRNGDEVICE=/dev/urandom" /etc/default/rng-tools ; then
 		echo "HRNGDEVICE=/dev/urandom" | sudo tee -a /etc/default/rng-tools
@@ -145,13 +156,13 @@ fi
 # download required software
 if [ ! -f $SKFS_SOFTWARE/$GLASSFISH ]; then
         echo -n "Downloading Payara ... "
-	wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/5.2020.7/payara-5.2020.7.zip -q
+	wget https://repo1.maven.org/maven2/fish/payara/distributions/payara/5.2021.6/payara-5.2021.6.zip -q
         echo "Successful"
 fi
 
 if [ ! -f $SKFS_SOFTWARE/$MARIA ]; then
         echo -n "Downloading Mariadb Server ... "
-        wget https://downloads.mariadb.com/MariaDB/mariadb-10.5.8/bintar-linux-x86_64/mariadb-10.5.8-linux-x86_64.tar.gz -q
+	wget https://archive.mariadb.org/mariadb-10.6.8/bintar-linux-systemd-x86_64/mariadb-10.6.8-linux-systemd-x86_64.tar.gz -q
         echo "Successful"
 fi
 
@@ -232,7 +243,7 @@ alias aslg='cd $GLASSFISH_HOME/domains/domain1/logs'
 alias ascfg='cd $GLASSFISH_HOME/domains/domain1/config'
 alias tsl='tail --follow=name $GLASSFISH_HOME/domains/domain1/logs/server.log'
 alias mys='mysql -u skfsdbuser -p\`dbpass 2> /dev/null\` skfs'
-alias java='java -Djavax.net.ssl.trustStore=\$STRONGKEY_HOME/certs/cacerts '
+alias java='java -Djavax.net.ssl.trustStore=\$STRONGKEY_HOME/certs/cacerts -Djavax.net.ssl.trustStorePassword="changeit" '
 EOFSKFSRC
 
 if [ -f /etc/bashrc ]; then
@@ -388,6 +399,11 @@ fi
 
 ##### Configure OpenLDAP #####
 if [ $INSTALL_OPENLDAP = 'Y' ]; then
+	# If still running CentOS, change db type to hdb
+	if [[ $(cat /etc/system-release | grep "CentOS") ]]; then
+		sed -i "s/mdb/hdb/g" $SKFS_SOFTWARE/db.ldif
+	fi
+
 	/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ldaprootpassword.ldif >/dev/null 2>&1
 	/bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SKFS_SOFTWARE/db.ldif >/dev/null 2>&1
 	/bin/ldapmodify -Y EXTERNAL  -H ldapi:/// -f $SKFS_SOFTWARE/monitor.ldif >/dev/null 2>&1
@@ -524,7 +540,11 @@ skfs.cfg.property.return.MDS=$MDS_RETURN
 skfs.cfg.property.return.MDS.webservices=$MDS_RETURN_WS
 skfs.cfg.property.mds.mechanism=$MDS_MECHANISM
 skfs.cfg.property.mds.url=$MDS_MECHANISM_URL
-skfs.cfg.property.mds.rootca.url=$MDS_ROOTCA_URL" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+skfs.cfg.property.mds.rootca.url=$MDS_ROOTCA_URL
+
+skfs.cfg.property.return.responsedetail=$RESPONSE_DETAIL
+skfs.cfg.property.return.responsedetail.webservices=$RESPONSE_DETAIL_WEBSERVICES
+skfs.cfg.property.return.responsedetail.format=$RESPONSE_DETAIL_FORMAT" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
 	
 	mkdir -p $STRONGKEY_HOME/fido

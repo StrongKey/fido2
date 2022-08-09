@@ -96,6 +96,7 @@ public class SKFSConstants {
     public static final String JSON_KEY_SERVLET_INPUT_DISPLAY_NAME = "displayName";
     public static final String JSON_KEY_SERVLET_INPUT_REQUEST = "request";
     public static final String JSON_KEY_SERVLET_INPUT_RESPONSE = "response";
+    public static final String JSON_KEY_SERVLET_RESPONSE_CODE = "responseCode";
     public static final String JSON_KEY_SERVLET_INPUT_METADATA = "metadata";
 
     /**
@@ -130,10 +131,13 @@ public class SKFSConstants {
     public static final String JSON_KEY_TRANSPORT = "transport";
     public static final String JSON_KEY_APP_ID = "appId";
     public static final String JSON_KEY_USER_ID = "userId";
+    public static final String JSON_KEY_CLIENT_EXTENSION_RESULTS = "clientExtensionResults";
     public static final String JSON_USER_PUBLIC_KEY_SERVLET = "userPublicKey";
     public static final String JSON_USER_KEY_HANDLE_SERVLET = "keyHandle";
     public static final String JSON_USER_COUNTER_SERVLET = "counter";
     public static final String JSON_USER_PRESENCE_SERVLET = "touch";
+    
+    public static final String JSON_RESPONSE_DETAIL_FORMAT = "responseFormat";
     
     /*
     TX related constants

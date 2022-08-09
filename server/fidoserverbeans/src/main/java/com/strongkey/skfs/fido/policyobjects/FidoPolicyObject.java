@@ -186,9 +186,9 @@ public class FidoPolicyObject {
                     startDate, endDate, system, algorithms, rp, registration, authentication, 
                     attestation,jwt,authorization,mds,extensions)
                     .build();
-        } catch (ClassCastException | NullPointerException | UnsupportedEncodingException ex) {
+        } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
-            throw new SKFEException(ex.getLocalizedMessage());      //TODO replace with standard parsing error message
+            throw new SKFEException("Unable to decode base64 policy");      //TODO replace with standard parsing error message
         } 
     }
 

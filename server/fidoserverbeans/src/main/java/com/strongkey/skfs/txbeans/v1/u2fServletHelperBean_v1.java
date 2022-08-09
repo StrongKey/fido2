@@ -334,16 +334,18 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     while (it.hasNext()) {
                         FidoKeys key = (FidoKeys) it.next();
                         if (key != null) {
-                            String kh = decryptKH(key.getKeyhandle());
+                            if (!key.getStatus().equalsIgnoreCase(applianceConstants.DELETED)) {
+                                String kh = decryptKH(key.getKeyhandle());
 
-                            // Do a silent preauthenticate call to get auth wsresponse for this key handle.
-                            // Fetch transports from the child table and create a jsonarray and pass it on to the auth challenge object
-                            FEreturn feskcero = u2fpreauthbean.execute(Long.parseLong(did), protocol, username, kh, key.getAppid(), SKFSCommon.getTransportJson(key.getTransports().intValue()));
-                            if (feskcero != null) {
-                                U2FAuthenticationChallenge authChallenge = (U2FAuthenticationChallenge) feskcero.getResponse();
-                                if (authChallenge != null) {
-                                    authresponses[i] = authChallenge.toJsonString(appid);
-                                    i++;
+                                // Do a silent preauthenticate call to get auth wsresponse for this key handle.
+                                // Fetch transports from the child table and create a jsonarray and pass it on to the auth challenge object
+                                FEreturn feskcero = u2fpreauthbean.execute(Long.parseLong(did), protocol, username, kh, key.getAppid(), SKFSCommon.getTransportJson(key.getTransports().intValue()));
+                                if (feskcero != null) {
+                                    U2FAuthenticationChallenge authChallenge = (U2FAuthenticationChallenge) feskcero.getResponse();
+                                    if (authChallenge != null) {
+                                        authresponses[i] = authChallenge.toJsonString(appid);
+                                        i++;
+                                    }
                                 }
                             }
                         }

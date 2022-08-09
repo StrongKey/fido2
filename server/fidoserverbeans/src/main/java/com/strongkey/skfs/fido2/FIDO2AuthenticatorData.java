@@ -15,6 +15,9 @@ import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.logging.Level;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -135,5 +138,28 @@ public class FIDO2AuthenticatorData {
             throw new IllegalArgumentException("AuthenicatorData contains invalid CBOR: "
                 + extraData + " unknown bytes");
         }
+    }
+    
+    public JsonObject toJson(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("rpIdHash", Base64.toBase64String(this.rpIdHash));
+        
+        JsonObjectBuilder flagsjob = Json.createObjectBuilder();
+        flagsjob.add("userPresent", isUserPresent);
+        flagsjob.add("bit1", "RFU");
+        flagsjob.add("userVerified", isUserVerified);
+        flagsjob.add("bit3", "RFU");
+        flagsjob.add("bit4", "RFU");
+        flagsjob.add("bit5", "RFU");
+        flagsjob.add("attestedCredentialData", isAttestedCredentialData);
+        flagsjob.add("extensionDataIncluded", isExtensionData);
+        
+        job.add("flags", flagsjob.build());
+        
+        job.add("signCount", getCounterValueAsInt());
+        if (isAttestedCredentialData) {
+            job.add("attestedCredentialData", attCredData.toJson());
+        }
+        return job.build();
     }
 }

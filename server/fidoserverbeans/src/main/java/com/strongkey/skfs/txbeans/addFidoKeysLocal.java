@@ -28,5 +28,6 @@ public interface addFidoKeysLocal {
             String aaguid,
             String registrationSettings,
             Integer registrationSettingsVersion,
-            String create_location);
+            String create_location,
+            String keyStatus);
 }

@@ -7,6 +7,8 @@
 
 package com.strongkey.skfs.fido2;
 
+import javax.json.JsonObject;
+
 public abstract class FIDO2KeyObject {
 
     long alg;
@@ -27,4 +29,5 @@ public abstract class FIDO2KeyObject {
         return kty;
     }
 
+    public abstract JsonObject toJson();
 }

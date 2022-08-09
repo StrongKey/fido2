@@ -163,6 +163,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
 
         String response = Json.createObjectBuilder()
                 .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObject)
+                .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0002")
                 .build().toString();
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                 "FIDO 2.0 Response : " + response);
@@ -305,7 +306,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         if(rpRequestedAuthSelect != null){
             String rpRequestedAttachment = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT, null);
 //            Boolean rpRequestedRequireResidentKey = SKFSCommon.handleNonExistantJsonBoolean(rpRequestedAuthSelect, SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
-            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);;
+            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
             String rpRequestedUserVerification = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null);
 
             if(regOp.getAuthenticatorAttachment().contains(rpRequestedAttachment)){
@@ -324,7 +325,12 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
 
             if (rpRequestedRequireResidentKey != null) {
                 if (regOp.getRequireResidentKey().contains(rpRequestedRequireResidentKey)) {
-                    authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, rpRequestedRequireResidentKey);
+                    if(rpRequestedRequireResidentKey.equalsIgnoreCase("required")){
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, Boolean.TRUE);
+                    }
+                    else{
+                        authselectBuilder.add(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, Boolean.FALSE);
+                    }
                 } else {
                     throw new SKIllegalArgumentException("Policy violation: " + SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
                 }

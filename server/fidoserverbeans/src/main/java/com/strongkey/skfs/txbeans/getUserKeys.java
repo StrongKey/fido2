@@ -33,6 +33,7 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
+import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.skce.pojos.FidoKeysInfo;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfe.entitybeans.FidoKeys;
@@ -104,63 +105,65 @@ public class getUserKeys implements getUserKeysLocal {
                     while (it.hasNext()) {
                         FidoKeys key = (FidoKeys) it.next();
                         if (key != null) {
-                            //  Create a json object out of this key information
-                            String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
-                            FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
-                            skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
-                            long modifytime = 0L;
-                            if (key.getModifyDate() != null) {
-                                modifytime = key.getModifyDate().getTime();
-                            }
+                            if (!key.getStatus().equalsIgnoreCase(applianceConstants.DELETED)) {
+                                //  Create a json object out of this key information
+                                String mapkey = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
+                                FidoKeysInfo fkinfoObj = new FidoKeysInfo(key);
+                                skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_KEYS, mapkey, fkinfoObj);
+                                long modifytime = 0L;
+                                if (key.getModifyDate() != null) {
+                                    modifytime = key.getModifyDate().getTime();
+                                }
 
-                            String modifyloc = "Not used yet";
-                            if (key.getModifyLocation() != null) {
-                                modifyloc = key.getModifyLocation();
-                            }
+                                String modifyloc = "Not used yet";
+                                if (key.getModifyLocation() != null) {
+                                    modifyloc = key.getModifyLocation();
+                                }
 
-                            //  Generate a unique randomid for this key to be user
-                            //  as a pointer for the key data base index.
-                            String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
+                                //  Generate a unique randomid for this key to be user
+                                //  as a pointer for the key data base index.
+                                String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
 //                        String time_to_live = SKFSCommon.getConfigurationProperty("skfs.cfg.property.userkeypointers.flush.cutofftime.seconds");
 //                        if (time_to_live == null || time_to_live.isEmpty()) {
 //                            time_to_live = "300";
 //                        }
 
-                            String regSettings = key.getRegistrationSettings();
-                            JsonObjectBuilder keyJsonBuilder = Json.createObjectBuilder()
-                                    .add("keyid", randomid)
-                                    //                                .add("randomid_ttl_seconds", time_to_live)
-                                    .add("fidoProtocol", key.getFidoProtocol())
-                                    //                                .add("fidoVersion", key.getFidoVersion())
-                                    .add("credentialId", key.getKeyhandle())
-                                    .add("createLocation", key.getCreateLocation())
-                                    .add("createDate", key.getCreateDate().getTime())
-                                    .add("lastusedLocation", modifyloc)
-                                    .add("modifyDate", modifytime)
-                                    .add("status", key.getStatus());
-                            if (regSettings != null) {
-                                byte[] regSettingsBytes = Base64.getUrlDecoder().decode(regSettings);
-                                String regSettingsString = new String(regSettingsBytes, "UTF-8");
-                                String displayName = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
-                                if (displayName != null) {
-                                    keyJsonBuilder.add("displayName", displayName);
-                                }
-                                String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
-                                if (displayName != null) {
-                                    keyJsonBuilder.add("attestationFormat", attestationFormat);
-                                }
-                            }
-                            if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")) {
-                                if (SKFSCommon.containsMDSWSList("G")) {
-                                    if (SKFSCommon.containsMdsentry(key.getAaguid())) {
-                                        keyJsonBuilder.add("MDSEntry", SKFSCommon.getMdsentryfromMap(key.getAaguid()));
-                                    } else {
-                                        keyJsonBuilder.addNull("MDSEntry");
+                                String regSettings = key.getRegistrationSettings();
+                                JsonObjectBuilder keyJsonBuilder = Json.createObjectBuilder()
+                                        .add("keyid", randomid)
+                                        //                                .add("randomid_ttl_seconds", time_to_live)
+                                        .add("fidoProtocol", key.getFidoProtocol())
+                                        //                                .add("fidoVersion", key.getFidoVersion())
+                                        .add("credentialId", key.getKeyhandle())
+                                        .add("createLocation", key.getCreateLocation())
+                                        .add("createDate", key.getCreateDate().getTime())
+                                        .add("lastusedLocation", modifyloc)
+                                        .add("modifyDate", modifytime)
+                                        .add("status", key.getStatus());
+                                if (regSettings != null) {
+                                    byte[] regSettingsBytes = Base64.getUrlDecoder().decode(regSettings);
+                                    String regSettingsString = new String(regSettingsBytes, "UTF-8");
+                                    String displayName = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
+                                    if (displayName != null) {
+                                        keyJsonBuilder.add("displayName", displayName);
                                     }
-
+                                    String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
+                                    if (displayName != null) {
+                                        keyJsonBuilder.add("attestationFormat", attestationFormat);
+                                    }
                                 }
+                                if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")) {
+                                    if (SKFSCommon.containsMDSWSList("G")) {
+                                        if (SKFSCommon.containsMdsentry(key.getAaguid())) {
+                                            keyJsonBuilder.add("mdsEntry", SKFSCommon.getMdsentryfromMap(key.getAaguid()));
+                                        } else {
+                                            keyJsonBuilder.addNull("mdsEntry");
+                                        }
+
+                                    }
+                                }
+                                keysArrayBuilder.add(keyJsonBuilder.build());
                             }
-                            keysArrayBuilder.add(keyJsonBuilder.build());
                         }
                     }
                 }

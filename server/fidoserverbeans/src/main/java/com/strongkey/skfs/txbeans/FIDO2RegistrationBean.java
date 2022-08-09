@@ -6,9 +6,11 @@
 */
 package com.strongkey.skfs.txbeans;
 
+import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.utilities.skceMaps;
+import com.strongkey.skfe.entitybeans.FidoKeys;
 import com.strongkey.skfs.entitybeans.AttestationCertificates;
 import com.strongkey.skfs.entitybeans.AttestationCertificatesPK;
 import com.strongkey.skfs.fido2.FIDO2AttestationObject;
@@ -63,6 +65,12 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
     addFidoAttestationCertificateLocal addAttCertBean;
     @EJB
     verifyFido2RegistrationPolicyLocal verifyRegistrationPolicyBean;
+    @EJB(beanName = "getRegistrationDetailsDefault")
+    getRegistrationDetailsLocal getregdetaildefaultsejb;
+    @EJB(beanName = "getRegistrationDetailsWebauthn2")
+    getRegistrationDetailsLocal getregdetailswebauthn2ejb;
+    @EJB
+    getFidoKeysLocal getregkeysejb;
 
 //    @EJB
 //    verifyMDSCertificateChainBeanLocal verifyMDSCertificateChainBean;
@@ -144,7 +152,7 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
                     aaguid,
                     parseRegistrationSettings(attObject.getAuthData(), userInfo, attObject.getAttFormat()),
                     RSV,
-                    metadataJson.getString(SKFSConstants.FIDO_METADATA_KEY_CREATE_LOC));
+                    metadataJson.getString(SKFSConstants.FIDO_METADATA_KEY_CREATE_LOC), applianceConstants.ACTIVE_STATUS);
             
             JsonObject addkeyres = SKFSCommon.getJsonObjectFromString(addkeyresponse);
             if (!addkeyres.getBoolean("status")) {
@@ -158,20 +166,81 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             String responseJSON;
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, wsresponse);
+            job.add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0004");
             if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")){
                 if(SKFSCommon.containsMDSWSList("R")){
                     if (SKFSCommon.containsMdsentry(aaguid)) {
-                        job.add("MDSEntry", SKFSCommon.getMdsentryfromMap(aaguid));
+                        job.add("mdsEntry", SKFSCommon.getMdsentryfromMap(aaguid));
                     }else{
-                        job.addNull("MDSEntry");
+                        job.addNull("mdsEntry");
                     }
                     
+                }
+            }
+            
+            JsonObject responseObject = SKFSCommon.getJsonObjectFromString(registrationresponse);
+            String rawid=null, id=null, type=null, authattachment=null;
+            // add id, rawid, and type and optionally attachment
+            if (responseObject.containsKey(SKFSConstants.JSON_KEY_ID)) {
+                id = responseObject.getString(SKFSConstants.JSON_KEY_ID);
+            }
+            if (responseObject.containsKey(SKFSConstants.JSON_KEY_RAW_ID)) {
+                rawid = responseObject.getString(SKFSConstants.JSON_KEY_RAW_ID);
+            }
+            if (responseObject.containsKey(SKFSConstants.FIDO2_ATTR_ATTACHMENT)) {
+                authattachment = responseObject.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT);
+            }
+            if (responseObject.containsKey(SKFSConstants.JSON_KEY_REQUEST_TYPE)) {
+                type = responseObject.getString(SKFSConstants.JSON_KEY_REQUEST_TYPE);
+            }
+            //add in details to response if enabled
+            if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.responsedetail").equalsIgnoreCase("true")) {
+                if (SKFSCommon.containsDetailsWSList("R")) {
+                    if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.responsedetail.format").trim().equalsIgnoreCase("webauthn2")){
+                        job.add("responseDetail", getregdetailswebauthn2ejb.execute(id, rawid, type, authattachment, clientDataJson, attObject));
+                    }else {
+                        job.add("responseDetail", getregdetaildefaultsejb.execute(id, rawid, type, authattachment, clientDataJson, attObject));
+                    }
+                    FidoKeys key = getregkeysejb.getByUsernameKH(did, sessionUsername, Base64.getUrlEncoder().withoutPadding().encodeToString(attObject.getAuthData().getAttCredData().getCredentialId()));
+                    String regSettings = key.getRegistrationSettings();
+                    String randomid = key.getFidoKeysPK().getSid() + "-" + key.getFidoKeysPK().getDid() + "-" + key.getFidoKeysPK().getFkid();
+                    long modifytime = 0L;
+                    if (key.getModifyDate() != null) {
+                        modifytime = key.getModifyDate().getTime();
+                    }
+
+                    String modifyloc = "Not used yet";
+                    if (key.getModifyLocation() != null) {
+                        modifyloc = key.getModifyLocation();
+                    }
+                    JsonObjectBuilder keyJsonBuilder = Json.createObjectBuilder()
+                            .add("keyid", randomid)
+                            .add("fidoProtocol", key.getFidoProtocol())
+                            .add("credentialId", key.getKeyhandle())
+                            .add("createLocation", key.getCreateLocation())
+                            .add("createDate", key.getCreateDate().getTime())
+                            .add("lastusedLocation", modifyloc)
+                            .add("modifyDate", modifytime)
+                            .add("status", key.getStatus());
+                    if (regSettings != null) {
+                        byte[] regSettingsBytes = Base64.getUrlDecoder().decode(regSettings);
+                        String regSettingsString = new String(regSettingsBytes, "UTF-8");
+                        String displayName = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("DISPLAYNAME");
+                        if (displayName != null) {
+                            keyJsonBuilder.add("displayName", displayName);
+                        }
+                        String attestationFormat = SKFSCommon.getJsonObjectFromString(regSettingsString).getString("attestationFormat");
+                        if (displayName != null) {
+                            keyJsonBuilder.add("attestationFormat", attestationFormat);
+                        }
+                    }
+                    job.add("keyInfo", keyJsonBuilder.build());
                 }
             }
             responseJSON = job.build().toString();
             return responseJSON;
         }
-        catch(RuntimeException | SKFEException | CertificateException | NoSuchProviderException ex){
+        catch(RuntimeException | SKFEException | CertificateException | NoSuchProviderException | UnsupportedEncodingException ex){
             ex.printStackTrace();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE,
                     SKFSCommon.getMessageProperty("FIDO-ERR-2001"), ex.getLocalizedMessage());

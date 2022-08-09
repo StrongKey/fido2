@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS fido_keys (
         create_location                 VARCHAR(256) NOT NULL,
         modify_date                     DATETIME NULL,
         modify_location                 VARCHAR(256),
-        status                          ENUM('Active','Inactive') NOT NULL,
+        status                          ENUM('Active','Inactive','Deleted','Revoked','Other') NOT NULL,
         signature_keytype               ENUM('RSA','EC','OTHER') NULL,
         signature                       VARCHAR(2048) NULL,
                 PRIMARY KEY (sid,did,username,fkid),

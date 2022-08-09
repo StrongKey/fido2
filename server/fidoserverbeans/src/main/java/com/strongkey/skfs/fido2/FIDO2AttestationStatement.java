@@ -7,6 +7,7 @@
 package com.strongkey.skfs.fido2;
 
 import java.util.ArrayList;
+import javax.json.JsonObject;
 
 public interface FIDO2AttestationStatement {
 
@@ -17,4 +18,6 @@ public interface FIDO2AttestationStatement {
     public ArrayList getX5c();
 
     public String getAttestationType();
+    
+    public JsonObject toJson();
 }

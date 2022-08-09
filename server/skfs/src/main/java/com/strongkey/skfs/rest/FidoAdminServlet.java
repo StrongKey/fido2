@@ -116,7 +116,7 @@ public class FidoAdminServlet {
     private authenticateRestRequestBeanLocal lookupauthenticateRestRequestBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
+            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -124,7 +124,7 @@ public class FidoAdminServlet {
     private getFidoPolicyLocal lookupgetFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.5.0/getFidoPolicy!com.strongkey.skfs.policybeans.getFidoPolicyLocal");
+            return (getFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getFidoPolicy!com.strongkey.skfs.policybeans.getFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -132,7 +132,7 @@ public class FidoAdminServlet {
     private JWTVerifyLocal lookupJWTVerifyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (JWTVerifyLocal) c.lookup("java:app/fidoserverbeans-4.5.0/JWTVerify!com.strongkey.skfs.jwt.JWTVerifyLocal");
+            return (JWTVerifyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/JWTVerify!com.strongkey.skfs.jwt.JWTVerifyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -140,7 +140,7 @@ public class FidoAdminServlet {
     private deleteFidoPolicyLocal lookupdeleteFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (deleteFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.5.0/deleteFidoPolicy!com.strongkey.skfs.policybeans.deleteFidoPolicyLocal");
+            return (deleteFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/deleteFidoPolicy!com.strongkey.skfs.policybeans.deleteFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -149,7 +149,7 @@ public class FidoAdminServlet {
     private updateFidoPolicyLocal lookupActionFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.5.0/updateFidoPolicy!com.strongkey.skfs.policybeans.updateFidoPolicyLocal");
+            return (updateFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFidoPolicy!com.strongkey.skfs.policybeans.updateFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -158,7 +158,7 @@ public class FidoAdminServlet {
     private addFidoPolicyLocal lookupaddFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (addFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.5.0/addFidoPolicy!com.strongkey.skfs.policybeans.addFidoPolicyLocal");
+            return (addFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/addFidoPolicy!com.strongkey.skfs.policybeans.addFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -167,7 +167,7 @@ public class FidoAdminServlet {
     private updateFIDOConfigurationLocal lookupupdateFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.5.0/updateFIDOConfiguration!com.strongkey.skfs.txbeans.updateFIDOConfigurationLocal");
+            return (updateFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFIDOConfiguration!com.strongkey.skfs.txbeans.updateFIDOConfigurationLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -175,7 +175,7 @@ public class FidoAdminServlet {
     private getAllConfigurationsBeanLocal lookupgetAllFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getAllConfigurationsBeanLocal) c.lookup("java:app/fidoserverbeans-4.5.0/getAllConfigurationsBean!com.strongkey.skfs.txbeans.getAllConfigurationsBeanLocal");
+            return (getAllConfigurationsBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getAllConfigurationsBean!com.strongkey.skfs.txbeans.getAllConfigurationsBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -183,7 +183,7 @@ public class FidoAdminServlet {
     private getFIDOConfigurationLocal lookupgetFIDOConfigurationLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.5.0/getFIDOConfiguration!com.strongkey.skfs.txbeans.getFIDOConfigurationLocal");
+            return (getFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getFIDOConfiguration!com.strongkey.skfs.txbeans.getFIDOConfigurationLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -191,7 +191,7 @@ public class FidoAdminServlet {
     private deleteFIDOConfigurationsLocal lookupdeleteFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (deleteFIDOConfigurationsLocal) c.lookup("java:app/fidoserverbeans-4.5.0/deleteFIDOConfigurations!com.strongkey.skfs.txbeans.deleteFIDOConfigurationsLocal");
+            return (deleteFIDOConfigurationsLocal) c.lookup("java:app/fidoserverbeans-4.6.0/deleteFIDOConfigurations!com.strongkey.skfs.txbeans.deleteFIDOConfigurationsLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -199,7 +199,7 @@ public class FidoAdminServlet {
     private updateFIDOKeysUsernameLocal lookupupdateFIDOKeysUsernameLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFIDOKeysUsernameLocal) c.lookup("java:app/fidoserverbeans-4.5.0/updateFIDOKeysUsername!com.strongkey.skfs.txbeans.updateFIDOKeysUsernameLocal");
+            return (updateFIDOKeysUsernameLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFIDOKeysUsername!com.strongkey.skfs.txbeans.updateFIDOKeysUsernameLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -208,7 +208,7 @@ public class FidoAdminServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -217,7 +217,7 @@ public class FidoAdminServlet {
     private getUserKeysLocal lookupgetUserKeysLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getUserKeysLocal) c.lookup("java:app/fidoserverbeans-4.5.0/getUserKeys!com.strongkey.skfs.txbeans.getUserKeysLocal");
+            return (getUserKeysLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getUserKeys!com.strongkey.skfs.txbeans.getUserKeysLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -271,7 +271,7 @@ public class FidoAdminServlet {
         createfidopolicy.setPolicy(payloadjson.getString("policy"));
         createfidopolicy.setStatus(payloadjson.getString("status"));
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -354,7 +354,7 @@ public class FidoAdminServlet {
         }
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -382,7 +382,7 @@ public class FidoAdminServlet {
                         isAuthorizedMonitor = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_MONITOR);
                     } catch (SKCEException ex2) {
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-                 //       return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
+                        //return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
                     }
                 }
             }
@@ -451,7 +451,7 @@ public class FidoAdminServlet {
         }
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -542,7 +542,7 @@ public class FidoAdminServlet {
         }
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -626,7 +626,7 @@ public class FidoAdminServlet {
         }
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -712,7 +712,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -745,8 +745,8 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         try {
             configarray = payloadjson.getJsonArray("configurations");
         } catch (Exception ex) {
-               SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0001"), ex.getMessage());
-               return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage()).build();
+               SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0020"), " missing configurations in payload " + ex.getMessage());
+               return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0020") + " missing configurations in payload " + ex.getMessage()).build();
         }
 
         return deltefidoconfig.execute(did, configarray);
@@ -795,7 +795,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }      
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -815,7 +815,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
                         isAuthorizedMonitor = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_MONITOR);
                     } catch (SKCEException ex2) {
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-                     //   return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
+                        //return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
                     }
             }
             if (!isAuthorized) {
@@ -882,7 +882,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }       
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -915,8 +915,8 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         try {
             configarray = payloadjson.getJsonArray("configurations");
         } catch (Exception ex) {
-               SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0001"), ex.getMessage());
-               return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage()).build();
+               SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0001"), " missing configurations in payload " + ex.getMessage());
+               return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + " missing configurations in payload " + ex.getMessage()).build();
         }
         return updateFidoConfig.execute(did, configarray);
     }
@@ -1123,7 +1123,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }       
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;
@@ -1192,16 +1192,10 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }
         
         // No other admins found and hash verified, remove hash from db and respond with 200.
-        JsonArray configarray;
-        try {
-            configarray = Json.createArrayBuilder()
-                    .add("skfs.cfg.property.install.date.hash")
-                    .build();
-        } catch (Exception ex) {
-               SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0001"), ex.getMessage());
-               return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0001") + ex.getMessage()).build();
-        }
-        //deltefidoconfig.execute(did, configarray); // not deleting hash just yet (for testing purposes)
+        JsonArray configarray = Json.createArrayBuilder()
+            .add("skfs.cfg.property.install.date.hash")
+            .build();
+        deltefidoconfig.execute(did, configarray);
         return Response.status(Response.Status.ACCEPTED).build();
     }
     
@@ -1249,7 +1243,7 @@ Y88b  d88P Y88b. .d88P 888   Y8888 888          888   Y88b  d88P Y88b. .d88P 888
         }      
         
         ServiceInfo svcinfoObj;
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());        
+        svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());        
         Response svcres = SKFSCommon.checksvcinfoerror(svcinfoObj);
         if(svcres !=null){
             return svcres;

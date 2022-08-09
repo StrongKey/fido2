@@ -105,7 +105,7 @@ public class addFidoUserBean implements addFidoUserBeanLocal {
         try {
             fidoUser = getfidoUserbean.getByUsername(did,username);
         } catch (SKFEException ex) {
-            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0001")+ ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0015") + " Could not verify user signature in database " + ex.getLocalizedMessage());
         }
         if(fidoUser != null){
             SKFSLogger.logp(SKFSConstants.SKFE_LOGGER,Level.SEVERE, classname, "execute", "FIDOJPA-ERR-2004","");

@@ -31,8 +31,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonNumber;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 
 class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement {
@@ -41,7 +44,8 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
     private com.strongkey.appliance.objects.JWT jwt = null;
     private final String attestationType = "basic";
 
-
+    private JsonArray x5c;
+    private String alg;
 
     static{
         Security.addProvider(new BouncyCastleFipsProvider());
@@ -85,8 +89,9 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
                 throw new IllegalArgumentException("JWT has invalid timestampMs");
             }
 
+            alg = jwt.getHeader().getString("alg");
             //Verify JWT certificate chain
-            JsonArray x5c = jwt.getHeader().getJsonArray("x5c");
+            x5c = jwt.getHeader().getJsonArray("x5c");
             if (x5c == null || x5c.isEmpty()) {
                 throw new IllegalArgumentException("JWT missing x5c information");
             }
@@ -202,5 +207,14 @@ class AndroidSafetynetAttestationStatement implements FIDO2AttestationStatement 
     @Override
     public String getAttestationType() {
         return attestationType;
+    }
+    
+    public JsonObject toJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("alg", alg);
+        if (x5c != null) {
+            job.add("x5c", x5c);
+        }
+        return job.build();
     }
 }

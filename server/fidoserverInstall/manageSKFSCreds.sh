@@ -25,6 +25,7 @@
 . /etc/bashrc
 
 SERVICE_LDAP_BIND_PASS=Abcd1234!
+SERVICE_LDAP_BASEDN='dc=strongauth,dc=com'
 OPERATION=$1
 SAKA_DID=$2
 USERNAME=$3
@@ -37,7 +38,9 @@ allgroups="FidoRegistrationService-AuthorizedServiceCredentials,FidoAuthenticati
 usage() {
         echo "Usage: "
         echo "${0##*/} addUser <did> <username>"
+        echo "${0##*/} addGroup <did> <group name>"
         echo "${0##*/} addUserToGroup <did> <username> <group(s)>"
+        echo "${0##*/} removeUserFromGroup <did> <username> <group(s)>"
         echo "${0##*/} getUserGroups <did> <username>"
         echo "${0##*/} changeUserPassword <did> <username>"
         echo "${0##*/} deleteUser <did> <username>"
@@ -53,7 +56,7 @@ if [ -z $OPERATION ] || [ -z $SAKA_DID ] || [ -z $USERNAME ]; then
 fi
 
 #Test If Default LDAP Password is Used
-ldapwhoami -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" 2> /tmp/Error 1> /dev/null
+ldapwhoami -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" 2> /tmp/Error 1> /dev/null
 ERROR=$(</tmp/Error)
 rm /tmp/Error
 if [ -n "$ERROR" ]; then
@@ -73,7 +76,7 @@ if [ "$OPERATION" = "addUser" ]; then
 
 
     cat > /tmp/ldapuser.ldif << LDAPUSER
-dn: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: add
 objectClass: person
 objectClass: organizationalPerson
@@ -84,7 +87,7 @@ givenName: $USERNAME
 cn: $USERNAME
 sn: $USERNAME
 LDAPUSER
-    ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/ldapuser.ldif 2> /tmp/Error
+    ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/ldapuser.ldif 2> /tmp/Error
     ERROR=$(</tmp/Error)
     rm /tmp/ldapuser.ldif /tmp/Error
     if [ -z "$ERROR" ]; then
@@ -111,7 +114,7 @@ if [ "$OPERATION" = "addAdmin" ]; then
 
 
     cat > /tmp/ldapuser.ldif << LDAPUSER
-dn: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: add
 objectClass: person
 objectClass: organizationalPerson
@@ -122,12 +125,12 @@ givenName: $USERNAME
 cn: $USERNAME
 sn: $USERNAME
 
-dn: cn=FidoAdminAuthorized,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=FidoAdminAuthorized,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: modify
 add: uniqueMember
-uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 LDAPUSER
-    ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/ldapuser.ldif 2> /tmp/Error
+    ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/ldapuser.ldif 2> /tmp/Error
     ERROR=$(</tmp/Error)
     rm /tmp/ldapuser.ldif /tmp/Error
     if [ -z "$ERROR" ]; then
@@ -139,8 +142,29 @@ LDAPUSER
     fi
 fi
 
+if [ "$OPERATION" = "addGroup" ]; then
+	GROUP_NAME=$3
+	if [ -z $GROUP_NAME ]; then
+		usage
+		exit 1
+	fi
+	cat > /tmp/FidoServiceGroup.ldif <<-LDAPGROUP
+	dn: cn=$GROUP_NAME,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+	objectClass: groupOfUniqueNames
+	objectClass: top
+	cn: $GROUP_NAME
+	uniqueMember: cn=fidoadminuser,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+	uniqueMember: cn=svcfidouser,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+	LDAPGROUP
+
+	/bin/ldapadd -x -w $SERVICE_LDAP_BIND_PASS -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/FidoServiceGroup.ldif
+
+	echo "Added Group $GROUP_NAME"
+	exit 0
+fi
+
 if [ "$OPERATION" = "addUserToGroup" ]; then
-    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b dc=strongauth,dc=com cn=$USERNAME -LLL 2> /dev/null)
+    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b $SERVICE_LDAP_BASEDN cn=$USERNAME -LLL 2> /dev/null)
     if [ -z "$USER_EXIST" ]; then
         echo "$USERNAME does not exist. Please run addUser."
         exit 1
@@ -156,12 +180,12 @@ if [ "$OPERATION" = "addUserToGroup" ]; then
     do
         if [[ "$allgroups" == *"$group"* ]]; then
             cat > /tmp/ldapgroup.ldif << LDAPUSER
-dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: modify
 add: uniqueMember
-uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 LDAPUSER
-            ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/ldapgroup.ldif 2> /tmp/Error
+            ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/ldapgroup.ldif 2> /tmp/Error
             ERROR=$(</tmp/Error)
             rm /tmp/ldapgroup.ldif /tmp/Error
             if [ -z "$ERROR" ]; then
@@ -179,8 +203,47 @@ LDAPUSER
     exit 0
 
 fi
+if [ "$OPERATION" = "removeUserFromGroup" ]; then
+    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b $SERVICE_LDAP_BASEDN cn=$USERNAME -LLL 2> /dev/null)
+    if [ -z "$USER_EXIST" ]; then
+        echo "$USERNAME does not exist. Please run addUser."
+        exit 1
+    fi
+    groups="$4"
+    if [ -z $groups ];then
+            usage
+            exit 1
+    fi
+    IFS=','
+    read -a groupsarr <<< "$groups"
+    for group in "${groupsarr[@]}";
+    do
+        if [[ "$allgroups" == *"$group"* ]]; then
+            cat > /tmp/ldapgroup.ldif << LDAPUSER
+dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+changetype: modify
+delete: uniqueMember
+uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
+LDAPUSER
+            ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/ldapgroup.ldif 2> /tmp/Error
+            ERROR=$(</tmp/Error)
+            rm /tmp/ldapgroup.ldif /tmp/Error
+            if [ -z "$ERROR" ]; then
+                echo "Removed User $USERNAME from Group $group"
+            else
+                echo $ERROR
+                exit 1
+            fi
+        else
+            echo "$group is not a valid Group for Users."
+            exit 1
+        fi
+    done
+    echo "Done!"
+    exit 0
+fi
 if [ "$OPERATION" = "deleteUser" ]; then
-    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b dc=strongauth,dc=com cn=$USERNAME -LLL 2> /dev/null)
+    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b $SERVICE_LDAP_BASEDN cn=$USERNAME -LLL 2> /dev/null)
     if [ -z "$USER_EXIST" ]; then
         echo "$USERNAME does not exist"
         exit 1
@@ -190,32 +253,32 @@ if [ "$OPERATION" = "deleteUser" ]; then
     for group in "${groupsarr[@]}";
     do
         cat > /tmp/ldapgroup.ldif << LDAPUSER
-dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+dn: cn=$group,did=$SAKA_DID,ou=groups,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 changetype: modify
 delete: uniqueMember
-uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com
+uniqueMember: cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN
 LDAPUSER
-        ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -f /tmp/ldapgroup.ldif 2> /tmp/Error 1> /dev/null
+        ldapmodify -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -f /tmp/ldapgroup.ldif 2> /tmp/Error 1> /dev/null
         ERROR=$(</tmp/Error)
         rm /tmp/ldapgroup.ldif /tmp/Error
         if [ -z "$ERROR" ]; then
             echo "Removed User $USERNAME from Group $group"
         fi
     done
-    ldapdelete -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" "cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com"
+    ldapdelete -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" "cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN"
     echo "Deleted User $USERNAME"
     exit 0
 fi
 
 if [ "$OPERATION" = "changeUserPassword" ] ; then
 
-    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b dc=strongauth,dc=com cn=$USERNAME -LLL 2> /dev/null)
+    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b $SERVICE_LDAP_BASEDN cn=$USERNAME -LLL 2> /dev/null)
     if [ -z "$USER_EXIST" ]; then
         echo "$USERNAME does not exist."
         exit 1
     fi
 
-    PASSWORD_CHANGE_RESULT=$(ldappasswd -v -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,dc=strongauth,dc=com" -S "cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com")
+    PASSWORD_CHANGE_RESULT=$(ldappasswd -v -x -w  "$SERVICE_LDAP_BIND_PASS" -D "cn=Manager,$SERVICE_LDAP_BASEDN" -S "cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN")
     if [ -z "$PASSWORD_CHANGE_RESULT" ]; then
       exit 1
     fi
@@ -224,12 +287,12 @@ if [ "$OPERATION" = "changeUserPassword" ] ; then
 fi
 if [ "$OPERATION" = "getUserGroups" ]; then
 
-    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b dc=strongauth,dc=com cn=$USERNAME -LLL 2> /dev/null)
+    USER_EXIST=$(ldapsearch -Y external -H ldapi:/// -b $SERVICE_LDAP_BASEDN cn=$USERNAME -LLL 2> /dev/null)
     if [ -z "$USER_EXIST" ]; then
         echo "$USERNAME does not exist."
         exit 1
     fi
-    ldapsearch -LLL -Y external -H ldapi:/// -b "dc=strongauth,dc=com" "uniqueMember=cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,dc=strongauth,dc=com" 2> /dev/null | grep dn -A 1 --color=never
+    ldapsearch -LLL -Y external -H ldapi:/// -b "$SERVICE_LDAP_BASEDN" "uniqueMember=cn=$USERNAME,did=$SAKA_DID,ou=users,ou=v2,ou=SKCE,ou=StrongAuth,ou=Applications,$SERVICE_LDAP_BASEDN" 2> /dev/null | grep dn -A 1 --color=never
     exit 0
 fi
 

@@ -18,8 +18,6 @@ import com.strongkey.skfs.fido.policyobjects.AuthenticationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.DefinedExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2AuthenticationExtension;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
@@ -44,7 +42,6 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 
 @Stateless
 public class generateFido2PreauthenticateChallenge implements generateFido2PreauthenticateChallengeLocal {
@@ -61,15 +58,18 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
     public String execute(Long did, String username, JsonObject options, JsonObject extensions) {
         //If unable to get UserId, there are no Active keys registered under the username
         String sendfakekeys = SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.fido2.user.sendfakeKH");
+        String residentkey = options.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
         Boolean sendfakekeyhandles = Boolean.FALSE;
         List<FidoKeys> fks = null ;
         try {
             fks = getkeybean.getKeysByUsernameStatus(did, username, "Active");
-            if (fks.size() < 1) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0007", "");
-                throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0007"));
-            }else{
-                
+            if (!residentkey.equalsIgnoreCase("required")) {
+                if (fks.size() < 1) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0007", "");
+                    throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0007"));
+                } else {
+
+                }
             }
 //            getUserId(did, username);
         } catch (SKFEException ex) {
@@ -99,12 +99,16 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
         try {
             if (sendfakekeyhandles) {
                 returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
-                        .add(SKFSConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,generatefakeAllowCredentialsList());
+                        .add(SKFSConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS, generatefakeAllowCredentialsList());
             } else {
 //                fks = getkeybean.getByUsernameStatus(did, username, "Active");
-                returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
-                        .add(SKFSConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,
-                                generateAllowCredentialsList(fidoPolicy.getAuthenticationOptions(), fks));
+                if (residentkey!=null && residentkey.equalsIgnoreCase("required")) {
+                    returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge);
+                } else {
+                    returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_CHALLENGE, challenge)
+                            .add(SKFSConstants.FIDO2_PREAUTH_ATTR_ALLOWCREDENTIALS,
+                                    generateAllowCredentialsList(fidoPolicy.getAuthenticationOptions(), fks));
+                }
             }
 
             String rpId = generateRpId(fidoPolicy.getRpOptions());
@@ -112,6 +116,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
                 returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_RPID, rpId);
             }
             String userVerificationPref = generateUserVerification(fidoPolicy, options);
+            
             if (userVerificationPref != null) {
                 returnObjectBuilder.add(SKFSConstants.FIDO2_PREAUTH_ATTR_UV, userVerificationPref);
             }
@@ -146,6 +151,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
 
             String response = Json.createObjectBuilder()
                     .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObjectBuilder.build())
+                    .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0006")
                     .build().toString();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "FIDO 2.0 Response : " + response);
@@ -255,6 +261,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
 
             String response = Json.createObjectBuilder()
                     .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObjectBuilder.build())
+                    .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0014")
                     .build().toString();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "FIDO 2.0 Response : " + response);

@@ -1,9 +1,9 @@
 /**
-* Copyright StrongAuth, Inc. All Rights Reserved.
-*
-* Use of this source code is governed by the GNU Lesser General Public License v2.1
-* The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
-*/
+ * Copyright StrongAuth, Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by the GNU Lesser General Public License v2.1
+ * The license can be found at https://github.com/StrongKey/fido2/blob/master/LICENSE
+ */
 package com.strongkey.skfs.fido2;
 
 import com.strongkey.cbor.jacob.CborDecoder;
@@ -18,6 +18,9 @@ import java.io.PushbackInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 public class ECKeyObject extends FIDO2KeyObject {
 
@@ -36,25 +39,25 @@ public class ECKeyObject extends FIDO2KeyObject {
         ByteArrayInputStream m_bais = new ByteArrayInputStream(cbor);
         PushbackInputStream m_is = new PushbackInputStream(m_bais);
         CborDecoder m_stream = new CborDecoder(m_is);
-        
-        long len = m_stream.readMapLength();
-         Map<Object, Object> pkObjectMap = new HashMap<>();
-            for (long i = 0; len < 0 || i < len; i++) {
-                Object key = SKFSCommon.readGenericItem(m_stream);
-                if (len < 0 && (key == null)) {
-                    // break read...
-                    break;
-                }
-                Object value = SKFSCommon.readGenericItem(m_stream);
-                pkObjectMap.put(key, value);
-            }
 
-        for (Map.Entry<Object,Object> entry : pkObjectMap.entrySet()) {
+        long len = m_stream.readMapLength();
+        Map<Object, Object> pkObjectMap = new HashMap<>();
+        for (long i = 0; len < 0 || i < len; i++) {
+            Object key = SKFSCommon.readGenericItem(m_stream);
+            if (len < 0 && (key == null)) {
+                // break read...
+                break;
+            }
+            Object value = SKFSCommon.readGenericItem(m_stream);
+            pkObjectMap.put(key, value);
+        }
+
+        for (Map.Entry<Object, Object> entry : pkObjectMap.entrySet()) {
 //        for (Object key : pkObjectMap.keySet()) {
             Object key = entry.getKey();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "key : " + key);
-            switch (Long.toString((long)key)) {
+            switch (Long.toString((long) key)) {
                 case "1":
                     kty = (long) entry.getValue();
                     break;
@@ -70,24 +73,24 @@ public class ECKeyObject extends FIDO2KeyObject {
                 case "-3":
                     y = (byte[]) entry.getValue();
                     break;
-                default :
+                default:
                     break;
             }
         }
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             CborEncoder cbe = new CborEncoder(baos);
             cbe.writeMapStart(5);
 
             cbe.writeInt(1);
-            cbe.writeInt((int)kty);
+            cbe.writeInt((int) kty);
 
             cbe.writeInt(3);
-            cbe.writeInt((int)alg);
+            cbe.writeInt((int) alg);
 
             cbe.writeInt(-1);
-            cbe.writeInt((int)crv);
+            cbe.writeInt((int) crv);
 
             cbe.writeInt(-2);
             cbe.writeByteString(x);
@@ -97,11 +100,11 @@ public class ECKeyObject extends FIDO2KeyObject {
 
         } catch (IOException e) {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0001",
-                e.getMessage());
+                    e.getMessage());
         }
-        
+
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
-                    "Length of Encoded Attested Cred. Data = " + baos.toByteArray().length);
+                "Length of Encoded Attested Cred. Data = " + baos.toByteArray().length);
         encodedLength = baos.toByteArray().length;
     }
 
@@ -121,4 +124,13 @@ public class ECKeyObject extends FIDO2KeyObject {
         return crv;
     }
 
+    public JsonObject toJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("kty", "EC");
+        job.add("alg", SKFSCommon.getAlgFromIANACOSEAlg(alg));
+        job.add("crv", SKFSCommon.getCurveFromFIDOECCCurveID(crv));
+        job.add("x", org.bouncycastle.util.encoders.Hex.toHexString(x));
+        job.add("y", org.bouncycastle.util.encoders.Hex.toHexString(y));
+        return job.build();
+    }
 }

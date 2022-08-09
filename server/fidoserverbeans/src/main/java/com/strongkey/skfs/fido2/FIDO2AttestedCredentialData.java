@@ -26,7 +26,11 @@ import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -174,5 +178,26 @@ public class FIDO2AttestedCredentialData {
         buffer.flip();
         return buffer.getLong();
     }
-
+    
+    public JsonObject toJson(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        
+        job.add("aaguid", getAAGUID(this.aaguid));
+        job.add("credentialIdLength", length);
+        job.add("credentialId", java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(credentialId));
+        job.add("credentialPublicKey", fko.toJson());
+        
+        return job.build();
+    }
+    
+     private String getAAGUID(byte[] aaguidbytes){
+        byte[] aaguidbytes1 = new byte[8];
+        byte[] aaguidbytes2 = new byte[8];
+        System.arraycopy(aaguidbytes, 0, aaguidbytes1, 0, 8);
+        System.arraycopy(aaguidbytes, 8, aaguidbytes2, 0, 8);
+//        UUID uuid = new UUID(Longs.fromByteArray(aaguidbytes1), Longs.fromByteArray(aaguidbytes2));
+        UUID uuid = new UUID(ByteBuffer.wrap(aaguidbytes1).getLong(), ByteBuffer.wrap(aaguidbytes2).getLong());
+        
+        return uuid.toString();
+    }
 }

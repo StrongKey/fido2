@@ -75,4 +75,24 @@ public class FIDOReturnObject {
         else
             return null;
     }
+    
+     public String toJsonStringwithCode(String responseCode) {
+
+        if ( response == null ) {
+            response = "";
+        }
+
+        // Build the output json object
+        JsonObject responseJSON ;
+
+        responseJSON = Json.createObjectBuilder()
+        .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, response)
+        .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, responseCode)
+        .build();
+
+        if ( responseJSON != null )
+            return responseJSON.toString();
+        else
+            return null;
+    }
 }
