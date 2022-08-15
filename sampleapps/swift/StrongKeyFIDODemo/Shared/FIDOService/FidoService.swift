@@ -36,35 +36,38 @@ import SwiftUI
 /// LoginService handles all the communication with the SKFS Servlet
 class FidoService {
     
+    @AppStorage("fqdn_url") static var fidoServiceBaseURL:String = "demo.strongkey.com"
+    
+    static var fidoBackend: String {
+        return "https://\(fidoServiceBaseURL)/fidopolicyboa/fido2"
+    }
+    
     /// PreRegister is used to fetch the challenge from SKFS for the user
     /// - Parameters:
     ///   - username: Unique User Name set by the account user
     ///   - displayName: Display name can be the Full Name of the user or any other name of their choice
     ///   - completion: Passes the Data, Response and Error to the View where the function is called
-    func preRegister(username: String, displayName: String, completion: @escaping (PreRegResponseModel?, URLResponse?, Error?) -> Void) {
+    func preRegister(username: String, displayName: String, completion: @escaping (Result<PreRegResponseModel, NetworkError>) -> Void) {
         let preRegisterEndpoint = APICases.preRegister(username: username, displayName: displayName)
         request(endpoint: preRegisterEndpoint) { data, response, error in
             
-            guard let data = data else {
-                print(String(describing: error))
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                      let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                      print(errorResponseModel.message)
-                      return completion(nil, response, error)
-                  }
-            
-            let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-            let responseDataString = responseJSON["Response"] as! String
-            let responseData = Data(responseDataString.utf8)
-            
-            let dataFromPreRegModel: PreRegResponseModel = try! JSONDecoder().decode(PreRegResponseModel.self, from: responseData)
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                let responseDataString = responseJSON["Response"] as! String
+                let responseData = Data(responseDataString.utf8)
+                let dataFromPreRegModel: PreRegResponseModel = try JSONDecoder().decode(PreRegResponseModel.self, from: responseData)
+                completion(.success(dataFromPreRegModel))
+                
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
             
             // MARK: Change the completion to NOT send the preRegResponseModel data to the view controller
-            completion(dataFromPreRegModel, response, error)
         }
     }
     
@@ -75,12 +78,24 @@ class FidoService {
     ///   - clientDataJSON: clientDataJSON has the information about the authenticator
     ///   - id: Credential ID from the Platform Authenticator
     ///   - completion: completion handler provides the response from the SKFS
-    func register(username: String, attestationObject: String, clientDataJSON: String, id: String, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func register(username: String, attestationObject: String, clientDataJSON: String, id: String, completion: @escaping (Result<[String: Any], NetworkError>) -> Void) {
         
         let registerEndpoint = APICases.register(username: username, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id)
         
         request(endpoint: registerEndpoint) { data, response, error in
-            completion(data, response, error)
+            
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
+                return
+            }
+            
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                
+                completion(.success(responseJSON))
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
         }
         
     }
@@ -93,12 +108,25 @@ class FidoService {
     ///   - id: Credential ID
     ///   - jwt: Stored JWT of the currently logged in user from AppStorage
     ///   - completion: completion handler provides the response from the SKFS
-    func registerExisting(username: String, attestationObject: String, clientDataJSON: String, id: String, jwt: String, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func registerExisting(username: String, attestationObject: String, clientDataJSON: String, id: String, jwt: String, completion: @escaping (Result<[String: Any], NetworkError>) -> Void) {
         
         let registerExistingEndpoint = APICases.registerExisting(username: username, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id, jwt: jwt)
         
         request(endpoint: registerExistingEndpoint) { data, response, error in
-            completion(data, response, error)
+            
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
+                return
+            }
+            
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                
+                completion(.success(responseJSON))
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
+            
         }
         
     }
@@ -107,34 +135,29 @@ class FidoService {
     /// - Parameters:
     ///   - username: username of the user
     ///   - completion: completion returns PreAuthResponseModel which has the challenge for attestation
-    func preauthenticate(username: String, completion: @escaping (PreAuthResponseModel?, URLResponse?, Error?) -> Void) {
+    func preauthenticate(username: String, completion: @escaping (Result<PreAuthResponseModel, NetworkError>) -> Void) {
         
         let preAuthenticateEndpoint = APICases.preauthenticate(username: username)
         
         request(endpoint: preAuthenticateEndpoint) { data, response, error in
-            guard let data = data else {
-                print(String(describing: error))
+            
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                      let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                      print(errorResponseModel.message)
-                      return completion(nil, response, error)
-                  }
-            
-            //            print(data)
-            
-            let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-            let responseDataString = responseJSON["Response"] as! String
-            let responseData = Data(responseDataString.utf8)
-            
-            //            print(responseDataString)
-            
-            let dataFromPreAuthModel: PreAuthResponseModel = try! JSONDecoder().decode(PreAuthResponseModel.self, from: responseData)
-            
-            completion(dataFromPreAuthModel, response, error)
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                let responseDataString = responseJSON["Response"] as! String
+                let responseData = Data(responseDataString.utf8)
+                
+                let dataFromPreAuthModel: PreAuthResponseModel = try JSONDecoder().decode(PreAuthResponseModel.self, from: responseData)
+                
+                completion(.success(dataFromPreAuthModel))
+                
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
             
         }
         
@@ -149,27 +172,23 @@ class FidoService {
     ///   - clientDataJSON: clientDataJSON from the authenticator
     ///   - id: Credential ID on device
     ///   - completion: completion handler returns AuthResponseModel which has the JWT in it which needs to be stored in App Storage for future use
-    func authenticate(username: String, authenticatorData: String, signature: String, userHandle: String, clientDataJSON: String, id: String, completion: @escaping (AuthResponseModel?, URLResponse?, Error?) -> Void) {
+    func authenticate(username: String, authenticatorData: String, signature: String, userHandle: String, clientDataJSON: String, id: String, completion: @escaping (Result<AuthResponseModel, NetworkError>) -> Void) {
         
         let authenticateEndpoint = APICases.authenticate(username: username, authenticatorData: authenticatorData, signature: signature, userHandle: userHandle, clientDataJSON: clientDataJSON, id: id)
         
         request(endpoint: authenticateEndpoint) { data, response, error in
             
-            guard let data = data else {
-                print(String(describing: error))
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                      let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                      print(errorResponseModel.message)
-                      return completion(nil, response, error)
-                  }
-            
-            let dataFromAuthModel: AuthResponseModel = try! JSONDecoder().decode(AuthResponseModel.self, from: data)
-            
-            completion(dataFromAuthModel, response, error)
+            do {
+                let dataFromAuthModel: AuthResponseModel = try JSONDecoder().decode(AuthResponseModel.self, from: data!)
+                completion(.success(dataFromAuthModel))
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
         }
         
     }
@@ -179,30 +198,27 @@ class FidoService {
     ///   - username: username of the currently logged in user
     ///   - jwt: JWT for the user saved during Authentication
     ///   - completion: completion handler returns a KeyInfoModel which has all keys registered to an account and their details
-    func getKeysInfo(username: String, jwt: String, completion: @escaping (KeyInfoModel?, URLResponse?, Error?) -> Void) {
+    func getKeysInfo(for username: String, with jwt: String, then completion: @escaping (Result<KeyInfoModel, NetworkError>) -> Void) {
         let getkeysinfoEndpoint = APICases.getKeysInfo(username: username, jwt: jwt)
         
         request(endpoint: getkeysinfoEndpoint) { data, response, error in
-            guard let data = data else {
-                print(String(describing: error))
+            
+            if let networkError = NetworkError(data: data, response: response, error: error) {
+                completion(.failure(networkError))
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                      let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                      print(errorResponseModel.message)
-                      return completion(nil, response, error)
-                  }
-            
-            let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-            
-            let responseDataString = responseJSON["Response"] as! String
-            let responseData = Data(responseDataString.utf8)
-            
-            let dataFromPreAuthModel: KeyInfoModel = try! JSONDecoder().decode(KeyInfoModel.self, from: responseData)
-            
-            completion(dataFromPreAuthModel, response, error)
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                let responseDataString = responseJSON["Response"] as! String
+                let responseData = Data(responseDataString.utf8)
+                
+                let dataFromKeyInfoModel: KeyInfoModel = try JSONDecoder().decode(KeyInfoModel.self, from: responseData)
+                completion(.success(dataFromKeyInfoModel))
+                
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
             
         }
     }
@@ -313,6 +329,8 @@ class FidoService {
         let url = URL(string: endpoint.url)!
         var urlRequest = URLRequest(url: url)
         
+        print("FQDN Right Now: \(url)")
+        
         // HTTP Method
         urlRequest.httpMethod = endpoint.httpMethod
         
@@ -322,10 +340,10 @@ class FidoService {
         })
         
         // HTTP Body
-        //        urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: endpoint.body!, options: []) else {
             return
         }
+        // urlRequest.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         
         urlRequest.httpBody = httpBody
         

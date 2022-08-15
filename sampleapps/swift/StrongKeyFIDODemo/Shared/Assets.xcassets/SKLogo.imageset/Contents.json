@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "OCTO.DarkUSB_TM.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "OCTO.LightUSB_TM.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -44,6 +44,7 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
     var hasPlatformKey = true
     var addingNewPlatformKey = false
     var addingNewSecurityKey = false
+    let anchor = ASPresentationAnchor()
     
     @Published var currentlyLoggedInUserJWTFromStorage: String?
     @AppStorage("username") var usernameFromAppStorage: String?
@@ -55,7 +56,7 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
     
     @Published var isSKRegisterUsernameError = false
     @Published var isSKLoginError = false
-    @Published var isSKTimeoutError = false
+    @Published var isSKBackendError = false
     @Published var isAddingNewKeyError = false
     @Published var isASError = false
     @Published var errorMessage = ""
@@ -67,56 +68,54 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
         
         // Fetching the challenge from the server (SKFS Servlet). The challengs is unique for every request.
         // The userID is the identifier for the user's account.
-        FidoService().preRegister(username: username, displayName: "Initial Key" + "appleDebugPlatformKeyFlag") { data,  response, error in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        self.isSKRegisterUsernameError = true
-                    }
+        FidoService().preRegister(username: username, displayName: "Initial Key" + "appleDebugPlatformKeyFlag") { result in
+            
+            switch result {
+            case .success(let data):
+                
+                self.user = username
+                let challenge = data.response.challenge.decodeBase64Url()!
+                let userID = data.response.user.id.decodeBase64Url()!
+
+                let platformKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
+                let securityKeyCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
+
+                // Creating Request Object for Platform Key Credential Registration
+                let platformKeyRegistrationRequest = platformKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge,name: username, userID: userID)
+
+                // Platform Key Credential Request preferences
+                platformKeyRegistrationRequest.attestationPreference = .none
+                platformKeyRegistrationRequest.userVerificationPreference = .required
+
+                // Creating Request Obejct for Security Key Credential Registration
+                let securityKeyRegistrationRequest = securityKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge, displayName: "Initial Key" + "Security", name: username , userID: userID)
+
+                // Security Key Credential Request preferences
+                securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.init(rawValue: data.response.attestation ?? "direct")
+                securityKeyRegistrationRequest.userVerificationPreference = .preferred
+                var credentialParameters: [ASAuthorizationPublicKeyCredentialParameters] = []
+
+                for publicKeyParam in data.response.pubKeyCredParams {
+                    credentialParameters.append(ASAuthorizationPublicKeyCredentialParameters(algorithm: ASCOSEAlgorithmIdentifier(rawValue: publicKeyParam.alg)))
                 }
-                print(String(describing: error))
-                return
+                securityKeyRegistrationRequest.credentialParameters = credentialParameters
+
+                securityKeyRegistrationRequest.residentKeyPreference = .preferred
+
+
+                // Using both Platform Key Credential Registration Request and Security Key Credential Registration Request at the same time is not supported.
+
+                // Only ASAuthorizationPlatformPublicKeyCredentialRegistrationRequests or
+                // ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequests should be used here.
+                let authController = ASAuthorizationController(authorizationRequests: [  platformKeyRegistrationRequest ] )
+                authController.delegate = self
+                authController.presentationContextProvider = self
+                authController.performRequests()
+                
+            case .failure(let error):
+                self.errorHandler(error)
+                
             }
-            
-            
-            self.user = username
-            let challenge = data.response.challenge.decodeBase64Url()!
-            let userID = data.response.user.id.decodeBase64Url()!
-            
-            let platformKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
-            let securityKeyCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
-            
-            // Creating Request Object for Platform Key Credential Registration
-            let platformKeyRegistrationRequest = platformKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge,name: username, userID: userID)
-            
-            // Platform Key Credential Request preferences
-            platformKeyRegistrationRequest.attestationPreference = .none
-            platformKeyRegistrationRequest.userVerificationPreference = .required
-            
-            // Creating Request Obejct for Security Key Credential Registration
-            let securityKeyRegistrationRequest = securityKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge, displayName: "Initial Key" + "Security", name: username , userID: userID)
-            
-            // Security Key Credential Request preferences
-            securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.init(rawValue: data.response.attestation ?? "direct")
-            securityKeyRegistrationRequest.userVerificationPreference = .preferred
-            var credentialParameters: [ASAuthorizationPublicKeyCredentialParameters] = []
-            
-            for publicKeyParam in data.response.pubKeyCredParams {
-                credentialParameters.append(ASAuthorizationPublicKeyCredentialParameters(algorithm: ASCOSEAlgorithmIdentifier(rawValue: publicKeyParam.alg)))
-            }
-            securityKeyRegistrationRequest.credentialParameters = credentialParameters
-            
-            securityKeyRegistrationRequest.residentKeyPreference = .preferred
-            
-            
-            // Using both Platform Key Credential Registration Request and Security Key Credential Registration Request at the same time is not supported.
-            
-            // Only ASAuthorizationPlatformPublicKeyCredentialRegistrationRequests or
-            // ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequests should be used here.
-            let authController = ASAuthorizationController(authorizationRequests: [  platformKeyRegistrationRequest ] )
-            authController.delegate = self
-            authController.presentationContextProvider = self
-            authController.performRequests()
             
         }
     }
@@ -127,53 +126,50 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
         
         // Fetching the challenge from the server (SKFS Servlet). The challengs is unique for every request.
         // The userID is the identifier for the user's account.
-        FidoService().preRegister(username: username, displayName: "Initial Key") { data,  response, error in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        self.isSKRegisterUsernameError = true
-                    }
+        FidoService().preRegister(username: username, displayName: "Initial Key") { result in
+            
+            switch result {
+            case .success(let data):
+                
+                print(data)
+                self.user = username
+                let challenge = data.response.challenge.decodeBase64Url()!
+                let userID = data.response.user.id.decodeBase64Url()!
+
+                let securityKeyCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
+
+                // Creating Request Obejct for Security Key Credential Registration
+                let securityKeyRegistrationRequest = securityKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge, displayName: "Initial Key", name: username , userID: userID)
+
+                // Security Key Credential Request preferences
+                securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.init(rawValue: data.response.attestation ?? "direct")
+                securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.none
+                securityKeyRegistrationRequest.userVerificationPreference = .preferred
+                var credentialParameters: [ASAuthorizationPublicKeyCredentialParameters] = []
+
+                for publicKeyParam in data.response.pubKeyCredParams {
+                    credentialParameters.append(ASAuthorizationPublicKeyCredentialParameters(algorithm: ASCOSEAlgorithmIdentifier(rawValue: publicKeyParam.alg)))
                 }
-                print(String(describing: error))
-                return
+                securityKeyRegistrationRequest.credentialParameters = credentialParameters
+
+                securityKeyRegistrationRequest.residentKeyPreference = .preferred
+
+
+                // Using both Platform Key Credential Registration Request and Security Key Credential Registration Request at the same time is not supported.
+
+                // Only ASAuthorizationPlatformPublicKeyCredentialRegistrationRequests or
+                // ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequests should be used here.
+                let authController = ASAuthorizationController(authorizationRequests: [  securityKeyRegistrationRequest ] )
+                authController.delegate = self
+                authController.presentationContextProvider = self
+                authController.performRequests()
+                
+            case .failure(let error):
+                self.errorHandler(error)
+            
             }
-            
-            
-            self.user = username
-            let challenge = data.response.challenge.decodeBase64Url()!
-            let userID = data.response.user.id.decodeBase64Url()!
-            
-            let securityKeyCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rp.id)
-            
-            // Creating Request Obejct for Security Key Credential Registration
-            let securityKeyRegistrationRequest = securityKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge, displayName: "Initial Key", name: username , userID: userID)
-            
-            // Security Key Credential Request preferences
-            securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.init(rawValue: data.response.attestation ?? "direct")
-            securityKeyRegistrationRequest.userVerificationPreference = .preferred
-            var credentialParameters: [ASAuthorizationPublicKeyCredentialParameters] = []
-            
-            for publicKeyParam in data.response.pubKeyCredParams {
-                credentialParameters.append(ASAuthorizationPublicKeyCredentialParameters(algorithm: ASCOSEAlgorithmIdentifier(rawValue: publicKeyParam.alg)))
-            }
-            securityKeyRegistrationRequest.credentialParameters = credentialParameters
-            
-            securityKeyRegistrationRequest.residentKeyPreference = .preferred
-            
-            
-            // Using both Platform Key Credential Registration Request and Security Key Credential Registration Request at the same time is not supported.
-            
-            // Only ASAuthorizationPlatformPublicKeyCredentialRegistrationRequests or
-            // ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequests should be used here.
-            let authController = ASAuthorizationController(authorizationRequests: [  securityKeyRegistrationRequest ] )
-            authController.delegate = self
-            authController.presentationContextProvider = self
-            authController.performRequests()
-            
         }
     }
-    
-    
     
     
     /// This function initiates the process for Login using either the Passkey or Security Key based on what is available.
@@ -181,65 +177,58 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
     func signInWith(username: String) {
         
         // Fetching the challenge from the server for the user. The challenge is unique for every request.
-        FidoService().preauthenticate(username: username) { data, response, error in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        self.isSKLoginError = true
-                    }
+        FidoService().preauthenticate(username: username) { result in
+            
+            switch result {
+            case .success(let data):
+                self.user = username
+                let challenge = data.response.challenge.decodeBase64Url()! // Challenge from the servlet
+                
+                print("Number of Keys: \(data.response.allowCredentials.capacity)")
+                
+                var allowedPlatformKeyCredentials: [ASAuthorizationPlatformPublicKeyCredentialDescriptor] = []
+                var allowedSecurityKeyCredentials: [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor] = []
+                
+                let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rpID)
+                let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rpID)
+                
+                // Creating obejct for Platform Key Credential Assertion
+                let platformKeyAssertionRequest = publicKeyCredentialProvider.createCredentialAssertionRequest(challenge: challenge)
+                
+                // Creating object for Security Key Credential Assertion
+                let securityKeyAssertionRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: challenge)
+                
+                for credential in data.response.allowCredentials {
+                    allowedSecurityKeyCredentials.append(ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor(credentialID: credential.id.decodeBase64Url()!, transports: ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport.allSupported))
+                    allowedPlatformKeyCredentials.append(ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: credential.id.decodeBase64Url()!))
                 }
-                print(String(describing: error))
-                return
-            }
-            
-            self.user = username
-            let challenge = data.response.challenge.decodeBase64Url()! // Challenge from the servlet
-            
-            print("Number of Keys: \(data.response.allowCredentials.capacity)")
-            var allowedCredentials: [ASAuthorizationPlatformPublicKeyCredentialDescriptor] = []
-            
-            
-            let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rpID)
-            let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: data.response.rpID)
-            
-            
-            // Creating obejct for Platform Key Credential Assertion
-            let platformKeyAssertionRequest = publicKeyCredentialProvider.createCredentialAssertionRequest(challenge: challenge)
-            
-            for credential in data.response.allowCredentials {
-                allowedCredentials.append(ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: credential.id.decodeBase64Url()!))
-            }
-            
-            // Platform Key Assertion Request preferences
-            platformKeyAssertionRequest.allowedCredentials = allowedCredentials
-            
-            // Creating object for Security Key Credential Assertion
-            let securityKeyAssertionRequest = securityKeyProvider.createCredentialAssertionRequest(challenge: challenge)
-            
-            
-            var allowedSecurityKeyCredentials: [ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor] = []
-            
-            for credential in data.response.allowCredentials {
-                allowedSecurityKeyCredentials.append(ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor(credentialID: credential.id.decodeBase64Url()!, transports: ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport.allSupported))
-            }
-           
-            // Security Key Assertion Request preferences
-            securityKeyAssertionRequest.userVerificationPreference = .required
-            securityKeyAssertionRequest.allowedCredentials = allowedSecurityKeyCredentials
-            
-            // Pass in any mix of supported sign in request types.
-            var authController = ASAuthorizationController(authorizationRequests: [platformKeyAssertionRequest] )
-            
-            if data.response.allowCredentials.capacity > 1 {
-                authController = ASAuthorizationController(authorizationRequests: [platformKeyAssertionRequest, securityKeyAssertionRequest] )
-            } else if !self.hasPlatformKey {
-                authController = ASAuthorizationController(authorizationRequests: [securityKeyAssertionRequest] )
+                
+                // Platform Key Assertion Request preferences
+                platformKeyAssertionRequest.allowedCredentials = allowedPlatformKeyCredentials
+               
+                // Security Key Assertion Request preferences
+                securityKeyAssertionRequest.userVerificationPreference = .required
+                securityKeyAssertionRequest.allowedCredentials = allowedSecurityKeyCredentials
+                
+                // Pass in any mix of supported sign in request types.
+                let authController = ASAuthorizationController(authorizationRequests: [platformKeyAssertionRequest , securityKeyAssertionRequest] )
+                
+//                if data.response.allowCredentials.capacity > 1 {
+//                    authController = ASAuthorizationController(authorizationRequests: [platformKeyAssertionRequest, securityKeyAssertionRequest] )
+//                } else if !self.hasPlatformKey {
+//                    authController = ASAuthorizationController(authorizationRequests: [securityKeyAssertionRequest] )
+//                }
+                
+                
+                authController.delegate = self
+                authController.presentationContextProvider = self
+                authController.performRequests()
+                
+            case .failure(let error):
+                self.errorHandler(error)
             }
             
             
-            authController.delegate = self
-            authController.presentationContextProvider = self
-            authController.performRequests()
         }
     }
     
@@ -271,7 +260,7 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             
             // Security Key Credential Request preferences
             securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.init(rawValue: data.response.attestation ?? "direct")
-            
+            securityKeyRegistrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind.none
             securityKeyRegistrationRequest.userVerificationPreference = .preferred
             
             var credentialParameters: [ASAuthorizationPublicKeyCredentialParameters] = []
@@ -343,15 +332,14 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
     
     /// This functions fetches information about all the Keys user has registered to the account
     func updateKeys() {
-        FidoService().getKeysInfo(username: user, jwt: currentlyLoggedInUserJWTFromStorage!) { data, response, error in
-            
-            guard let data = data else {
-                print(String(describing: error))
-                return
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                self.keys = data.response.keys
+        FidoService().getKeysInfo(for: user, with: currentlyLoggedInUserJWTFromStorage!) { result in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    self.keys = data.response.keys
+                }
+            case .failure(let error):
+                self.errorHandler(error)
             }
         }
     }
@@ -363,20 +351,17 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             return
         }
         
-        FidoService().getKeysInfo(username: user, jwt: jwt) { data, response, error in
-            
+        FidoService().getKeysInfo(for: user, with: jwt) { result in
             print("Verifying JWT")
             
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            switch result{
                 
-                print("Register Error from SKFS Servlet")
+            case .success(_):
+                print("Verified")
                 
-                DispatchQueue.main.async {
-                    self.isSKTimeoutError = true
-                    self.toggleSignInStatus()
-                }
-                  
-                return
+            case .failure(let error):
+                self.errorHandler(error)
+                
             }
         }
     }
@@ -399,65 +384,34 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             
             // Verifying the attestation with SKFS Servlet
             if !addingNewPlatformKey {
-                FidoService().register(username: user, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id) { data, response, error in
+                FidoService().register(username: user, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id) { result in
                     
-                    guard let data = data else {
-                        print(String(describing: error))
-                        return
-                    }
-                    
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                              let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                              print(errorResponseModel.message)
-
-                              print("Register Error from SKFS Servlet")
-                              
-                              DispatchQueue.main.async {
-                                  self.errorMessage = errorResponseModel.message
-                                  self.isSKTimeoutError = true
-                              }
-                              
-                              return
-                          }
-                    
-                    let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    
-                    print(responseJSON)
-                    
-                    DispatchQueue.main.async {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            self.isRegisterSuccess = true
+                    switch result {
+                    case .success(let data):
+                        print(data)
+                        // Register Success
+                        DispatchQueue.main.async {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                self.isRegisterSuccess = true
+                            }
                         }
+                    case .failure(let error):
+                        self.errorHandler(error)
                     }
+                    
                 }
             } else {
                 addingNewPlatformKey.toggle()
-                FidoService().registerExisting(username: usernameFromAppStorage!, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id, jwt: currentlyLoggedInUserJWTFromStorage!) { data, response, error in
+                FidoService().registerExisting(username: usernameFromAppStorage!, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id, jwt: currentlyLoggedInUserJWTFromStorage!) { result in
                     
-                    guard let data = data else {
-                        print(String(describing: error))
-                        return
+                    switch result {
+                    case .success(let data):
+                        print(data)
+                        self.updateKeys()
+                    case .failure(let error):
+                        self.errorHandler(error)
+                        
                     }
-                    
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                              let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                              print(errorResponseModel.message)
-
-                              print("Register Error from SKFS Servlet")
-                              
-                              DispatchQueue.main.async {
-                                  self.errorMessage = errorResponseModel.message
-                                  self.isSKTimeoutError = true
-                              }
-                              return
-                          }
-                    
-                    let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    print(responseJSON)
-                    
-                    self.updateKeys()
                     
                 }
             }
@@ -474,36 +428,22 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             let credentialID = platformKeyCredentialAssertion.credentialID.toBase64Url()
             
             // Verifying the signature from the SKFS Servlet
-            FidoService().authenticate(username: user, authenticatorData: authenticatorData, signature: signature, userHandle: "", clientDataJSON: clientDataJSON, id: credentialID) { data, response, error in
+            FidoService().authenticate(username: user, authenticatorData: authenticatorData, signature: signature, userHandle: "", clientDataJSON: clientDataJSON, id: credentialID) { result in
                 
-                guard let data = data else {
-                    print(String(describing: error))
+                switch result {
+                case .success(let data):
+                    
                     DispatchQueue.main.async {
-                        self.errorMessage = "The session has timed out. Please try again"
-                        self.isSKTimeoutError = true
+                        self.currentlyLoggedInUserJWTFromStorage = data.jwt
+                        self.updateKeys()
                     }
-                    return
+                    self.toggleSignInStatus()
+                    
+                case .failure(let error):
+                    self.errorHandler(error)
                 }
                 
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                          print("Authenticate Error from SKFS Servlet")
-                          print(data.message)
-                          DispatchQueue.main.async {
-                              self.errorMessage = data.message
-                              self.isSKTimeoutError = true
-                          }
-                          return
-                      }
                 
-                DispatchQueue.main.async {
-                    self.currentlyLoggedInUserJWTFromStorage = data.jwt
-                    self.updateKeys()
-                }
-                
-                // After the server has verified the assertion, sign the user in.
-                
-                self.toggleSignInStatus()
             }
             
             // MARK: Security Key Registration Request verification from SKFS Servlet
@@ -520,65 +460,33 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             // Verifying the attestation with SKFS Servlet
             
             if !addingNewSecurityKey {
-                FidoService().register(username: user, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id) { data, response, error in
+                FidoService().register(username: user, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id) { result in
                     
-                    guard let data = data else {
-                        print(String(describing: error))
-                        return
-                    }
-                    
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                              let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                              print(errorResponseModel.message)
-
-                              print("Register Error from SKFS Servlet")
-                              
-                              DispatchQueue.main.async {
-                                  self.errorMessage = errorResponseModel.message
-                                  self.isSKTimeoutError = true
-                              }
-                              return
-                          }
-                    
-                    let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    
-                    print(responseJSON)
-                    
-                    DispatchQueue.main.async {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            self.isRegisterSuccess = true
+                    switch result {
+                    case .success(let data):
+                        print(data)
+                        DispatchQueue.main.async {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                self.isRegisterSuccess = true
+                            }
                         }
+                    case .failure(let error):
+                        self.errorHandler(error)
                     }
+                    
+                    
                 }
             } else {
                 addingNewSecurityKey.toggle()
-                FidoService().registerExisting(username: usernameFromAppStorage!, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id, jwt: currentlyLoggedInUserJWTFromStorage!) { data, response, error in
+                FidoService().registerExisting(username: usernameFromAppStorage!, attestationObject: attestationObject, clientDataJSON: clientDataJSON, id: id, jwt: currentlyLoggedInUserJWTFromStorage!) { result in
                     
-                    guard let data = data else {
-                        print(String(describing: error))
-                        return
+                    switch result {
+                    case .success(let data):
+                        print(data)
+                        self.updateKeys()
+                    case .failure(let error):
+                        self.errorHandler(error)
                     }
-                    
-                    guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                              let errorResponseModel = try! JSONDecoder().decode(ErrorResponseModel.self, from: data)
-                              print(errorResponseModel.message)
-
-                              print("Register Error from SKFS Servlet")
-                              
-                              DispatchQueue.main.async {
-                                  self.errorMessage = errorResponseModel.message
-                                  self.isSKTimeoutError = true
-                              }
-                              return
-                          }
-                    
-                    let responseJSON = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    print(responseJSON)
-                    
-                    self.updateKeys()
-                    
                 }
             }
             
@@ -597,37 +505,20 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
             print("Client Data JSON: \(clientDataJSON)")
             
             // Verifying the signature from the SKFS Servlet
-            FidoService().authenticate(username: user, authenticatorData: authenticatorData, signature: signature, userHandle: "", clientDataJSON: clientDataJSON, id: credentialID) { data, response, error in
+            FidoService().authenticate(username: user, authenticatorData: authenticatorData, signature: signature, userHandle: "", clientDataJSON: clientDataJSON, id: credentialID) { result in
                 
-                guard let data = data else {
-                    print(String(describing: error))
+                switch result {
+                case .success(let data):
+                    
                     DispatchQueue.main.async {
-                        self.errorMessage = "The session has timed out. Please try again"
-                        self.isSKTimeoutError = true
+                        self.currentlyLoggedInUserJWTFromStorage = data.jwt
+                        self.updateKeys()
                     }
-                    return
+                    self.toggleSignInStatus()
+                    
+                case .failure(let error):
+                    self.errorHandler(error)
                 }
-                
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                          print("Authenticate Error from SKFS Servlet")
-                          print(data.message)
-                          DispatchQueue.main.async {
-                              self.errorMessage = data.message
-                              self.isSKTimeoutError = true
-                          }
-                          return
-                      }
-                
-                print("Response: \(data.response)")
-                print("JWT: \(data.jwt ?? "")")
-                
-                DispatchQueue.main.async {
-                    self.currentlyLoggedInUserJWTFromStorage = data.jwt
-                    self.updateKeys()
-                }
-                
-                self.toggleSignInStatus()
             }
             
             
@@ -697,8 +588,8 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
          return window ?? ASPresentationAnchor()
          #endif
          */
-        
-        return ASPresentationAnchor()
+    
+        return self.anchor
     }
     
     // Do any actions necessary after a successfull Registration/Assertion here.
@@ -707,7 +598,7 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
 //            self.hasPlatformKey = true
             self.isSKRegisterUsernameError = false
             self.isSKLoginError = false
-            self.isSKTimeoutError = false
+            self.isSKBackendError = false
             self.isAddingNewKeyError = false
             self.isASError = false
             self.isLoggedIn.toggle()
@@ -715,4 +606,62 @@ class AccountManager: NSObject, ObservableObject, ASAuthorizationControllerPrese
         }
     }
     
+    func errorHandler(_ networkError: NetworkError) {
+        switch networkError {
+        case .backendError(message: let message):
+            print("Backend Error: \(message)")
+            if message.contains("POC-WS-ERR-1001") {
+                DispatchQueue.main.async {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        self.isSKRegisterUsernameError = true
+                    }
+                }
+            } else if message.contains("POC-WS-ERR-1002") {
+                DispatchQueue.main.async {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        self.isSKLoginError = true
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                        self.isSKBackendError = true
+                        self.errorMessage = message
+                }
+            }
+            
+        case .transportError(let error):
+            print("Transport Error \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                    self.isSKBackendError = true
+                    self.errorMessage = "\(error.localizedDescription) Check Settings"
+            }
+            
+        case .serverError(let statusCode):
+            print("Server Error Code: \(statusCode)")
+            DispatchQueue.main.async {
+                    self.isSKBackendError = true
+                    self.errorMessage = "Server Error: \(statusCode)"
+            }
+        case .noData:
+            print("No Data Returned")
+            DispatchQueue.main.async {
+                    self.isSKBackendError = true
+                    self.errorMessage = "No Data Returned"
+            }
+        case .decodingError(let error):
+            print("Decoding Error : \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                    self.isSKBackendError = true
+                    self.errorMessage = "Decoding Error: \(error.localizedDescription)"
+            }
+        case .encodingError(let error):
+            print("Encoding Error : \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                    self.isSKBackendError = true
+                    self.errorMessage = "Encoding Error\(error.localizedDescription)"
+            }
+        }
+    }
+    
 }
+    

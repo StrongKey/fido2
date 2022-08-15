@@ -32,7 +32,6 @@
 
 import Foundation
 
-fileprivate let fidoServiceBaseURL:String = "https://fidotest.strongkey.com/fidopolicyboa/fido2"
 
 protocol Endpoint {
     var httpMethod: String { get }
@@ -87,23 +86,23 @@ enum APICases: Endpoint {
     var baseURLString: String {
         switch self {
         case .preRegister:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .register:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .preauthenticate:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .authenticate:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .getKeysInfo:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .preRegisterExisting:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .registerExisting:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .removeKeys:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         case .deleteAccount:
-            return fidoServiceBaseURL
+            return FidoService.fidoBackend
         }
     }
     
