@@ -10,7 +10,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2001-2021 StrongAuth, Inc. (DBA StrongKey)
+ * Copyright (c) 2001-2022 StrongAuth, Inc. (DBA StrongKey)
  *
  * **********************************************
  *

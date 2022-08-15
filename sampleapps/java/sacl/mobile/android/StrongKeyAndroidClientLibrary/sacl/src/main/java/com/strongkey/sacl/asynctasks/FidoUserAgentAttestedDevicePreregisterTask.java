@@ -9,7 +9,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  * <p>
- * Copyright (c) 2001-2021 StrongAuth, Inc. (d/b/a StrongKey)
+ * Copyright (c) 2001-2022 StrongAuth, Inc. (d/b/a StrongKey)
  * <p>
  * **********************************************
  * <p>
