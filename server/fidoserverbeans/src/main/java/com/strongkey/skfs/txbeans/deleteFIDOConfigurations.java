@@ -98,7 +98,7 @@ public class deleteFIDOConfigurations implements deleteFIDOConfigurationsLocal {
                         if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
                             String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_CONFIGURATIONS, applianceConstants.REPLICATION_OPERATION_DELETE, primarykey, config);
                             if (response != null) {
-                                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
+                                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-2006") + " deleteFidoConfiguration replication error: " + response).build();
                             }
                         }
                     }

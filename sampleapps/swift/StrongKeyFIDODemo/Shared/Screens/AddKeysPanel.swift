@@ -40,6 +40,8 @@ struct AddKeysPanel: View {
     }
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var isPresented: Bool
     @Binding var passkeyAlreadyPresent: Bool
@@ -50,7 +52,7 @@ struct AddKeysPanel: View {
     
     var body: some View {
         
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .center) {
             
             if isPresented {
                 Color.black
@@ -81,77 +83,94 @@ struct AddKeysPanel: View {
                         
                         Spacer()
                     }
+                    .frame(maxWidth: 600)
                     .padding(.horizontal)
                     .transition(.move(edge: .top))
                 }
                 
-                VStack {
-                    VStack(alignment: .leading, spacing: 16.0) {
-                        Text("Key Information").font(.title2).fontWeight(.semibold)
-                        Text("You can use additional keys to login on other devices.").font(.subheadline).opacity(0.8)
-                        TextField("Key Name", text: $keyDisplayName)
-                            .focused($keyFieldInFocused, equals: .keyName)
-                            .textContentType(.username)
-                            .disableAutocorrection(true)
-                            .zIndex(2.0)
-                            #if os(iOS)
-                            .textInputAutocapitalization(.never)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color("labelColor").opacity(colorScheme == .dark ? 0.4 : 0.2))
-                                    .background(Color("textFieldBackground"))
-                                    .cornerRadius(8)
-                            )
-                            .submitLabel(.return)
-                        
-                            #endif
-                        
-                        HStack {
-                            StrongButton(buttonTitle: "Security Key") {
-                                print("Calling AccountManager preRegisterExiting...")
-                                viewModel.addSecurityKeyToExistingUser(keyDN: keyDisplayName != "" ? keyDisplayName : "Security Key")
-                                isPresented = false
-                                keyDisplayName = ""
-                            }
-                            .buttonStyle(.borderedProminent)
-                            
-                            if !passkeyAlreadyPresent {
-                                StrongButton(buttonTitle: "Platform Key", icon: Image(systemName: "cpu")) {
-                                    print("Calling AccountManager preRegisterExiting...")
-                                    viewModel.addPlatformKeyToExistingUser(keyDN: keyDisplayName != "" ? keyDisplayName + "appleDebugPlatformKeyFlag" : "Platform KeyappleDebugPlatformKeyFlag")
-                                    isPresented = false
-                                    keyDisplayName = ""
-                                }
-                                .buttonStyle(.borderedProminent)
-                            }
-                             
-                        }
-                        .onAppear {
-                            DispatchQueue.main.async {  /// Anything over 0.5 seems to work
-                                self.keyFieldInFocused = .keyName
-                            }
-                        }
+                if verticalSizeClass == .regular && horizontalSizeClass == .regular {
+                    panel
+                        .cornerRadius(16)
+                        .transition(.opacity)
+                } else {
+                    VStack {
+                        Spacer()
+                        panel
                     }
-                    .padding()
+                    .transition(.move(edge: .bottom))
                 }
-                .cornerRadius(16)
-                .transition(.move(edge: .bottom))
-                .background(.regularMaterial)
-                .ignoresSafeArea()
+                
+                
             }
         }
         
         
         
     }
+    
+    var panel: some View {
+        VStack {
+            VStack(alignment: .leading, spacing: 16.0) {
+                Text("Key Information").font(.title2).fontWeight(.semibold)
+                Text("You can use additional keys to login on other devices.").font(.subheadline).opacity(0.8)
+                TextField("Key Name", text: $keyDisplayName)
+                    .focused($keyFieldInFocused, equals: .keyName)
+                    .textContentType(.username)
+                    .disableAutocorrection(true)
+                    .zIndex(2.0)
+                    #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color("labelColor").opacity(colorScheme == .dark ? 0.4 : 0.2))
+                            .background(Color("textFieldBackground"))
+                            .cornerRadius(8)
+                    )
+                    .submitLabel(.return)
+                
+                    #endif
+                
+                HStack {
+                    StrongButton(buttonTitle: "Security Key") {
+                        print("Calling AccountManager preRegisterExiting...")
+                        viewModel.addSecurityKeyToExistingUser(keyDN: keyDisplayName != "" ? keyDisplayName : "Security Key")
+                        isPresented = false
+                        keyDisplayName = ""
+                    }
+                    .buttonStyle(.borderedProminent)
+                    
+                    if !passkeyAlreadyPresent {
+                        StrongButton(buttonTitle: "Platform Key", icon: Image(systemName: "cpu")) {
+                            print("Calling AccountManager preRegisterExiting...")
+                            viewModel.addPlatformKeyToExistingUser(keyDN: keyDisplayName != "" ? keyDisplayName + "appleDebugPlatformKeyFlag" : "Platform KeyappleDebugPlatformKeyFlag")
+                            isPresented = false
+                            keyDisplayName = ""
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                     
+                }
+                .onAppear {
+                    DispatchQueue.main.async {  /// Anything over 0.5 seems to work
+                        self.keyFieldInFocused = .keyName
+                    }
+                }
+            }
+            .padding()
+        }
+        .frame(maxWidth: 600)
+        .background(.regularMaterial)
+        .edgesIgnoringSafeArea(.bottom)
+    }
+    
 }
 
 struct SlidingUpPanel_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddKeysPanel(isPresented: .constant(true), passkeyAlreadyPresent: .constant(false), viewModel: AccountManager())
+            AddKeysPanel(isPresented: .constant(true), passkeyAlreadyPresent: .constant(true), viewModel: AccountManager())
         }
     }
 }

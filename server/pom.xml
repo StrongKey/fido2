@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fidoserver</artifactId>
     <groupId>com.strongkey</groupId>
-    <version>4.5.0</version>
+    <version>4.6.0</version>
     <packaging>pom</packaging>
     <name>fidoserver</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.jdkPlatform>jdk8u162</netbeans.hint.jdkPlatform>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <netbeans.hint.jdkPlatform>JDK_11.0.14</netbeans.hint.jdkPlatform>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <reporting>
@@ -63,7 +63,7 @@
         <module>skfs</module>
         <module>skfsclient</module>
         <module>FIDO2Simulator</module>
-        <module>fidoserverEAR</module>
         <module>FIDO2JWTVerify</module>
+        <module>fidoserverEAR</module>
     </modules>
 </project>

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.strongkey</groupId>
-    <artifactId>webauthntutorial</artifactId>
+    <artifactId>basicdemo</artifactId>
     <version>4.0</version>
     <packaging>war</packaging>
 
@@ -33,11 +33,19 @@
             <version>4.5.13</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
+            <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+	    <optional>true</optional>
+        </dependency>-->
+        <dependency>
+            <groupId>fish.payara.blue.extras</groupId>
+            <artifactId>payara-embedded-all</artifactId>
+            <version>5.2022.2</version>
+            <type>jar</type>
+                        <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -46,10 +54,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>11</source>
+                    <target>11</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
@@ -58,7 +66,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.2.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -66,7 +74,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>

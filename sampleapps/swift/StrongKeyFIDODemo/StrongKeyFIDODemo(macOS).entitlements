@@ -4,13 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:fidotest.strongkey.com</string>
+		<string>webcredentials:demo.strongkey.com</string>
 	</array>
-	<key>com.apple.security.app-sandbox</key>
-	<true/>
-	<key>com.apple.security.network.client</key>
-	<true/>
-	<key>com.apple.security.network.server</key>
-	<true/>
 </dict>
 </plist>

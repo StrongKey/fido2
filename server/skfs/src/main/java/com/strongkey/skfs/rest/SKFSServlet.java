@@ -62,7 +62,7 @@ public class SKFSServlet {
     private u2fServletHelperBeanLocal lookup_u2fServletHelperBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.5.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
+            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -71,7 +71,7 @@ public class SKFSServlet {
     private pingBeanLocal lookup_pingBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.5.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
+            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -80,7 +80,7 @@ public class SKFSServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -89,7 +89,7 @@ public class SKFSServlet {
     private authenticateRestRequestBeanLocal lookupauthenticateRestRequestBeanLocall() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.5.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
+            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -113,36 +113,24 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response preregister(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
-        PreregistrationRequest pregreq = new PreregistrationRequest();
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject preregpayload = inputJson.getJsonObject("payload");
-
-        if (preregpayload.containsKey("username")) {
-            pregreq.setUsername(preregpayload.getString("username"));
-        }
-
-        if (preregpayload.containsKey("displayname")) {
-            pregreq.setDisplayName(preregpayload.getString("displayname"));
-        }
-
-        if (preregpayload.containsKey("options")) {
-            pregreq.setOptions(preregpayload.getJsonObject("options"));
-        }
-
-        if (preregpayload.containsKey("extensions")) {
-            pregreq.setExtensions(preregpayload.getString("extensions"));
-        }
+        error = SKFSCommon.validatePreregisterPayload(preregpayload);
+        if (error != null) return error;
+        
+        //convert payload to prereg object
+        PreregistrationRequest pregreq = new PreregistrationRequest();
+        pregreq.setUsername(preregpayload.getString("username"));
+        pregreq.setDisplayName(preregpayload.getString("displayname"));
+        pregreq.setOptions(preregpayload.getJsonObject("options"));
+        pregreq.setExtensions(preregpayload.getString("extensions"));
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -192,30 +180,22 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response register(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
+        JsonObject svcinfo = SKFSCommon.validateJsonObject(inputJson.getJsonObject("svcinfo"));
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
+        JsonObject regpayload = SKFSCommon.validateJsonObject(inputJson.getJsonObject("payload"));
+        error = SKFSCommon.validateRegisterPayload(regpayload);
+        if (error != null) return error;
 
-        //convert payload to pre reg object
+        //convert payload to reg object
         RegistrationRequest registration = new RegistrationRequest();
-        JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
-        JsonObject regpayload = inputJson.getJsonObject("payload");
-
-        if (regpayload.containsKey("strongkeyMetadata")) {
-            registration.setMetadata(regpayload.getJsonObject("strongkeyMetadata"));
-        }
-
-        if (regpayload.containsKey("publicKeyCredential")) {
-            registration.setResponse(regpayload.getJsonObject("publicKeyCredential"));
-        }
+        registration.setMetadata(regpayload.getJsonObject("strongkeyMetadata"));
+        registration.setResponse(regpayload.getJsonObject("publicKeyCredential"));
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -259,31 +239,22 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response preauthenticate(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
-
-        //convert payload to pre reg object
-        PreauthenticationRequest pauthreq = new PreauthenticationRequest();
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject preauthpayload = inputJson.getJsonObject("payload");
+        error = SKFSCommon.validatePreauthenticatePayload(preauthpayload);
+        if (error != null) return error;
 
-        if (preauthpayload.containsKey("username")) {
-            pauthreq.setUsername(preauthpayload.getString("username"));
-        }
-
-        if (preauthpayload.containsKey("options")) {
-            pauthreq.setOptions(preauthpayload.getJsonObject("options"));
-        }
-
+        //convert payload to pre auth object
+        PreauthenticationRequest pauthreq = new PreauthenticationRequest();
+        pauthreq.setUsername(preauthpayload.getString("username"));
+        pauthreq.setOptions(preauthpayload.getJsonObject("options"));
         if (preauthpayload.containsKey("extensions")) {
             pauthreq.getPayload().setExtensions(preauthpayload.getString("extensions"));
         }
@@ -337,30 +308,22 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response authenticate(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
-
-        //convert payload to pre reg object
-        AuthenticationRequest authentication = new AuthenticationRequest();
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject authpayload = inputJson.getJsonObject("payload");
+        error = SKFSCommon.validateAuthenticatePayload(authpayload);
+        if (error != null) return error;
 
-        if (authpayload.containsKey("strongkeyMetadata")) {
-            authentication.setMetadata(authpayload.getJsonObject("strongkeyMetadata"));
-        }
-
-        if (authpayload.containsKey("publicKeyCredential")) {
-            authentication.setResponse(authpayload.getJsonObject("publicKeyCredential"));
-        }
+        //convert payload to auth object
+        AuthenticationRequest authentication = new AuthenticationRequest();
+        authentication.setMetadata(authpayload.getJsonObject("strongkeyMetadata"));
+        authentication.setResponse(authpayload.getJsonObject("publicKeyCredential"));
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -395,28 +358,24 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response deregister(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
 
-        //convert payload to pre reg object
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject deregpayload = inputJson.getJsonObject("payload");
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        error = SKFSCommon.validateDeregisterPayload(deregpayload);
+        if (error != null) return error;
+        
+        //convert payload to deregister object
         DeregisterRequest deregreq = new DeregisterRequest();
-        if(deregpayload.containsKey("keyid")){
-            deregreq.setKeyid(deregpayload.getString("keyid"));
-        }
+        deregreq.setKeyid(deregpayload.getString("keyid"));
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin = Boolean.FALSE;
+        boolean isAuthorizedAdmin  = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
@@ -430,7 +389,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                    //return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+//                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -472,41 +431,27 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response updatekeyinfo(String input) {
 
-        ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
-
-        //convert payload to pre reg object
-        UpdateFidoKeyRequest patchreq = new UpdateFidoKeyRequest();
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject patchpayload = inputJson.getJsonObject("payload");
-
-        String keyid="";
-
-        if(patchpayload.containsKey("status")){
-            patchreq.setStatus(patchpayload.getString("status"));
-        }
-        if(patchpayload.containsKey("modify_location")){
-            patchreq.setModifyLocation(patchpayload.getString("modify_location"));
-        }
-        if(patchpayload.containsKey("displayname")){
-            patchreq.setDisplayname(patchpayload.getString("displayname"));
-        }
-        if(patchpayload.containsKey("keyid")){
-            patchreq.setKeyid(patchpayload.getString("keyid"));
-            keyid = patchpayload.getString("keyid");
-        }
+        error = SKFSCommon.validateUpdateKeyInfoPayload(patchpayload);
+        if (error != null) return error;
+        
+        //convert payload to update fido key object
+        UpdateFidoKeyRequest patchreq = new UpdateFidoKeyRequest();
+        patchreq.setStatus(patchpayload.getString("status"));
+        patchreq.setModifyLocation(patchpayload.getString("modify_location"));
+        patchreq.setDisplayname(patchpayload.getString("displayname"));
+        patchreq.setKeyid(patchpayload.getString("keyid"));
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin = Boolean.FALSE;
+        boolean isAuthorizedAdmin= Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
@@ -520,7 +465,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                //    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+//                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -535,7 +480,7 @@ public class SKFSServlet {
             }
         }
 
-        return u2fHelperBean.patchfidokey(svcinfoObj.getDid(), keyid, patchreq);
+        return u2fHelperBean.patchfidokey(svcinfoObj.getDid(), patchreq.getPayload().getKeyid(), patchreq);
     }
 
     /**
@@ -563,29 +508,25 @@ public class SKFSServlet {
     @Produces({"application/json"})
     public Response getkeysinfo(String input) {
 
-         ServiceInfo svcinfoObj;
-
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
 
-        //convert payload to pre reg object
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
         JsonObject getkeyspayload = inputJson.getJsonObject("payload");
+        error = SKFSCommon.validateGetKeysInfoPayload(getkeyspayload);
+        if (error != null) return error;
+        
+        //convert payload to get keys info object
         GetKeysInfoRequest getkeysreq = new GetKeysInfoRequest();
-        if(getkeyspayload.containsKey("username")){
-            getkeysreq.setUsername(getkeyspayload.getString("username"));
-        }
+        getkeysreq.setUsername(getkeyspayload.getString("username"));
 
 
         boolean isAuthorized = Boolean.FALSE;
-        boolean isAuthorizedAdmin = Boolean.FALSE;
+        boolean isAuthorizedAdmin =  Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO);
@@ -599,7 +540,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                 //   return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+//                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -621,25 +562,20 @@ public class SKFSServlet {
     @Path("/ping")
     @Consumes({"application/json"})
     public Response ping(String input) {
-        ServiceInfo svcinfoObj;
 
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        Response error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
 
         boolean isAuthorized = Boolean.FALSE;
         boolean isAuthorizedAdmin = Boolean.FALSE;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
             try {
                 isAuthorized = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_MONITOR);
-                if(!isAuthorized){
+                if (!isAuthorized) {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 }
             } catch (Exception ex) {
@@ -648,7 +584,7 @@ public class SKFSServlet {
                     isAuthorizedAdmin = authorizebean.execute(svcinfoObj.getDid(), svcinfoObj.getSvcusername(), svcinfoObj.getSvcpassword(), SKFSConstants.LDAP_ROLE_FIDO_ADMIN);
                 } catch (SKCEException ex1) {
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex1.getMessage());
-                 //   return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
+//                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex1.getMessage()).build();
                 }
             }
             if (!isAuthorized) {
@@ -679,49 +615,28 @@ public class SKFSServlet {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response preauthorize(String input) {
-        ServiceInfo svcinfoObj;
-
+        
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
 
-        //convert payload to pre reg object
-        PreauthorizeRequest pauthreq = new PreauthorizeRequest();
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
-        JsonObject preauthpayload = inputJson.getJsonObject("payload");
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
+        JsonObject preauthzpayload = inputJson.getJsonObject("payload");
+        error = SKFSCommon.validatePreauthorizePayload(preauthzpayload);
+        if (error != null) return error;
         
-        
-        if (preauthpayload.containsKey("username")) {
-            pauthreq.setUsername(preauthpayload.getString("username"));
+        //convert payload to pre authz object
+        PreauthorizeRequest pauthreq = new PreauthorizeRequest();
+        pauthreq.setUsername(preauthzpayload.getString("username"));
+        pauthreq.setTxid(preauthzpayload.getString("txid"));
+        pauthreq.setTxpayload(preauthzpayload.getString("txpayload"));
+        pauthreq.setOptions(preauthzpayload.getJsonObject("options"));
+        if (preauthzpayload.containsKey("extensions")) {
+            pauthreq.getPayload().setExtensions(preauthzpayload.getString("extensions"));
         }
-
-        if (preauthpayload.containsKey("options")) {
-            pauthreq.setOptions(preauthpayload.getJsonObject("options"));
-        }
-        
-        if (preauthpayload.containsKey("txid")) {
-            pauthreq.setTxid(preauthpayload.getString("txid"));
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + "Missing txid").build();
-        }
-        
-        if (preauthpayload.containsKey("txpayload")) {
-            pauthreq.setTxpayload(preauthpayload.getString("txpayload"));
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + "Missing txpayload").build();
-        }
-
-        if (preauthpayload.containsKey("extensions")) {
-            pauthreq.getPayload().setExtensions(preauthpayload.getString("extensions"));
-        }
-        
-        
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -754,42 +669,25 @@ public class SKFSServlet {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response authorize(String input) {
-        ServiceInfo svcinfoObj;
-
+        
         JsonObject inputJson =  SKFSCommon.getJsonObjectFromString(input);
-        if (inputJson == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
-        }
-
-        //convert payload to pre reg object
-        AuthenticationRequest authentication = new AuthenticationRequest();
+        Response error = SKFSCommon.validateSVCInfoPayload(inputJson);
+        if (error != null) return error;
+        
         JsonObject svcinfo = inputJson.getJsonObject("svcinfo");
-        svcinfoObj = SKFSCommon.checkSvcInfo("REST", svcinfo.toString());
-        Response svcres = checksvcinfoerror(svcinfoObj);
-        if(svcres !=null){
-            return svcres;
-        }
-        JsonObject authpayload = inputJson.getJsonObject("payload");
+        ServiceInfo svcinfoObj = SKFSCommon.checkAndSetSvcInfo("REST", svcinfo.toString());
+        error = SKFSCommon.checksvcinfoerror(svcinfoObj);
+        if (error != null) return error;
+        JsonObject authzpayload = inputJson.getJsonObject("payload");
+        error = SKFSCommon.validateAuthorizePayload(authzpayload);
+        if (error != null) return error;
 
-        if (authpayload.containsKey("strongkeyMetadata")) {
-            authentication.setMetadata(authpayload.getJsonObject("strongkeyMetadata"));
-        }
-
-        if (authpayload.containsKey("publicKeyCredential")) {
-            authentication.setResponse(authpayload.getJsonObject("publicKeyCredential"));
-        }
-        
-        if (authpayload.containsKey("txid")) {
-            authentication.setTxid(authpayload.getString("txid"));
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + "Missing txid").build();
-        }
-        
-        if (authpayload.containsKey("txpayload")) {
-            authentication.setTxpayload(authpayload.getString("txpayload"));
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + "Missing txpayload").build();
-        }
+        //convert payload to authz object
+        AuthenticationRequest authentication = new AuthenticationRequest();
+        authentication.setMetadata(authzpayload.getJsonObject("strongkeyMetadata"));
+        authentication.setResponse(authzpayload.getJsonObject("publicKeyCredential"));
+        authentication.setTxid(authzpayload.getString("txid"));
+        authentication.setTxpayload(authzpayload.getString("txpayload"));
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -813,20 +711,6 @@ public class SKFSServlet {
         authentication.getSVCInfo().setProtocol(svcinfoObj.getProtocol());
         return u2fHelperBean.authorize(svcinfoObj.getDid(), authentication);
     
-    }
-
-
-
-    private Response checksvcinfoerror(ServiceInfo svcinfo){
-        if(svcinfo.getErrormsg() != null){
-            String errormsg = svcinfo.getErrormsg();
-            if(errormsg.contains("FIDO-ERR-0033")){
-                return Response.status(Response.Status.UNAUTHORIZED).entity(errormsg).build();
-            }else{
-                return Response.status(Response.Status.BAD_REQUEST).entity(errormsg).build();
-            }
-        }
-        return null;
     }
     
     public Response adminauthenticatehelper(String input, HttpServletRequest request) {

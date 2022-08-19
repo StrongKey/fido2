@@ -9,7 +9,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Copyright (c) 2001-2021 StrongAuth, Inc. (d/b/a StrongKey)
+ * Copyright (c) 2001-2022 StrongAuth, Inc. (d/b/a StrongKey)
  *
  * **********************************************
  *
@@ -275,7 +275,8 @@ public class FidoUserAgentAttestedDeviceAuthenticateTask implements Callable {
                                         .put(Constants.JSON_KEY_FIDO_PAYLOAD_CLIENT_DATA_JSON, authenticationSignature.getClientDataJson())
                                         .put(Constants.ANDROID_KEYSTORE_ASSERTION_LABEL_AUTHENTICATOR_DATA, authenticationSignature.getAuthenticatorData())
                                         .put(Constants.ANDROID_KEYSTORE_ASSERTION_LABEL_SIGNATURE, authenticationSignature.getSignature())
-                                        .put(Constants.JSON_KEY_FIDO_PAYLOAD_CLIENT_EXTENSIONS, new JSONObject())))
+                                            .put(Constants.JSON_KEY_PUBLIC_KEY_CREDENTIAL_LABEL_USERHANDLE, "")
+                                            .put(Constants.JSON_KEY_FIDO_PAYLOAD_CLIENT_EXTENSIONS, new JSONObject())))
                             ));
 
             Common.printVeryLongLogMessage(TAG, "mJSONObjectInput for Authentication: " + mJSONObjectInput.toString(2));

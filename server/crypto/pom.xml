@@ -4,7 +4,8 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.5.0</version>
+        <version>4.6.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>com.strongkey</groupId>
     <artifactId>crypto</artifactId>
@@ -29,12 +30,12 @@
             <version>1.0.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
             <version>1.1.2</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -53,6 +54,23 @@
             <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <type>jar</type>
+            <!--<scope>provided</scope>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -61,8 +79,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+<!--                    <source>1.8</source>
+                    <target>1.8</target>-->
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>

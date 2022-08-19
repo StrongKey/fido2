@@ -10,7 +10,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Copyright (c) 2001-2021 StrongAuth, Inc. (d/b/a StrongKey)
+ * Copyright (c) 2001-2022 StrongAuth, Inc. (d/b/a StrongKey)
  *
  * **********************************************
  *
@@ -31,12 +31,12 @@
 <resources>
     <string name="app_name">Sample SACL FIDO eCommerce App</string>
 
-    <string name="saclfido_webservice_hostport">https://psd2demo.strongkey.com/sfaeco-web/rest/</string>
+    <string name="saclfido_webservice_hostport">https://demo.strongkey.com/sfaeco-web/rest/</string>
     <string name="saclfido_webservice_operation_check_username">checkUsername</string>
     <string name="saclfido_webservice_operation_register_user">registerUser</string>
 
     <string name="saclfido_using_self_signed_certificate">false</string>
-    <string name="saclfido_self_signed_webservice_hostport">https://sakasmb.noorhome.net:8181/sfaeco-web/rest/</string>
+    <string name="saclfido_self_signed_webservice_hostport">https://demo.strongkey.com/sfaeco-web/rest/</string>
 
     <string name="action_settings">Settings</string>
 

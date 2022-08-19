@@ -13,6 +13,8 @@
 		8218686926FE5FD20036F5CF /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8218686726FE5FD20036F5CF /* NetworkMonitor.swift */; };
 		8218686B26FE778B0036F5CF /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8218686A26FE778B0036F5CF /* TitleView.swift */; };
 		8218686C26FE778B0036F5CF /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8218686A26FE778B0036F5CF /* TitleView.swift */; };
+		821FD60C2721E6A600C39F6C /* ErrorHandlingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821FD60B2721E6A600C39F6C /* ErrorHandlingModel.swift */; };
+		821FD60D2721E6A600C39F6C /* ErrorHandlingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821FD60B2721E6A600C39F6C /* ErrorHandlingModel.swift */; };
 		822FDA0626BB1F16007ED421 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822FDA0526BB1F16007ED421 /* Tests_iOS.swift */; };
 		822FDA1026BB1F16007ED421 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822FDA0F26BB1F16007ED421 /* Tests_macOS.swift */; };
 		822FDA1126BB1F17007ED421 /* StrongKeyFIDODemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822FD9EF26BB1F15007ED421 /* StrongKeyFIDODemo.swift */; };
@@ -37,6 +39,8 @@
 		82A1220126CF753300E81AAD /* KeyDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A121FF26CF753300E81AAD /* KeyDetailScreen.swift */; };
 		82B6D83226C43E4600F2365F /* APIEndpointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6D83126C43E4500F2365F /* APIEndpointManager.swift */; };
 		82B6D83326C43E4600F2365F /* APIEndpointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B6D83126C43E4500F2365F /* APIEndpointManager.swift */; };
+		82BA2FAE271F7012007618D3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 82BA2FAD271F7012007618D3 /* Settings.bundle */; };
+		82BA2FB0271F72D3007618D3 /* SettingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82BA2FAF271F72D3007618D3 /* SettingsHelper.swift */; };
 		82D394F926CB2BC9005EF280 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D394F826CB2BC9005EF280 /* ResponseModel.swift */; };
 		82D394FA26CB2BC9005EF280 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D394F826CB2BC9005EF280 /* ResponseModel.swift */; };
 		82DF1E952703D1DC007A79AD /* NetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DF1E942703D1DC007A79AD /* NetworkStatusView.swift */; };
@@ -67,6 +71,7 @@
 		820D4DEA26E182FE00773E1F /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		8218686726FE5FD20036F5CF /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		8218686A26FE778B0036F5CF /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
+		821FD60B2721E6A600C39F6C /* ErrorHandlingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandlingModel.swift; sourceTree = "<group>"; };
 		822FD9EF26BB1F15007ED421 /* StrongKeyFIDODemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrongKeyFIDODemo.swift; sourceTree = "<group>"; };
 		822FD9F026BB1F15007ED421 /* LoginRegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterScreen.swift; sourceTree = "<group>"; };
 		822FD9F126BB1F16007ED421 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -88,6 +93,8 @@
 		829DFF8026CDA0E900F796AF /* KeyManagementScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManagementScreen.swift; sourceTree = "<group>"; };
 		82A121FF26CF753300E81AAD /* KeyDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDetailScreen.swift; sourceTree = "<group>"; };
 		82B6D83126C43E4500F2365F /* APIEndpointManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpointManager.swift; sourceTree = "<group>"; };
+		82BA2FAD271F7012007618D3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		82BA2FAF271F72D3007618D3 /* SettingsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHelper.swift; sourceTree = "<group>"; };
 		82D394F826CB2BC9005EF280 /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		82D9B8C426E1912D0026386C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		82D9B8C526E195950026386C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -157,6 +164,7 @@
 		822FD9E926BB1F15007ED421 = {
 			isa = PBXGroup;
 			children = (
+				82BA2FAD271F7012007618D3 /* Settings.bundle */,
 				827AAB6E270B736400B3439A /* Localization */,
 				8208DFD726C72B6E00954951 /* StrongKeyFIDODemo(macOS).entitlements */,
 				8208DFD026C70AAA00954951 /* StrongKeyFIDODemo(iOS).entitlements */,
@@ -225,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				827A999426DFE1050059251C /* Utils.swift */,
+				82BA2FAF271F72D3007618D3 /* SettingsHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -250,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				82D394F826CB2BC9005EF280 /* ResponseModel.swift */,
+				821FD60B2721E6A600C39F6C /* ErrorHandlingModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -335,7 +345,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					822FD9F526BB1F16007ED421 = {
 						CreatedOnToolsVersion = 13.0;
@@ -385,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				822FDA1526BB1F17007ED421 /* Assets.xcassets in Resources */,
+				82BA2FAE271F7012007618D3 /* Settings.bundle in Resources */,
 				8278554026DD811E00F5A9DF /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,7 +431,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				82A1220026CF753300E81AAD /* KeyDetailScreen.swift in Sources */,
+				82BA2FB0271F72D3007618D3 /* SettingsHelper.swift in Sources */,
 				82B6D83226C43E4600F2365F /* APIEndpointManager.swift in Sources */,
+				821FD60C2721E6A600C39F6C /* ErrorHandlingModel.swift in Sources */,
 				8218686826FE5FD20036F5CF /* NetworkMonitor.swift in Sources */,
 				822FDA1326BB1F17007ED421 /* LoginRegisterScreen.swift in Sources */,
 				827A999826DFE8080059251C /* AddKeysPanel.swift in Sources */,
@@ -443,6 +456,7 @@
 				82A1220126CF753300E81AAD /* KeyDetailScreen.swift in Sources */,
 				8208DFD626C711C300954951 /* AccountManager.swift in Sources */,
 				8218686926FE5FD20036F5CF /* NetworkMonitor.swift in Sources */,
+				821FD60D2721E6A600C39F6C /* ErrorHandlingModel.swift in Sources */,
 				82B6D83326C43E4600F2365F /* APIEndpointManager.swift in Sources */,
 				827A999926DFE8080059251C /* AddKeysPanel.swift in Sources */,
 				82DF1E962703D1DC007A79AD /* NetworkStatusView.swift in Sources */,
@@ -509,6 +523,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -539,6 +554,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -570,6 +586,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -600,6 +617,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -629,7 +647,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -647,7 +665,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.94;
+				MARKETING_VERSION = 0.97;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.strongkey.Strong-Key-FIDO2-Demo-iOS-2";
 				PRODUCT_NAME = StrongKeyFIDODemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -666,11 +684,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "StrongKeyFIDODemo(iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "StrongKeyFIDODemo (iOS)Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -688,7 +706,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.94;
+				MARKETING_VERSION = 0.97;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.strongkey.Strong-Key-FIDO2-Demo-iOS-2";
 				PRODUCT_NAME = StrongKeyFIDODemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -713,6 +731,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -744,6 +763,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -823,6 +843,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -848,6 +869,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MPJD5QMH38;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

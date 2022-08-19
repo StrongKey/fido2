@@ -27,10 +27,10 @@
  *
  * *********************************************
  *
- * Verifies the user making the FIDO service request. Every request 
- * must have the "sfaFidoServiceInput" Json sub-object with a "payload" 
+ * Verifies the user making the FIDO service request. Every request
+ * must have the "sfaFidoServiceInput" Json sub-object with a "payload"
  * that follows it (if appropriate) that looks like this:
- * 
+ *
  * {
  *   "sfaFidoServiceInput": {
  *     "did": 1,
@@ -61,27 +61,27 @@ public class verifyFidoServiceRequest implements verifyFidoServiceRequestLocal {
 
     // Resources used by this bean
     @EJB private getUserLocal                       getuser;
-    
+
     private final short sid = Common.getSid();
     private final String classname = "verifyFidoServiceRequest";
-    
+
     /**
      * Verifies content in the FIDO service request
-     * @param did short Domain Id
+     * @param did short Domain ID
      * @param fidoinput JsonObject containing the input from the app
      * @param txid String for logging
      * @return JsonObject with the payload for preregister (for now)
      */
     @Override
     public JsonObject execute(short did, JsonObject fidoinput, String txid) {
-        
+
         // Entry log
         long timein = Common.entryLog(Level.INFO, "SFAECO-MSG-3003", classname, String.valueOf(did), txid);
-        
+
         // Get necessary objects for verification out of Json input
         JsonObject sfacred = fidoinput.getJsonObject(Constants.JSON_KEY_SACL_CREDENTIALS);
         Long uid = sfacred.getJsonNumber(Constants.JSON_KEY_SACL_FIDO_UID).longValue();
-        
+
         // Get the UserDevice
         Users user = getuser.byUid(did, uid, txid);
         if (user == null) {
@@ -89,7 +89,7 @@ public class verifyFidoServiceRequest implements verifyFidoServiceRequestLocal {
             Common.exitLog(Level.INFO, "SFAECO-MSG-3004", classname, String.valueOf(did), txid, timein);
             return Common.jsonError(classname, "execute", "SFAECO-ERR-1023", "User: " + did+"-"+uid);
         }
-        
+
         // Found it - check user's status for "Active or Registered"
         String status = user.getStatus();
         if (!status.equals(Constants.STATUS_ACTIVE)) {
@@ -100,7 +100,7 @@ public class verifyFidoServiceRequest implements verifyFidoServiceRequestLocal {
             }
         }
         Common.log(Level.INFO, "SFAECO-MSG-2021", "User: " +did+"-"+uid);
-        
+
         // Need to return some information for use by servlet and other EJBs
         return Json.createObjectBuilder()
                 .add(Constants.VERIFIED_LABEL, true)

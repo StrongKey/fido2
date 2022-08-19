@@ -84,6 +84,7 @@ public class SKFSCommon {
     public static List<String> tldList = new ArrayList<>();
 
     public static List<String> MDSWSList = new ArrayList<>();
+    public static List<String> detailsWSList = new ArrayList<>();
 
     public static final SKFSCron cron = new SKFSCron();
 
@@ -325,6 +326,10 @@ public class SKFSCommon {
         String wslist = getConfigurationProperty("skfs.cfg.property.return.MDS.webservices");
         String[] splitlist = wslist.split(",");
         MDSWSList.addAll(Arrays.asList(splitlist));
+        
+        String detailswslist = getConfigurationProperty("skfs.cfg.property.return.responsedetail.webservices");
+        String[] detailssplitlist = detailswslist.split(",");
+        detailsWSList.addAll(Arrays.asList(detailssplitlist));
     }
 
     /**
@@ -694,6 +699,734 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         }
     }
 
+    public static JsonObject validateJsonObject(Object jsonObject) {
+        if (jsonObject instanceof JsonObject) {
+            return (JsonObject)jsonObject;
+        } else {
+            throw new ClassCastException();
+        }
+    }
+
+    public static JsonArray validateJsonArray(Object jsonArray) {
+        if (jsonArray instanceof JsonArray) {
+            return (JsonArray)jsonArray;
+        } else {
+            throw new ClassCastException();
+        }
+    }
+    
+    public static Response validateSVCInfoPayload(JsonObject requestBody) {
+        
+        if (requestBody == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0014") + " input").build();
+        }
+        
+        JsonObject svcinfo;
+        if (requestBody.containsKey("svcinfo")) {
+            try {
+                svcinfo = SKFSCommon.validateJsonObject(requestBody.getJsonObject("svcinfo"));
+            } catch (ClassCastException ex) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0041", ex.getLocalizedMessage());
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0041")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0041", "Missing \"svcinfo\" in request body");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0041")).build();
+        }
+        
+        if (!svcinfo.containsKey("did")) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0042", "Missing \"did\" in request svcinfo");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0042")).build();
+        }
+        if (svcinfo.containsKey("protocol")) {
+            if (svcinfo.getString("protocol").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0043", "Invalid or missing \"protocol\" in request svcinfo");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0043")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0043", "Missing \"protocol\" in request svcinfo");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0043")).build();
+        }
+        if (svcinfo.containsKey("authtype")) {
+            if (svcinfo.getString("authtype").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0044", "Invalid or missing \"authtype\" in request svcinfo");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0044")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0044", "Missing \"authtype\" in request svcinfo");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0044")).build();
+        }
+        
+        if (svcinfo.getString("authtype").equalsIgnoreCase(SKFSConstants.FIDO_API_AUTH_TYPE_PASSWORD)) {
+            if (svcinfo.containsKey("svcusername")) {
+                if (svcinfo.getString("svcusername").isEmpty()) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0045", "Invalid or missing \"svcusername\" in request svcinfo");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0045")).build();
+                }
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0045", "Missing \"svcusername\" in request svcinfo");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0045")).build();
+            }
+            if (svcinfo.containsKey("svcpassword")) {
+                if (svcinfo.getString("svcpassword").isEmpty()) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0046", "Invalid or missing \"svcpassword\" in request svcinfo");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0046")).build();
+                }
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0046", "Missing \"svcpassword\" in request svcinfo");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0046")).build();
+            }
+        }
+        
+        if (requestBody.containsKey("payload")) {
+            try {
+                SKFSCommon.validateJsonObject(requestBody.getJsonObject("payload"));
+            } catch (ClassCastException ex) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0047", ex.getLocalizedMessage());
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0047")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0047", "Missing \"payload\" in request body");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0047")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validatePreregisterPayload(JsonObject preregpayload) {
+        
+        if (preregpayload.containsKey("username")) {
+            if (preregpayload.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+
+        if (preregpayload.containsKey("displayname")) {
+            if (preregpayload.getString("displayname").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0049", "Invalid or missing \"displayname\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0049")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0049", "Missing \"displayname\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0049")).build();
+        }
+
+        try {
+            if (preregpayload.containsKey("options")) {
+                validateJsonObject(preregpayload.getJsonObject("options"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", "Missing \"options\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+        }
+
+        // For now, extensions is a stringified empty json object, so other checks may need to be created here when it is used in a future version.
+//        if (preregpayload.containsKey("extensions")) {
+//            if (SKFSCommon.isValidJsonObject(preregpayload.getString("extensions"))) {
+//            } else {
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0051", "Invalid \"extensions\" in request payload");
+//                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0051")).build();
+//            }
+//        }
+        
+        return null;
+    }
+    
+    public static Response validateRegisterPayload(JsonObject regpayload) {
+        
+        JsonObject strongkeyMetadata;
+        try {
+            if (regpayload.containsKey("strongkeyMetadata")) {
+                strongkeyMetadata = validateJsonObject(regpayload.getJsonObject("strongkeyMetadata"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", "Missing \"strongkeyMetadata\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+        }
+
+        if (strongkeyMetadata.containsKey("version")) {
+            if (strongkeyMetadata.getString("version").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Invalid or missing \"version\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Missing \"version\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+        }
+        if (strongkeyMetadata.containsKey("create_location")) {
+            if (strongkeyMetadata.getString("create_location").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0055", "Invalid or missing \"create_location\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0055")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0055", "Missing \"create_location\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0055")).build();
+        }
+        if (strongkeyMetadata.containsKey("username")) {
+            if (strongkeyMetadata.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+        if (strongkeyMetadata.containsKey("origin")) {
+            if (strongkeyMetadata.getString("origin").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Invalid or missing \"origin\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Missing \"origin\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+        }
+
+        JsonObject publicKeyCredential;
+        try {
+            if (regpayload.containsKey("publicKeyCredential")) {
+                publicKeyCredential = validateJsonObject(regpayload.getJsonObject("publicKeyCredential"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", "Missing \"publicKeyCredential\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+        }
+        if (publicKeyCredential.containsKey("id")) {
+            if (publicKeyCredential.getString("id").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Invalid or missing \"id\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Missing \"id\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+        }
+        if (publicKeyCredential.containsKey("rawId")) {
+            if (publicKeyCredential.getString("rawId").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Invalid or missing \"rawId\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Missing \"rawId\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+        }
+        JsonObject responseObject;
+        try {
+            if (publicKeyCredential.containsKey("response")) {
+                responseObject = validateJsonObject(publicKeyCredential.getJsonObject("response"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", "Missing \"response\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+        }
+        if (responseObject.containsKey("attestationObject")) {
+            if (responseObject.getString("attestationObject").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0062", "Invalid or missing \"attestationObject\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0062")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0062", "Missing \"attestationObject\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0062")).build();
+        }
+        
+        if (responseObject.containsKey("clientDataJSON")) {
+            if (responseObject.getString("clientDataJSON").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Invalid or missing \"clientDataJSON\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Missing \"clientDataJSON\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+        }
+        if (publicKeyCredential.containsKey("type")) {
+            if (publicKeyCredential.getString("type").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Invalid or missing \"type\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Missing \"type\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validatePreauthenticatePayload(JsonObject preauthpayload) {
+        
+        if (preauthpayload.containsKey("username")) {
+            if (preauthpayload.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+
+        try {
+            if (preauthpayload.containsKey("options")) {
+                validateJsonObject(preauthpayload.getJsonObject("options"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", "Missing \"options\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+        }
+        // For now, extensions is a stringified empty json object, so other checks may need to be created here when it is used in a future version.
+//        if (preauthpayload.containsKey("extensions")) {
+//            if (SKFSCommon.isValidJsonObject(preauthpayload.getString("extensions"))) {
+//            } else {
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0051", "Invalid \"extensions\" in request payload");
+//                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0051")).build();
+//            }
+//        }
+        
+        return null;
+    }
+    
+    public static Response validateAuthenticatePayload(JsonObject authpayload) {
+        
+        JsonObject strongkeyMetadata;
+        try {
+            if (authpayload.containsKey("strongkeyMetadata")) {
+                strongkeyMetadata = validateJsonObject(authpayload.getJsonObject("strongkeyMetadata"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", "Missing \"strongkeyMetadata\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+        }
+
+        if (strongkeyMetadata.containsKey("version")) {
+            if (strongkeyMetadata.getString("version").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Invalid or missing \"version\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Missing \"version\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+        }
+        if (strongkeyMetadata.containsKey("last_used_location")) {
+            if (strongkeyMetadata.getString("last_used_location").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0056", "Invalid or missing \"last_used_location\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0056")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0056", "Missing \"last_used_location\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0056")).build();
+        }
+        if (strongkeyMetadata.containsKey("username")) {
+            if (strongkeyMetadata.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+        if (strongkeyMetadata.containsKey("origin")) {
+            if (strongkeyMetadata.getString("origin").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Invalid or missing \"origin\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Missing \"origin\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+        }
+
+        JsonObject publicKeyCredential;
+        try {
+            if (authpayload.containsKey("publicKeyCredential")) {
+                publicKeyCredential = validateJsonObject(authpayload.getJsonObject("publicKeyCredential"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", "Missing \"publicKeyCredential\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+        }
+        if (publicKeyCredential.containsKey("id")) {
+            if (publicKeyCredential.getString("id").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Invalid or missing \"id\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Missing \"id\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+        }
+        if (publicKeyCredential.containsKey("rawId")) {
+            if (publicKeyCredential.getString("rawId").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Invalid or missing \"rawId\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Missing \"rawId\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+        }
+        JsonObject responseObject;
+        try {
+            if (publicKeyCredential.containsKey("response")) {
+                responseObject = validateJsonObject(publicKeyCredential.getJsonObject("response"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", "Missing \"response\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+        }
+        if (responseObject.containsKey("authenticatorData")) {
+            if (responseObject.getString("authenticatorData").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0064", "Invalid or missing \"authenticatorData\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0064")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0064", "Missing \"authenticatorData\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0064")).build();
+        }
+        if (responseObject.containsKey("signature")) {
+            if (responseObject.getString("signature").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0065", "Invalid or missing \"signature\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0065")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0065", "Missing \"signature\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0065")).build();
+        }
+        if (!responseObject.containsKey("userHandle")) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0066", "Missing \"userHandle\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0066")).build();
+        }
+        if (responseObject.containsKey("clientDataJSON")) {
+            if (responseObject.getString("clientDataJSON").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Invalid or missing \"clientDataJSON\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Missing \"clientDataJSON\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+        }
+        if (publicKeyCredential.containsKey("type")) {
+            if (publicKeyCredential.getString("type").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Invalid or missing \"type\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Missing \"type\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validatePreauthorizePayload(JsonObject preauthzpayload) {
+        
+        if (preauthzpayload.containsKey("username")) {
+            if (preauthzpayload.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+
+        if (preauthzpayload.containsKey("txid")) {
+            if (preauthzpayload.getString("txid").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0071", "Invalid or missing \"txid\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0071")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0071", "Missing \"txid\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0071")).build();
+        }
+
+        if (preauthzpayload.containsKey("txpayload")) {
+            if (preauthzpayload.getString("txpayload").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0072", "Invalid or missing \"txpayload\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0072")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0072", "Missing \"txpayload\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0072")).build();
+        }
+
+        try {
+            if (preauthzpayload.containsKey("options")) {
+                validateJsonObject(preauthzpayload.getJsonObject("options"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", "Missing \"options\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0050", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0050")).build();
+        }
+        // For now, extensions is a stringified empty json object, so other checks may need to be created here when it is used in a future version.
+//        if (preauthpayload.containsKey("extensions")) {
+//            if (SKFSCommon.isValidJsonObject(preauthpayload.getString("extensions"))) {
+//            } else {
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0051", "Invalid \"extensions\" in request payload");
+//                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0051")).build();
+//            }
+//        }
+        
+        return null;
+    }
+    
+    public static Response validateAuthorizePayload(JsonObject authzpayload) {
+        
+        JsonObject strongkeyMetadata;
+        try {
+            if (authzpayload.containsKey("strongkeyMetadata")) {
+                strongkeyMetadata = validateJsonObject(authzpayload.getJsonObject("strongkeyMetadata"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", "Missing \"strongkeyMetadata\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0052", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0052")).build();
+        }
+
+        if (strongkeyMetadata.containsKey("version")) {
+            if (strongkeyMetadata.getString("version").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Invalid or missing \"version\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0054", "Missing \"version\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0054")).build();
+        }
+        if (strongkeyMetadata.containsKey("last_used_location")) {
+            if (strongkeyMetadata.getString("last_used_location").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0056", "Invalid or missing \"last_used_location\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0056")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0056", "Missing \"last_used_location\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0056")).build();
+        }
+        if (strongkeyMetadata.containsKey("username")) {
+            if (strongkeyMetadata.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+        if (strongkeyMetadata.containsKey("origin")) {
+            if (strongkeyMetadata.getString("origin").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Invalid or missing \"origin\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0057", "Missing \"origin\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0057")).build();
+        }
+
+        JsonObject publicKeyCredential;
+        try {
+            if (authzpayload.containsKey("publicKeyCredential")) {
+                publicKeyCredential = validateJsonObject(authzpayload.getJsonObject("publicKeyCredential"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", "Missing \"publicKeyCredential\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0053", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0053")).build();
+        }
+        if (publicKeyCredential.containsKey("id")) {
+            if (publicKeyCredential.getString("id").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Invalid or missing \"id\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0058", "Missing \"id\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0058")).build();
+        }
+        if (publicKeyCredential.containsKey("rawId")) {
+            if (publicKeyCredential.getString("rawId").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Invalid or missing \"rawId\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0059", "Missing \"rawId\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0059")).build();
+        }
+        JsonObject responseObject;
+        try {
+            if (publicKeyCredential.containsKey("response")) {
+                responseObject = validateJsonObject(publicKeyCredential.getJsonObject("response"));
+            } else {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", "Missing \"response\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+            }
+        } catch (ClassCastException ex) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0060", ex.getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0060")).build();
+        }
+        if (responseObject.containsKey("authenticatorData")) {
+            if (responseObject.getString("authenticatorData").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0064", "Invalid or missing \"authenticatorData\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0064")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0064", "Missing \"authenticatorData\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0064")).build();
+        }
+        if (responseObject.containsKey("signature")) {
+            if (responseObject.getString("signature").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0065", "Invalid or missing \"signature\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0065")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0065", "Missing \"signature\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0065")).build();
+        }
+        if (!responseObject.containsKey("userHandle")) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0066", "Missing \"userHandle\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0066")).build();
+        }
+        if (responseObject.containsKey("clientDataJSON")) {
+            if (responseObject.getString("clientDataJSON").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Invalid or missing \"clientDataJSON\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0063", "Missing \"clientDataJSON\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0063")).build();
+        }
+        if (publicKeyCredential.containsKey("type")) {
+            if (publicKeyCredential.getString("type").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Invalid or missing \"type\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Missing \"type\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+        }
+
+        if (authzpayload.containsKey("txid")) {
+            if (authzpayload.getString("txid").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0071", "Invalid or missing \"txid\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0071")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0071", "Missing \"txid\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0071")).build();
+        }
+
+        if (authzpayload.containsKey("txpayload")) {
+            if (authzpayload.getString("txpayload").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0072", "Invalid or missing \"txpayload\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0072")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0072", "Missing \"txpayload\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0072")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validateDeregisterPayload(JsonObject deregpayload) {
+        if (deregpayload.containsKey("keyid")) {
+            if (deregpayload.getString("keyid").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0068", "Invalid or missing \"keyid\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0068")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0068", "Missing \"keyid\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0068")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validateUpdateKeyInfoPayload(JsonObject patchpayload) {
+        if (patchpayload.containsKey("status")) {
+            if (patchpayload.getString("status").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0069", "Invalid or missing \"status\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0069")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0069", "Missing \"status\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0069")).build();
+        }
+        if (patchpayload.containsKey("modify_location")) {
+            if (patchpayload.getString("modify_location").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0070", "Invalid or missing \"modify_location\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0070")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0070", "Missing \"modify_location\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0070")).build();
+        }
+        if (patchpayload.containsKey("displayname")) {
+            if (patchpayload.getString("displayname").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0049", "Invalid or missing \"displayname\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0049")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0049", "Missing \"displayname\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0049")).build();
+        }
+        if (patchpayload.containsKey("keyid")) {
+            if (patchpayload.getString("keyid").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0068", "Invalid or missing \"keyid\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0068")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0068", "Missing \"keyid\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0068")).build();
+        }
+        
+        return null;
+    }
+    
+    public static Response validateGetKeysInfoPayload(JsonObject getkeyspayload) {
+        if (getkeyspayload.containsKey("username")) {
+            if (getkeyspayload.getString("username").isEmpty()) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Invalid or missing \"username\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+            }
+        } else if (getkeyspayload.containsKey("usernames")) {
+            try {
+                SKFSCommon.validateJsonArray(getkeyspayload.getJsonArray("usernames"));
+            } catch (ClassCastException ex) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0073", "Invalid or missing \"usernames\" in request payload");
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0073")).build();
+            }
+        } else {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0048", "Missing \"username\" in request payload");
+            return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0048")).build();
+        }
+        
+        return null;
+    }
+
     public static Boolean updateFidoUsers() {
         return Boolean.valueOf(updatefidousers);
     }
@@ -730,6 +1463,10 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         return MDSWSList.contains(key);
     }
     
+    public static Boolean containsDetailsWSList(String key){
+        return detailsWSList.contains(key);
+    }
+    
     public static X509Certificate getMdsrootca() {
         return mdsrootca;
     }
@@ -738,7 +1475,6 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         SKFSCommon.mdsrootca = mdsrootca;
     }
 
-    
     public static String getDigest(String Input, String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
         MessageDigest digest = MessageDigest.getInstance(algorithm, "BCFIPS");
@@ -1128,71 +1864,71 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 //
 //        return responseJSON;
 //    }
+    
     //check svcinfo
-    public static ServiceInfo checkSvcInfo(String wsprotocol, String svcinfo) {
+    public static ServiceInfo checkAndSetSvcInfo(String wsprotocol, String svcinfo) {
 
         ServiceInfo svinfo = new ServiceInfo();
         try {
             if (svcinfo == null) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "NULL");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "NULL");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0041", "Invalid or missing \"svcinfo\" in request body.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0041"));
                 return svinfo;
             }
             JsonObject svcjson = applianceCommon.stringToJSON(svcinfo);
             if (svcjson == null) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "NULL");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "NULL");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0041", "Invalid or missing \"svcinfo\" in request body.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0041"));
                 return svinfo;
             }
-            if (svcjson.getJsonNumber("did") == null || svcjson.getJsonNumber("did").longValue() < 1) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "DID");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "DID");
+            if (!svcjson.containsKey("did")) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0042", "Missing \"did\" in request svcinfo");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0042"));
                 return svinfo;
             }
             try {
+                if (svcjson.getJsonNumber("did") == null || svcjson.getJsonNumber("did").longValue() < 1) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0042", "Invalid or missing \"did\" in request svcinfo.");
+                    svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0042"));
+                    return svinfo;
+                }
                 inputValidateSKCEDid(svcjson.getJsonNumber("did").toString());
             } catch (Exception ex) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006",
-                        "invalid svcinfo = " + ex.getLocalizedMessage());
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-5006").replace("{0}", "") + "invalid svcinfo = " + ex.getLocalizedMessage());
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006", "invalid svcinfo = " + ex.getLocalizedMessage());
+//                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-5006").replace("{0}", "") + "invalid svcinfo = " + ex.getLocalizedMessage());
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0042", "Invalid \"did\" in request svcinfo.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0042"));
                 return svinfo;
             }
             svinfo.setDid(svcjson.getJsonNumber("did").longValue());
 
             if (!svcjson.containsKey("protocol") || svcjson.getString("protocol").trim().isEmpty()) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "Protocol");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Protocol");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0043", "Missing \"protocol\" in request svcinfo.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0043"));
                 return svinfo;
             }
             if (!svcjson.getString("protocol").equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2) && !svcjson.getString("protocol").equalsIgnoreCase(SKFSConstants.FIDO_PROTOCOL_VERSION_2_0)) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "Protocol");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Protocol");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0043", "Invalid \"protocol\" in request svcinfo.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0043"));
                 return svinfo;
             }
             svinfo.setProtocol(svcjson.getString("protocol"));
 
             if (!svcjson.containsKey("authtype") || svcjson.getString("authtype").trim().isEmpty()) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "Authtype");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Authtype");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0044", "Missing \"authtype\" in request svcinfo.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0044"));
                 return svinfo;
             }
             if (!svcjson.getString("authtype").equalsIgnoreCase(SKFSConstants.FIDO_API_AUTH_TYPE_HMAC) && !svcjson.getString("authtype").equalsIgnoreCase(SKFSConstants.FIDO_API_AUTH_TYPE_PASSWORD)) {
-                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                        "Authtype");
-                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "Authtype");
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0044", "Invalid \"authtype\" in request svcinfo.");
+                svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0044"));
                 return svinfo;
             }
             svinfo.setAuthtype(svcjson.getString("authtype"));
 
             if (svcjson.getString("authtype").equalsIgnoreCase(SKFSConstants.FIDO_API_AUTH_TYPE_PASSWORD)) {
                 if (!svcjson.containsKey("svcusername") || svcjson.getString("svcusername").trim().isEmpty()) {
-                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0002", " credential");
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0045", "Missing \"svcusername\" in request svcinfo.");
                     svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0033"));
                     return svinfo;
                 }
@@ -1207,8 +1943,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
 
                 if (wsprotocol.equalsIgnoreCase("SOAP")) {
                     if (svcjson.getJsonNumber("timestamp") == null || svcjson.getJsonNumber("timestamp").longValue() < 1) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                                "timestamp");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003", "timestamp");
                         svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "timestamp");
                         return svinfo;
                     }
@@ -1221,23 +1956,20 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                     }
                     svinfo.setAuthorization(svcjson.getString("authorization"));
                     if (!svcjson.containsKey("strongkey-content-sha256") || svcjson.getString("strongkey-content-sha256").trim().isEmpty()) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                                "strongkey-content-sha256");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003", "strongkey-content-sha256");
                         svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-content-sha256");
                         return svinfo;
                     }
                     svinfo.setContentSHA256(svcjson.getString("strongkey-content-sha256"));
 
                     if (!svcjson.containsKey("strongkey-api-version") || svcjson.getString("strongkey-api-version").trim().isEmpty()) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                                "strongkey-api-version");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003", "strongkey-api-version");
                         svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-api-version");
                         return svinfo;
                     }
                     // only check for SK3_0 as this is only used by
                     if (!svcjson.getString("strongkey-api-version").equalsIgnoreCase("SK3_0")) {
-                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003",
-                                "strongkey-api-version");
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2003", "strongkey-api-version");
                         svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-2003").replace("{0}", "") + "strongkey-api-version");
                         return svinfo;
                     }
@@ -1245,8 +1977,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
                 }
             }
         } catch (Exception ex) {
-            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006",
-                    "invalid svcinfo = " + ex.getLocalizedMessage());
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-5006", "invalid svcinfo = " + ex.getLocalizedMessage());
             svinfo.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-5006").replace("{0}", "") + "invalid svcinfo = " + ex.getLocalizedMessage());
             return svinfo;
         }
@@ -1276,6 +2007,12 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     public static String buildReturn(String response) {
         FIDOReturnObject fro = new FIDOReturnObject(response);
         return fro.toJsonString();
+    }
+    
+    
+    public static String buildReturnwithCode(String response, String responseCode) {
+        FIDOReturnObject fro = new FIDOReturnObject(response);
+        return fro.toJsonStringwithCode(responseCode);
     }
 
     /*

@@ -35,7 +35,9 @@ import SwiftUI
 struct LoginRegisterScreen: View {
     
     @Environment(\.colorScheme) var colorScheme
+    #if !os(macOS)
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    #endif
     
     @AppStorage("username") var userFromAppStorage: String?
     @State private var userName = ""
@@ -103,6 +105,9 @@ struct LoginRegisterScreen: View {
                                 .background(Color("textFieldBackground"))
                                 .cornerRadius(8)
                         )
+                        .onTapGesture {
+                            userTextFieldFocus = true
+                        }
                         .submitLabel(.done)
                     #endif
                 }
@@ -179,7 +184,7 @@ struct LoginRegisterScreen: View {
                     
                     
                 }
-                .alert(isPresented: $viewModel.isSKTimeoutError) {
+                .alert(isPresented: $viewModel.isSKBackendError) {
                     Alert(
                         title: Text(viewModel.errorMessage)
                     )
@@ -242,19 +247,20 @@ struct LoginRegisterScreen: View {
             ZStack{
                 Color("Background")
                     .edgesIgnoringSafeArea(.all)
-                
+                    .onTapGesture {
+                        userTextFieldFocus = false
+                    }
+                #if os(iOS)
                 HStack {
                     if verticalSizeClass == .regular {
                         Spacer()
                         VStack() {
                             Button {
                                 
-                                #if os(iOS)
                                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                #endif
                                 
                             } label: {
-                                Label("Language", systemImage: "globe")
+                                Label("Settings", systemImage: "gear")
                                     .labelStyle(.iconOnly)
                                     .foregroundColor(.white)
                                     .padding(8)
@@ -267,12 +273,10 @@ struct LoginRegisterScreen: View {
                         VStack() {
                             Button {
                                 
-                                #if os(iOS)
                                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                #endif
                                 
                             } label: {
-                                Label("Language", systemImage: "globe")
+                                Label("Settings", systemImage: "gear")
                                     .labelStyle(.iconOnly)
                                     .foregroundColor(.white)
                                     .padding(8)
@@ -283,12 +287,10 @@ struct LoginRegisterScreen: View {
                         }
                         Spacer()
                     }
-                    
-                    
-                    
                 }
+                #endif
                 
-                
+                #if !os(macOS)
                 if verticalSizeClass == .regular {
                     VStack {
                         TitleView()
@@ -303,11 +305,20 @@ struct LoginRegisterScreen: View {
                     }
                     .padding(.bottom, -32)
                 }
+                #else
+                
+                VStack {
+                    TitleView()
+                    loginPanel
+                }
+                
+                #endif
                 
             }
         }
         
         .onAppear {
+//            UserDefaults.standard.set(FidoService.fidoServiceBaseURL, forKey: "fqdn_url")
             guard let user = userFromAppStorage else {
                 print("No previous stored user")
                 return

@@ -40,6 +40,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -375,5 +379,21 @@ public class TPMAttestationStatement implements FIDO2AttestationStatement {
     @Override
     public String getAttestationType() {
         return attestationType;
+    }
+    
+     public JsonObject toJson() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("alg", alg);
+        job.add("sig", java.util.Base64.getEncoder().encodeToString(signature));
+        JsonArrayBuilder jarr = Json.createArrayBuilder();
+        if (x5c != null) {
+            Iterator x5cItr = x5c.iterator();
+            while (x5cItr.hasNext()) {
+                byte[] certByte = (byte[]) x5cItr.next();
+                jarr.add(java.util.Base64.getEncoder().encodeToString(certByte));
+            }
+        }
+        job.add("x5c", jarr.build());
+        return job.build();
     }
 }

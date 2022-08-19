@@ -163,6 +163,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
 
         String response = Json.createObjectBuilder()
                 .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObject)
+                .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0002")
                 .build().toString();
         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                 "FIDO 2.0 Response : " + response);

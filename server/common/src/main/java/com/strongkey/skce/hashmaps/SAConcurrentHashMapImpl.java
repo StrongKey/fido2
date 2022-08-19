@@ -227,12 +227,12 @@ public class SAConcurrentHashMapImpl implements SAHashmap {
                 try {
                     sessionagelimit = Long.parseLong(agelimit);
                     //  if the configured time is < 5 seconds, set it to 5 seconds
-                    if (sessionagelimit < 5L) {
-                        sessionagelimit = 5L;
+                    if (sessionagelimit < 30L) {
+                        sessionagelimit = 30L;
                     } //  if the configured time is > 5 minutes, set it to 5 min
-                    else if (sessionagelimit > 300L) {
-                        sessionagelimit = 300L;
-                    }
+//                    else if (sessionagelimit > 300L) {
+//                        sessionagelimit = 300L;
+//                    }
                 } catch (NumberFormatException ex) {
                     //  any exception, default it to 30 seconds.
                     sessionagelimit = 30L;

@@ -1,4 +1,4 @@
 rootProject.name='Sample SACL FIDO eCommerce App'
 include ':app'
 include ':sacl'
-project(':sacl').projectDir = new File('/usr/local/workspace/skrepo/mobile/android/StrongKeyAndroidClientLibrary/sacl')
+project(':sacl').projectDir = new File('/usr/local/pmarathe/tmp/android/StrongKeyAndroidClientLibrary/sacl')

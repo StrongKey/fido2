@@ -7,6 +7,7 @@
 package com.strongkey.skfs.txbeans;
 
 import com.strongkey.appliance.utilities.applianceCommon;
+import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.skce.pojos.UserSessionInfo;
 import com.strongkey.skce.utilities.skceMaps;
 import com.strongkey.skfs.core.U2FRegistrationResponse;
@@ -170,7 +171,7 @@ public class U2FRegistrationBean implements U2FRegistrationBeanLocal {
                     addkeybean.execute(did, null, session_username, keyhandle, publickey, appid,
                             (short) SKFSConstants.FIDO_TRANSPORT_USB, null, null, null, 0,
                             SKFSConstants.FIDO_PROTOCOL_VERSION_U2F_V2, SKFSConstants.FIDO_PROTOCOL_U2F,
-                            null, null, null, createloc);
+                            null, null, null, createloc, applianceConstants.ACTIVE_STATUS);
                     SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.FINE, "FIDO-MSG-0024", "");
 
                     if (SKFSCommon.updateFidoUsers()) {

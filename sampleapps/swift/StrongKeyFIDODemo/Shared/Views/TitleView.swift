@@ -34,32 +34,17 @@ import SwiftUI
 /// A reusable view with StrongKey's Logo and Title
 struct TitleView: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    
     var body: some View {
         VStack {
-            if colorScheme == .dark {
-                Image("SKLightLogo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 180)
-                Image("SKTitleLight")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 280, minHeight: 22)
-                    .padding(.bottom, 22)
-            } else {
-            
-                Image("SKDarkLogo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 180)
-                Image("SKTitleDark")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 280, minHeight: 22)
-                    .padding(.bottom, 22)
-            }
+            Image("SKLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 180)
+            Image("SKTitle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 280, minHeight: 22)
+                .padding(.bottom, 22)
         }
     }
 }
@@ -67,5 +52,7 @@ struct TitleView: View {
 struct TitleView_Previews: PreviewProvider {
     static var previews: some View {
         TitleView()
+            .preferredColorScheme(.dark)
+            
     }
 }

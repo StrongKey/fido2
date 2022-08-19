@@ -11,7 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Copyright (c) 2001-2020 StrongAuth, Inc. (d/b/a StrongKey)
+ * Copyright (c) 2001-2022 StrongAuth, Inc. (d/b/a StrongKey)
  *
  * **********************************************
  *
@@ -32,14 +32,14 @@
 
 <resources>
 
-    <string name="sacl_service_hostport">https://psd2demo.strongkey.com/sfaeco-web/rest/</string>
+    <string name="sacl_service_hostport">https://demo.strongkey.com/sfaeco-web/rest/</string>
     <string name="sacl_service_domainid">1</string>
     <string name="sacl_service_service_credential_username">svccred</string>
     <string name="sacl_service_service_credential_password">Abcd1234!</string>
 
-    <string name="sacl_using_self_signed_certificate">false</string>
-    <string name="sacl_self_signed_service_hostport">https://sakasmb.noorhome.net:8181/sfaeco-web/rest/</string>
-    <string name="sacl_self_signed_service_cert">sakasmb_noorhome_net</string>
+    <string name="sacl_using_self_signed_certificate">true</string>
+    <string name="sacl_self_signed_service_hostport">https://demo.strongkey.com/sfaeco-web/rest/</string>
+    <string name="sacl_self_signed_service_cert">demo</string>
 
     <string name="ERROR_ANDROID_KEYSTORE_EMPTY">AndroidKeystore has no entries</string>
     <string name="ERROR_EMULATOR">Running inside an emulator - no SE or TEE</string>

@@ -167,7 +167,7 @@ public class SKFSClient {
                     if(AUTHENTICATORATTACHMENT != null && !AUTHENTICATORATTACHMENT.isEmpty()){
                         authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTACHMENT, AUTHENTICATORATTACHMENT);
                     }
-                    authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
+//                    authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
                     authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_USERVERIFICATION, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
                     authSelect = authSelectBuilder.build();
                     if(!authSelect.isEmpty()){
@@ -182,7 +182,7 @@ public class SKFSClient {
                     if(AUTHENTICATORATTACHMENT != null && !AUTHENTICATORATTACHMENT.isEmpty()){
                         authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_ATTACHMENT, AUTHENTICATORATTACHMENT);
                     }
-                    authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
+//                    authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_RESIDENTKEY, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
                     authSelectBuilder.add(Constants.SKFS_JSON_KEY_OPTIONS_USERVERIFICATION, Constants.SKFS_JSON_KEY_OPTIONS_REQUIRED);
                     authSelect = authSelectBuilder.build();
                     if(!authSelect.isEmpty()){

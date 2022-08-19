@@ -84,6 +84,7 @@ public class addFidoKeys implements addFidoKeysLocal {
      * @param registrationSettingsVersion - Version of registrationSettings
      * @param fido_protocol - FIDO Protocol used for authenticator
      * @param create_location - Location where the key was generated
+     * @param keyStatus
      * @return - Returns a JSON string containing the status and the
      * error/success message
      */
@@ -104,7 +105,8 @@ public class addFidoKeys implements addFidoKeysLocal {
             String aaguid,
             String registrationSettings,
             Integer registrationSettingsVersion,
-            String create_location) {
+            String create_location,
+            String keyStatus) {
         SKFSLogger.entering(SKFSConstants.SKFE_LOGGER, classname, "execute");
 
         //Json return object
@@ -322,7 +324,7 @@ public class addFidoKeys implements addFidoKeysLocal {
         }
         newKey.setCreateLocation(create_location);
         newKey.setCreateDate(createDateFormat);
-        newKey.setStatus(applianceConstants.ACTIVE_STATUS);
+        newKey.setStatus(keyStatus);
         newKey.setId(primarykey);
 
         if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")

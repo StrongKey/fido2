@@ -116,7 +116,7 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
             if (!Boolean.valueOf(SKFSCommon.getConfigurationProperty("skfs.cfg.property.replicate.hashmapsonly"))) {
                 String response = replObj.execute(applianceConstants.ENTITY_TYPE_FIDO_POLICIES, applianceConstants.REPLICATION_OPERATION_UPDATE, primarykey, fidopolicy);
                 if (response != null) {
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + response).build();
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-2006") + " updateFidoPolicy replication error: " + response).build();
                 }
             }
         }
@@ -131,7 +131,7 @@ public class updateFidoPolicy implements updateFidoPolicyLocal {
                     (long) fidopolicy.getFidoPoliciesPK().getSid(),
                     (long) fidopolicy.getFidoPoliciesPK().getPid());
         } catch (SKFEException ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + ex.getLocalizedMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(SKFSCommon.getMessageProperty("FIDOJPA-ERR-1001") + " could not update local map " + ex.getLocalizedMessage()).build();
         }
         MDSClient mds = null;
         skceMaps.getMapObj().put(SKFSConstants.MAP_FIDO_POLICIES, fpMapkey, new FidoPolicyMDSObject(fidoPolicyObject, mds));

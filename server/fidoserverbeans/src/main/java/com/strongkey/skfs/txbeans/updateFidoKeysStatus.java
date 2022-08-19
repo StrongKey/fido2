@@ -180,6 +180,7 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
 
         if (status.trim().equalsIgnoreCase(applianceConstants.ACTIVE_STATUS)) {
         } else if (status.trim().equalsIgnoreCase(applianceConstants.INACTIVE_STATUS)) {
+        } else if (status.trim().equalsIgnoreCase(applianceConstants.DELETED)) {
         } else {
             outputstatus = false;
             SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.SEVERE, classname, "execute", "FIDOJPA-ERR-1002", "STATUS");
@@ -223,6 +224,10 @@ public class updateFidoKeysStatus implements updateFidoKeysStatusLocal {
         rk.setModifyLocation(modify_location);
         rk.setModifyDate(modifyDateFormat);
         rk.setStatus(status);
+        if (status.trim().equalsIgnoreCase(applianceConstants.DELETED)) {
+            rk.setKeyhandle("Removed");
+            rk.setPublickey("Removed");
+        }
         rk.setId(primarykey);
 
         if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.db.signature.rowlevel.add")

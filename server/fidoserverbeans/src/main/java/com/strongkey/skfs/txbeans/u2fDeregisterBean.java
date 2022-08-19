@@ -8,6 +8,7 @@
 
 package com.strongkey.skfs.txbeans;
 
+import com.strongkey.appliance.utilities.applianceConstants;
 import com.strongkey.skfs.utilities.SKCEReturnObject;
 import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKFSConstants;
@@ -35,9 +36,11 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
     /*
      * Enterprise Java Beans used in this EJB.
      */
-    @EJB getFidoKeysLocal         getkeybean;
-    @EJB deleteFidoKeysLocal      deletekeybean;
-    @EJB updateFidoUserBeanLocal  updateldapbean;
+//    @EJB getFidoKeysLocal         getkeybean;
+//    @EJB deleteFidoKeysLocal      deletekeybean;
+//    @EJB updateFidoUserBeanLocal  updateldapbean;
+    @EJB
+    updateFidoKeysStatusLocal updatekeystatusbean;
 
     /*************************************************************************
                                                  888
@@ -100,7 +103,7 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
         Short sid_to_be_deleted = null;
 //        String did_to_be_deactivated = null;
         int userfkidhyphen;
-        String current_pk;
+        String current_pk ;
         String fidouser;
         Long fkid_to_be_deleted = null;
         try {
@@ -110,8 +113,7 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
             userfkidhyphen = mapvaluesplit[2].lastIndexOf("-");
 
 //            fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
-//            fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
-           if (userfkidhyphen == -1) {
+            if (userfkidhyphen == -1) {
                 fkid_to_be_deleted = Long.parseLong(mapvaluesplit[2]);
                 current_pk = sid_to_be_deleted + "-" + did + "-" + fkid_to_be_deleted;
             }else{
@@ -119,6 +121,7 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
                 fidouser = mapvaluesplit[2].substring(0, userfkidhyphen);
                 current_pk = sid_to_be_deleted + "-" + did + "-" + fidouser + "-" + fkid_to_be_deleted;
             }
+            
         } catch (Exception ex) {
             rv.setErrorkey("FIDO-ERR-0023");
             rv.setErrormsg(SKFSCommon.getMessageProperty("FIDO-ERR-0023") + "Invalid keyid= " + keyid);
@@ -127,7 +130,7 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
             return rv;
         }
 
-//        String current_pk = sid_to_be_deleted + "-" + did + "-" + fkid_to_be_deleted;
+        
         if(!keyid.equalsIgnoreCase(current_pk)){
             //user is not authorized to deactivate this key
             //  throw an error and return.
@@ -144,7 +147,9 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
                         SKFSCommon.getMessageProperty("FIDO-MSG-5005"), "");
                 try {
                     //  if the fkid_to_be_deleted is valid, delete the entry from the database
-                    String jparesult = deletekeybean.execute(sid_to_be_deleted, did, fkid_to_be_deleted);
+                    //we are now updating the keys table with a 'deleted' status and emptying out the keyhandle and public key columns
+//                    String jparesult = deletekeybean.execute(sid_to_be_deleted, did, fkid_to_be_deleted);
+                    String jparesult = updatekeystatusbean.execute(sid_to_be_deleted, did, fkid_to_be_deleted, "N/A", applianceConstants.DELETED);
                     JsonObject jo;
                     try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                         jo = jr.readObject();
@@ -162,32 +167,6 @@ public class u2fDeregisterBean implements u2fDeregisterBeanLocal {
                     } else {
                         //  Successfully deleted key from the database
                         SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0028"), "key id = " + fkid_to_be_deleted);
-                    }
-
-                    if (SKFSCommon.updateFidoUsers()) {
-//                        Collection<FidoKeys> keys = getkeybean.getByUsernameStatus(did, fidouser, applianceConstants.ACTIVE_STATUS);
-//                        if (keys == null || keys.isEmpty()) {
-//                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-5006"), "");
-//                            //  Update the "FIDOKeysEnabled" attribute of the user to 'false'
-//                            //  if the key that was just deleted is the last key registered
-//                            //  for the user
-//                            try {
-//                                String result = updateldapbean.execute(did, fidouser, SKFSConstants.LDAP_ATTR_KEY_FIDOENABLED, "false", false);
-//                                try (JsonReader jr = Json.createReader(new StringReader(result))) {
-//                                    jo = jr.readObject();
-//                                }
-//                                status = jo.getBoolean(SKFSConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
-//                                if (status) {
-//                                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, SKFSCommon.getMessageProperty("FIDO-MSG-0029"), "false");
-//                                } else {
-//                                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0024"), "false");
-//                                }
-//                            } catch (SKFEException ex) {
-//                                //  Do we need to return with an error at this point?
-//                                //  Just throw an err msg and proceed.
-//                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0024"), "false");
-//                            }
-//                        }
                     }
 
                 } catch (Exception ex) {

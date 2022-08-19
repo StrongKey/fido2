@@ -18,8 +18,6 @@ import com.strongkey.skfs.fido.policyobjects.AuthenticationPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.DefinedExtensionsPolicyOptions;
 import com.strongkey.skfs.fido.policyobjects.FidoPolicyObject;
 import com.strongkey.skfs.fido.policyobjects.RpPolicyOptions;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2AuthenticationExtension;
-import com.strongkey.skfs.fido.policyobjects.extensions.Fido2Extension;
 import com.strongkey.skfs.messaging.replicateSKFEObjectBeanLocal;
 import com.strongkey.skfs.pojos.RegistrationSettings;
 import com.strongkey.skfs.txbeans.getFidoKeysLocal;
@@ -44,7 +42,6 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 
 @Stateless
 public class generateFido2PreauthenticateChallenge implements generateFido2PreauthenticateChallengeLocal {
@@ -146,6 +143,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
 
             String response = Json.createObjectBuilder()
                     .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObjectBuilder.build())
+                    .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0006")
                     .build().toString();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "FIDO 2.0 Response : " + response);
@@ -255,6 +253,7 @@ public class generateFido2PreauthenticateChallenge implements generateFido2Preau
 
             String response = Json.createObjectBuilder()
                     .add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, returnObjectBuilder.build())
+                    .add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0014")
                     .build().toString();
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "FIDO-MSG-2001",
                     "FIDO 2.0 Response : " + response);

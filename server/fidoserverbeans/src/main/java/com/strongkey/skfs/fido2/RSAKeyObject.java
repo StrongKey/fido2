@@ -19,6 +19,9 @@ import java.io.PushbackInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 public class RSAKeyObject extends FIDO2KeyObject {
 
@@ -112,5 +115,13 @@ public class RSAKeyObject extends FIDO2KeyObject {
         return e;
     }
 
+    public JsonObject toJson(){
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("kty", "RSA");
+        job.add("alg", SKFSCommon.getAlgFromIANACOSEAlg(alg));
+        job.add("n", org.bouncycastle.util.encoders.Hex.toHexString(n));
+        job.add("e", org.bouncycastle.util.encoders.Hex.toHexString(e));
+        return job.build();
+    }
 
 }

@@ -170,7 +170,7 @@ public class updateFIDOKeysUsername implements updateFIDOKeysUsernameLocal {
                         //add a new key
                         String addkeyresponse = addFidoKeyejb.execute(did, fk.getUserid(), newUsername, fk.getKeyhandle(), fk.getPublickey(), fk.getAppid(), fk.getTransports(),
                                 fk.getAttsid(), fk.getAttdid(), fk.getAttcid(), fk.getCounter(), fk.getFidoVersion(), fk.getFidoProtocol(), fk.getAaguid(), fk.getRegistrationSettings(),
-                                fk.getRegistrationSettingsVersion(), modify_location);
+                                fk.getRegistrationSettingsVersion(), modify_location, fk.getStatus());
 
                         JsonObject addkeyres = SKFSCommon.getJsonObjectFromString(addkeyresponse);
                         if (!addkeyres.getBoolean("status")) {
