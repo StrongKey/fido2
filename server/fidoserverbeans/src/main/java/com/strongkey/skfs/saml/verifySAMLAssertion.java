@@ -10,7 +10,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2001-2021 StrongAuth, Inc.
+ * Copyright (c) 2001-2022 StrongAuth, Inc.
  *
  * $Date: $
  * $Revision: $
@@ -30,33 +30,16 @@
  * *********************************************
  *
  */
-package com.strongkey.FIDO2JWTVerify;
+
+package com.strongkey.skfs.saml;
+
+import javax.ejb.Stateless;
 
 
-public class Main {
+@Stateless
+public class verifySAMLAssertion implements verifySAMLAssertionLocal {
 
-    private static final String usage = "\nUsage: java -jar FIDO2JWTVerify.jar  <did> <jwt> <username> <agent> <cip> <rpid> <jwt-truststore-location> <jwt-truststore-password> \n";
-    
-    private static String jwtpassword;
-    private static String jwttruststorelocation;
-    
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
 
-    public static void main(String[] args) throws Exception {
-
-        if (args.length < 8) {
-            System.err.println(usage);
-            return;
-        }
-
-        String did = args[0];
-        String jwt = args[1];
-        String username = args[2];
-        String agent = args[3];
-        String cip = args[4];
-        jwtpassword = args[7];
-        jwttruststorelocation = args[6];
-        String rpid = args[5];
-        Verify v = new Verify();
-        System.out.println("JWT Verified = " + v.verify(did, jwt, username, agent, cip, jwtpassword, jwttruststorelocation, rpid));
-    }
 }

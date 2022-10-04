@@ -49,6 +49,7 @@ public class AuthenticationRequest {
     public void setTxid(String txId) {
         payload.setTxid(txId);
     }
+    
 
     public JsonObject toJsonObject() {
         JsonObjectBuilder job = Json.createObjectBuilder();

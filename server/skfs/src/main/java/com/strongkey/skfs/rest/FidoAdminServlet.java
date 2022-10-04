@@ -116,7 +116,7 @@ public class FidoAdminServlet {
     private authenticateRestRequestBeanLocal lookupauthenticateRestRequestBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
+            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.7.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -124,7 +124,7 @@ public class FidoAdminServlet {
     private getFidoPolicyLocal lookupgetFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getFidoPolicy!com.strongkey.skfs.policybeans.getFidoPolicyLocal");
+            return (getFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.7.0/getFidoPolicy!com.strongkey.skfs.policybeans.getFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -132,7 +132,7 @@ public class FidoAdminServlet {
     private JWTVerifyLocal lookupJWTVerifyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (JWTVerifyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/JWTVerify!com.strongkey.skfs.jwt.JWTVerifyLocal");
+            return (JWTVerifyLocal) c.lookup("java:app/fidoserverbeans-4.7.0/JWTVerify!com.strongkey.skfs.jwt.JWTVerifyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -140,7 +140,7 @@ public class FidoAdminServlet {
     private deleteFidoPolicyLocal lookupdeleteFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (deleteFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/deleteFidoPolicy!com.strongkey.skfs.policybeans.deleteFidoPolicyLocal");
+            return (deleteFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.7.0/deleteFidoPolicy!com.strongkey.skfs.policybeans.deleteFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -149,7 +149,7 @@ public class FidoAdminServlet {
     private updateFidoPolicyLocal lookupActionFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFidoPolicy!com.strongkey.skfs.policybeans.updateFidoPolicyLocal");
+            return (updateFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.7.0/updateFidoPolicy!com.strongkey.skfs.policybeans.updateFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -158,7 +158,7 @@ public class FidoAdminServlet {
     private addFidoPolicyLocal lookupaddFidoPolicyLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (addFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.6.0/addFidoPolicy!com.strongkey.skfs.policybeans.addFidoPolicyLocal");
+            return (addFidoPolicyLocal) c.lookup("java:app/fidoserverbeans-4.7.0/addFidoPolicy!com.strongkey.skfs.policybeans.addFidoPolicyLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -167,7 +167,7 @@ public class FidoAdminServlet {
     private updateFIDOConfigurationLocal lookupupdateFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFIDOConfiguration!com.strongkey.skfs.txbeans.updateFIDOConfigurationLocal");
+            return (updateFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.7.0/updateFIDOConfiguration!com.strongkey.skfs.txbeans.updateFIDOConfigurationLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -175,7 +175,7 @@ public class FidoAdminServlet {
     private getAllConfigurationsBeanLocal lookupgetAllFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getAllConfigurationsBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getAllConfigurationsBean!com.strongkey.skfs.txbeans.getAllConfigurationsBeanLocal");
+            return (getAllConfigurationsBeanLocal) c.lookup("java:app/fidoserverbeans-4.7.0/getAllConfigurationsBean!com.strongkey.skfs.txbeans.getAllConfigurationsBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -183,7 +183,7 @@ public class FidoAdminServlet {
     private getFIDOConfigurationLocal lookupgetFIDOConfigurationLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getFIDOConfiguration!com.strongkey.skfs.txbeans.getFIDOConfigurationLocal");
+            return (getFIDOConfigurationLocal) c.lookup("java:app/fidoserverbeans-4.7.0/getFIDOConfiguration!com.strongkey.skfs.txbeans.getFIDOConfigurationLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -191,7 +191,7 @@ public class FidoAdminServlet {
     private deleteFIDOConfigurationsLocal lookupdeleteFidoConfigLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (deleteFIDOConfigurationsLocal) c.lookup("java:app/fidoserverbeans-4.6.0/deleteFIDOConfigurations!com.strongkey.skfs.txbeans.deleteFIDOConfigurationsLocal");
+            return (deleteFIDOConfigurationsLocal) c.lookup("java:app/fidoserverbeans-4.7.0/deleteFIDOConfigurations!com.strongkey.skfs.txbeans.deleteFIDOConfigurationsLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -199,7 +199,7 @@ public class FidoAdminServlet {
     private updateFIDOKeysUsernameLocal lookupupdateFIDOKeysUsernameLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (updateFIDOKeysUsernameLocal) c.lookup("java:app/fidoserverbeans-4.6.0/updateFIDOKeysUsername!com.strongkey.skfs.txbeans.updateFIDOKeysUsernameLocal");
+            return (updateFIDOKeysUsernameLocal) c.lookup("java:app/fidoserverbeans-4.7.0/updateFIDOKeysUsername!com.strongkey.skfs.txbeans.updateFIDOKeysUsernameLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -208,7 +208,7 @@ public class FidoAdminServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.7.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -217,7 +217,7 @@ public class FidoAdminServlet {
     private getUserKeysLocal lookupgetUserKeysLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (getUserKeysLocal) c.lookup("java:app/fidoserverbeans-4.6.0/getUserKeys!com.strongkey.skfs.txbeans.getUserKeysLocal");
+            return (getUserKeysLocal) c.lookup("java:app/fidoserverbeans-4.7.0/getUserKeys!com.strongkey.skfs.txbeans.getUserKeysLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }

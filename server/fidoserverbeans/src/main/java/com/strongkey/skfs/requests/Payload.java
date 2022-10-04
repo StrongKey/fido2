@@ -26,6 +26,8 @@ public class Payload {
     private String keyid;
     private String txid;
     private String txpayload;
+    private JsonObject ssoRequest;
+    private JsonObject ssoResponse;
 
 
     public String getUsername() {
@@ -115,6 +117,22 @@ public class Payload {
     public void setTxpayload(String txpayload) {
         this.txpayload = txpayload;
     }
+
+    public JsonObject getSSORequest() {
+        return ssoRequest;
+    }
+
+    public void setSSORequest(JsonObject ssoRequest) {
+        this.ssoRequest = ssoRequest;
+    }
+
+    public JsonObject getSSOResponse() {
+        return ssoResponse;
+    }
+
+    public void setSSOResponse(JsonObject ssoResponse) {
+        this.ssoResponse = ssoResponse;
+    }
     
     public JsonObject toJsonObject() {
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -150,6 +168,12 @@ public class Payload {
         }
         if (this.keyid != null) {
             job.add("keyid", keyid);
+        }
+        if (this.ssoRequest != null) {
+            job.add("ssoRequest", ssoRequest);
+        }
+        if (this.ssoResponse != null) {
+            job.add("ssoResponse", ssoResponse);
         }
         return job.build();
     }

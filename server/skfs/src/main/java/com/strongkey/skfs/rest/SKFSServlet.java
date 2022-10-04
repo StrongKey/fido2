@@ -62,7 +62,7 @@ public class SKFSServlet {
     private u2fServletHelperBeanLocal lookup_u2fServletHelperBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
+            return (u2fServletHelperBeanLocal) c.lookup("java:app/fidoserverbeans-4.7.0/u2fServletHelperBean!com.strongkey.skfs.txbeans.u2fServletHelperBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -71,7 +71,7 @@ public class SKFSServlet {
     private pingBeanLocal lookup_pingBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.6.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
+            return (pingBeanLocal) c.lookup("java:app/fidoserverbeans-4.7.0/pingBean!com.strongkey.skfs.txbeans.pingBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -80,7 +80,7 @@ public class SKFSServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.7.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -89,7 +89,7 @@ public class SKFSServlet {
     private authenticateRestRequestBeanLocal lookupauthenticateRestRequestBeanLocall() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
+            return (authenticateRestRequestBeanLocal) c.lookup("java:app/authenticationBeans-4.7.0/authenticateRestRequestBean!com.strongkey.auth.txbeans.authenticateRestRequestBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -324,6 +324,9 @@ public class SKFSServlet {
         AuthenticationRequest authentication = new AuthenticationRequest();
         authentication.setMetadata(authpayload.getJsonObject("strongkeyMetadata"));
         authentication.setResponse(authpayload.getJsonObject("publicKeyCredential"));
+        if (authpayload.containsKey("ssoRequest")) {
+            authentication.setSSORequest(authpayload.getJsonObject("ssoRequest"));
+        }
 
         boolean isAuthorized;
         if (svcinfoObj.getAuthtype().equalsIgnoreCase("password")) {
@@ -332,12 +335,12 @@ public class SKFSServlet {
                 authentication.getSVCInfo().setSVCUsername(svcinfoObj.getSvcusername());
             } catch (Exception ex) {
                 SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, SKFSCommon.getMessageProperty("FIDO-ERR-0003"), ex.getMessage());
-                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
-                }
+                return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0003") + ex.getMessage()).build();
+            }
             if (!isAuthorized) {
-                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0033", "");
-                    return Response.status(Response.Status.UNAUTHORIZED).build();
-                }
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0033", "");
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
         } else {
             if (!authRest.execute(svcinfoObj.getDid(), request, authentication.getPayload().toJsonObject().toString())) {
                 return Response.status(Response.Status.UNAUTHORIZED).build();

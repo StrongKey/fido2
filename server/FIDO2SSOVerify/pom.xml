@@ -4,15 +4,15 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.6.0</version>
+        <version>4.7.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.strongkey</groupId>
-    <artifactId>FIDO2JWTVerify</artifactId>
+    <artifactId>FIDO2SSOVerify</artifactId>
     <packaging>jar</packaging>
 
-    <name>FIDO2JWTVerify</name>
+    <name>FIDO2SSOVerify</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -36,6 +36,12 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.strongkey</groupId>
+            <artifactId>fidoserverbeans</artifactId>
+            <version>4.7.0</version>
             <type>jar</type>
         </dependency>
     </dependencies>
@@ -65,7 +71,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.strongkey.FIDO2JWTVerify.Main</mainClass>
+                            <mainClass>com.strongkey.FIDO2SSOVerify.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

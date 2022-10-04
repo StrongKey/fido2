@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fidoserver</artifactId>
         <groupId>com.strongkey</groupId>
-        <version>4.6.0</version>
+        <version>4.7.0</version>
          <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>com.strongkey</groupId>
             <artifactId>replicationEJB</artifactId>
-            <version>4.6.0</version>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
         
@@ -117,6 +117,12 @@
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.3</version>
             <type>jar</type>
         </dependency>
         <dependency>

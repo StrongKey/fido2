@@ -526,6 +526,9 @@ public class SKFSServlet {
         if (authpayload.containsKey("publicKeyCredential")) {
             authreq.setResponse(authpayload.getJsonObject("publicKeyCredential"));
         }
+        if (authpayload.containsKey("ssoRequest")) {
+            authreq.setSSORequest(authpayload.getJsonObject("ssoRequest"));
+        }
 
         HttpServletRequest request = (HttpServletRequest)context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
         System.out.println("IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost());

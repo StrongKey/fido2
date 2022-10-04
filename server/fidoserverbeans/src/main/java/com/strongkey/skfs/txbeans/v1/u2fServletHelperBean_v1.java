@@ -727,6 +727,12 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0017", "");
             return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0017"));
         }
+        JsonObject ssoRequest = (JsonObject) applianceCommon.getJsonValue(payload,
+                SKFSConstants.JSON_KEY_SERVLET_INPUT_SSO_REQUEST, "JsonObject");
+        String samlRequest = null;
+        if (ssoRequest.containsKey("saml")) {
+            samlRequest = ssoRequest.getString("saml");
+        }
 
         String authenticationresponse = response.toString();
         String authenticationmetadata = metadata.toString();
@@ -740,7 +746,8 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     protocol,
                     "authentication",
                     agent,
-                    cip);
+                    cip,
+                    samlRequest);
         } catch (SKFEException ex) {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0034", "");
             return SKFSCommon.buildAuthenticateResponse("", "", SKFSCommon.getMessageProperty("FIDO-ERR-0034"));
@@ -908,7 +915,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             String authresponse,
             String authmetadata,
             String protocol,
-            String method, String agent, String cip) throws SKFEException {
+            String method, String agent, String cip, String samlrequest) throws SKFEException {
         /* Check for needed fields in authresponse and metadata */
         String logs = "";
         String errmsg = "";
@@ -1155,7 +1162,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
             }
             responseJSON = SKFSCommon.buildAuthenticateResponse(response, logs, errmsg);
         } else {
-            responseJSON = FIDO2Authejb.execute(Long.parseLong(did), authresponse, authmetadata, method, null,null, agent, cip);
+            responseJSON = FIDO2Authejb.execute(Long.parseLong(did), authresponse, authmetadata, method, null,null, agent, cip, samlrequest);
         }
 
         // Build the output json object
@@ -1357,6 +1364,7 @@ public class u2fServletHelperBean_v1 implements u2fServletHelperBeanLocal_v1 {
                     authorizationmetadata,
                     protocol,
                     "authorization",
+                    "",
                     "",
                     "");
         } catch (SKFEException ex) {

@@ -182,16 +182,16 @@ public class FIDO2RegistrationBean implements FIDO2RegistrationBeanLocal {
             String rawid=null, id=null, type=null, authattachment=null;
             // add id, rawid, and type and optionally attachment
             if (responseObject.containsKey(SKFSConstants.JSON_KEY_ID)) {
-                id = responseObject.getString(SKFSConstants.JSON_KEY_ID);
+                id = responseObject.getString(SKFSConstants.JSON_KEY_ID, null);
             }
             if (responseObject.containsKey(SKFSConstants.JSON_KEY_RAW_ID)) {
-                rawid = responseObject.getString(SKFSConstants.JSON_KEY_RAW_ID);
+                rawid = responseObject.getString(SKFSConstants.JSON_KEY_RAW_ID, null);
             }
             if (responseObject.containsKey(SKFSConstants.FIDO2_ATTR_ATTACHMENT)) {
-                authattachment = responseObject.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT);
+                authattachment = responseObject.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT, null);
             }
             if (responseObject.containsKey(SKFSConstants.JSON_KEY_REQUEST_TYPE)) {
-                type = responseObject.getString(SKFSConstants.JSON_KEY_REQUEST_TYPE);
+                type = responseObject.getString(SKFSConstants.JSON_KEY_REQUEST_TYPE, null);
             }
             //add in details to response if enabled
             if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.responsedetail").equalsIgnoreCase("true")) {

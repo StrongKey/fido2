@@ -76,7 +76,7 @@ public class SKFEServlet {
     private u2fServletHelperBeanLocal_v1 lookup_u2fServletHelperBeanLocal_v1() {
         try {
             Context c = new InitialContext();
-            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.6.0/u2fServletHelperBean_v1!com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1");
+            return (u2fServletHelperBeanLocal_v1) c.lookup("java:app/fidoserverbeans-4.7.0/u2fServletHelperBean_v1!com.strongkey.skfs.txbeans.v1.u2fServletHelperBeanLocal_v1");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
@@ -85,7 +85,7 @@ public class SKFEServlet {
     private authorizeLdapUserBeanLocal lookupauthorizeLdapUserBeanLocal() {
         try {
             Context c = new InitialContext();
-            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.6.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
+            return (authorizeLdapUserBeanLocal) c.lookup("java:app/authenticationBeans-4.7.0/authorizeLdapUserBean!com.strongkey.auth.txbeans.authorizeLdapUserBeanLocal");
         } catch (NamingException ne) {
             throw new RuntimeException(ne);
         }
