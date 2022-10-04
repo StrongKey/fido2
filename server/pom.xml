@@ -63,7 +63,7 @@
         <module>skfs</module>
         <module>skfsclient</module>
         <module>FIDO2Simulator</module>
-        <module>FIDO2JWTVerify</module>
+        <module>FIDO2SSOVerify</module>
         <module>fidoserverEAR</module>
     </modules>
 </project>
