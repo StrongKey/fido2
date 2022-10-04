@@ -13,7 +13,9 @@ import com.strongkey.skfsclient.common.Constants;
 import com.strongkey.skfsclient.common.common;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -29,6 +31,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.bouncycastle.util.encoders.Base64;
 
 public class RestFidoAuthenticate {
 
@@ -40,7 +43,8 @@ public class RestFidoAuthenticate {
                                     String username,
                                     String origin,
                                     int auth_counter,
-                                    String crossOrigin) throws Exception
+                                    String crossOrigin,
+                                    Boolean samlrequest) throws Exception
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -216,6 +220,14 @@ public class RestFidoAuthenticate {
                 .build();
         auth.setMetadata(auth_metadata);
         auth.setResponse(auth_response);
+        if (samlrequest) {
+            String issueInstant = LocalDateTime.now().withNano(0) + "Z";
+
+            String uuid = UUID.randomUUID().toString();
+
+            String samlrequestString = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" AssertionConsumerServiceURL=\"https://loadbalancer.strongkey.com/cgi/samlauth\" Destination=\"https://saka445.strongkey.com:8181/skso/saml\" ForceAuthn=\"false\" ID=\"" + uuid + "\" IssueInstant=\"" + issueInstant + "\" ProtocolBinding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\" Version=\"2.0\"><saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">strongkey.com</saml:Issuer></samlp:AuthnRequest>";
+            auth.getPayload().setSSORequest(javax.json.Json.createObjectBuilder().add("saml", Base64.toBase64String(samlrequestString.getBytes())).build());
+        }
 
         // Prepare for POST call
         json = auth.toJsonObject().toString();
@@ -276,6 +288,7 @@ public class RestFidoAuthenticate {
             response.close();
         }
 
+        
         System.out.println("\nAuthentication Complete.");
         System.out.println("*******************************");
     }
