@@ -306,7 +306,7 @@ public class generateFido2PreregisterChallenge implements generateFido2Preregist
         if(rpRequestedAuthSelect != null){
             String rpRequestedAttachment = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_ATTACHMENT, null);
 //            Boolean rpRequestedRequireResidentKey = SKFSCommon.handleNonExistantJsonBoolean(rpRequestedAuthSelect, SKFSConstants.FIDO2_ATTR_RESIDENTKEY);
-            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);;
+            String rpRequestedRequireResidentKey = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_RESIDENTKEY, null);
             String rpRequestedUserVerification = rpRequestedAuthSelect.getString(SKFSConstants.FIDO2_ATTR_USERVERIFICATION, null);
 
             if(regOp.getAuthenticatorAttachment().contains(rpRequestedAttachment)){

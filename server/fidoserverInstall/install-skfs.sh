@@ -13,7 +13,7 @@
 ##########################################
 ##########################################
 # Fido Server Info
-FIDOSERVER_VERSION=4.6.0
+FIDOSERVER_VERSION=4.7.0
 
 # Server Passwords
 LINUX_PASSWORD=ShaZam123
@@ -23,15 +23,28 @@ MARIA_SKFSDBUSER_PASSWORD=AbracaDabra
 XMXSIZE=512m
 BUFFERPOOLSIZE=512m
 
+# SSO
+USE_DEFAULT_KEYS=N # Setting this flag to 'Y' will skip JWT and SAML key generation, instead using the default keys found in the SKFS distribution
+
 # JWT
 RPID=strongkey.com
 JWT_CREATE=true
-JWT_DN='CN=StrongKey KeyAppliance,O=StrongKey'
 JWT_DURATION=30
+JWT_DN='CN=StrongKey KeyAppliance,O=StrongKey'
 JWT_KEYGEN_DN='/C=US/ST=California/L=Cupertino/O=StrongAuth/OU=Engineering'
 JWT_CERTS_PER_SERVER=3
 JWT_KEYSTORE_PASS=Abcd1234!
 JWT_KEY_VALIDITY=365
+
+# SAML
+SAML_RESPONSE=false
+SAML_CITRIX=false
+SAML_DURATION=15
+SAML_KEYGEN_DN='/C=US/ST=California/L=Cupertino/O=StrongAuth/OU=Engineering'
+SAML_CERTS_PER_SERVER=3
+SAML_TIMEZONE=UTC
+SAML_KEYSTORE_PASS=Abcd1234!
+SAML_KEY_VALIDITY=365
 
 # MDS
 MDS_ENABLED=true        # Property that enables MDS download
@@ -535,6 +548,13 @@ if [ $INSTALL_FIDO = 'Y' ]; then
 
 skfs.cfg.property.jwt.create=$JWT_CREATE
 
+skfs.cfg.property.saml.response=$SAML_RESPONSE
+skfs.cfg.property.saml.certsperserver=$SAML_CERTS_PER_SERVER
+skfs.cfg.property.saml.timezone=$SAML_TIMEZONE
+skfs.cfg.property.saml.citrix=$SAML_CITRIX
+skfs.cfg.property.saml.assertion.duration=$SAML_DURATION
+skfs.cfg.property.saml.issuer.entity.name=https://$(hostname)/
+
 skfs.cfg.property.mds.enabled=$MDS_ENABLED
 skfs.cfg.property.return.MDS=$MDS_RETURN
 skfs.cfg.property.return.MDS.webservices=$MDS_RETURN_WS
@@ -546,7 +566,8 @@ skfs.cfg.property.apple.rootca.url=$STRONGKEY_HOME/skfs/applerootca.crt
 
 skfs.cfg.property.return.responsedetail=$RESPONSE_DETAIL
 skfs.cfg.property.return.responsedetail.webservices=$RESPONSE_DETAIL_WEBSERVICES
-skfs.cfg.property.return.responsedetail.format=$RESPONSE_DETAIL_FORMAT" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
+skfs.cfg.property.return.responsedetail.format=$RESPONSE_DETAIL_FORMAT
+" >> $STRONGKEY_HOME/skfs/etc/skfs-configuration.properties
 	chown -R strongkey:strongkey $STRONGKEY_HOME/skfs
 	
 	mkdir -p $STRONGKEY_HOME/fido
@@ -617,15 +638,29 @@ EOFAPPJSON
         	sed -i "/^\[/a \"           https://$fqdn\"," $GLASSFISH_HOME/domains/domain1/docroot/app.json
 	done
 
-	# Generate JWT keystores
-	$SKFS_SOFTWARE/keygen-jwt.sh $JWT_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $JWT_CERTS_PER_SERVER $SAKA_DID $JWT_KEYSTORE_PASS $JWT_KEY_VALIDITY
-	if [ ${POLICY_DOMAINS^^} = "ALL" ]; then
-		for (( DID = 2; DID <= 8 ; DID++ ))
-		do
-			$SKFS_SOFTWARE/keygen-jwt.sh $JWT_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $JWT_CERTS_PER_SERVER $DID $JWT_KEYSTORE_PASS $JWT_KEY_VALIDITY
-		done
+	cd $SKFS_HOME/keystores
+	if [ $USE_DEFAULT_KEYS = 'Y' ]; then
+		cp $SKFS_SOFTWARE/jwtsigning*.bcfks $SKFS_SOFTWARE/samlsigning*.bcfks $SKFS_HOME/keystores
+	else
+		# Generate JWT keystores
+		$SKFS_SOFTWARE/keygen-jwt.sh $JWT_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $JWT_CERTS_PER_SERVER $SAKA_DID $JWT_KEYSTORE_PASS $JWT_KEY_VALIDITY
+		if [ ${POLICY_DOMAINS^^} = "ALL" ]; then
+			for (( DID = 2; DID <= 8 ; DID++ ))
+			do
+				$SKFS_SOFTWARE/keygen-jwt.sh $JWT_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $JWT_CERTS_PER_SERVER $DID $JWT_KEYSTORE_PASS $JWT_KEY_VALIDITY
+			done
+		fi
+
+		# Generate SAML keystores
+		$SKFS_SOFTWARE/keygen-saml.sh $SAML_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $SAML_CERTS_PER_SERVER $SAKA_DID $SAML_KEYSTORE_PASS $SAML_KEY_VALIDITY
+		if [ ${POLICY_DOMAINS^^} = "ALL" ]; then
+			for (( DID = 2; DID <= 8 ; DID++ ))
+			do
+				$SKFS_SOFTWARE/keygen-saml.sh $SAML_KEYGEN_DN $($MARIA_HOME/bin/mysql -u skfsdbuser -p${MARIA_SKFSDBUSER_PASSWORD} skfs -B --skip-column-names -e "select count(fqdn) from servers;") $SAML_CERTS_PER_SERVER $DID $SAML_KEYSTORE_PASS $SAML_KEY_VALIDITY
+			done
+		fi
 	fi
-	chown strongkey:strongkey $SKFS_HOME/keystores/jwtsigningtruststore.bcfks $SKFS_HOME/keystores/jwtsigningkeystore.bcfks
+	chown -R strongkey:strongkey $SKFS_HOME/keystores
 
 	# Add users to other policy domains
 	if [ ${POLICY_DOMAINS^^} = "ALL" ]; then

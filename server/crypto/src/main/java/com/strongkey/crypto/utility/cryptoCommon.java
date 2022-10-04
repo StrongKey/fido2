@@ -703,7 +703,7 @@ public final class cryptoCommon {
                         jwtcertlist.add(cert);
                     }
                 }
-              }
+            }
             // Setup signing instances
             int pvki = 0;
             BlockingQueue<List> jwtsignq = new LinkedBlockingQueue<List>();
@@ -723,8 +723,8 @@ public final class cryptoCommon {
                 if(pvki >= certPerServer){
                     pvki=0;
                 } 
-             }
-             jwtsignqMap.put(did, jwtsignq);
+            }
+            jwtsignqMap.put(did, jwtsignq);
         } catch (KeyStoreException | InvalidKeySpecException | NoSuchAlgorithmException | UnrecoverableEntryException | IOException |  InterruptedException  ex) {
             ex.printStackTrace();
             cryptoCommon.logp(Level.SEVERE, classname, "getJWTSignatureSigningKeys", "CRYPTO-ERR-2506", ex.getLocalizedMessage());
@@ -785,7 +785,7 @@ public final class cryptoCommon {
     }
     public static SortedMap<BigInteger,String> getJWTSerialAliasMap(){
         return jwtcertserialmap;
-    }
+    } 
     
     
     

@@ -15,6 +15,7 @@ import com.strongkey.crypto.utility.cryptoCommon;
 import com.strongkey.skce.utilities.skceCommon;
 import com.strongkey.skfs.messaging.SKCEBacklogProcessor;
 import com.strongkey.skfs.policybeans.cacheMDSv3Local;
+import com.strongkey.skfs.utilities.SKFEException;
 import com.strongkey.skfs.utilities.SKFSCommon;
 import com.strongkey.skfs.utilities.SKFSConstants;
 import com.strongkey.skfs.utilities.SKFSLogger;
@@ -109,8 +110,12 @@ public class startServices {
                         cryptoCommon.loadJWTSigningKeys(didString, sid.toString());
                         cryptoCommon.loadJWTVerifyKeys(didString, sid.toString());
                     }
+                    if (SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.response").equalsIgnoreCase("true")) {
+                        SKFSCommon.loadSAMLSigningKeys(didString, sid.toString());
+                        SKFSCommon.loadSAMLVerifyKeys(didString, sid.toString());
+                    }
                     
-                } catch (CryptoException ex) {
+                } catch (CryptoException | SKFEException ex) {
                     ex.printStackTrace();
                 }
             }

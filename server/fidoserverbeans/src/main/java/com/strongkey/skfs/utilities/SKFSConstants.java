@@ -98,6 +98,7 @@ public class SKFSConstants {
     public static final String JSON_KEY_SERVLET_INPUT_RESPONSE = "response";
     public static final String JSON_KEY_SERVLET_RESPONSE_CODE = "responseCode";
     public static final String JSON_KEY_SERVLET_INPUT_METADATA = "metadata";
+    public static final String JSON_KEY_SERVLET_INPUT_SSO_REQUEST = "ssoRequest";
 
     /**
      * FIDO Registration, Authentication message JSON keys
@@ -441,6 +442,11 @@ public class SKFSConstants {
     public static final String FIDO2_CONST_ATTESTATION_NONE = "none";
     public static final String FIDO2_CONST_ATTESTATION_INDIRECT = "indirect";
     public static final String FIDO2_CONST_ATTESTATION_DIRECT = "direct";
+    
+    /**
+     * SAML CONFIG
+     */
+     public static final String SAML_VERSION = "2.0";
 
 
         /**

@@ -42,7 +42,7 @@ public class FidoEngine {
                      + "| CP (createpolicy) | PP (updatepolicy) | DP (deletepolicy) | GP (getpolicy)\n"
                      + "| GC (getconfiguration) | UC (updateconfiguration) | DC (deleteconfiguration)\n"
                      + "       java -jar skfsclient.jar R <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <crossorigin>\n"
-                     + "       java -jar skfsclient.jar A <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <authcounter> <crossorigin>\n"
+                     + "       java -jar skfsclient.jar A <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <origin> <authcounter> <crossorigin> <saml>\n"
                      + "       java -jar skfsclient.jar AZ <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username> <txid> <txpayload> <origin> <authcounter> <crossorigin> <verify>\n"
                      + "       java -jar skfsclient.jar G <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <username>\n"
                      + "       java -jar skfsclient.jar U <hostport> <did> <wsprotocol> <authtype> [ <accesskey> <secretkey> | <svcusername> <svcpassword> ] <random-id> <displayname> <status>\n"
@@ -115,6 +115,7 @@ public class FidoEngine {
         String status;
         String origin;
         String crossOrigin;
+        String saml;
         int auth_counter;
         String configkey;
         String configvalue;
@@ -170,7 +171,7 @@ public class FidoEngine {
                     break;
 
                 case Constants.COMMANDS_AUTHENTICATE:
-                    if (args.length != 11) {
+                    if (args.length != 12) {
                         System.out.println("Missing arguments...\n" + usage);
                         break;
                     }
@@ -178,11 +179,15 @@ public class FidoEngine {
                     origin          = args[8];
                     auth_counter    = Integer.parseInt(args[9]);
                     crossOrigin          = args[10];
-                    
+                    saml          = args[11];
+                    Boolean samlreq = Boolean.FALSE;
+                    if(saml.equalsIgnoreCase("yes")||saml.equalsIgnoreCase("true")){
+                        samlreq = Boolean.TRUE;
+                    }
                     if (wsprotocol.equalsIgnoreCase(Constants.PROTOCOL_REST)) {
-                        RestFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin);
+                        RestFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin, samlreq);
                     } else {
-                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin);
+                        SoapFidoAuthenticate.authenticate(hostport, did, authtype, credential1, credential2, username, origin, auth_counter, crossOrigin, samlreq);
                     }
 
                     System.out.println("\nDone with Authenticate!\n");

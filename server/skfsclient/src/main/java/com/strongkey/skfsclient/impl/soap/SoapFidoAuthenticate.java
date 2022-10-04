@@ -33,6 +33,8 @@ import com.strongkey.skfsclient.common.common;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -43,6 +45,7 @@ import javax.xml.ws.WebServiceException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.bouncycastle.util.encoders.Base64;
 
 public class SoapFidoAuthenticate  {
 
@@ -54,7 +57,8 @@ public class SoapFidoAuthenticate  {
                                     String username,
                                     String origin,
                                     int auth_counter,
-                                    String crossOrigin)
+                                    String crossOrigin,
+                                    Boolean samlrequest)
     {
         /*
         * authtype    -> |HMAC     |PASSWORD   |
@@ -212,6 +216,15 @@ public class SoapFidoAuthenticate  {
             payloadObj = new Payload();
             payloadObj.setMetadata(auth_metadata);
             payloadObj.setResponse(auth_response);
+            if (samlrequest) {
+                String issueInstant = LocalDateTime.now().withNano(0) + "Z";
+
+                String uuid = UUID.randomUUID().toString();
+
+                String samlrequestString = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" AssertionConsumerServiceURL=\"https://loadbalancer.strongkey.com/cgi/samlauth\" Destination=\"https://saka445.strongkey.com:8181/skso/saml\" ForceAuthn=\"false\" ID=\"" + uuid + "\" IssueInstant=\"" + issueInstant + "\" ProtocolBinding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\" Version=\"2.0\"><saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">strongkey.com</saml:Issuer></samlp:AuthnRequest>";
+                payloadObj.setSSORequest(javax.json.Json.createObjectBuilder().add("saml", Base64.toBase64String(samlrequestString.getBytes())).build());
+            }
+            
             payload = payloadObj.toJsonObject().toString();
             payloadHash = common.calculateSha256(payloadObj.toJsonObject().toString());
 

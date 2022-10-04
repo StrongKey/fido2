@@ -31,7 +31,7 @@
  *
  */
 
-package com.strongkey.FIDO2JWTVerify;
+package com.strongkey.JWTVerify;
 
 import java.io.FileInputStream;
 import java.io.IOException;

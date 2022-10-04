@@ -50,6 +50,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import org.bouncycastle.util.encoders.Base64;
+import com.strongkey.skfs.saml.getSAMLAssertionLocal;
 
 @Stateless
 public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
@@ -69,22 +70,24 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
     getCachedFidoPolicyMDSLocal getpolicybean;
     @EJB
     JWTCreateLocal createJWT;
-    @EJB (beanName = "getAuthenticationDetailsDefault")
+    @EJB
+    getSAMLAssertionLocal createSAML;
+    @EJB(beanName = "getAuthenticationDetailsDefault")
     getAuthenticationDetailsLocal getauthdetaildefaultsejb;
     @EJB(beanName = "getAuthenticationDetailsWebauthn2")
     getAuthenticationDetailsLocal getauthdetailswebauthn2ejb;
 
     @Override
-    public String execute(Long did, String authresponse, String authmetadata, String method, String txid, String txpayload, String agent, String cip) {
+    public String execute(Long did, String authresponse, String authmetadata, String method, String txid, String txpayload, String agent, String cip, String samlrequest) {
 
         String userAgent, clientIP;
         String sessiontype = "";
         String wsresponse = "", logs = "", errmsg = "";
-        String aaguid= "";
-        String userHandle ="", jwt = "";
+        String aaguid = "";
+        String userHandle = "", jwt = "", saml = "";
         JsonObject txdetail = null;
         JsonArray FIDOAuthRefs = null;
-        String signature ;
+        String signature;
         String browserdataJson;
         FidoKeys key = null;
         FIDO2AuthenticatorData authenticatorData = new FIDO2AuthenticatorData();
@@ -169,7 +172,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             String bdnonce = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_NONCE, "String"); //jsonObject.getString(SKFSConstants.JSON_KEY_NONCE);
             String bdorigin = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_SERVERORIGIN, "String"); //jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
             Boolean crossOrigin = (Boolean) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_CROSSORIGIN, "Boolean"); //jsonObject.getString(SKFSConstants.JSON_KEY_SERVERORIGIN);
-            if(crossOrigin == null){
+            if (crossOrigin == null) {
                 crossOrigin = Boolean.FALSE;
             }
 //            String bdhashAlgo = (String) applianceCommon.getJsonValue(browserdataJson, SKFSConstants.JSON_KEY_HASH_ALGORITHM, "String"); // jsonObject.getString(SKFSConstants.JSON_KEY_HASH_ALGORITHM);
@@ -199,14 +202,13 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             if (clientIP == null) {
                 clientIP = cip;
             }
-            
+
             userAgent = (String) applianceCommon.getJsonValue(authmetadata,
                     SKFSConstants.FIDO_METADATA_KEY_CLIENT_USERAGENT, "String");
             if (userAgent == null) {
                 userAgent = agent;
             }
-              
-              
+
             String origin = (String) applianceCommon.getJsonValue(authmetadata,
                     SKFSConstants.FIDO_METADATA_KEY_ORIGIN, "String");
 
@@ -264,7 +266,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
             SKFSLogger.logp(SKFSConstants.SKFE_LOGGER, Level.FINE, classname, "execute", "FIDO-MSG-2001", "Signature : " + signature);
 
             byte[] authData = java.util.Base64.getUrlDecoder().decode(authenticatorObject);
-            
+
             authenticatorData.decodeAuthData(authData);
 
             String username_received = (String) applianceCommon.getJsonValue(authmetadata,
@@ -357,14 +359,13 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     throw new SKFEException(SKFSCommon.getMessageProperty("FIDO-ERR-0020"));
                 }
             }
-            
+
             //  3. Do processing
             //  fetch the user public key from the session map.
             String userpublickey = user.getUserPublicKey();
             regkeyid = user.getFkid();
             serverid = user.getSkid();
 
-            
             FidoKeysInfo fkinfo = (FidoKeysInfo) skceMaps.getMapObj().get(SKFSConstants.MAP_FIDO_KEYS, serverid + "-" + did + "-" + regkeyid);
             if (fkinfo != null) {
                 key = fkinfo.getFk();
@@ -381,50 +382,50 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
 
             String rpId = fidoPolicy.getRpOptions().getId();
             String rpidServletExtracted;
-            
-                if (rpId == null) {
-                    rpidServletExtracted = originURI.getHost();
-                } else {
-                    System.out.println("rpidhashfrompolicy = " + Base64.toBase64String(SKFSCommon.getDigestBytes(rpId, "SHA256")));
-                    //check if the origin received is rpid+1 if not then reject it
-                    if (origin.startsWith("android")) {
-                        rpidServletExtracted = rpId;
-                    } else {
-                        String originwithoutSchemePort;
-                        if (origin.startsWith("https")) {
-                            originwithoutSchemePort = origin.substring(8).split(":")[0];
-                        } else {
-                            //reject it
-                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                            throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                    + " RPID Hash invalid'"));
-                        }
-                        if (!crossOrigin) {
-                            if (!originwithoutSchemePort.endsWith(rpId)) {
-                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                        + " RPID Hash invalid'"));
-                            }
 
-                            String origin2 = originwithoutSchemePort.replace(rpId, "");
-                            if (origin2.split("\\.").length > 1) {
-                                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
-                                throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
-                                        + " RPID Hash invalid'"));
-                            }
-                        }
-                        rpidServletExtracted = rpId;
+            if (rpId == null) {
+                rpidServletExtracted = originURI.getHost();
+            } else {
+                System.out.println("rpidhashfrompolicy = " + Base64.toBase64String(SKFSCommon.getDigestBytes(rpId, "SHA256")));
+                //check if the origin received is rpid+1 if not then reject it
+                if (origin.startsWith("android")) {
+                    rpidServletExtracted = rpId;
+                } else {
+                    String originwithoutSchemePort;
+                    if (origin.startsWith("https")) {
+                        originwithoutSchemePort = origin.substring(8).split(":")[0];
+                    } else {
+                        //reject it
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                + " RPID Hash invalid'"));
                     }
-                
                     if (!crossOrigin) {
-                        if (!Base64.toBase64String(authenticatorData.getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
+                        if (!originwithoutSchemePort.endsWith(rpId)) {
+                            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                            throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                    + " RPID Hash invalid'"));
+                        }
+
+                        String origin2 = originwithoutSchemePort.replace(rpId, "");
+                        if (origin2.split("\\.").length > 1) {
                             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
                             throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
                                     + " RPID Hash invalid'"));
                         }
                     }
+                    rpidServletExtracted = rpId;
+                }
+
+                if (!crossOrigin) {
+                    if (!Base64.toBase64String(authenticatorData.getRpIdHash()).equals(Base64.toBase64String(SKFSCommon.getDigestBytes(rpidServletExtracted, "SHA256")))) {
+                        SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-2001", " RPID Hash invalid");
+                        throw new SKIllegalArgumentException(SKFSCommon.buildReturn(SKFSCommon.getMessageProperty("FIDO-ERR-2001")
+                                + " RPID Hash invalid'"));
+                    }
+                }
             }
-            
+
             if (key != null) {
                 RegistrationSettings rs = RegistrationSettings.parse(key.getRegistrationSettings(), key.getRegistrationSettingsVersion());
                 String signingKeyType = getKeyTypeFromRegSettings(rs);
@@ -451,7 +452,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                 //  update the sign counter value in the database with the new counter value.
                 String jparesult = updatekeybean.execute(serverid, did, regkeyid, authenticatorData.getCounterValueAsInt(), modifyloc);
                 JsonObject jo;
-                try (JsonReader jr = Json.createReader(new StringReader(jparesult))) {
+                try ( JsonReader jr = Json.createReader(new StringReader(jparesult))) {
                     jo = jr.readObject();
                 }
                 Boolean status = jo.getBoolean(SKFSConstants.JSON_KEY_FIDOJPA_RETURN_STATUS);
@@ -468,8 +469,13 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                 switch (method) {
                     case "authentication":
                         wsresponse = "Successfully processed sign response";
-                        if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.jwt.create").equalsIgnoreCase("true")){
-                            jwt = createJWT.execute(did.toString(), username, userAgent, clientIP , rpidServletExtracted);
+                        if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.jwt.create").equalsIgnoreCase("true")) {
+                            jwt = createJWT.execute(did.toString(), username, userAgent, clientIP, rpidServletExtracted);
+                        }
+                        if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.saml.response").equalsIgnoreCase("true")) {
+                            if (samlrequest != null && !samlrequest.isEmpty()) {
+                                saml = createSAML.execute(did.toString(), username, samlrequest);
+                            }
                         }
                         break;
                     case "authorization":
@@ -480,8 +486,8 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                                 .add(SKFSConstants.TX_NONCE, user.getInitnonce())
                                 .add(SKFSConstants.TX_TIMESTAMP, user.getTxtimestamp())
                                 .add(SKFSConstants.TX_CHALLENGE, user.getNonce())
-                        .build();
-                        
+                                .build();
+
                         JsonObjectBuilder fidorefobjb = Json.createObjectBuilder();
                         JsonArrayBuilder fidorefarrb = Json.createArrayBuilder();
                         fidorefobjb.add("protocol", SKFSConstants.FIDO_PROTOCOL_VERSION_2_0);
@@ -493,8 +499,8 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                         fidorefobjb.add(SKFSConstants.JSON_KEY_CLIENTDATAJSON, browserdata);
                         fidorefobjb.add("aaguid", key.getAaguid());
                         fidorefobjb.add("authorizationTime", new Date().getTime());
-                        fidorefobjb.add("uv",authenticatorData.isUserVerified());
-                        fidorefobjb.add("up",authenticatorData.isUserPresent());
+                        fidorefobjb.add("uv", authenticatorData.isUserVerified());
+                        fidorefobjb.add("up", authenticatorData.isUserPresent());
                         fidorefobjb.add(SKFSConstants.TX_PUBLIC_KEY, key.getPublickey());
                         fidorefobjb.add(SKFSConstants.JSON_KEY_SIGNATURE, signature);
                         fidorefobjb.add("usedForThisTransaction", Boolean.TRUE);
@@ -506,8 +512,7 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     default:
                         break;
                 }
-                
-                        
+
             } else {
                 throw new IllegalStateException("Unable to retrieve FIDO key from database");
             }
@@ -519,29 +524,29 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     + ex.getLocalizedMessage()));
         }
         String responseJSON;
-        if(method.equalsIgnoreCase("authorization")){
-            
+        if (method.equalsIgnoreCase("authorization")) {
+
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, wsresponse);
             job.add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0016");
             job.add(SKFSConstants.TX_DETAIL, txdetail);
             job.add(SKFSConstants.FIDOAuthenticatorReferences, FIDOAuthRefs);
             responseJSON = job.build().toString();
-        }else{
+        } else {
             //call jwtcreate to generate a jwt
             JsonObjectBuilder job = Json.createObjectBuilder();
             job.add(SKFSConstants.JSON_KEY_SERVLET_RETURN_RESPONSE, wsresponse);
             job.add(SKFSConstants.JSON_KEY_SERVLET_RESPONSE_CODE, "FIDO-MSG-0008");
-            if(SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")){
-                if(SKFSCommon.containsMDSWSList("A")){
+            if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.MDS").equalsIgnoreCase("true")) {
+                if (SKFSCommon.containsMDSWSList("A")) {
                     if (SKFSCommon.containsMdsentry(aaguid)) {
                         job.add("mdsEntry", SKFSCommon.getMdsentryfromMap(aaguid));
-                    }else{
+                    } else {
                         job.addNull("mdsEntry");
                     }
                 }
             }
-            
+
             if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.responsedetail").equalsIgnoreCase("true")) {
                 if (SKFSCommon.containsDetailsWSList("A")) {
                     if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.return.responsedetail.format").trim().equalsIgnoreCase("webauthn2")) {
@@ -589,11 +594,16 @@ public class FIDO2AuthenticateBean implements FIDO2AuthenticateBeanLocal {
                     job.add("keyInfo", keyJsonBuilder.build());
                 }
             }
-            
+
             job.add("jwt", jwt);
+            if (SKFSCommon.getConfigurationProperty(did, "skfs.cfg.property.saml.response").equalsIgnoreCase("true")) {
+                if (samlrequest != null && !samlrequest.isEmpty()) {
+                    job.add("saml", java.util.Base64.getEncoder().encodeToString(saml.getBytes()));
+                }
+            }
             responseJSON = job.build().toString();
         }
-         
+
         return responseJSON;
     }
 

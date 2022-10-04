@@ -12,6 +12,6 @@ import javax.ejb.Local;
 @Local
 public interface FIDO2AuthenticateBeanLocal {
 
-    public String execute(Long did, String authneticationresponse, String authenticationmetadata, String method, String txid, String txpayload, String agent, String cip);
+    public String execute(Long did, String authneticationresponse, String authenticationmetadata, String method, String txid, String txpayload, String agent, String cip, String samlrequest);
 
 }

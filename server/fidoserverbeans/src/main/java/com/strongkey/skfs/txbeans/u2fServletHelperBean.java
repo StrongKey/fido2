@@ -1047,7 +1047,11 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 responseJSON = SKFSCommon.buildReturn("Successfully processed authorization response");
             } else {
                 try {
-                    responseJSON = FIDO2Authejb.execute(did, authentication.getPayload().getResponse().toString(), authentication.getPayload().getMetadata().toString(), "authentication", null ,null, agent, cip);
+                    if (authentication.getPayload().getSSORequest() == null) {
+                        responseJSON = FIDO2Authejb.execute(did, authentication.getPayload().getResponse().toString(), authentication.getPayload().getMetadata().toString(), "authentication", null ,null, agent, cip, null);
+                    } else {
+                        responseJSON = FIDO2Authejb.execute(did, authentication.getPayload().getResponse().toString(), authentication.getPayload().getMetadata().toString(), "authentication", null ,null, agent, cip, authentication.getPayload().getSSORequest().getString("saml"));
+                    }
                 } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
                 }
@@ -1108,8 +1112,7 @@ public class u2fServletHelperBean implements u2fServletHelperBeanLocal {
                 return Response.status(Response.Status.NOT_IMPLEMENTED).entity("U2F not being implemeted").build();
             } else {
                 try {
-                    responseJSON = FIDO2Authejb.execute(did, authentication.getPayload().getResponse().toString(), authentication.getPayload().getMetadata().toString(), "authorization",
-                            authentication.getPayload().getTxid(), authentication.getPayload().getTxpayload(), "", "");
+                    responseJSON = FIDO2Authejb.execute(did, authentication.getPayload().getResponse().toString(), authentication.getPayload().getMetadata().toString(), "authorization", authentication.getPayload().getTxid(), authentication.getPayload().getTxpayload(), "", "", null);
                 } catch (IllegalArgumentException | SKIllegalArgumentException ex) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
                 }

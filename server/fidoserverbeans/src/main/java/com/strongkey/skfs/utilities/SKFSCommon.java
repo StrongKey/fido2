@@ -27,15 +27,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyFactory;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
+import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +58,9 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -101,6 +112,26 @@ public class SKFSCommon {
     private static SortedMap<Integer, JsonArray> transport_combinations = new ConcurrentSkipListMap<>();
 
     private static String updatefidousers = getConfigurationProperty("skfs.cfg.property.fido.usermetadata.enabled");
+
+    private static ArrayList<PrivateKey> samlpvkeylist;
+    
+    private static ArrayList<X509Certificate> samlcertlist;
+
+    private static SortedMap<String, BlockingQueue<List>> samlsignqMap = new ConcurrentSkipListMap<>();
+
+    private static SortedMap<String, BlockingQueue<PublicKey>> samlverifyqMap = new ConcurrentSkipListMap<>();
+    
+    private static SortedMap<BigInteger,String> samlcertserialmap =  new ConcurrentSkipListMap<>();
+
+    private static KeyStore samlKeystore;
+    private static Integer samlthreads;
+    private static String samlkeystorelocation;
+    private static Integer certPerServer;
+    private static String samlkeystorepassword;
+//    private static String samltruststorelocation;
+
+    private static BouncyCastleFipsProvider BC_FIPS_PROVIDER = new BouncyCastleFipsProvider();
+
 
     static {
 
@@ -450,6 +481,7 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
             for (String key : newkeys) {
                 currentconfigs.put(key, newconfigs.get(key));
             }
+            skfsconfigmap.put(did, currentconfigs);
         } else {
             skfsconfigmap.put(did, newconfigs);
         }
@@ -605,6 +637,22 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
     public static String getMessageProperty(String key) {
         return msgrb.getString(key);
     }
+    
+    public static String getMessageWithParam(String key, String param) {
+        String s = null;
+        if (msgrb != null) {
+            try {
+                String val = msgrb.getString(key);
+                if (val != null) {
+                    s = val.replace("{0}", param);
+                }
+            } catch (java.util.MissingResourceException ex) {
+                // Do nothing
+            }
+        }
+        return s;
+    }
+
 
     public static JsonArray getTransportJson(Integer entity) {
         return transport_combinations.get(entity);
@@ -1133,6 +1181,15 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         } else {
             SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0061", "Missing \"type\" in request payload");
             return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0061")).build();
+        }
+        
+        if (authpayload.containsKey("ssoRequest")) {
+            if (authpayload.getJsonObject("ssoRequest").containsKey("saml") && SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.response").equalsIgnoreCase("true")) {
+                if (authpayload.getJsonObject("ssoRequest").getString("saml").isEmpty()) {
+                    SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "FIDO-ERR-0074", "Missing \"saml\" in payload's ssoRequest object");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(SKFSCommon.getMessageProperty("FIDO-ERR-0074")).build();
+                }
+            }
         }
         
         return null;
@@ -2123,5 +2180,232 @@ Y88b  d88P Y88..88P 888  888 888    888 Y88b 888 Y88b 888 888     888  888 Y88b.
         }
 
         return null; // to keep compiler happy...
+    }
+    
+    
+    //SAML
+    public static void loadSAMLSigningKeys(String did, String sid) throws SKFEException {
+        
+        samlpvkeylist = new ArrayList<>();
+        samlcertlist = new ArrayList<>();
+        if(samlKeystore==null || samlkeystorepassword==null || 
+                samlthreads==null ){
+            loadSAMLProperties(did);
+        }
+
+        InputStream is = null;
+        try {
+            samlKeystore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            is = new FileInputStream(samlkeystorelocation);
+            samlKeystore.load(is, samlkeystorepassword.toCharArray());
+            //load each certificate
+            String alias;
+            for (Enumeration<String> e = samlKeystore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "SKCE-MSG-2522", alias);
+                String[] aliasSplit = alias.split("-");
+                // If using Citrix ADC for SAML authentication, only load the single key/cert with the specified citrix alias
+                if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("true")) {
+                    if (alias.equals(getConfigurationProperty("skfs.cfg.property.saml.citrix.signingalias"))) {
+                        PrivateKey pvk = ((KeyStore.PrivateKeyEntry) samlKeystore.getEntry(alias, new KeyStore.PasswordProtection(samlkeystorepassword.toCharArray()))).getPrivateKey();
+                        PKCS8EncodedKeySpec X509privateKey = new PKCS8EncodedKeySpec(pvk.getEncoded());
+                        KeyFactory kf = KeyFactory.getInstance("RSA");
+                        PrivateKey pKey = kf.generatePrivate(X509privateKey);
+                        samlpvkeylist.add(pKey);
+                        X509Certificate cert = (X509Certificate) samlKeystore.getCertificate(alias);
+                        samlcertlist.add(cert);
+                    }
+                } else {
+                    //check for did and sid
+                    if (aliasSplit[0].equals("samlsigning")) {
+                        if (aliasSplit[1].equals(sid) && aliasSplit[2].equals(did)) {
+                            PrivateKey pvk = ((KeyStore.PrivateKeyEntry) samlKeystore.getEntry(alias, new KeyStore.PasswordProtection(samlkeystorepassword.toCharArray()))).getPrivateKey();
+                            PKCS8EncodedKeySpec X509privateKey = new PKCS8EncodedKeySpec(pvk.getEncoded());
+                            KeyFactory kf = KeyFactory.getInstance("RSA");
+                            PrivateKey pKey = kf.generatePrivate(X509privateKey);
+                            samlpvkeylist.add(pKey);
+                            X509Certificate cert = (X509Certificate) samlKeystore.getCertificate(alias);
+                            samlcertlist.add(cert);
+                        }
+                    }
+                }
+                // Setup signing instances
+                int pvki = 0;
+                BlockingQueue<List> samlpvkq = new LinkedBlockingQueue<List>();
+                for (int i = 0; i < samlthreads; i++) {
+                    try {
+                        List<Object> list = new ArrayList<>();
+                        list.add(samlpvkeylist.get(pvki));
+                        list.add(samlcertlist.get(pvki));
+                        samlpvkq.put(list);
+                        if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("true") && !samlpvkq.isEmpty()) {
+                            break;
+                        }
+                    } catch (Exception ex) {
+//                    throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2506", ex.getLocalizedMessage()));
+                    }
+                    pvki++;
+                    if (pvki >= certPerServer) {
+                        pvki = 0;
+                    }
+                }
+                samlsignqMap.put(did, samlpvkq);
+                if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("true") && !samlpvkq.isEmpty()) {
+                    break;
+                }
+            }
+        } catch (KeyStoreException | InvalidKeySpecException | NoSuchAlgorithmException | UnrecoverableEntryException | IOException   ex) {
+            ex.printStackTrace();
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE, "SKCE-ERR-2506", ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2506", ex.getLocalizedMessage()));
+        } catch (CertificateException  ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                if(is!=null)
+                    is.close();
+            } catch (IOException ex) {
+                Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+     public static void loadSAMLVerifyKeys(String did, String sid) throws SKFEException {
+        
+        if(samlKeystore==null || samlkeystorepassword==null || 
+                samlthreads==null ){
+            loadSAMLProperties(did);
+        }
+
+        InputStream ist = null;
+        try {
+            KeyStore truststore = KeyStore.getInstance("BCFKS", BC_FIPS_PROVIDER);
+            ist = new FileInputStream(samlkeystorelocation);
+            truststore.load(ist, samlkeystorepassword.toCharArray());
+            //load each certificate
+            String alias;
+            for (Enumeration<String> e = truststore.aliases(); e.hasMoreElements();) {
+                alias = e.nextElement();
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.FINE, "SKCE-MSG-2522", alias);
+                String[] aliasSplit = alias.split("-");
+                // If using Citrix ADC for SAML authentication, only load the single key/cert with the specified citrix alias
+                if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("true")) {
+                    if (alias.equals(getConfigurationProperty("skfs.cfg.property.saml.citrix.signingalias"))) {
+                        X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
+                        BlockingQueue<PublicKey> samlpbkq = new LinkedBlockingQueue<PublicKey>();
+                        for (int i = 0; i < (samlthreads / 3); i++) {
+                            samlpbkq.put(cert.getPublicKey());
+                        }
+                        samlverifyqMap.put(alias, samlpbkq);
+                        samlcertserialmap.put(cert.getSerialNumber(), alias);
+                        break;
+                    }
+                } else {
+                    //check if samlsigning
+                    if (aliasSplit[0].equals("samlsigning")) {
+                        X509Certificate cert = (X509Certificate) truststore.getCertificate(alias);
+                        BlockingQueue<PublicKey> samlpbkq = new LinkedBlockingQueue<PublicKey>();
+                        for (int i = 0; i < (samlthreads / 3); i++) {
+                            samlpbkq.put(cert.getPublicKey());
+                        }
+                        samlverifyqMap.put(alias, samlpbkq);
+                        samlcertserialmap.put(cert.getSerialNumber(), alias);
+                    }
+                }
+            }
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException | InterruptedException ex) {
+            ex.printStackTrace();
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER, Level.SEVERE, "CRYPTO-ERR-2506", ex.getLocalizedMessage());
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2506", ex.getLocalizedMessage()));
+        } catch (CertificateException  ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                if(ist!=null)
+                    ist.close();
+            } catch (IOException ex) {
+                Logger.getLogger(SKFSCommon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    // TODO: finish later 
+    private static void loadSAMLProperties(String did) throws SKFEException {
+//        try {
+//            if ((samltruststorelocation = SKFSCommon.getConfigurationProperty("crypto.cfg.property.jwtsigning.truststorelocation")) == null) {
+//                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation");
+//                throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation"));
+//            }
+//        } catch (java.util.MissingResourceException e) {
+//            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation");
+//            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "crypto.cfg.property.jwtsigning.truststorelocation"));
+//        }
+        try {
+            if ((samlkeystorepassword = SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.keystore.password")) == null) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.password");
+                throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.password"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.password");
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.password"));
+        }
+         try {
+            if ((samlthreads = Integer.parseInt(SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.threads"))) == null) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.threads");
+                throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.threads"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.threads");
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.threads"));
+        }
+        try {
+            if ((samlkeystorelocation = SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.keystore.rsa")) == null) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.rsa");
+                throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.rsa"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.rsa");
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.keystore.rsa"));
+        }
+        try {
+            if ((certPerServer = Integer.parseInt(SKFSCommon.getConfigurationProperty("skfs.cfg.property.saml.certsperserver"))) == null) {
+                SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.certsperserver");
+                throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.certsperserver"));
+            }
+        } catch (java.util.MissingResourceException e) {
+            SKFSLogger.log(SKFSConstants.SKFE_LOGGER,Level.SEVERE,  "SKCE-ERR-2505", "skfs.cfg.property.saml.certsperserver");
+            throw new SKFEException(SKFSCommon.getMessageWithParam("SKCE-ERR-2505", "skfs.cfg.property.saml.certsperserver"));
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static List<Object> takeSAMLSignList(String did) throws InterruptedException
+    {
+        // A single key is used for Citrix ADC SAML authentication, so the queue is not necessary
+        if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("true")) {
+            return samlsignqMap.get(did).peek();
+        } else {
+            return samlsignqMap.get(did).take();
+        }
+    }
+    public static void putSAMLSignList(String did, List<Object> pvk) throws InterruptedException
+    {
+        // A single key is used for Citrix ADC SAML authentication, so the queue is not necessary
+        if (getConfigurationProperty("skfs.cfg.property.saml.citrix").equalsIgnoreCase("false")) {
+            samlsignqMap.get(did).put(pvk);
+        }
+    }
+    public static PublicKey takeSAMLVerify(String alias) throws InterruptedException
+    {
+        return samlverifyqMap.get(alias).take();
+    }
+    public static void putSAMLVerify(String alias, PublicKey verifier) throws InterruptedException
+    {
+        samlverifyqMap.get(alias).put(verifier);
+    }
+    public static SortedMap<BigInteger,String> getSAMLSerialAliasMap(){
+        return samlcertserialmap;
     }
 }
