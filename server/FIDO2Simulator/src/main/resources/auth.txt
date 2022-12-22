@@ -1,4 +1,0 @@
-{
-    "challenge": "asdfasdfasdfasdf",
-    "rpId": "rdu.strongkey.com"
-}

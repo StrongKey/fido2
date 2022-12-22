@@ -1,5 +1,0 @@
-theme: jekyll-theme-cayman
-title: FIDO Server
-description: FIDO2-certified authentication server
-pages_list:       
-  FIDO Server: '/fido2'

@@ -1,6 +1,0 @@
-mysql --user=sfaeco --password=AbracaDabra sfa -e "
-drop table merchants;
-drop table utx_fido_authenticator_references;
-drop table utx_products;
-drop table user_transactions;
-drop table users;"
